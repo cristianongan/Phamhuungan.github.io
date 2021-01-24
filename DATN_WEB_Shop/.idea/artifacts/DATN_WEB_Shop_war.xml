@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="DATN_WEB_Shop:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>DATN_WEB_Shop</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="DATN_WEB_Shop-0.0.1-SNAPSHOT.war">
+      <element id="artifact" artifact-name="DATN_WEB_Shop:war exploded" />
+    </root>
+  </artifact>
+</component>

@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="e1e7cb12-f53a-43e4-8232-e7abda89e2a5" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.classpath" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/artifacts/DATN_WEB_Shop_war.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/artifacts/DATN_WEB_Shop_war_exploded.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_classmate_1_3_4.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_annotations_2_10_0_pr3.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_core_2_10_0_pr3.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_databind_2_10_0_pr3.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_google_protobuf_protobuf_java_2_6_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__commons_fileupload_commons_fileupload_1_4.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__commons_io_commons_io_2_8_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__javax_servlet_jstl_1_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__javax_servlet_servlet_api_3_0_alpha_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__javax_validation_validation_api_2_0_1_Final.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__mysql_mysql_connector_java_8_0_11.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_tomcat_tomcat_api_9_0_12.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_tomcat_tomcat_el_api_9_0_12.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_tomcat_tomcat_jasper_9_0_12.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_tomcat_tomcat_jasper_el_9_0_12.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_tomcat_tomcat_jsp_api_9_0_12.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_tomcat_tomcat_juli_9_0_12.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_tomcat_tomcat_servlet_api_9_0_12.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_tomcat_tomcat_util_9_0_12.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_tomcat_tomcat_util_scan_9_0_12.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_eclipse_jdt_ecj_3_13_102.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_hibernate_validator_hibernate_validator_6_0_13_Final.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_jboss_logging_jboss_logging_3_3_2_Final.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_projectlombok_lombok_1_18_16.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_security_spring_security_config_5_0_0_RELEASE.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_security_spring_security_core_5_0_0_RELEASE.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_security_spring_security_web_5_0_0_RELEASE.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_aop_5_1_1_RELEASE.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_beans_5_1_1_RELEASE.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_context_5_1_1_RELEASE.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_core_5_1_1_RELEASE.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_expression_5_1_1_RELEASE.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_jcl_5_1_1_RELEASE.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_jdbc_5_1_1_RELEASE.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_tx_5_1_1_RELEASE.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_web_5_1_1_RELEASE.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_webmvc_5_1_1_RELEASE.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.project" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.settings/.jsdtscope" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.settings/org.eclipse.core.resources.prefs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.settings/org.eclipse.jdt.core.prefs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.settings/org.eclipse.m2e.core.prefs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.settings/org.eclipse.wst.common.component" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.settings/org.eclipse.wst.common.project.facet.core.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.settings/org.eclipse.wst.jsdt.ui.superType.container" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.settings/org.eclipse.wst.jsdt.ui.superType.name" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.settings/org.eclipse.wst.validation.prefs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DATN_WEB_Shop.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/META-INF/MANIFEST.MF" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/WEB-INF/jsp/admin_index.jsp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/WEB-INF/jsp/home.jsp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/WEB-INF/jsp/login.jsp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/WEB-INF/jsp/parts/search.jsp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/WEB-INF/jsp/parts/sidebar.jsp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/WEB-INF/spring-servlet.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/WEB-INF/web.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/imagesP/p1.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/bootstrap/css/bootstrap-responsive.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/bootstrap/css/bootstrap.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/bootstrap/img/glyphicons-halflings-white.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/bootstrap/img/glyphicons-halflings.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/bootstrap/js/bootstrap.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/amelia/bootstrap.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/amelia/bootstrap.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/bootshop/bootstrap.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/businessltd/bootstrap.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/cerulean/bootstrap.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/css/base.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/css/bootstrap-responsive.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/css/font-awesome-ie7.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/css/font-awesome.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/cyborg/bootstrap.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/font/fontawesome-webfont.eot" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/font/fontawesome-webfont.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/font/fontawesome-webfont.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/font/fontawesome-webfont.woff" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/font/museo_slab_300-webfont.eot" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/font/museo_slab_300-webfont.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/font/museo_slab_500-webfont.eot" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/font/museo_slab_500-webfont.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/font/proximanova-webfont.eot" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/font/proximanova-webfont.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/carousel/1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/carousel/2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/carousel/3.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/carousel/4.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/carousel/5.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/carousel/6.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/carousel/7.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/facebook.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/headerRepeat.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/ico-cart.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/ico/apple-touch-icon-114-precomposed.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/ico/apple-touch-icon-144-precomposed.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/ico/apple-touch-icon-57-precomposed.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/ico/apple-touch-icon-72-precomposed.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/ico/favicon.ico" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/lightbox/Close.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/lightbox/lightbox-blank.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/lightbox/lightbox-btn-close.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/lightbox/lightbox-btn-next.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/lightbox/lightbox-btn-prev.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/lightbox/lightbox-ico-loading.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/logo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/new.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/payment_methods.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/products/1.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/products/10.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/products/11.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/products/12.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/products/13.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/products/2.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/products/3.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/products/4.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/products/5.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/products/6.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/products/7.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/products/8.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/products/9.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/products/b1.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/products/b2.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/products/b3.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/products/b4.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/products/kindle.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/products/large/3.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/products/large/f1.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/products/large/f2.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/products/large/f3.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/products/panasonic.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/search.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/tabRepeatInactive.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/twitter.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/images/youtube.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/img/glyphicons-halflings-white.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/img/glyphicons-halflings.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/journal/bootstrap.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/js/bootshop.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/js/bootstrap.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/js/google-code-prettify/prettify.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/js/google-code-prettify/prettify.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/js/jquery.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/js/jquery.lightbox-0.5.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/js/less.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/accordion.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/alerts.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/amelia.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/amelia/bootswatch.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/amelia/variables.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/bootshop.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/bootshop/main.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/bootshop/variables.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/bootstrap.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/breadcrumbs.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/button-groups.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/buttons.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/carousel.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/classified.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/close.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/code.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/component-animations.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/dropdowns.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/font-awesome-ie7.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/font-awesome.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/forms.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/grid.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/hero-unit.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/labels-badges.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/layouts.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/mixins.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/modals.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/navbar.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/navs.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/pager.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/pagination.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/popovers.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/progress-bars.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/reset.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/responsive-1200px-min.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/responsive-767px-max.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/responsive-768px-979px.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/responsive-navbar.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/responsive-utilities.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/responsive.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/scaffolding.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/simplex.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/simplex/bootswatch.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/simplex/variables.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/sprites.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/tables.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/thumbnails.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/tooltip.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/type.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/utilities.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/variables.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/less/wells.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/readable/bootstrap.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/simplex/bootstrap.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/slate/bootstrap.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/spacelab/bootstrap.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/spruce/bootstrap.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/spruce/bootstrap.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/superhero/bootstrap.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/switch/images/clr/amelia.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/switch/images/clr/bootshop.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/switch/images/clr/businessltd.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/switch/images/clr/cerulean.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/switch/images/clr/cyborg.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/switch/images/clr/journal.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/switch/images/clr/readable.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/switch/images/clr/simplex.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/switch/images/clr/slate.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/switch/images/clr/spacelab.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/switch/images/clr/spruce.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/switch/images/clr/superhero.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/switch/images/clr/united.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/switch/images/hideme.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/switch/images/pattern/pattern1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/switch/images/pattern/pattern10.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/switch/images/pattern/pattern11.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/switch/images/pattern/pattern12.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/switch/images/pattern/pattern13.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/switch/images/pattern/pattern14.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/switch/images/pattern/pattern15.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/switch/images/pattern/pattern16.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/switch/images/pattern/pattern16~.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/switch/images/pattern/pattern17.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/switch/images/pattern/pattern17~.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/switch/images/pattern/pattern18.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/switch/images/pattern/pattern19.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/switch/images/pattern/pattern19~.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/switch/images/pattern/pattern2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/switch/images/pattern/pattern20.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/switch/images/pattern/pattern20~.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/switch/images/pattern/pattern3.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/switch/images/pattern/pattern4.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/switch/images/pattern/pattern5.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/switch/images/pattern/pattern6.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/switch/images/pattern/pattern7.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/switch/images/pattern/pattern8.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/switch/images/pattern/pattern9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/switch/images/styleTgl.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/switch/theamswitcher.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/switch/themeswitch.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/lib/themes/united/bootstrap.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/CRUD/category_CRUD.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/CRUD/product_CRUD.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/CRUD/user_CRUD.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Controllers/Control.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Controllers/admin_controller.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Controllers/user_control.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Entity/Category.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Entity/Category2.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Entity/Product.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Entity/user.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Services/product_Int.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Services/product_service.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Services/user_Inter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Services/user_service.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/CRUD/category_CRUD$1.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/CRUD/category_CRUD$2.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/CRUD/category_CRUD.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/CRUD/product_CRUD$1.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/CRUD/product_CRUD$2.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/CRUD/product_CRUD$3.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/CRUD/product_CRUD$4.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/CRUD/product_CRUD.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/CRUD/user_CRUD$1.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/CRUD/user_CRUD.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/Controllers/Control.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/Controllers/admin_controller.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/Controllers/user_control.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/Entity/Category.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/Entity/Category2.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/Entity/Product.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/Entity/user.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/Services/product_Int.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/Services/product_service.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/Services/user_Inter.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/Services/user_service.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/m2e-wtp/web-resources/META-INF/MANIFEST.MF" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/m2e-wtp/web-resources/META-INF/maven/DATN_WEB_Shop/DATN_WEB_Shop/pom.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/m2e-wtp/web-resources/META-INF/maven/DATN_WEB_Shop/DATN_WEB_Shop/pom.xml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectId" id="1kBWLbCoteBgH50f21C32YkrSv5" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e1e7cb12-f53a-43e4-8232-e7abda89e2a5" name="Default Changelist" comment="" />
+      <created>1605174410083</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1605174410083</updated>
+      <workItem from="1605174414837" duration="34000" />
+      <workItem from="1607142492315" duration="83000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="2" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="580" y="131" key="FileChooserDialogImpl" timestamp="1607142573152">
+      <screen x="0" y="0" width="1600" height="860" />
+    </state>
+    <state x="580" y="131" key="FileChooserDialogImpl/0.0.1600.860@0.0.1600.860" timestamp="1607142573152" />
+    <state x="610" y="267" key="NewModule_or_Project.wizard" timestamp="1607142576101">
+      <screen x="0" y="0" width="1600" height="860" />
+    </state>
+    <state x="610" y="267" key="NewModule_or_Project.wizard/0.0.1600.860@0.0.1600.860" timestamp="1607142576101" />
+  </component>
+</project>
