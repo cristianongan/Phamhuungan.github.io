@@ -11,7 +11,11 @@ try{
 {
 	p1 = 1;
 }
+if(request.getAttribute("num")!=null)
 pp=(Integer)request.getAttribute("num");
+else
+	pp=0;
+
 p2 =p1+2;
 if(p2>pp) p2 =pp;
 if(p1>=1)

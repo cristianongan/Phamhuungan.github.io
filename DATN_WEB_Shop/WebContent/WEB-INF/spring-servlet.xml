@@ -35,6 +35,9 @@
 	<constructor-arg name="dataSource" ref="datasource"></constructor-arg>
 	<property name="procedureName" value="ins_order_MA"></property>
 	</bean>
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+    <property name="maxUploadSize" value="20848820" />
+	</bean>
 	<mvc:resources location="/lib/bootstrap/" mapping="/boostrap/**"></mvc:resources>
 	<mvc:resources location="/lib/themes/" mapping="/themes/**"></mvc:resources>
 	<mvc:resources location="/lib/bootstrap/" mapping="/user/boostrap/**"></mvc:resources>
@@ -48,11 +51,18 @@
 	<mvc:resources location="/lib/themes/" mapping="/cart/themes/**"></mvc:resources>
 	<mvc:resources location="/imagesP/" mapping="/product/imagesP/**"></mvc:resources>
 	<mvc:resources location="/lib/assets/" mapping="/assets/**"></mvc:resources>
+	<mvc:resources location="/lib/assets/" mapping="admin/assets/**"></mvc:resources>
 		<mvc:resources location="/lib/bootstrap/" mapping="/order/boostrap/**"></mvc:resources>
 	<mvc:resources location="/lib/themes/" mapping="/order/themes/**"></mvc:resources>
 	<mvc:resources location="/imagesP/" mapping="/order/imagesP/**"></mvc:resources>
 		<mvc:resources location="/lib/themes/" mapping="/admin/themes/**"></mvc:resources>
 	<mvc:resources location="/lib/bootstrap/" mapping="/admin/boostrap/**"></mvc:resources>
+	<mvc:resources location="/imagesP/" mapping="/admin/order_detail/imagesP/**"></mvc:resources>
+	<mvc:resources location="/lib/bootstrap/" mapping="/admin/order_detail/bootstrap/**"></mvc:resources>
+	<mvc:resources location="/lib/themes/" mapping="/admin/order_detail/themes/**"></mvc:resources>
+	<mvc:resources location="/lib/bootstrap/" mapping="/admin/user_detail/bootstrap/**"></mvc:resources>
+	<mvc:resources location="/lib/themes/" mapping="/admin/user_detail/themes/**"></mvc:resources>
+	<mvc:resources location="/imagesP/" mapping="/admin/imagesP/**"></mvc:resources>
 	<mvc:interceptors>
 		<mvc:interceptor>
 		<mvc:mapping path="/admin/**"/>

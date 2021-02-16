@@ -20,6 +20,7 @@ public class order_service {
 	private order_CRUD o;
 	@Autowired
 	private user_service us;
+	
 	public boolean add_order(List<Product> li, user u)
 	{
 		int ma = o.order(us.get_full_info_user(u));
@@ -49,7 +50,8 @@ public class order_service {
 			{
 				tonggia += Integer.parseInt(p.getPrice())*p.getNumOfProduct();
 			}
-			return new order(ma, li, tonggia,(Date) m.get("date"), (int)m.get("user"));
+			return new order(ma, li, tonggia,(Date) m.get("date"), (int)m.get("user"),
+					(String)m.get("status"),(String)m.get("addr"));
 		}
 	}
 

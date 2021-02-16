@@ -14,12 +14,35 @@ import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import Entity.*;
 @Component
 public class product_CRUD {
 	@Autowired
 	private JdbcTemplate template;
+	@Transactional
+	public boolean update_product(Product p)
+	{
+		return template.execute("update product set name=?,color=?,material=?,price=?,urlimg=?,numofproduct=?,category=?,category2=?,note=?,size=? where id=?", new PreparedStatementCallback<Boolean>() {
+
+			@Override
+			public Boolean doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
+				ps.setString(1, p.getName());
+				ps.setString(2, p.getColor());
+				ps.setString(3, p.getMaterial());
+				ps.setString(4, p.getPrice());
+				ps.setString(5, p.getUrlimg());
+				ps.setInt(6, p.getNumOfProduct());
+				ps.setInt(7, p.getId_cat());
+				ps.setInt(8, p.getId_cat2());
+				ps.setString(9, p.getNote());
+				ps.setString(10, p.getList_size().get(0));
+				ps.setInt(11, p.getId());
+				return null;
+			}
+		});
+	}
 	public List<Product> search(String s,int id)
 	{
 		return template.query("select * from product where product.name like ? and product.category =? limit 50", new PreparedStatementSetter() {
@@ -71,7 +94,8 @@ public class product_CRUD {
 	}
 	public boolean addProduct(Product p)
 	{
-		return template.execute("insert into propuct('name','color','material','price','urlimg','numofproduct')VALUES();",
+		return template.execute("insert into product(name,color,material,price,urlimg,numofproduct,size,category,category2)"
+				+ "VALUES(?,?,?,?,?,?,?,?,?)",
 				new PreparedStatementCallback<Boolean>() {
 
 			@Override
@@ -82,6 +106,9 @@ public class product_CRUD {
 				ps.setString(4, p.getPrice());
 				ps.setString(5, p.getUrlimg());
 				ps.setInt(6, p.getNumOfProduct());
+				ps.setString(7, p.getList_size().get(0));
+				ps.setInt(8, p.getId_cat());
+				ps.setInt(9, p.getId_cat2());
 				return ps.execute();
 			}
 		});

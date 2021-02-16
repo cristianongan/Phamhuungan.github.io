@@ -17,12 +17,21 @@ public class order {
 	private List<Product> list;
 	private int tong_gia;
 	private Date ngay_tao_don;
-	private int id_user;
+	private int id_user;private String status;
+	private String addr;
 	public order(int madh, Date ngay_tao_don, int id_user) {
 		super();
 		this.madh = madh;
 		this.ngay_tao_don = ngay_tao_don;
 		this.id_user = id_user;
 	}
+	public order(int madh, Date ngay_tao_don, int id_user,String s) {
+		super();
+		this.madh = madh;
+		this.ngay_tao_don = ngay_tao_don;
+		this.id_user = id_user;
+		this.status=s;
+	}
+	
 	
 }

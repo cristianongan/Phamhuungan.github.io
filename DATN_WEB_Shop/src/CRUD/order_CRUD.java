@@ -19,6 +19,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+
 import Entity.Product;
 import Entity.order;
 import Entity.user_full;
@@ -29,6 +30,44 @@ public class order_CRUD {
 	private SimpleJdbcCall call2;
 	@Autowired
 	private JdbcTemplate template;
+	@Transactional
+	public boolean delete_order(int madh)
+	{
+		boolean b= template.execute("delete from order_pd  where "
+				+ "order_pd.id = ?", new PreparedStatementCallback<Boolean>() {
+			@Override
+			public Boolean doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
+				ps.setInt(1, madh);
+				return ps.executeUpdate()==1?true:false;
+			}
+		});
+		if(b)
+		{
+			return template.execute("delete from order_ma  where "
+					+ "order_ma.id = ?", new PreparedStatementCallback<Boolean>() {
+						@Override
+						public Boolean doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
+							ps.setInt(1, madh);
+							return ps.executeUpdate()==1?true:false;
+						}
+					});
+		}
+		return b;
+	}
+	@Transactional
+	public boolean update_order(order o)
+	{
+		return template.execute("update order_ma set addr=?,status=? where id=?", new PreparedStatementCallback<Boolean>() {
+
+			@Override
+			public Boolean doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
+				ps.setString(1, o.getAddr());
+				ps.setString(2, o.getStatus());
+				ps.setInt(3, o.getMadh());
+				return ps.executeUpdate()==1?true:false;
+			}
+		});
+	}
 	@Transactional
 	public int order(user_full u)
 	{
@@ -106,9 +145,34 @@ public class order_CRUD {
 			}
 		});
 	}
+	public List<order> search(int id)
+	{
+		return template.query("select id,created,user from order_MA where id = ?", new PreparedStatementSetter() {
+			
+			@Override
+			public void setValues(PreparedStatement ps) throws SQLException {
+				ps.setInt(1, id);
+			}
+		}, new ResultSetExtractor<List<order>>() {
+
+			@Override
+			public List<order> extractData(ResultSet rs) throws SQLException, DataAccessException {
+				List<order> lo = new ArrayList<order>();
+				while(rs.next())
+				{
+					order o= new order();
+					o.setMadh(rs.getInt(1));
+					o.setNgay_tao_don(rs.getDate(2));
+					o.setId_user(rs.getInt(3));
+					lo.add(o);
+				}
+				return lo;
+			}
+		});
+	}
 	public Map<String, Object> get_order_MA(int ma)
 	{
-		return template.query("select user,created from order_MA where id = ?",new PreparedStatementSetter() {
+		return template.query("select user,created,status,addr from order_MA where id = ?",new PreparedStatementSetter() {
 			
 			@Override
 			public void setValues(PreparedStatement ps) throws SQLException {
@@ -123,6 +187,8 @@ public class order_CRUD {
 				if(rs.next())
 					m.put("user", rs.getInt(1));
 					m.put("date", rs.getDate(2));
+					m.put("status", rs.getString(3));
+					m.put("addr", rs.getString(4));
 				return m;
 			}
 		} );
@@ -151,7 +217,7 @@ public class order_CRUD {
 	}
 	public int get_row_order()
 	{
-		return template.query("select max(id) from order_MA",new ResultSetExtractor<Integer>() {
+		return template.query("select r from row_num_order",new ResultSetExtractor<Integer>() {
 
 			@Override
 			public Integer extractData(ResultSet rs) throws SQLException, DataAccessException {

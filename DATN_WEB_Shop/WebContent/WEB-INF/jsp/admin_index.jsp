@@ -49,7 +49,7 @@ The above copyright notice and this permission notice shall be included in all c
         <ul class="nav">
 
           <li class="nav-item active ">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="${pageContext.request.contextPath}/admin">
               <i class="material-icons">content_paste</i>
               <p>List Order</p>
             </a>
@@ -58,7 +58,7 @@ The above copyright notice and this permission notice shall be included in all c
         <ul class="nav">
 
           <li class="nav-item active ">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="${pageContext.request.contextPath}/admin/users">
               <i class="material-icons">content_paste</i>
               <p>List User</p>
             </a>
@@ -67,7 +67,7 @@ The above copyright notice and this permission notice shall be included in all c
          <ul class="nav">
 
           <li class="nav-item active ">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="${pageContext.request.contextPath}/admin/products">
               <i class="material-icons">content_paste</i>
               <p>List Products</p>
             </a>
@@ -89,9 +89,9 @@ The above copyright notice and this permission notice shall be included in all c
             <span class="navbar-toggler-icon icon-bar"></span>
           </button>
           <div class="collapse navbar-collapse justify-content-end">
-            <form class="navbar-form">
+            <form class="navbar-form" action="${pageContext.request.contextPath}/admin/search_order" method="post" >
               <div class="input-group no-border">
-                <input type="text" value="" class="form-control" placeholder="Mã đơn hàng">
+                <input type="text" value="" class="form-control" placeholder="Mã đơn hàng" name="madh">
                 <button type="submit" class="btn btn-white btn-round btn-just-icon">
                   <i class="material-icons">search</i>
                   <div class="ripple-container"></div>
@@ -135,15 +135,18 @@ The above copyright notice and this permission notice shall be included in all c
                   <% o=(List<order>) request.getAttribute("list_order"); %>
                     <table class="table">
                       <thead class=" text-primary">
-                        <th>Mã đơn hàng</th><th>ID User</th><th>Ngày tạo đơn</th>
+                        <th>Mã đơn hàng</th><th>ID User</th><th>Ngày tạo đơn</th><th></th>
                       </thead>
                       <tbody>
                       <%
                       	for(order or: o)
                       	{
-                      		out.print("<tr><td>"+or.getMadh()+"</td>"+
+                      		out.print("<tr><td><a target='_blank' href='admin/order_detail/"+or.getMadh()+"'>"+or.getMadh()+"</a></td>"+
                                     "<td>"+or.getId_user()+"</td>"+
                                     "<td>"+or.getNgay_tao_don()+"</td>"+
+                                    "<td><form target='_blank' action='admin/order_detail/"+or.getMadh()+"'>"+
+                                    "<input type='submit' value='Chi tiết'>"+
+                                    "</form></td>"+
                                   "</tr>");
                       	}
                       %>  

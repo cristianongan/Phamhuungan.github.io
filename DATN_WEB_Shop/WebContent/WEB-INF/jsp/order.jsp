@@ -102,7 +102,10 @@ if(u!=null)
                %>
 				  <tr>
                <td colspan="4" style="text-align:right"><strong>TOTAL =</strong></td>
-               <td class="label label-important" style="display:block"> <strong> <%=tonggia %> Đ </strong></td>
+               <td class="label label-important" style="display:block"> <strong> <%=tonggia %> Đ </strong></td></tr>
+               <tr>
+               <td colspan="4" style="text-align:right"><strong>Trạng thái :</strong></td>
+               <td class="label label-important" style="display:block"> <strong> <%=od.getStatus() %></strong></td>
              </tr>
                
 				</tbody>

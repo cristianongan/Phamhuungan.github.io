@@ -39,7 +39,7 @@ public class product_service implements product_Int{
 	public List<Product> get_list_propuct(int page)
 	{
 		int a = p.getmax_id();
-		return p.get_product1((a-6*page)>0?a-6*page:0,a-6*(page-1));
+		return p.get_product1((a-6*page)>0?a-6*page:0,(page==a/6 +(a%6>0?1:0))?a%6:6);
 	}
 	public List<Category> get_cat()
 	{
@@ -65,14 +65,14 @@ public class product_service implements product_Int{
 		int a= p.get_row_num_by_cat(id);
 		if(page> a || page<1)
 			page=1;
-		return p.get_product_by_cat(id,(a-6*page)>0?a-6*page:0,a-6*(page-1));
+		return p.get_product_by_cat(id,(a-6*page)>0?a-6*page:0,(page==a/6 +(a%6>0?1:0))?a%6:6);
 	}
 	public List<Product> get_list_product_by_cat2(int id , int page,int id2)
 	{
 		int a= p.get_row_num_by_cat2( id,id2 );
 		if(page> a || page<1)
 			page=1;
-		return p.get_product_by_cat2(id,id2,(a-6*page)>0?a-6*page:0,a-6*(page-1));
+		return p.get_product_by_cat2(id,id2,(a-6*page)>0?a-6*page:0,(page==a/6 +(a%6>0?1:0))?a%6:6);
 	}
 	public String get_name(int id, page_by pa)
 	{

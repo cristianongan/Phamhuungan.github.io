@@ -42,6 +42,17 @@ public class user_service implements user_Inter {
 			else
 				return z;
 	}
+	public user_full get_full_info_user(int id)
+	{
+		
+		user_full z= c.get_full_info_user(id);
+		if(z==null)
+		{
+			throw new user_erro("!!!");
+		}
+			else
+				return z;
+	}
 	public boolean update_user(user_full u)
 	{
 		return c.update_info(u);

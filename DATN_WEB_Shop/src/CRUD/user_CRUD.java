@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,67 @@ public class user_CRUD {
 	private JdbcTemplate template;
 	@Autowired
 	private SimpleJdbcCall call;
+	@Transactional
+	public boolean delete(int id)
+	{
+		String sql="delete from info where info.id = ?";
+		String sql2="delete from user where user.id = ?";
+		boolean a =template.execute(sql, new PreparedStatementCallback<Boolean>() {
+
+			@Override
+			public Boolean doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
+				ps.setInt(1, id);
+				return ps.executeUpdate()==1?true:false;
+			}
+		});
+		if(a)
+			return template.execute(sql2, new PreparedStatementCallback<Boolean>() {
+
+				@Override
+				public Boolean doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
+					ps.setInt(1, id);
+					return ps.executeUpdate()==1?true:false;
+				}
+			});
+		else
+			return false;
+		
+	}
+	public int num_user()
+	{
+		return template.query("select num from num_user", new ResultSetExtractor<Integer>() {
+
+			@Override
+			public Integer extractData(ResultSet rs) throws SQLException, DataAccessException {
+				if(rs.next())
+					return rs.getInt(1);
+				return 0;
+			}
+		});
+	}
+	public List<user> list_user(int min, int max)
+	{
+		String sql="select id,username from user limit ?,?";
+		return template.query(sql, new PreparedStatementSetter() {
+			
+			@Override
+			public void setValues(PreparedStatement ps) throws SQLException {
+				ps.setInt(1, min);
+				ps.setInt(2, max);
+			}
+		}, new ResultSetExtractor<List<user>>() {
+
+			@Override
+			public List<user> extractData(ResultSet rs) throws SQLException, DataAccessException {
+				List<user> r =new ArrayList<user>();
+				while(rs.next())
+				{
+					r.add(new user(rs.getString(2), "", rs.getInt(1)));
+				}
+				return r;
+			}
+		});
+	}
 	public boolean login(user u)
 	{
 		return template.query("select password from user where username='"+u.getUsername()+"'", new ResultSetExtractor<Boolean>() {
@@ -98,6 +161,32 @@ public class user_CRUD {
 						if(rs.next())
 						{
 							user_full us = new user_full(u.getUsername(), u.getPassword(), Integer.parseInt(rs.getString("id")), 
+									rs.getString("DOB"), rs.getString("title"), rs.getString("firstname"),
+									rs.getString("lastname"), rs.getString("address"),
+									rs.getString("city"), rs.getNString("additional_information"),
+									rs.getString("homephone"), rs.getString("mobilephone"));
+							return us;
+						}
+						return null;
+					}
+				});
+	}
+	public user_full get_full_info_user(int u)
+	{
+		return template.query("select * from info right join user on user.id = info.id where user.id=?", new PreparedStatementSetter() {
+					
+					@Override
+					public void setValues(PreparedStatement ps) throws SQLException {
+						ps.setInt(1,u);
+						
+					}
+				}, new ResultSetExtractor<user_full>() {
+
+					@Override
+					public user_full extractData(ResultSet rs) throws SQLException, DataAccessException {
+						if(rs.next())
+						{
+							user_full us = new user_full(rs.getString("username"), rs.getString("password"), u, 
 									rs.getString("DOB"), rs.getString("title"), rs.getString("firstname"),
 									rs.getString("lastname"), rs.getString("address"),
 									rs.getString("city"), rs.getNString("additional_information"),
