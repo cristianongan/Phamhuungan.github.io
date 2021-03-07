@@ -85,7 +85,7 @@ public class admin_service {
 			List<String> ls = new ArrayList<String>();
 			ls.add(ph.getList_size());
 			pc.addProduct(new Product(ph.getId(), ph.getName(), ph.getColor(), ph.getMaterial(), ph.getPrice(),
-					"imagesP"+file.separator+fileName, ph.getNumOfProduct(), ph.getId_cat(),
+					"imagesP"+file.separator+fileName+df.format(new Date()), ph.getNumOfProduct(), ph.getId_cat(),
 					ph.getId_cat2(), ph.getNote(), ls));
 		} catch (IllegalStateException e) {
 			// TODO Auto-generated catch block

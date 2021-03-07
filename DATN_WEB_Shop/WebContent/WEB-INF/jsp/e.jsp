@@ -4,9 +4,10 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Insert title here</title>
+<title>Lỗi</title>
 </head>
 <body>
-
+<h3>Đã xảy 1 lỗi trong quá trình thực hiện yêu cầu!!!</h3>
+<a href="${pageContext.request.contextPath}/">Quay lại trang chủ</a>
 </body>
 </html>

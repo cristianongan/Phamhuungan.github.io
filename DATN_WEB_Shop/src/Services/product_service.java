@@ -31,7 +31,7 @@ public class product_service implements product_Int{
 	public Product get_product_only(int id)
 	{
 		Product pr = p.get_product_by_id(id);
-		if(p==null)
+		if(pr==null)
 			throw new user_erro("id san pham khong ton tai!");
 		else
 			return pr;

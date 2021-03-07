@@ -24,7 +24,9 @@ public class product_CRUD {
 	@Transactional
 	public boolean update_product(Product p)
 	{
-		return template.execute("update product set name=?,color=?,material=?,price=?,urlimg=?,numofproduct=?,category=?,category2=?,note=?,size=? where id=?", new PreparedStatementCallback<Boolean>() {
+		return template.execute("update product set name=?,color=?,material=?,price=?,urlimg=?"
+				+ ",numofproduct=?,category=?,category2=?,note=?,size=? where id=?",
+				new PreparedStatementCallback<Boolean>() {
 
 			@Override
 			public Boolean doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {

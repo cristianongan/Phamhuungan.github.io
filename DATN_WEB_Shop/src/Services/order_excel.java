@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.poi.hssf.usermodel.HSSFFont;
-import org.apache.poi.ss.formula.functions.Column;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CreationHelper;
@@ -23,7 +22,6 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.view.document.AbstractXlsxView;
 
 import Entity.Product;
@@ -62,6 +60,7 @@ public class order_excel extends AbstractXlsxView{
 		sheet.addMergedRegion(new CellRangeAddress(8, 8, 0, 2));
 		sheet.addMergedRegion(new CellRangeAddress(8, 8, 3, 5));
 		sheet.addMergedRegion(new CellRangeAddress(8, 8, 6, 8));
+		
         // font áp dụng cho row header (dòng tiêu đề )
         Font fontHeader =workbook.createFont();
         fontHeader.setBold(true);
@@ -168,11 +167,17 @@ public class order_excel extends AbstractXlsxView{
         	chp.getStringCellValue().getBytes(Charset.forName("UTF-8"));
         	chp.setCellValue(header_table_order[i]);
         	chp.setCellStyle(cellStyle);
+        	x+=3;
         }
-        int r=8;int tonggia=0;
+        int r=8;int tonggia=0;r++;
         for(Product p: o.getList())
         {
-        	r++;int z=Integer.parseInt(p.getPrice())*p.getNumOfProduct();
+        	
+        	//merge
+        	sheet.addMergedRegion(new CellRangeAddress(r, r+1, 0	, 2));
+        	sheet.addMergedRegion(new CellRangeAddress(r, r+1, 3	, 5));
+        	sheet.addMergedRegion(new CellRangeAddress(r, r+1, 6	, 8));
+        	int z=Integer.parseInt(p.getPrice())*p.getNumOfProduct();
         	Row rp =sheet.createRow(r);
         	Cell cpd1 = rp.createCell(0);
         	cpd1.getStringCellValue().getBytes(Charset.forName("UTF-8"));
@@ -187,12 +192,13 @@ public class order_excel extends AbstractXlsxView{
         	cpd3.setCellValue(z);
         	cpd3.setCellStyle(cellStyle2);
         	tonggia +=z; 
+        	r+=2;
         }
         //tong gia
         Row rowTotal= sheet.createRow(++r);
         Cell celltotal= rowTotal.createCell(0);
         celltotal.getStringCellValue().getBytes(Charset.forName("UTF-8"));
-        celltotal.setCellValue("Tổng giá:"+tonggia);
+        celltotal.setCellValue("Giá trị đơn hàng:"+tonggia);
         celltotal.setCellStyle(cellStyle3);
         sheet.addMergedRegion(new CellRangeAddress(r, r, 0, 8));
         //ngay thang
@@ -204,8 +210,9 @@ public class order_excel extends AbstractXlsxView{
         celld.setCellStyle(cellStyle3);
         sheet.addMergedRegion(new CellRangeAddress(r, r, 0, 8));
         //end!!!
-        for(int i = 0; i <= 8; i++) { // tự động thay đổi cho vừa kích thước cho các ô dữ liệu
-            sheet.autoSizeColumn(i,true);
+        for(int i=0;i<=8;i++)
+        {
+        	sheet.autoSizeColumn(i, true);
         }
         try {  // gửi kèm file thông qua response
             response.setHeader("Content-Disposition", "attachement; filename=\""

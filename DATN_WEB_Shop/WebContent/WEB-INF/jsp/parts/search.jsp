@@ -31,7 +31,14 @@
     </form>
 
     <ul id="topMenu" class="nav pull-right">
-	 <li class=""><a href="https://m.me/100012230322373/">Contact</a></li>
+	 <li class="">
+	 <% 
+	 	if(request.getSession().getAttribute("user")==null)
+	 		out.print("<a href='"+request.getContextPath()+"/user/register'>Register</a>");
+	 	else
+	 		out.print("<a href='https://www.facebook.com/goicam.ruoi/'>Contact</a>");
+	 %>
+	 </li>
 	 <li class="">
 	 <% if(request.getSession().getAttribute("user")==null)
 		 out.print("<a href='#login' role='button' data-toggle='modal' style='padding-right:0'><span class='btn btn-large btn-success'>Login</span></a>");

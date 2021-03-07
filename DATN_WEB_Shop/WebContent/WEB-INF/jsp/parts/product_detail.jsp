@@ -53,10 +53,9 @@
 				  </div>
 				</form>
 				<hr class="soft clr"/>
-				<p>
-				<!-- chi tiet -->
+				<textarea style="width:500px;height:300px" readonly="readonly">
 				<%= p.getNote() %>
-				</p>
+				</textarea>
 				<br class="clr"/>
 			<a href="#" name="detail"></a>
 			<hr class="soft"/>

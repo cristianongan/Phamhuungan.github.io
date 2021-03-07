@@ -101,7 +101,7 @@ The above copyright notice and this permission notice shall be included in all c
             </form>
             <ul class="navbar-nav">
             <li class="nav-item dropdown">
-            <a class="nav-link" href="${pageContext.request.contextPath}/admin/add_product">
+            <a class="nav-link" href="${pageContext.request.contextPath}/admin/add_product" target="blank_">
                   <i class="material-icons">playlist_add</i>
                   <p class="d-lg-none d-md-block">
                     Add product
