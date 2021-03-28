@@ -1,0 +1,21 @@
+@charset "utf-8";
+html,body{
+	margin: 0px;
+	padding:0;
+	height: 100%;
+	width: 100%;
+}
+left{
+	display: inline-block;
+	width: 45%;
+	height: 100%;
+	margin-left:-5px;
+	padding: 0;
+}
+right{
+	display:inline-block;
+	width: 45%;
+	height: 100%;
+	margin-left: -5px;
+	padding: 0;
+}

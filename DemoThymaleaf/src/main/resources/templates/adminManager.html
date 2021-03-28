@@ -1,0 +1,143 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Admin</title>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+	integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+	crossorigin="anonymous">
+<link rel="stylesheet" href="/divider.css">
+</head>
+<body>
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		<form class="form-inline" method="get" action="/admin/search">
+			<input class="form-control mr-sm-2" type="search" name="key"
+				placeholder="Search" aria-label="Search">
+			<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+		</form>
+		<div class="collapse navbar-collapse" id="navbarNavAltMarkup" style="margin-left:10px;">
+    		<div class="navbar-nav">
+		<a class="btn btn-outline-success my-2 my-sm-0 mr-sm-2" th:href="@{${session.user}?'/logout':'/login'}" th:text="${session.user}?Logout:Login"></a>
+			</div>
+		</div>
+		
+	</nav>
+	<div class="container">
+		<div class="row">
+		<div class="col">
+					<div id="second">
+						<div class="myform form ">
+							<div class="logo mb-3">
+								<div class="col-md-12 text-center">
+									<h1>New</h1>
+									<span th:if="${stt}!=null" th:text="${stt}"></span]>
+								</div>
+							</div>
+							<form action="/admin/add" name="registration" th:object="${User}"
+								method="post">
+								<div class="form-group">
+									<label for="exampleInputEmail1">First Name</label> <input
+										th:value="${User.userInfo.firstName}" type="text"
+										name="userInfo.firstName" class="form-control" id="firstName"
+										aria-describedby="emailHelp" placeholder="Enter Firstname">
+									<span id="firstNameE"></span>
+								</div>
+								<div class="form-group">
+									<label for="exampleInputEmail1">Last Name</label> <input
+										th:value="*{userInfo.lastName}" type="text"
+										name="userInfo.lastName" class="form-control" id="lastName"
+										aria-describedby="emailHelp" placeholder="Enter Lastname">
+									<span id="lastNameE"></span>
+								</div>
+								<div class="form-group">
+									<label for="exampleInputEmail1">Email address</label> <input
+										th:value="*{userInfo.email}" type="email"
+										name="userInfo.email" class="form-control" id="email"
+										aria-describedby="emailHelp" placeholder="Enter email">
+									<span id="emailE"></span>
+								</div>
+								<div class="form-group">
+									<label for="exampleInputEmail1">UserName</label> <input
+										th:value="*{userName}" type="text" name="userName"
+										id="userName" class="form-control"
+										aria-describedby="emailHelp" placeholder="Enter userName">
+									<span id="userNameE"></span>
+								</div>
+								<div class="form-group">
+									<label for="exampleInputEmail1">Password</label> <input
+										th:value="*{password}" type="password" name="password"
+										id="password" class="form-control"
+										aria-describedby="emailHelp" placeholder="Enter Password">
+									<span id="passwordE"></span>
+								</div>
+								<div class="form-group">
+									<label for="exampleInputEmail1">Re-Password</label> <input
+										type="password" id="Re-password" class="form-control"
+										aria-describedby="emailHelp" placeholder="Enter Password">
+									<span id="Re-passwordE"></span>
+								</div>
+								<div class="form-check">
+									<input
+										type="checkbox" id="" class="form-check-input" name="grantAdmin"
+										aria-describedby="emailHelp" th:value="${true}" th:checked="*{grantAdmin}">
+										<label for="exampleInputEmail1">isAdmin</label> 
+								</div>
+								<div class="form-check">
+									<input
+										type="checkbox" id="" class="form-check-input" name="grantEmployee"
+										aria-describedby="emailHelp" th:value="${true}" th:checked="*{grantEmployee}">
+										<label for="exampleInputEmail1">isEmployee</label> 
+								</div>
+								<div class="form-check">
+									<input
+										type="checkbox" id="" class="form-check-input" name="grantStandar"
+										aria-describedby="emailHelp" th:value="${true}" th:checked="*{grantStandar}">
+										<label for="exampleInputEmail1">isUser</label> 
+								</div>
+								<div class="col-md-12 text-center mb-3">
+									<button type="submit" onClick="return validation();"
+										class=" btn btn-block mybtn btn-primary tx-tfm">Add</button>
+								</div>
+						</div>
+						</form>
+					</div>
+		</div>
+		<div class="col">
+				<table class="table rounded">
+					<thead>
+						<tr>
+							<th>No</th>
+							<th>userName</th>
+							<th>lastName</th>
+							<th>firstName</th>
+							<th>email</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="user, iter : ${listUser}">
+							<td th:text="${iter.count}" />
+							<td th:text="${user.userName}" class="table-success" />
+							<td th:text="${user.userInfo.lastName}" class="table-primary" />
+							<td th:text="${user.userInfo.firstName}" class="table-danger" />
+							<td th:text="${user.userInfo.email}" class="table-info" />
+						</tr>
+					</tbody>
+				</table>
+			<div
+				style="height: auto; width: 50%; text-align: center; margin-left: 50%;">
+				<ul class="pagination">
+					<li th:if="${pages.size()}>3" class="page-item"><a
+						th:href="@{/manager(page=1)}" class="page-link">First</a></li>
+					<li th:each="i : ${pages}" class="page-item"><a th:text="${i}"
+						class="page-link" th:href="@{/manager(page=${i})}"></a></li>
+					<li th:if="${pages.size()}>5" class="page-item"><a
+						class="page-link" th:href="@{/manager(page=${totalPages})}">End</a></li>
+				</ul>
+			</div>
+		</div>
+		</div>
+	</div>
+</body>
+</html>
