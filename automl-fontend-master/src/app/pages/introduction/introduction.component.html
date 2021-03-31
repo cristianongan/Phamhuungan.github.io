@@ -1,0 +1,108 @@
+<nb-layout>
+  <nb-layout-column>
+    <nb-card style="height: calc(100vh - 140px)">
+      <nb-card-header class="text-center"><h2>Introduction</h2></nb-card-header>
+      <nb-card-body>
+        <ol>
+          <li>Mục tiêu</li>
+          <ul>
+            <li>
+              Tự động hóa quá trình training, tuning và deploy model
+            </li>
+            <li>
+              Cung cấp giao diện quản lý work flow, các tiến trình training, inference, testing và quản lý các model
+            </li>
+            <li>
+              .....
+            </li>
+          </ul>
+          <li>Các chức năng chính</li>
+          <a  routerLink="/pages/run-new-models"><span>2.1 Tạo mới model</span></a>
+          <ul>
+            <li>Tạo mới các model với 2 chế độ: người dùng tự define tham số, hoặc sử dụng Automl tự động lựa chọn tham
+              số
+            </li>
+            <li>Khi tạo mới model xong có thể chọn dồng thời các option để train/test hoặc inference</li>
+            <li>Chọn dataset tương ứng với các option trên</li>
+            <li>Chọn location trên HDFS để lưu trữ report và output</li>
+          </ul>
+          <a  routerLink="/pages/run-existing-models"><span>2.2 Sử dụng model</span></a>
+          <ul>
+            <li>Chọn model trong list model đã được train</li>
+            <li>Khi tạo mới model xong có thể chọn dồng thời các option để train/test hoặc inference</li>
+            <li>Chọn dataset tương ứng với các option trên</li>
+            <li>Chọn location trên HDFS để lưu trữ report và output</li>
+          </ul>
+          <a routerLink="/pages/model-list"><span>2.3 Quản lý model</span></a>
+          <ul>
+            <li>Hệ thống lưu lại và quản lý các model đã được train</li>
+            <li>Hệ thống hiển thị list các model của người dùng</li>
+            <li>Hệ thống hiển thị các tiến trình sử dụng model</li>
+            <li>Hệ thống cung cấp filter thiển thị các jobs</li>
+            <li>Hệ thống hiển thị chi tiết của từng model (tham số, train score, validation score, ...)</li>
+            <li>Hệ thống lưu lại report cho các lần chạy</li>
+          </ul>
+          <a routerLink="/pages/project-list"><span>2.4 Quản lý các dự án</span></a>
+          <ul>
+            <li>Các models sẽ thuộc 1 project nào đó với mục tiêu gom nhóm và quản lý dễ dàng</li>
+          </ul>
+        </ol>
+        <!--  <div class="m-3">
+        <span class="mt-2 mb-4 text">
+          Viettel Machine Learning Platform là hệ sinh thái Machine Learning toàn diện trong lĩnh vực khoa học dữ liệu và
+          trí tuệ nhân tạo. Nền tảng được phát triển nhằm giúp người dùng cá nhân và người dùng doanh nghiệp tối ưu hóa hiệu
+          quả sản xuất kinh doanh bằng việc ứng dụng các công nghệ mới nhất trong việc lưu trữ và xử lý dữ liệu lớn (Big Data),
+          trí tuệ nhân tạo (Artificial Intelligence), các thuật toán học máy (Machine Learning) và học máy chuyên sâu (Deep Learning).
+        </span>
+            <br/>
+            <b class="text">1. Quản lý dữ liệu đầu vào, đầu ra</b>
+            <br/>
+            <span class="mt-2 mb-4 text">
+          Viettel Machine Learning platform cung cấp hệ thống quản lý lưu trữ dữ liệu đầu vào và đầu ra trên Viettel Data
+          Lake hoặc kết nối đến nền tảng bên thứ 3. Ngoài ra, nền tảng còn hỗ trợ đưa ra các thống kê, biểu đồ trực quan
+          dữ liệu, các báo cáo về kết quả mô hình, các phân tích và phương pháp áp dụng
+          </span>
+            <br/>
+            <b class="text">2. Cung cấp nền tảng tính toán</b>
+            <br/>
+            <span class="mt-2 mb-4 text">
+          Viettel Machine Learning platform cung cấp máy chủ để thực thi workflow Machine Learning với nhiều mức độ khác
+          nhau tùy thuộc vào mức độ lớn nhỏ của dữ liệu và trìu tượng hóa những thông số kỹ thuật để đưa ra các lựa chọn
+          phù hợp giúp khách hàng dễ dàng cho việc lựa chọn.
+          </span>
+            <br/>
+            <b class="text">3. Cung cấp workflow Machine Learning hoàn chỉnh và tự động hóa tối đa</b>
+            <br/>
+            <span class="mt-2 mb-4 text">
+          Đây là chức năng trung tâm của platform, cung cấp giao diện để người dùng tương tác trên hệ thống một cách đơn
+          giản và trực quan mà không cần thực hiện các tác vụ lập trình. Nền tảng tự động hóa toàn bộ các bước trong một
+          bài toán Machine Learning: Làm sạch dữ liệu, tiền xử lý dữ liệu, xây dựng và trích chọn đặc trưng, lựa chọn mô
+          hình và tham số tối ưu, kiểm tra và đánh giá kết quả, việc tự động hóa này được gọi là AutoML.
+          </span>
+            <br/>
+            <b class="text">4. Cung cấp cơ chế tạo ra Custom Recipe cho người dùng advanced</b>
+            <br/>
+            <span class="mt-2 mb-4 text">
+          Người dùng có kinh nghiệm trong lĩnh vực Machine Learning sẽ có nhu cầu customize các technique sử dụng trong
+          workflow để phù hợp hơn với dữ liệu của họ. Bằng cách mô hình hóa các bước trong Machine Learning Workflow thành
+          các khối (building block), người dùng có thể xây dựng công thức (recipe) cho riêng bài toán của họ. Platform
+          cung cấp cơ chế giúp việc cấu hình sử dụng block nào hay việc thay đổi parameter của block được thực hiện ngay
+          trên giao diện một cách dễ dàng và trên mỗi bước của ML workflow.
+          Đối với các business use case khác nhau sẽ có các recipe phù hợp tương ứng, bằng việc sử dụng recipe như một
+          template, Platform có thể cung cấp giải pháp theo nhiều lĩnh vực khác nhau (domain hóa giải pháp).
+          </span>
+            <br/>
+            <b class="text">5. Cơ chế vận hành trong môi trường production</b>
+            <br/>
+            <span class="mt-2 text">
+          Model sau khi training có thể serving dưới nhiều hình thức dựa vào nhu cầu riêng: serving qua HTTP (endpoint),
+          cơ chế xử lý theo batch vào lưu trữ kết quả ra file hoặc export pipeline ra file object để import trực tiếp
+          trong code khi phát triển ứng dụng. Ngoài ra, Platform cung cấp quản lý model life-cycle (MLOps) giúp vận hành
+          model trong môi trường production, bao gồm: sự thay đổi của các model, độ chính xác cập nhật theo thời gian, cơ
+          chế schedule retraining…
+          </span>
+          </div>-->
+      </nb-card-body>
+    </nb-card>
+  </nb-layout-column>
+</nb-layout>

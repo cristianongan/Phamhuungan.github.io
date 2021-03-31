@@ -1,0 +1,73 @@
+<div class="row" style="width: 100%;height: 100%; margin-left: unset; margin-right: unset">
+  <div class="image-left"></div>
+  <div class="col d-flex justify-content-center align-items-center" [nbSpinner]="isLoading" nbSpinnerStatus="primary">
+<!--    <div>-->
+      <form [formGroup]="loginForm" aria-labelledby="title">
+        <h1 id="title" class="title custom-title">Viettel Machine Learning Engine</h1>
+        <!--<nb-alert *ngIf="showMessages.error && errors?.length && !submitted" outline="danger" role="alert">-->
+        <!--  <p class="alert-title"><b>Oh snap!</b></p>-->
+        <!--  <ul class="alert-message-list">-->
+        <!--    <li *ngFor="let error of errors" class="alert-message">{{ error }}</li>-->
+        <!--  </ul>-->
+        <!--</nb-alert>-->
+
+        <!--<nb-alert *ngIf="showMessages.success && messages?.length && !submitted" outline="success" role="alert">-->
+        <!--  <p class="alert-title"><b>Hooray!</b></p>-->
+        <!--  <ul class="alert-message-list">-->
+        <!--    <li *ngFor="let message of messages" class="alert-message">{{ message }}</li>-->
+        <!--  </ul>-->
+        <!--</nb-alert>-->
+
+<!--        <nb-alert outline="danger" *ngIf="authenticationError" closable-->
+<!--                  (close)="onClose()">{{'login.failIn'|translate}}</nb-alert>-->
+        <div class="form-control-group">
+          <label class="label" for="account">{{'login.account'|translate}}</label>
+          <input nbInput
+                 fullWidth
+                 trim="blur"
+                 id="account"
+                 placeholder="{{'login.account'|translate}}"
+                 formControlName="account"
+                 [status]="loginForm.get('account').dirty ? (loginForm.get('account').invalid  ? 'danger' : 'success') : ''">
+          <ng-container *ngIf="loginForm.get('account').invalid && loginForm.get('account').touched">
+            <ngx-inline-message [formName]="loginForm.get('account')" [message]="'login.account'"></ngx-inline-message>
+          </ng-container>
+        </div>
+
+        <div class="form-control-group">
+          <label class="label" for="password">{{'login.password'|translate}}</label>
+
+          <input nbInput
+                 fullWidth
+                 name="password"
+                 type="password"
+                 id="password"
+                 trim="blur"
+                 formControlName="password"
+                 placeholder="{{'login.password'|translate}}"
+                 [status]="loginForm.get('password').dirty ?
+           (loginForm.get('password').invalid  ? 'danger' : 'success') : ''">
+          <ng-container *ngIf="loginForm.get('password').invalid && loginForm.get('password').touched ">
+            <ngx-inline-message [formName]="loginForm.get('password')"
+                                [message]="'login.password'"></ngx-inline-message>
+          </ng-container>
+        </div>
+
+        <!--  <div class="form-control-group accept-group">-->
+        <!--    <nb-checkbox name="rememberMe" [(ngModel)]="user.rememberMe" *ngIf="rememberMe">Remember me</nb-checkbox>-->
+        <!--    <a class="forgot-password" routerLink="../request-password">Forgot Password?</a>-->
+        <!--  </div>-->
+
+        <button nbButton
+                [disabled]="loginForm.invalid"
+                fullWidth status="primary"
+                (click)="signIn()">
+          {{'login.in'|translate}}
+        </button>
+        <!--      <button class="forgot-password-btn" (click)="forgotPassword()" >{{'login.forgotPassword'|translate}}-->
+        <!--      </button>-->
+      </form>
+<!--    </div>-->
+
+  </div>
+</div>

@@ -1,0 +1,117 @@
+<nb-card>
+  <nb-card-header>
+{{'user.label.title'|translate}}
+  </nb-card-header>
+  <nb-card-body>
+<!--    <form [formGroup]="userForm" (ngSubmit)="search()">-->
+      <div class="row" [formGroup]="userForm">
+        <div class="col-lg-3 form-group">
+          <label class="label">{{ 'user.column.role' | translate }}</label>
+          <ng-select fullWidth appendTo="body"  [items]="authorities"
+                     formControlName="authority" bindLabel="displayName" bindValue="name"
+                     placeholder="{{'global.select.placeholder' |translate}}"
+                     notFoundText="{{'global.select.notFoundText' |translate}}"
+                     clearAllText="{{'global.select.clearAllText' |translate}}"
+          >
+          </ng-select>
+        </div>
+        <div class="col-lg-3 form-group ">
+          <label class="label">
+            {{'user.label.search'|translate}}
+          </label>
+          <input id="keywordId" nbInput fullWidth formControlName="keyword" trim="blur">
+        </div>
+
+        <div class="form-group col-lg-2 align-items-end d-flex">
+          <button nbButton type="button" status="primary" (click)="search()" >
+            <nb-icon icon="search-outline"></nb-icon>
+            {{'user.label.search'|translate}}
+          </button>
+        </div>
+
+      </div>
+  </nb-card-body>
+</nb-card>
+
+<nb-card>
+  <nb-card-header class="d-flex justify-content-between">
+    {{ 'global.gridTitle' | translate}}
+    <button nbButton status="success" size="small" class="ml-auto" (click)="new()">
+    <nb-icon icon="plus" pack="eva"></nb-icon>
+    {{'user.label.add'|translate}}
+  </button>
+  </nb-card-header>
+  <nb-card-body>
+    <ngx-datatable class="fullscreen"
+                   [ngClass]="{'dark' : currentTheme !== 'default', 'bootstrap': currentTheme === 'default'}"
+                   [columnMode]="'flex'"
+                   [rows]="users"
+                   [columns]="columns"
+                   rowHeight="auto"
+                   [externalPaging]="true"
+                   [count]="page.totalElements"
+                   [offset]="page.pageNumber"
+                   [limit]="page.size"
+                   (page)="setPage($event)"
+                   [headerHeight]="50"
+                   [footerHeight]="50"
+                   [messages]="{totalMessage:'user.label.record'|translate}"
+
+    >
+      <ng-container *ngFor="let col of columns">
+        <ngx-datatable-column prop="{{col.prop}}" name="{{col.name}}" [flexGrow]="col.flexGrow">
+          <ng-template let-column="column" ngx-datatable-header-template>
+            {{ column.name |translate}}
+          </ng-template>
+
+          <ng-template let-value="value" ngx-datatable-cell-template let-row="row" let-rowIndex='rowIndex'>
+            <ng-container [ngSwitch]="col.prop">
+              <ng-container *ngSwitchCase="'index'">
+                {{rowIndex + 1 + (page.pageNumber * page.size)}}
+              </ng-container>
+
+              <ng-container *ngSwitchCase="'activated'">
+                <div *ngIf="row.activated === true; else elseBlockActived">{{'user.label.active'|translate}}</div>
+                <ng-template #elseBlockActived>
+                  {{'user.label.inactive'|translate}}
+                </ng-template>
+              </ng-container>
+
+              <ng-container *ngSwitchCase="'createdDate'">
+                {{row.createdDate | date:'dd/MM/yyyy HH:mm:ss'}}
+              </ng-container>
+
+              <ng-container *ngSwitchCase="'domainCode'">
+                    <span class="row-data-show"
+                          title="{{value}}">{{value.length > 50 ? value.substring(0, 50).concat('...') : value}}</span>
+              </ng-container>
+
+              <ng-container *ngSwitchCase="'action_btn'">
+                <button title="Cập nhật" class="p-1" nbButton status="warning" ghost (click)="edit(row)">
+                  <nb-icon icon="edit-outline" pack="eva" size="tiny"></nb-icon>
+                </button>
+                <button title="Khoá người dùng" class="p-1" *ngIf="row.activated" nbButton status="success" ghost
+                        (click)="setActive(row,false)">
+                  <nb-icon icon="unlock-outline" pack="eva" size="tiny"></nb-icon>
+                </button>
+                <button title="Mở khoá người dùng" class="p-1" *ngIf="!row.activated" nbButton status="danger" ghost
+                        (click)="setActive(row,true)">
+                  <nb-icon icon="lock-outline" pack="eva" size="tiny"></nb-icon>
+                </button>
+                <button title="Reset mật khẩu người dùng" class="p-1" nbButton status="danger" ghost *ngIf="!row.ssoUserId"
+                        (click)="resetPassword(row)">
+                  <nb-icon icon="refresh-outline" pack="eva" size="tiny"></nb-icon>
+                </button>
+              </ng-container>
+              <ng-container *ngSwitchDefault>
+                    <span class="row-data-show"
+                          title="{{value}}">{{value.length > 50 ? value.substring(0, 50).concat('...') : value}}</span>
+              </ng-container>
+
+            </ng-container>
+          </ng-template>
+        </ngx-datatable-column>
+      </ng-container>
+    </ngx-datatable>
+  </nb-card-body>
+</nb-card>

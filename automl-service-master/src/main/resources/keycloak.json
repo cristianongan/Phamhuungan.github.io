@@ -1,0 +1,8 @@
+{
+  "realm": "VAC",
+  "auth-server-url": "http://10.60.156.97:8000/auth",
+  "resource": "GBTD",
+  "credentials": {
+    "secret": "8636ea3e-ab81-4950-8849-2e373aa561a5"
+  }
+}

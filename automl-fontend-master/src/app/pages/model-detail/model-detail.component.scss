@@ -1,0 +1,127 @@
+
+.w60-h90 {
+  width: 60vw;
+  height: 90vh;
+}
+
+.custom-show-data {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.font-button {
+  text-transform: capitalize;
+}
+
+.task-blue {
+  width: 15px;
+  height: 31px;
+  background: #007bff;
+}
+
+.task-red {
+  width: 15px;
+  height: 31px;
+  background: #ff5500;
+}
+
+.task-green {
+  width: 15px;
+  height: 31px;
+  background: #229922;
+}
+
+.w-43 {
+  width: 43%;
+}
+
+.w-44 {
+  width: 44%;
+}
+
+.w-96 {
+  width: 96%;
+}
+
+.ml-10 {
+  margin-left: 10%;
+}
+
+.w30 {
+  width: 30vw;
+}
+
+.w-24 {
+  width: 24%;
+}
+
+.w35-h38 {
+  width: 35vw;
+  height: 38vh;
+}
+
+.font-blue {
+  color: #0076cb;
+  font-weight: bold;
+}
+
+.custom-show-data {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.font-button {
+  text-transform: capitalize;
+}
+
+::ng-deep .ngx-datatable .datatable-body-cell-label {
+  display: flex !important;
+}
+
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 15px;
+}
+
+.custom-table {
+  width: calc(100vw - 400px);
+  height: calc(100vh - 400px);
+}
+
+.w-h-log {
+  width: calc(100vw - 150px);
+  height: calc(100vh - 200px);
+}
+
+.w-h-logs {
+  width: calc(100vw - 530px);
+  height: calc(100vh - 200px);
+}
+
+::ng-deep .custom .p-picklist .p-picklist-buttons .p-button {
+  display: none;
+  margin-bottom: 0.5rem;
+}
+
+@media only screen and (max-width: 1366px) {
+  .w-h-logs {
+    width: calc(100vw - 330px);
+    height: calc(100vh - 100px);
+  }
+
+  .custom-table {
+    width: calc(100vw - 200px);
+    height: calc(100vh - 200px);
+  }
+
+  .w-h-log {
+    width: calc(100vw - 100px);
+    height: calc(100vh - 100px);
+  }
+}
