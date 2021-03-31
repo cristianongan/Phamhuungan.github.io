@@ -1,5 +1,6 @@
 package com.phamhuungan.thymeleafPractices.Controllers;
 
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,9 +13,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import com.phamhuungan.thymeleafPractices.Entities.Person;
 import com.phamhuungan.thymeleafPractices.Entities.User;
 import com.phamhuungan.thymeleafPractices.Services.UserServices;
 
@@ -28,27 +29,19 @@ public class UserController {
 	{
 		Cookie[] c = req.getCookies();
 		User user =new User();
+		if(c!=null)
 		for(Cookie cookie: c)
 		{
-			if(cookie.getName().equals("userName"))
-			{
-				user.setUserName(cookie.getValue());
-			}
-			if(cookie.getName().equals("password"))
-			{
-				user.setPassword(cookie.getValue());
-			}
+			if(cookie.getName().equals("JWT"))
+				user = userServices.reAu(cookie.getValue());
 		}
-		if(user.getUserName()!=null && user.getPassword()!=null)
+		if(user!=null )
+			if(user.getUserName()!=null)
 		{
-			if(userServices.authentication(user))
-			{
 				HttpSession ses =req.getSession();
-				ses.setMaxInactiveInterval(3000);
-				Person p = user;
-				ses.setAttribute("user", p);
+				ses.setMaxInactiveInterval(300);
+				ses.setAttribute("user", user.getId());
 				return "redirect:/manager";
-			}
 		}
 		m.addAttribute("User", new User());
 		return "index";
@@ -59,16 +52,13 @@ public class UserController {
 		if(userServices.authentication(user))
 		{
 			HttpSession ses =req.getSession();
-			ses.setMaxInactiveInterval(3000);
-			Person p =user;
-			ses.setAttribute("user", p);
+			ses.setMaxInactiveInterval(300);
+			ses.setAttribute("user", user.getId());
 			if(req.getParameter("remember")!=null)
 			{
-				Cookie cU = new Cookie("userName", user.getUserName());
-				Cookie cP = new Cookie("password", user.getPassword());
-				cU.setMaxAge(15);
-				cP.setMaxAge(15);
-				res.addCookie(cU);
+				String cU = userServices.JWTBuild(user);
+				Cookie cP = new Cookie("JWT", cU);
+				cP.setMaxAge(1500);
 				res.addCookie(cP);
 			}
 			return "redirect:/manager?stt=s";
@@ -83,10 +73,11 @@ public class UserController {
 		return "register";
 	}
 	@PostMapping(value="/register")
-	public String registerPost(@ModelAttribute(name = "User") User user,HttpServletRequest req,Model m)
+	public String registerPost(@ModelAttribute(name = "User") User user,HttpServletRequest req,Model m,
+			@RequestParam(name="fileImg" , required = false) CommonsMultipartFile fileImg)
 	{
 		try {
-			if(userServices.register(user))
+			if(userServices.register(user,fileImg))
 			{
 				return "redirect:/login?stt=success";
 			}
@@ -96,8 +87,11 @@ public class UserController {
 		return "register";
 	}
 	@GetMapping(value="/logout")
-	public String logout(HttpSession ses)
+	public String logout(HttpSession ses,HttpServletResponse res)
 	{
+		Cookie cU = new Cookie("JWT","");
+		cU.setMaxAge(1500);
+		res.addCookie(cU);
 		ses.invalidate();
 		return "redirect:/manager";
 	}

@@ -11,6 +11,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
+import org.mindrot.jbcrypt.BCrypt;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -62,6 +63,10 @@ public class User implements Person{
 		return this.grantAdmin;
 	}
 
+	public void Bcrypt()
+	{
+		this.password=BCrypt.hashpw(this.password, BCrypt.gensalt(12));
+	}
 
 
 }

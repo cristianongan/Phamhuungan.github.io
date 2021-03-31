@@ -3,9 +3,10 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Register</title>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" 
-integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" 
-crossorigin="anonymous">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+	integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+	crossorigin="anonymous">
 <script type="text/javascript" src="/validate.js"></script>
 </head>
 <body>
@@ -20,46 +21,51 @@ crossorigin="anonymous">
 								<h3 th:if="${stt}" th:text="${stt}"></h3>
 							</div>
 						</div>
-						<form action="/register" name="registration" th:object="${User}" method="post">
+						<form action="/register" name="registration" th:object="${User}"
+							method="post">
 							<div class="form-group">
-								<label for="exampleInputEmail1">First Name</label> <input th:value="${User.userInfo.firstName}" 
-									type="text" name="userInfo.firstName" class="form-control"
-									id="firstName" aria-describedby="emailHelp"
-									placeholder="Enter Firstname">
-									<span id="firstNameE"></span>
+								<label for="exampleInputEmail1">Avatar</label> <input
+									type="file" name="fileImg" class="form-control" id=""
+									aria-describedby="emailHelp" placeholder="Enter Firstname">
+								<span id=""></span>
 							</div>
 							<div class="form-group">
-								<label for="exampleInputEmail1">Last Name</label> <input th:value="*{userInfo.lastName}"
-									type="text" name="userInfo.lastName" class="form-control" id="lastName"
+								<label for="exampleInputEmail1">First Name</label> <input
+									th:value="${User.userInfo.firstName}" type="text"
+									name="userInfo.firstName" class="form-control" id="firstName"
+									aria-describedby="emailHelp" placeholder="Enter Firstname">
+								<span id="firstNameE"></span>
+							</div>
+							<div class="form-group">
+								<label for="exampleInputEmail1">Last Name</label> <input
+									th:value="*{userInfo.lastName}" type="text"
+									name="userInfo.lastName" class="form-control" id="lastName"
 									aria-describedby="emailHelp" placeholder="Enter Lastname">
-									<span id="lastNameE"></span>
+								<span id="lastNameE"></span>
 							</div>
 							<div class="form-group">
-								<label for="exampleInputEmail1">Email address</label> <input th:value="*{userInfo.email}"
-									type="email" name="userInfo.email" class="form-control" id="email"
-									aria-describedby="emailHelp" placeholder="Enter email">
-									<span id="emailE"></span>
+								<label for="exampleInputEmail1">Email address</label> <input
+									th:value="*{userInfo.email}" type="email" name="userInfo.email"
+									class="form-control" id="email" aria-describedby="emailHelp"
+									placeholder="Enter email"> <span id="emailE"></span>
 							</div>
 							<div class="form-group">
-								<label for="exampleInputEmail1">UserName</label> <input th:value="*{userName}"
-									type="text" name="userName" id="userName"
-									class="form-control" aria-describedby="emailHelp"
-									placeholder="Enter userName">
-									<span id="userNameE"></span>
+								<label for="exampleInputEmail1">UserName</label> <input
+									th:value="*{userName}" type="text" name="userName"
+									id="userName" class="form-control" aria-describedby="emailHelp"
+									placeholder="Enter userName"> <span id="userNameE"></span>
 							</div>
 							<div class="form-group">
-								<label for="exampleInputEmail1">Password</label> <input th:value="*{password}"
-									type="password" name="password" id="password"
-									class="form-control" aria-describedby="emailHelp"
-									placeholder="Enter Password">
-									<span id="passwordE"></span>
+								<label for="exampleInputEmail1">Password</label> <input
+									th:value="*{password}" type="password" name="password"
+									id="password" class="form-control" aria-describedby="emailHelp"
+									placeholder="Enter Password"> <span id="passwordE"></span>
 							</div>
 							<div class="form-group">
 								<label for="exampleInputEmail1">Re-Password</label> <input
-									type="password" id="Re-password"
-									class="form-control" aria-describedby="emailHelp"
-									placeholder="Enter Password">
-									<span id="Re-passwordE"></span>
+									type="password" id="Re-password" class="form-control"
+									aria-describedby="emailHelp" placeholder="Enter Password">
+								<span id="Re-passwordE"></span>
 							</div>
 							<div class="col-md-12 text-center mb-3">
 								<button type="submit" onClick="return validation();"

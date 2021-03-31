@@ -9,34 +9,52 @@
 	integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
 	crossorigin="anonymous">
 <link rel="stylesheet" href="/divider.css">
+<script type="text/javascript" src="/validate.js"></script>
 </head>
 <body>
 	<nav class="navbar navbar-expand-lg navbar-light bg-light">
-		<form class="form-inline" method="get" action="/admin/search">
+		<form class="form-inline" method="get" action="/admin/search" >
 			<input class="form-control mr-sm-2" type="search" name="key"
-				placeholder="Search" aria-label="Search">
+				placeholder="Search" aria-label="Search" th:value="${key}">
 			<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
 		</form>
 		<div class="collapse navbar-collapse" id="navbarNavAltMarkup" style="margin-left:10px;">
     		<div class="navbar-nav">
 		<a class="btn btn-outline-success my-2 my-sm-0 mr-sm-2" th:href="@{${session.user}?'/logout':'/login'}" th:text="${session.user}?Logout:Login"></a>
+		<a class="btn btn-outline-success my-2 my-sm-0 mr-sm-2" th:if="${action}=='update'" th:href="@{/admin/manager}" >New Employee</a>
 			</div>
 		</div>
 		
 	</nav>
+	<img  th:src="${User.userInfo.imgUrl}" th:alt="${User.userName}?${User.userName}:' '" id="output" class="rounded float-left" 
+	src="/img_ngan_img/f2.jpg" height="200 px" width="200 px" style="margin-left:10px;">
 	<div class="container">
+	
 		<div class="row">
 		<div class="col">
 					<div id="second">
+					
 						<div class="myform form ">
 							<div class="logo mb-3">
 								<div class="col-md-12 text-center">
-									<h1>New</h1>
-									<span th:if="${stt}!=null" th:text="${stt}"></span]>
+									<h1 th:text="${action}=='update'?'update':'New'">New</h1>
+									<span th:if="${stt}!=null" th:text="${stt}"></span>
 								</div>
 							</div>
-							<form action="/admin/add" name="registration" th:object="${User}"
-								method="post">
+							
+							<form th:action="${action}=='update'?'/admin/update':'/admin/add'" name="registration" th:object="${User}" enctype="multipart/form-data"
+								method="post" >
+								
+								<input th:if="*{id}!=null" th:value="*{id}" type="hidden" name="id">
+								<div class="form-group">
+									<label for="exampleInputEmail1">Avatar</label> <input
+									 type="file" name="fileImg"
+									 class="form-control" id="imgInput"
+										aria-describedby="emailHelp" placeholder="Enter Firstname"
+									accept="image/*"
+								onChange="document.getElementById('output').src = window.URL.createObjectURL(this.files[0])">
+									<span id=""></span>
+								</div>
 								<div class="form-group">
 									<label for="exampleInputEmail1">First Name</label> <input
 										th:value="${User.userInfo.firstName}" type="text"
@@ -73,7 +91,7 @@
 									<span id="passwordE"></span>
 								</div>
 								<div class="form-group">
-									<label for="exampleInputEmail1">Re-Password</label> <input
+									<label for="exampleInputEmail1">Re-Password</label> <input th:value="*{password}" 
 										type="password" id="Re-password" class="form-control"
 										aria-describedby="emailHelp" placeholder="Enter Password">
 									<span id="Re-passwordE"></span>
@@ -98,7 +116,7 @@
 								</div>
 								<div class="col-md-12 text-center mb-3">
 									<button type="submit" onClick="return validation();"
-										class=" btn btn-block mybtn btn-primary tx-tfm">Add</button>
+										class=" btn btn-block mybtn btn-primary tx-tfm" th:text="${action}=='update'?'Save':'Add'"></button>
 								</div>
 						</div>
 						</form>
@@ -118,10 +136,11 @@
 					<tbody>
 						<tr th:each="user, iter : ${listUser}">
 							<td th:text="${iter.count}" />
-							<td th:text="${user.userName}" class="table-success" />
+							<td class="table-success" ><a th:href="@{/admin/update(id=${user.id},page=${currentPage})}" th:text="${user.userName}"></a></td>
 							<td th:text="${user.userInfo.lastName}" class="table-primary" />
 							<td th:text="${user.userInfo.firstName}" class="table-danger" />
 							<td th:text="${user.userInfo.email}" class="table-info" />
+							<td><a th:href="@{/admin/delete(id=${user.id})}" class="btn btn-block">Delete</a></td>
 						</tr>
 					</tbody>
 				</table>
@@ -129,11 +148,11 @@
 				style="height: auto; width: 50%; text-align: center; margin-left: 50%;">
 				<ul class="pagination">
 					<li th:if="${pages.size()}>3" class="page-item"><a
-						th:href="@{/manager(page=1)}" class="page-link">First</a></li>
+						th:href="@{${key}?'/admin/search'(page=1,key=${key})}" class="page-link">First</a></li>
 					<li th:each="i : ${pages}" class="page-item"><a th:text="${i}"
-						class="page-link" th:href="@{/manager(page=${i})}"></a></li>
+						class="page-link" th:href="@{${key}?'/admin/search'(page=${i},key=${key})}"></a></li>
 					<li th:if="${pages.size()}>5" class="page-item"><a
-						class="page-link" th:href="@{/manager(page=${totalPages})}">End</a></li>
+						class="page-link" th:href="@{${key}?'/admin/search'(page=${totalPages},key=${key})}">End</a></li>
 				</ul>
 			</div>
 		</div>

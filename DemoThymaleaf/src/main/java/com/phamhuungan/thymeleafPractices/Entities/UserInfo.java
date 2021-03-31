@@ -40,6 +40,7 @@ public class UserInfo{
 	@Column(name = "lastName")
 	private String lastName;
 	
-
+	@Column(name="imgUrl")
+	private String imgUrl="";
 
 }

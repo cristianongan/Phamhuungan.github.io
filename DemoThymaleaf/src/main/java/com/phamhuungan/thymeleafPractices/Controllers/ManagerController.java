@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.phamhuungan.thymeleafPractices.Entities.Person;
 import com.phamhuungan.thymeleafPractices.Entities.User;
 import com.phamhuungan.thymeleafPractices.Services.UserServices;
 
@@ -28,9 +29,17 @@ public class ManagerController {
 	@GetMapping(value = "")
 	public String homeManager(Model m,@RequestParam(name = "page") Optional<Integer> page,HttpServletRequest req)
 	{
+		System.out.println(req.getServletContext().getRealPath("img_ngan_img"));
 		returnPageUser(page, req, m);
 		if(req.getSession().getAttribute("user")!=null)
-			m.addAttribute("isAdmin", true);
+		{
+			int id = (int) req.getSession().getAttribute("user");
+			User user = userService.findUser(id);
+			if(user!=null)
+			if(user.isGrantAdmin())
+				m.addAttribute("isAdmin", true);
+		}
+		
 		return "homeManager";
 	}
 	@GetMapping(value="/search")
@@ -49,9 +58,16 @@ public class ManagerController {
 			if(i>0 && i<=totalPages)
 			pages.add(i);
 		}
-		if(req.getSession().getAttribute("user")!=null)
-			m.addAttribute("isAdmin", true);
 		m.addAttribute("pages", pages);
+		m.addAttribute("key", s);
+		if(req.getSession().getAttribute("user")!=null)
+		{
+			int id = (int) req.getSession().getAttribute("user");
+			User user = userService.findUser(id);
+			if(user!=null)
+			if(user.isGrantAdmin())
+				m.addAttribute("isAdmin", true);
+		}
 		return "homeManager";
 	}
 	public static void returnPageUser(Optional<Integer> page,HttpServletRequest req,Model m)
