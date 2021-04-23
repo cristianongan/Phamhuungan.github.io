@@ -9,14 +9,15 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import org.zkoss.spring.SpringUtil;
 
 import com.evotek.qlns.model.RightView;
 import com.evotek.qlns.model.User;
@@ -30,13 +31,15 @@ import com.evotek.qlns.util.Validator;
  *
  * @author linhlh2
  */
+@Service
 public class UserDetailsServiceImpl implements UserDetailsService, Serializable {
 
     private static final long serialVersionUID = 1368775416931L;
 
     private static final Logger _log = LogManager.getLogger(UserDetailsServiceImpl.class);
-    // the service from which we get the data
-    private transient UserService userService;
+
+    @Autowired
+    private UserService userService;
 
     @Override
     public UserDetails loadUserByUsername(String userName) {
@@ -85,7 +88,7 @@ public class UserDetailsServiceImpl implements UserDetailsService, Serializable 
      * @return
      */
     public User getUserByUserName(final String userName) throws Exception{
-        return getUserService().getUserByUserName(userName);
+        return this.userService.getUserByUserName(userName);
     }
 
     /**
@@ -94,7 +97,7 @@ public class UserDetailsServiceImpl implements UserDetailsService, Serializable 
      * @return
      */
      public List<String> getRolesByUser(final User user) throws Exception{
-         return getUserService().getRolesNameByUser(user);
+         return this.userService.getRolesNameByUser(user);
      }
     /**
      * Fills the GrantedAuthorities List for a specified user.<br>
@@ -112,7 +115,7 @@ public class UserDetailsServiceImpl implements UserDetailsService, Serializable 
 
         try {
             // get the list of rights for a specified user from db.
-            final List<RightView> rightViews = getUserService().
+            final List<RightView> rightViews = this.userService.
                     getRightViewByUserId(userId);
 
             // now create for all rights a GrantedAuthority entry
@@ -143,21 +146,5 @@ public class UserDetailsServiceImpl implements UserDetailsService, Serializable 
 
             userService.saveOrUpdate(loginLog);
         }
-    }
-    // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-    // ++++++++++++++++ Setter/Getter ++++++++++++++++++ //
-    // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-    public UserService getUserService() {
-        if (this.userService == null) {
-            this.userService = (UserService)
-                    SpringUtil.getBean("userService");
-            setUserService(this.userService);
-        }
-
-        return this.userService;
-    }
-
-    public void setUserService(UserService userService) {
-        this.userService = userService;
     }
 }
