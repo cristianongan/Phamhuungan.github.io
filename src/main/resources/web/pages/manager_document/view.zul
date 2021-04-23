@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <hlayout spacing="0" apply="${documentController}">
+        <!-- Document type tree -->
+        <div id="sidebar" sclass="sidebar">
+	<!-- Shortcuts Button-->
+            <div class="shortcuts">
+		<!-- Display when expanded -->
+                <div class="shortcuts-expanded">
+                    <button type="button" class="btn-warning"
+                            tooltip="exportTooltip,position=after_center"
+                            iconSclass="z-icon-table"
+                            id="btnExport"/>
+                    <button type="button" class="btn-success" 
+                            tooltip="docTypeManager,position=after_center"
+                            iconSclass="z-icon-sitemap"
+                            id="btnDocTypeManager"/>
+                    <button type="button" class="btn-danger"
+                            tooltip="delDocTooltip,position=after_center"
+                            iconSclass="z-icon-trash-o"
+                            id="btnDelDoc"/>
+                    <button type="button" class="btn-info"
+                            tooltip="addDocTooltip,position=after_center"
+                            iconSclass="z-icon-plus-circle"
+                            id="btnAddDoc"/>
+                </div>
+                
+                <!--pop up tooltip-->
+                <popup id="docTypeManager" zclass="tooltip" sclass="bottom bottom tooltip-success">
+                    <span zclass="tooltip-arrow"/>
+                    <label zclass="tooltip-inner" value="${c:l('menu.item.document.type')}" multiline="true"/>
+                </popup>
+                <popup id="delDocTooltip" zclass="tooltip" sclass="bottom tooltip-error">
+                    <span zclass="tooltip-arrow"/>
+                    <label zclass="tooltip-inner" value="${c:l('delete.document')}" multiline="true"/>
+                </popup>
+                <popup id="addDocTooltip" zclass="tooltip" sclass="bottom tooltip-info">
+                    <span zclass="tooltip-arrow"/>
+                    <label zclass="tooltip-inner" value="${c:l('title.add.document')}" multiline="true"/>
+                </popup>
+		<!-- Display when collapsed -->
+                <div class="shortcuts-collapsed">
+                    <button type="button" class="btn-warning"/>
+                    <button type="button" class="btn-success"/>
+                    <button type="button" class="btn-danger"/>
+                    <button type="button" class="btn-info"/>
+                </div>
+            </div>
+            
+            <div>
+                <textbox id="tbSearchDocType" hflex="1" placeholder="${c:l('button.search')}"/>
+            </div>
+	<!-- Navigation List -->
+            <navbar id="navbar" sclass="nav-list" orient="vertical">
+            </navbar>
+            <navbar id="navbarSearch" sclass="nav-list search-nav" orient="vertical" visible="false">
+            </navbar>
+	<!-- Toggler -->
+            <div sclass="sidebar-collapse">
+                <a id="toggler" iconSclass="z-icon-angle-double-left"/>
+                <a id="togglerBack" iconSclass="z-icon-angle-double-left" visible="false" tooltiptext="${c:l('button.back')}"/>
+            </div>
+        </div>
+        <vlayout spacing="0" hflex="1" >
+            <!-- breadcrumbs -->
+            <div sclass="breadcrumbs">
+                <div sclass="breadcrumb">
+                    <span sclass="home-icon z-icon-home"/>
+                    <a label="${c:l('menu.main')}" onClick='Executions.sendRedirect("/index.zul")'/>
+                    <label value="${c:l('menu.item.manager.document')}"/>
+                </div>
+  <!-- Search input-->
+                <div sclass="nav-search">
+                    <span class="input-prepend z-bandbox" style="">
+                        <textbox id="tbKeyword" zclass="z-bandbox-input" 
+                                 placeholder="${c:l('button.search')}"/>
+                        <a id="btnBasicSearch" iconSclass="z-icon-search" 
+                           zclass="z-bandbox-button"/>
+                    </span>
+                    <button id="btnEnableAdvSearch" type="button"
+                            iconSclass="z-icon-search-plus"/>
+<!--                    <a hflex="3" iconSclass="z-icon-question-circle"
+                       tooltip="advSearchTooltip,after_start, delay = 0"/>-->
+                </div>
+                
+                <!--popup advance search-->
+                <popup id="advanceSearchPopup" width="500px" >
+                    <grid id ="gridAdvSearch" sclass="no-style">
+                        <columns>
+                            <column width="45%"/>
+                            <column/>
+                            <column width="45%"/>
+                        </columns>
+                        <rows>
+                            <row>
+                                <textbox id="txtDocumentNumber" mold="rounded" 
+                                         hflex="1" placeholder="${c:l('document.number')}"/>
+                                <a/>
+                                <textbox id="txtDocumentContent" mold="rounded" 
+                                         hflex="1" placeholder="${c:l('content')}"/>
+                   
+                            </row>
+                            <row>
+                                <bandbox id="bbDocumentType" mold="rounded" hflex="1" 
+                                         readonly="true" placeholder="${c:l('document.type')}">
+                                    <bandpopup width="345px" height="345px">
+                                        <include id="icDocumentType"/>
+                                    </bandpopup>
+                                </bandbox>
+                                <a id="btnClearDoc" iconSclass="z-icon-times" zclass="red"
+                                   style="font-size: 18px" disabled="true" visible="false"/>
+                                <combobox id="cbDepartment" mold="rounded" hflex="1" 
+                                          autodrop="true" buttonVisible="false"
+                                          placeholder="${c:l('publisher')}"/>
+                            </row>
+                            <row>
+                                <datebox id="dbFromDate" mold="rounded" hflex="1"
+                                         placeholder="${c:l('create.date.from')}"/>
+                                <a/>
+                                <datebox id="dbToDate" mold="rounded" hflex="1"
+                                         placeholder="${c:l('to.date')}"/>
+                            </row>
+                            <row>
+                                <cell colspan="3" align="center">
+                                    <toolbarbutton id = "btnAdvSearch" iconSclass="z-icon-search"
+                                                   style="font-size:18px"/>
+                                </cell>
+                            </row>
+                        </rows>
+                    </grid>
+                </popup>
+            </div>
+            <!-- document grid-->
+            <vlayout sclass="page-content" xmlns:n="native" spacing="0">
+                <div sclass="page-header">
+                    <a label="${c:l('menu.item.manager.document')}" 
+                       iconSclass="z-icon-list" sclass="lighter z-label"/>
+                </div>
+                <div sclass="table-responsive">
+                    <listbox id="listboxResult" emptyMessage="${c:l('common.no.record.found')}"
+                             mold="paging" pageSize="25" checkmark="true" multiple="true"
+                             hflex="1" width="100%" pagingPosition="both"
+                             sclass="table table-striped table-bordered table-hover search-result-grid" nonselectableTags="*">
+                        <listhead sizable="true">
+                            <listheader width="40px" />
+                            <listheader width="53px" label="${c:l('common.column.number')}"/>
+                            <listheader label="${c:l('document.number')}" hflex="1"
+                                        sort="auto(documentNumber)"/>
+                            <listheader label="${c:l('document.type')}" hflex="1"
+                                        sort="auto(typeName)"/>
+                            <listheader label="${c:l('publisher')}" hflex="2"
+                                        sort="auto(promulgationDept)"/>
+                            <listheader label="${c:l('public.date')}" hflex="1"
+                                        sort="auto(promulgationDate)"/>
+                            <listheader label="${c:l('document.attach')}" hflex="2"/>
+                            <listheader label="${c:l('content')}" hflex="3"
+                                        sort="auto(content)"/>
+                            <listheader width="70px" align="center"/>
+                        </listhead>
+                    </listbox>
+                </div>
+            </vlayout>
+        </vlayout>
+        
+        <!--pop up tooltip-->
+        <popup id="advSearchTooltip" zclass="tooltip" sclass="bottom tooltip-info">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('common.search.extend')}"/>
+        </popup>
+    </hlayout>
+</zk>

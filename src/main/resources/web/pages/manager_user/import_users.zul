@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <window id="winImportUser" title="${c:l('title.import.user')}" width="775px"
+            height="auto"  mode="overlapped" closable="true"
+            apply="${importUsersController}"
+            action="show: slideDown;hide: slideUp" border="normal">
+               <grid>
+                   <columns>
+                       <column width="20%"/>
+                       <column width="70%"/>
+                       <column width="10%"/>
+                   </columns>
+                   <rows>
+                       <row>
+                           <toolbarbutton id="btDownload" image="/html/images/icons/download.png" tooltiptext="${c:l('download.template')}"/>
+                           <textbox id="txtFileDirection" readonly="true" hflex="1"/>
+                        <button id="btBrowse" upload="true" label="${c:l('button.browse')}"/>
+                       </row>
+                       <row>
+                           <cell colspan="3" align="center">
+                               <button id="btnImport" label = "${c:l('button.import')}"
+                                        image="/html/images/icons/import-icon.png"   />
+                           </cell>
+                       </row>
+                   </rows>
+               </grid>
+    </window>
+</zk>

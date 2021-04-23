@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <window width="400px" closable="true" action="show: slideDown;hide: slideUp"
+        apply="${addEditDocumentController}" border="none" 
+        title="${c:l('title.add.document')}" position="center, center">
+        <grid sclass="no-style">
+            <columns>
+                <column width="10%"/>
+                <column width="80%"/>
+                <column width="10%"/>
+            </columns>
+            <rows>
+                <row>
+                    <cell sclass="z-require">
+                        <a iconSclass = "z-icon-star" 
+                           tooltip="requireTooltip,position=start_after"/>
+                    </cell>
+                    <textbox id="txtDocumentNumber" mold="rounded" focus="true"
+                             hflex="1" placeholder="${c:l('document.number')}" 
+                             tooltip="documentNumberTooltip,position=end_before,delay=500"/>
+                    <cell/>
+                </row>
+                
+                <row>
+                    <cell sclass="z-require">
+                        <a iconSclass = "z-icon-star" 
+                           tooltip="requireTooltip,position=start_after"/>
+                    </cell>
+                    <bandbox id="bbDocumentType" mold="rounded" hflex="1" 
+                             readonly="true" placeholder="${c:l('document.type')}" 
+                             tooltip="documentTypeTooltip,position=end_before,delay=500">
+                        <bandpopup width="350px">
+                            <include id="icDocumentType"/>
+                        </bandpopup>
+                    </bandbox>
+                    <a id="btnClearDoc" iconSclass="z-icon-times" zclass="red"
+                       style="font-size: 18px" visible="false"/>
+                    <cell/>
+                </row>
+                
+                <row>
+                    <cell/>
+                    <datebox id="dbDate" mold="rounded" hflex="1"
+                             placeholder="${c:l('public.date')}" 
+                             tooltip="dateTooltip,position=end_before,delay=500"/>
+                    <cell/>
+                </row>
+                
+                <row>
+                    <cell/>
+                    <combobox id="cbDepartment" mold="rounded" hflex="1" 
+                              autodrop="true" buttonVisible="false"
+                              placeholder="${c:l('publisher')}" 
+                              tooltip="departmentTooltip,position=end_before,delay=500"/>
+                    <cell/>
+                </row>
+                <row>
+                    <cell sclass="z-require">
+                        <a iconSclass = "z-icon-star" 
+                           tooltip="requireTooltip,position=start_after"/>
+                    </cell>
+                    <textbox id="txtContent" rows="2" mold="rounded" hflex="1"
+                             placeholder="${c:l('content')}" multiline="true" 
+                             tooltip="contentTooltip,position=end_before,delay=500"/>
+                    <cell/>
+                </row>
+                <row>
+                    <cell/>
+                    <cell>
+                        <panel sclass="panel-success" mold="bs">
+                            <panelchildren>
+                                <div id="divUpload" align="center" sclass="z-panel-attach-file">
+
+                                </div>
+                            </panelchildren>
+                        </panel>
+                    </cell>
+                </row>
+            </rows>
+        </grid>
+        
+        <div align="center" sclass="z-button-action">
+            <button id="btnPrevious" type="button" label="${c:l('button.previous')}" 
+                    iconSclass="z-icon-backward" class="btn-info" if="${not empty arg.object}"/>
+            <button id="btnNext" type="button" label="${c:l('button.next')}" 
+                    iconSclass="z-icon-forward" class="btn-info" if="${not empty arg.object}"/>
+            <button id="btnSave" type="button" label="${c:l('button.save')}" 
+                    iconSclass="z-icon-check" class="btn-success"/>
+            <button id="btnCancel" type="button" label="${c:l('button.cancel')}"
+                    iconSclass="z-icon-times" class="btn-default"/>
+        </div>
+        
+        <!--pop up tooltip-->
+        
+        <popup id="documentNumberTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('document.number')}"/>
+        </popup>
+        <popup id="documentTypeTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('document.type')}"/>
+        </popup>
+        <popup id="dateTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('public.date')}"/>
+        </popup>
+        <popup id="departmentTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('publisher')}"/>
+        </popup>
+        <popup id="contentTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('content')}"/>
+        </popup>
+    </window>
+</zk>

@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root>
+    <entry id="USER_CREATE">
+        <subject><![CDATA[
+            Kích hoạt tài khoản Smart Office
+            ]]>
+        </subject>
+        <body><![CDATA[
+            <html>
+                <style>
+                        p span{
+                                font-family:"Times New Roman","serif";
+                                color:#1F497D;
+                        }
+                </style>
+                <body>
+                    <div>
+                        <p>
+                            <span>Xin chào, $[FULL_NAME]</span>
+                            <br/>
+                            <br/>    
+                            <span>Tài khoản của bạn đã được tạo trên hệ thống $[HOST_ADDRESS].</span>
+                            <br/>
+                            <br/>    
+                            <span>Thông tin tài khoản:</span>
+                            <br/>
+                            <br/>    
+                            <span>Tên đăng nhập: $[USER_NAME]</span>
+                            <br/>
+                            <span>Mật khẩu: $[PASSWORD]</span>
+                            <br/>
+                            <br/>	
+                            <span>Để bắt đầu sử dụng hệ thống, mời bạn click vào liên kết này:  $[VERIFY_URL] để kích hoạt tài khoản và đổi mật khẩu. Liên kết này chỉ có hiệu lực trong vòng 7 ngày kể từ thời điểm đăng ký. Quá thời hạn này tài khoản của bạn sẽ bị xóa.</span>
+                            <br/>
+                            <br/>
+                            <span>Cảm ơn bạn đã sử dụng hệ thống.</span>
+                            <br/>
+                            <br/>	
+                            <span>Trân trọng,</span>
+                            <br/>
+                            <span>Nhóm phát triển Tech4</span>
+                            <br/>
+                            <span><a href="mailto:support@tech4.vn">support@tech4.vn</a></span>
+                            <br/>
+                            <span><a href="http://tech4.vn">http://tech4.vn</a></span>
+                            <br/>
+                        </p>
+                        <hr size=2 width="100%" align=center>
+			<p>
+                            <i><span style='font-size:10.0pt;color:red'>* Đây là email tự động gửi từ hệ thống. Vui lòng không trả lời email này.</span></i>
+			</p>
+                    </div>
+                </body>
+            </html>
+        ]]>
+        </body>
+    </entry>
+    <entry id="USER_REGISTER">
+        <subject><![CDATA[
+            Kích hoạt tài khoản Smart Office
+        ]]></subject>
+        <body><![CDATA[
+            <html>
+                <style>
+                        p span{
+                                font-family:"Times New Roman","serif";
+                                color:#1F497D;
+                        }
+                </style>
+                <body>
+                    <div>
+                        <p>
+                            <span>Xin chào, $[FULL_NAME]</span>
+                            <br/>
+                            <br/>    
+                            <span>Chúc mừng bạn đã đăng ký thành công tài khoản trên hệ thống $[HOST_ADDRESS].</span>
+                            <br/>
+                            <br/>    
+                            <span>Thông tin tài khoản:</span>
+                            <br/>
+                            <br/>    
+                            <span>Tên đăng nhập: $[USER_NAME]</span>
+                            <br/>
+                            <span>Mật khẩu: $[PASSWORD]</span>
+                            <br/>
+                            <br/>	
+                            <span>Để bắt đầu sử dụng hệ thống, mời bạn click vào liên kết này:  $[VERIFY_URL] để kích hoạt tài khoản và đổi mật khẩu. Liên kết này chỉ có hiệu lực trong vòng 7 ngày kể từ thời điểm đăng ký. Quá thời hạn này tài khoản của bạn sẽ bị xóa.</span>
+                            <br/>
+                            <br/>
+                            <span>Cảm ơn bạn đã đăng ký.</span>
+                            <br/>
+                            <br/>	
+                            <span>Trân trọng,</span>
+                            <br/>
+                            <span>Nhóm phát triển Tech4</span>
+                            <br/>
+                            <span><a href="mailto:support@tech4.vn">support@tech4.vn</a></span>
+                            <br/>
+                            <span><a href="http://tech4.vn">http://tech4.vn</a></span>
+                            <br/>
+                        </p>
+                        <hr size=2 width="100%" align=center>
+			<p>
+                            <i><span style='font-size:10.0pt;color:red'>* Đây là email tự động gửi từ hệ thống. Vui lòng không trả lời email này.</span></i>
+			</p>
+                    </div>
+                </body>
+            </html>
+        ]]></body>
+    </entry>
+    <entry id="RESET_PASSWORD">
+        <subject><![CDATA[
+            Mật khẩu của bạn đã được reset.
+        ]]></subject>
+        <body><![CDATA[
+            <html>
+                <style>
+                        p span{
+                                font-family:"Times New Roman","serif";
+                                color:#1F497D;
+                        }
+                </style>
+                <body>
+                    <div>
+                        <p>
+                            <span>Xin chào, $[FULL_NAME]</span>
+                            <br/>
+                            <br/>    
+                            <span>Tài khoản của bạn trên hệ thống $[HOST_ADDRESS] đã được reset mật khẩu.</span>
+                            <br/>
+                            <br/>    
+                            <span>Thông tin tài khoản:</span>
+                            <br/>
+                            <br/>    
+                            <span>Tên đăng nhập: $[USER_NAME]</span>
+                            <br/>
+                            <span>Mật khẩu mới: $[PASSWORD]</span>
+                            <br/>
+                            <br/>	
+                            <span>Hãy đăng nhập hệ thống $[HOST_ADDRESS] và đổi lại mật khẩu.</span>
+                            <br/>
+                            <br/>	
+                            <span>Trân trọng,</span>
+                            <br/>
+                            <span>Nhóm phát triển Tech4</span>
+                            <br/>
+                            <span><a href="mailto:support@tech4.vn">support@tech4.vn</a></span>
+                            <br/>
+                            <span><a href="http://tech4.vn">http://tech4.vn</a></span>
+                            <br/>
+                        </p>
+                        <hr size=2 width="100%" align=center>
+			<p>
+                            <i><span style='font-size:10.0pt;color:red'>* Đây là email tự động gửi từ hệ thống. Vui lòng không trả lời email này.</span></i>
+			</p>
+                    </div>
+                </body>
+            </html>
+        ]]></body>
+    </entry>
+    <entry id="VERIFY_RESET_PASSWORD">
+        <subject><![CDATA[
+            Khôi phục mật khẩu
+        ]]></subject>
+        <body><![CDATA[
+            <html>
+                <style>
+                        p span{
+                                font-family:"Times New Roman","serif";
+                                color:#1F497D;
+                        }
+                </style>
+                <body>
+                    <div>
+                        <p>
+                            <span>Xin chào, $[FULL_NAME]</span>
+                            <br/>
+                            <br/>    
+                            <span>Cảm ơn bạn đã sử dụng hệ thống Smart Office của <a href="tech4.vn">tech4.vn<a> tại địa chỉ $[HOST_ADDRESS].</span>
+                            <br/>
+                            <br/>    
+                            <span>Hệ thống nhận được yêu cầu của bạn về việc khôi phục mật khẩu.</span>
+                            <br/>
+                            <br/>    
+                            <span>Hãy dùng đoạn mã sau để xác nhận việc khôi phục: </span>
+                            <br/>
+                            <span style="font-size: 16px; color:blue; font-weight:bold">$[VERIFY_CODE]</span>
+                            <br/>
+                            <span>Nếu bạn không yêu cầu khôi phục mật khẩu hãy bỏ qua email này. Yêu cầu sẽ bị vô hiệu hóa sau 24h.</span>
+                            <br/>
+                            <br/>
+                            <br/>	
+                            <span>Trân trọng,</span>
+                            <br/>
+                            <span>Nhóm phát triển Tech4</span>
+                            <br/>
+                            <span><a href="mailto:support@tech4.vn">support@tech4.vn</a></span>
+                            <br/>
+                            <span><a href="http://tech4.vn">http://tech4.vn</a></span>
+                            <br/>
+                        </p>
+                        <hr size=2 width="100%" align=center>
+			<p>
+                            <i><span style='font-size:10.0pt;color:red'>* Đây là email tự động gửi từ hệ thống. Vui lòng không trả lời email này.</span></i>
+			</p>
+                    </div>
+                </body>
+            </html>
+        ]]></body>
+    </entry>
+    <entry id="VERIFY_RESET_PASSWORD_USER_DEACTIVE">
+        <subject><![CDATA[
+            Khôi phục mật khẩu
+        ]]></subject>
+        <body><![CDATA[
+            <html>
+                <style>
+                        p span{
+                                font-family:"Times New Roman","serif";
+                                color:#1F497D;
+                        }
+                </style>
+                <body>
+                    <div>
+                        <p>
+                            <span>Xin chào, $[FULL_NAME]</span>
+                            <br/>
+                            <br/>    
+                            <span>Cảm ơn bạn đã sử dụng hệ thống Smart Office của <a href="tech4.vn">tech4.vn<a> tại địa chỉ $[HOST_ADDRESS].</span>
+                            <br/>
+                            <br/>    
+                            <span>Hệ thống nhận được yêu cầu của bạn về việc khôi phục mật khẩu.</span>
+                            <br/>
+                            <br/>    
+                            <span>Tuy nhiên tài khoản của bạn đã bị vô hiệu hóa trên hệ thống.</span>
+                            <br/>
+                            <span>Mọi chi tiết xin liên hệ với quản trị hệ thống.</span>
+                            <br/>
+                            <br/>
+                            <br/>	
+                            <span>Trân trọng,</span>
+                            <br/>
+                            <span>Nhóm phát triển Tech4</span>
+                            <br/>
+                            <span><a href="mailto:support@tech4.vn">support@tech4.vn</a></span>
+                            <br/>
+                            <span><a href="http://tech4.vn">http://tech4.vn</a></span>
+                            <br/>
+                        </p>
+                        <hr size=2 width="100%" align=center>
+			<p>
+                            <i><span style='font-size:10.0pt;color:red'>* Đây là email tự động gửi từ hệ thống. Vui lòng không trả lời email này.</span></i>
+			</p>
+                    </div>
+                </body>
+            </html>
+        ]]></body>
+    </entry>
+</root>

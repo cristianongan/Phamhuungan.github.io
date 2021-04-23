@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <hlayout spacing="0" apply="${staffController}">
+        <div id="sidebar" sclass="sidebar sidebar-min">
+            <div class="shortcuts">
+                <!-- Display when expanded -->
+                <div class="shortcuts-expanded">
+                    <button type="button" class="btn-warning"
+                            tooltip="exportStaff,position=after_center"
+                            iconSclass="z-icon-table"
+                            id="btnExport"/>
+                    <button type="button" class="btn-success" 
+                            tooltip="deptManager,position=after_center"
+                            iconSclass="z-icon-sitemap"
+                            id="btnDeptManager"/>
+                    <button type="button" class="btn-warning" 
+                            iconSclass="z-icon-group"/>
+                    <button type="button" class="btn-danger" 
+                            iconSclass="z-icon-cogs"/>
+                </div>
+                <!-- Display when collapsed -->
+                <div class="shortcuts-collapsed">
+                    <button type="button" class="btn-warning"/>
+                    <button type="button" class="btn-info"/>
+                    <button type="button" class="btn-warning"/>
+                    <button type="button" class="btn-danger"/>
+                </div>
+            </div>
+	<!-- Navigation List -->
+            <navbar id="navbar" sclass="nav-list" orient="vertical" collapsed="true">
+            </navbar>
+	<!-- Toggler -->
+            <div sclass="sidebar-collapse">
+                <a id="toggler" iconSclass="z-icon-angle-double-right"/>
+            </div>
+        </div>
+        <vlayout spacing="0" hflex="1">
+            <div sclass="breadcrumbs">
+                <div sclass="breadcrumb">
+                    <span sclass="home-icon z-icon-home"/>
+                    <a label="${c:l('menu.main')}" onClick='Executions.sendRedirect("/index.zul")'/>
+                    <label value="${c:l('menu.item.human.resource')}"/>
+                </div>
+                
+                <!-- Search input-->
+                <div sclass="nav-search">
+                    <span class="input-prepend z-bandbox" style="">
+                        <textbox id="tbKeyword" zclass="z-bandbox-input" 
+                                 placeholder="${c:l('button.search')}"/>
+                        <a id="btnBasicSearch" iconSclass="z-icon-search" 
+                           zclass="z-bandbox-button"/>
+                    </span>
+                    <button id="btnEnableAdvSearch" type="button"
+                            iconSclass="z-icon-search-plus"/>
+                </div>
+                
+                <!--popup advance search-->
+                <popup id="advanceSearchPopup" width="500px" >
+                    <grid id ="gridAdvSearch" sclass="no-style">
+                        <columns>
+                            <column width="45%"/>
+                            <column/>
+                            <column width="45%"/>
+                        </columns>
+                        <rows>
+                            <row>
+                                <textbox id="tbStaffName" mold="rounded" 
+                                         hflex="1" placeholder="${c:l('full.name')}"/>
+                                <a/>
+                                <longbox id="lgbYearOfBirth" mold="rounded" 
+                                         hflex="1" placeholder="${c:l('year.of.birth')}"/>
+                   
+                            </row>
+                            <row>
+                                <bandbox id="bbDepartment" mold="rounded" hflex="1" 
+                                         readonly="true" placeholder="${c:l('department')}">
+                                    <bandpopup width="215px">
+                                        <include id="icDepartment"/>
+                                    </bandpopup>
+                                </bandbox>
+                                <a id="btnClearDept" iconSclass="z-icon-times" zclass="red"
+                                   style="font-size: 18px" visible="false"/>
+                                <textbox id="tbEmail" mold="rounded" 
+                                         hflex="1" placeholder="${c:l('common.email')}"/>
+                            </row>
+                            <row>
+                                <combobox id="cbJobTitle" hflex="1" mold="rounded" readonly="true"
+                                          placeholder="${c:l('job.title')}">
+                                    <template name="model">
+                                        <comboitem label="${each.jobTitle}" value="${each.jobId}">
+                                            <custom-attributes data="${each}"/>
+                                        </comboitem>
+                                    </template>
+                                </combobox>
+                                <a id="btnClearJob" iconSclass="z-icon-times" zclass="red"
+                                   style="font-size: 18px" visible="false"/>
+                                <textbox id="tbPhone" mold="rounded" 
+                                         hflex="1" placeholder="${c:l('phone')}"/>
+                            </row>
+                            <row>
+                                <cell colspan="3" align="center">
+                                    <toolbarbutton id = "btnAdvSearch" iconSclass="z-icon-search"
+                                                   style="font-size:18px"/>
+                                </cell>
+                            </row>
+                        </rows>
+                    </grid>
+                </popup>
+            </div>
+            
+            <!-- staff grid-->
+            <vlayout sclass="page-content" xmlns:n="native" spacing="0">
+                <div sclass="page-header">
+                    <a label="${c:l('list.staff')}" 
+                       iconSclass="z-icon-list" sclass="lighter z-label"/>
+                </div>
+                <div sclass="table-responsive">
+                    <listbox id="listboxResult" emptyMessage="${c:l('common.no.record.found')}"
+                             mold="paging" pageSize="25" checkmark="true" multiple="true"
+                             width="100%" height="600px" pagingPosition="both"
+                             sclass="table table-striped table-bordered table-hover" 
+                             nonselectableTags="*" span="true">
+                        <auxhead>
+                            <auxheader colspan="4" align="center">
+                                <button iconSclass="z-icon-plus-circle" sclass="blue" 
+                                        id="btnAdd" tooltip="addTooltip, position=after_center"/>
+                                <button iconSclass="z-icon-backward" sclass="blue" 
+                                        id="btnPreviousPage"/>
+                                <button iconSclass="z-icon-forward" sclass="blue" 
+                                        id="btnNextPage"/>
+                            </auxheader>
+                            <!--thong tin chung-->
+                            <auxheader colspan="8" align="center" sclass="background-blue"
+                                       label="${c:l('common.general.information')}" 
+                                       id="ahGeneral"/>
+                            <!--hop dong-->
+                            <auxheader colspan="5" align="center" sclass="background-orange"
+                                       label="${c:l('labor.contract')}" 
+                                       id="ahContract"/>
+                            <!--bao hiem-->
+                            <auxheader colspan="4" align="center" sclass="background-red"
+                                       label="${c:l('social.insurance')}"
+                                       id="ahInsurance"/>
+                            <!--Trinh do chuyen mon-->
+                            <auxheader colspan="3" align="center" sclass="background-yellow"
+                                       label="${c:l('qualifications')}"
+                                       id="ahQualifications"/>
+                            <!--CMND-->
+                            <auxheader colspan="3" align="center" sclass="background-skyblue"
+                                       label="${c:l('identification')}"
+                                       id="ahIdentification"/>
+                            <!--Lien he-->
+                            <auxheader colspan="2" align="center" sclass="background-purple"
+                                       label="${c:l('contact')}" 
+                                       id="ahContact"/>
+                            
+                        </auxhead>
+                        <listhead>
+                            <listheader width="40px" sclass="background-green"/>
+                            <listheader width="53px" label="${c:l('common.column.number')}" 
+                                        sclass="background-green"/>
+                            <listheader width="120px" align="center" 
+                                        sclass="background-green"/>
+                            <listheader label="${c:l('full.name')}" 
+                                        sort="auto(staffName)" sclass="background-green"/>
+                            <!--thong tin chung-->
+                            <listheader label="${c:l('department')}" 
+                                        sort="auto(d.deptName)" sclass="background-blue"
+                                        id="lhDepartmentName"/>
+                            <listheader label="${c:l('job.title')}" 
+                                        sort="auto(j.jobTitle)" sclass="background-blue"
+                                        id="lhJobTitleName"/>
+                            <listheader label="${c:l('work.date')}" 
+                                        sort="auto(workDate)" sclass="background-blue"
+                                        id="lhWorkDate"/>
+                            <listheader label="${c:l('date.of.birth')}" 
+                                        sort="auto(dateOfBirth)" sclass="background-blue"
+                                        id="lhDateOfBirth"/>
+                            <listheader label="${c:l('permanent.residence')}" 
+                                        sort="auto(permanentResidence)" sclass="background-blue"
+                                        id="lhPermanentResidence"/>
+                            <listheader label="${c:l('current.residence')}" 
+                                        sort="auto(currentResidence)" sclass="background-blue"
+                                        id="lhCurrentResidence"/>
+                            <listheader label="${c:l('status')}"  
+                                        sclass="background-blue"
+                                        id="lhStatus"/>
+                            <listheader label="${c:l('common.note')}" 
+                                        sort="auto(note)" sclass="background-blue"
+                                        id="lhNote"/>
+                            <!--hop dong-->
+                            <listheader label="${c:l('contract.type')}" 
+                                        sort="auto(ct.contractTypeName)" sclass="background-orange"
+                                        id="lhContractType"/>
+                            <listheader label="${c:l('from.date')}" 
+                                        sort="auto(contractFromDate)" sclass="background-orange"
+                                        id="lhContractFromDate"/>
+                            <listheader label="${c:l('to.date')}" 
+                                        sort="auto(contractToDate)" sclass="background-orange"
+                                        id="lhContractToDate"/>
+                            <listheader label="${c:l('contract.number')}" 
+                                        sort="auto(contractNumber)" sclass="background-orange"
+                                        id="lhContractNumber"/>
+                            <listheader label="${c:l('tax.code')}" 
+                                        sort="auto(taxCode)" sclass="background-orange"
+                                        id="lhTaxCode"/>
+                            <!--bao hiem-->
+                            <listheader label="${c:l('salary.basic')}" 
+                                        sort="auto(salaryBasic)" sclass="background-red"
+                                        id="lhSalaryBasic"/>
+                            <listheader label="${c:l('insurance.paid.date')}" 
+                                        sort="auto(insurancePaidDate)" sclass="background-red"
+                                        id="lhInsurancePaidDate"/>
+                            <listheader label="${c:l('insurance.book.number')}" 
+                                        sort="auto(insuranceBookNumber)" sclass="background-red"
+                                        id="lhInsuranceBookNumber"/>
+                            <listheader label="${c:l('paid.insurance.place')}" 
+                                        sort="auto(paidPlace)" sclass="background-red"
+                                        id="lhPaidPlace"/>
+                            <!--Trinh do chuyen mon-->
+                            <listheader label="${c:l('degree')}" 
+                                        sort="auto(levels)" sclass="background-yellow"
+                                        id="lhLevels"/>
+                            <listheader label="${c:l('majors')}" 
+                                        sort="auto(majors)" sclass="background-yellow"
+                                        id="lhMajors"/>
+                            <listheader label="${c:l('college')}" 
+                                        sort="auto(college)" sclass="background-yellow"
+                                        id="lhCollege"/>
+                            <!--CMND-->
+                            <listheader label="${c:l('identity.card')}" 
+                                        sort="auto(identityCard)" sclass="background-skyblue"
+                                        id="lhIdentityCard"/>
+                            <listheader label="${c:l('grant.date')}" 
+                                        sort="auto(grantDate)" sclass="background-skyblue"
+                                        id="lhGrantDate"/>
+                            <listheader label="${c:l('grant.place')}" 
+                                        sort="auto(grantPlace)" sclass="background-skyblue"
+                                        id="lhGrantPlace"/>
+                            <!--Lien he-->
+                            <listheader label="${c:l('mobile')}/${c:l('home.phone')}" 
+                                        sclass="background-purple"
+                                        id="lhTelephone"/>
+                            <listheader label="${c:l('common.email')}"  
+                                        sclass="background-purple"
+                                        id="lhEmail"/>
+                        </listhead>
+                    </listbox>
+                </div>
+                
+                <!--pop up tooltip-->
+                <popup id="deptManager" zclass="tooltip" sclass="bottom bottom-left tooltip-success">
+                    <span zclass="tooltip-arrow"/>
+                    <label zclass="tooltip-inner" value="${c:l('title.department.manager')}"/>
+                </popup>
+                <popup id="exportStaff" zclass="tooltip" sclass="bottom tooltip-warning">
+                    <span zclass="tooltip-arrow"/>
+                    <label zclass="tooltip-inner" value="${c:l('button.export')}"/>
+                </popup>
+                <popup id="addTooltip" zclass="tooltip" sclass="bottom tooltip-info">
+                    <span zclass="tooltip-arrow"/>
+                    <label zclass="tooltip-inner" value="${c:l('title.add.staff')}"/>
+                </popup>
+            </vlayout>
+        </vlayout>
+    </hlayout>
+</zk>

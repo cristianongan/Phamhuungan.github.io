@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <window id="winUser" apply="${commonGridUserController}">
+    <grid id="gridSearchUser">
+        <columns>
+            <column/>
+            <column/>
+        </columns>
+        <rows>
+            <row>
+                <textbox id="tbKeyword" mold ="rounded" hflex="1"
+                         placeholder="${c:l('user.login.name')}, ${c:l('full.name')}, ${c:l('common.email')}, ${c:l('common.mobile')}"/>
+                <div>
+                    <toolbarbutton id="btnSearch" image="/html/images/icons/search.png"/>
+                    <toolbarbutton id="btnClear" image="/html/images/icons/delete.png"/>
+                </div>
+            </row>
+        </rows>
+                                            
+    </grid>
+    <listbox id="gridUser" mold="paging" pageSize="5">
+        <listhead sizable="true">
+            <listheader width="120px" label="${c:l('user.login.name')}"
+                        style="white-space: normal;word-wrap:break-word;text-wrap:none;"
+                        sort="auto(userName)"/>
+            <listheader width="170px" label="${c:l('full.name')}"
+                        style="white-space: normal;word-wrap:break-word;text-wrap:none;"
+                        sort="auto(firstName)"/>
+            <listheader width="170px" label="${c:l('common.email')}"
+                        style="white-space: normal;word-wrap:break-word;text-wrap:none;"
+                        sort="auto(email)"/>
+            <listheader width="135px" label="${c:l('common.mobile')}" />
+        </listhead>
+    </listbox>
+    </window>
+</zk>

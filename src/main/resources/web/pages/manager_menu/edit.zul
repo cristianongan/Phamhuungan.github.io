@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <window title="${c:l('title.add.menu')}" width="400px"
+            height="auto"  mode="overlapped" closable="true"
+            apply="${addEditMenuController}" position="center, center"
+            action="show: slideDown;hide: slideUp" border="none">
+        <grid sclass="no-style">
+            <columns>
+                <column width="10%"/>
+                <column width="80%"/>
+                <column width="10%"/>
+            </columns>
+            <rows>
+                <row>
+                    <cell/>
+                    <combobox id="cbMenuType" hflex="1" mold="rounded" readonly="true"
+                              placeholder="${c:l('menu.type')}" focus="true"
+                              tooltip="menuTypeTooltip,position=end_before,delay=500">
+                        <template name="model">
+                            <comboitem label="${each.label}" value="${each.value}"/>
+                        </template>
+                    </combobox>
+                    <cell/>
+                </row>
+
+                <row id="rowMenu">
+                    <cell/>
+                    <bandbox id ="bbMenuParent" mold="rounded" hflex="1" 
+                             readonly="true" placeholder="${c:l('menu.parent')}" 
+                             tooltip="menuParentTooltip,position=end_before,delay=500">
+                        <bandpopup id="bppMenu" width="300px">
+                            <tree id="treeMenu">
+                                
+                            </tree>
+                        </bandpopup>
+                    </bandbox>
+                    <cell/>
+                </row>
+
+                <row>
+                    <cell sclass="z-require">
+                        <a iconSclass = "z-icon-star" 
+                           tooltip="requireTooltip,position=start_after"/>
+                    </cell>
+                    <textbox id = "tbLanguageKey" hflex="1" mold="rounded"
+                             placeholder="${c:l('language.key')}" 
+                             tooltip="languageKeyTooltip,position=end_before,delay=500"/>
+                    <cell/>
+                </row>
+                
+                <row id="rowNameFolder">
+                    <cell sclass="z-require">
+                        <a iconSclass = "z-icon-star" 
+                           tooltip="requireTooltip,position=start_after"/>
+                    </cell>
+                    <textbox id = "tbFolderName" hflex="1" mold="rounded"
+                             placeholder="${c:l('folder.name')}" 
+                             tooltip="folderNameTooltip,position=end_before,delay=500"/>
+                    <cell/>
+                </row>
+                <row id="rowViewPage">
+                    <cell sclass="z-require">
+                        <a iconSclass = "z-icon-star" 
+                           tooltip="requireTooltip,position=start_after"/>
+                    </cell>
+                    <textbox id = "tbViewPage" hflex="1" mold="rounded" 
+                             placeholder="${c:l('view.page')}" 
+                             tooltip="viewPageTooltip,position=end_before,delay=500"/>                  
+                    <cell/>
+                </row>
+                <row id="rowIconUrl">
+                    <cell/>
+                    <textbox id = "tbIcon" hflex="1" mold="rounded" 
+                             placeholder="${c:l('common.icon')}" 
+                             tooltip="iconTooltip,position=end_before,delay=500"/>
+                    <cell/>
+                </row>
+                
+                <row>
+                    <cell/>
+                    <textbox id = "tbWeight" hflex="1" mold="rounded" 
+                             placeholder="${c:l('weight')}" 
+                             tooltip="weightTooltip,position=end_before,delay=500"/>
+                    <cell/>
+                </row>
+
+                <row>
+                    <cell/>
+                    <textbox id = "tbDescription" hflex="1" mold="rounded" 
+                             rows="2" placeholder="${c:l('common.description')}" 
+                             tooltip="descriptionTooltip,position=end_before,delay=500"/>
+                    <cell/>
+                </row>
+            </rows>
+        </grid>
+
+        <separator height="15px"/>
+
+        <div align="center" sclass="z-button-action">
+            <button id="btnSave" type="button" label="${c:l('button.save')}" 
+                    iconSclass="z-icon-check" class="btn-success"/>
+            <button id="btnCancel" type="button" label="${c:l('button.cancel')}"
+                    iconSclass="z-icon-times" class="btn-default"/>
+        </div>
+
+        <!--pop up tooltip-->
+        <popup id="menuTypeTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('menu.type')}"/>
+        </popup>
+        <popup id="menuParentTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('menu.parent')}"/>
+        </popup>
+        <popup id="languageKeyTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('language.key')}"/>
+        </popup>
+        <popup id="folderNameTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('folder.name')}"/>
+        </popup>
+        <popup id="viewPageTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('view.page')}"/>
+        </popup>
+        <popup id="iconTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('common.icon')}"/>
+        </popup>
+        <popup id="weightTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('weight')}"/>
+        </popup>
+        <popup id="descriptionTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('common.description')}"/>
+        </popup>
+    </window>
+</zk>

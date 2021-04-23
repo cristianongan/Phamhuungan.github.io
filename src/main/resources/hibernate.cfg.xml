@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+<!--        <property name="hibernate.current_session_context_class">thread</property>-->
+        <property name="hibernate.current_session_context_class">thread</property>
+        <property name="connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
+        <property name="hibernate.connection.release_mode">after_transaction</property>
+        <property name="hibernate.connection.CharSet">utf8</property>
+        <property name="hibernate.connection.characterEncoding">utf8</property>
+        <property name="hibernate.connection.useUnicode">true</property>
+
+        <property name="show_sql">true</property>
+        <property name="format_sql">true</property>
+        
+        <mapping class="com.evotek.qlns.model.User"/>
+        <mapping class="com.evotek.qlns.model.Category"/>
+        <mapping class="com.evotek.qlns.model.Role"/>
+        <mapping class="com.evotek.qlns.model.Group"/>
+        <mapping class="com.evotek.qlns.model.Right"/>
+        <mapping class="com.evotek.qlns.model.RightView"/>
+        <mapping class="com.evotek.qlns.model.FileEntry"/>
+        <mapping class="com.evotek.qlns.model.FolderEntry"/>
+        <mapping class="com.evotek.qlns.model.UserLogin"/>
+        <!--    Documemt    -->
+        <mapping class="com.evotek.qlns.model.Document"/>
+        <mapping class="com.evotek.qlns.model.DocumentType"/>
+        <mapping class="com.evotek.qlns.model.Staff"/>
+        <mapping class="com.evotek.qlns.model.Job"/>
+        <mapping class="com.evotek.qlns.model.ContractType"/>
+        <mapping class="com.evotek.qlns.model.Department"/>
+        <mapping class="com.evotek.qlns.model.SalaryLandmark"/>
+        <mapping class="com.evotek.qlns.model.WorkProcess"/>
+        <mapping class="com.evotek.qlns.model.Notification"/>
+    </session-factory>
+</hibernate-configuration>

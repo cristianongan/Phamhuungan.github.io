@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <window title="${c:l('title.manager.right')}" width="750px"
+            height="auto"  mode="overlapped" closable="true"
+            apply="${rightAssignmentController}"
+            action="show: slideDown;hide: slideUp" border="none" 
+            position="center, center">
+        <panel title="${c:l('group.right')}" sclass="panel-primary">
+            <panelchildren>
+                <grid id="groupsSearchResult" emptyMessage="${c:l('common.no.record.found')}" 
+                      sclass="table table-striped table-hover" 
+                      hflex="1" width="100%">
+                    <columns sizable="true">
+                        <column label="${c:l('common.column.number')}" width="54px"/>
+                        <column label="${c:l('group.name')}" hflex="3"/>
+<!--                        <column label="${c:l('user.create')}" width="120px"/>
+                        <column label="${c:l('common.modified.date')}" width="120px"/>-->
+                        <column label="${c:l('common.description')}" hflex="2"/>
+                        <column label="${c:l('status')}" hflex="1"/>
+                        <column align="center" hflex="1"/>
+                    </columns>
+                    <foot>
+                        <footer span="5">
+                            <button id="btnAddGroups" sclass="blue" iconSclass="z-icon-plus-circle"
+                                    tooltip="addGroupRight, position=after_center"/>
+                        </footer>
+                    </foot>
+                </grid>
+            </panelchildren>
+        </panel>
+        <panel title="${c:l('right')}" sclass="panel-primary">
+            <panelchildren>
+                <grid id="rightSearchResult" emptyMessage="${c:l('common.no.record.found')}"
+                      sclass="table table-striped table-hover" 
+                      hflex="1" width="100%">
+                    <columns sizable="true">
+                        <column label="${c:l('common.column.number')}" width="54px"/>
+                        <column label="${c:l('right.name')}" hflex="2"/>
+                        <column label="${c:l('right.type')}" hflex="1"/>
+<!--                        <column label="${c:l('user.create')}" width="120px"/>
+                        <column label="${c:l('common.modified.date')}" width="120px"/>-->
+                        <column label="${c:l('common.description')}" hflex="2"/>
+                        <column label="${c:l('status')}" hflex="1"/>
+                        <column align="center" hflex="1"/>
+                    </columns>
+                    <foot>
+                        <footer span="6">
+                            <button id="btnAddRight" sclass="blue" iconSclass="z-icon-plus-circle"
+                                    tooltip="addRight, position=after_center"/>
+                        </footer>
+                    </foot>
+                </grid>
+            </panelchildren>
+        </panel>
+
+        <div align="center" sclass="z-button-action">
+            <button id="btnCancel" type="button" label="${c:l('button.cancel')}"
+                    iconSclass="z-icon-times" class="btn-default"/>
+        </div>
+        
+        <!--pop up tooltip-->
+        <popup id="addGroupRight" zclass="tooltip" sclass="bottom tooltip-info">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('title.add.group')}"/>
+        </popup>
+        <popup id="addRight" zclass="tooltip" sclass="bottom tooltip-info">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('title.add.right')}"/>
+        </popup>
+    </window>
+</zk>

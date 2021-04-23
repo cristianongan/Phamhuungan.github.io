@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:task="http://www.springframework.org/schema/task" 
+       xmlns:aop="http://www.springframework.org/schema/aop" 
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+    http://www.springframework.org/schema/tx
+    http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+    http://www.springframework.org/schema/util
+    http://www.springframework.org/schema/util/spring-util-3.2.xsd
+    http://www.springframework.org/schema/task 
+    http://www.springframework.org/schema/task/spring-task-3.2.xsd">
+    
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+    
+    <!-- ====================================================== -->
+    <!--         Define schemas for transactions                -->
+    <!-- ====================================================== -->
+    <tx:advice id="serviceTxAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="*" propagation="REQUIRED" />
+        </tx:attributes>
+    </tx:advice>
+
+<!--    <tx:advice id="daoTxAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="*" propagation="REQUIRED" />
+        </tx:attributes>
+    </tx:advice>-->
+
+    <!-- ====================================================== -->
+    <!--         Define Aspect pointcuts and advisors           -->
+    <!--               for the transaction scopes.              -->
+    <!-- ====================================================== -->
+    <!--   We need such an properly configured transcaction     -->
+    <!-- management too if we using Hibernate sessions directly.-->
+    <!-- Our PagedListWrapper classes are using the             -->
+    <!-- Hibernate-Generic-Dao framework who calls a session    -->
+    <!-- method like:                                           -->
+    <!--
+sessionFactory.getCurrentSession().createQuery("FROM User")
+.setMaxResults(10).setFirstResult(10).list();
+   	-->
+    <!-- for getting paged data.                                -->
+    <!-- Without that declaration we became an error like:      -->
+    <!--
+org.hibernate.HibernateException: No Hibernate Session bound to
+thread, and configuration does not allow creation of non-transactional
+one here
+   	-->
+    <!-- HibernateTemplate handles this on its own, but when    -->
+    <!-- using Hibernate sessions directly, declare a           -->
+    <!-- TransactionManager                                     -->
+    <!-- ====================================================== -->
+    <aop:config>
+        <aop:pointcut id="serviceMethods"
+                      expression="execution(* com.tech4.corp.service.*.*(..))" />
+<!--        <aop:pointcut id="daoMethods"
+                      expression="execution(* com.tech4.corp.dao.*.*(..))" />-->
+             
+        <aop:advisor advice-ref="serviceTxAdvice" pointcut-ref="serviceMethods" />
+		
+<!--        <aop:advisor advice-ref="daoTxAdvice" pointcut-ref="daoMethods"/>-->
+
+		
+    </aop:config>
+
+
+    <!-- ====================================================== -->
+    <!--    Provides exception translation from Hibernate to    -->
+    <!--          Spring vendor independent exceptions          -->
+    <!--           means Spring DataAccessExceptions            -->
+    <!-- Works together with Annotated DAOImpl classes like:    -->
+    <!-- @Repository                                            -->
+    <!-- public class UserDAOImpl extends BasisDAO<SecUser>     -->
+    <!--             implements UserDAO                         -->
+    <!--	                                                    -->
+    <!--   try {                                                -->
+    <!--	  Service.save(entity);                             -->
+    <!--   } catch (DataAccessException e) {                    -->
+    <!--	  System.out.println( e.getMostSpecificCause().toString() ); -->
+    <!--   }                                                    -->
+    <!--                                                        -->
+    <!-- ====================================================== -->
+    <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
+
+
+    
+
+
+    <!-- ====================================================== -->
+    <!--        Define the property placeholder configurer      -->
+    <!-- ====================================================== -->
+    <bean id="environmentVariablesConfiguration"
+          class="org.jasypt.encryption.pbe.config.EnvironmentStringPBEConfig">
+        <property name="algorithm" value="PBEWITHSHA1ANDRC2_40"/>
+        <property name="password" value="%HD[w2uCE6[ta`g" />
+        <!--<property name="passwordEnvName" value="APP_ENCRYPTION_PASSWORD" />-->
+    </bean>
+    
+    <bean id="configurationEncryptor"
+          class="org.jasypt.encryption.pbe.StandardPBEStringEncryptor">
+        <property name="config" ref="environmentVariablesConfiguration" />
+    </bean>
+    
+    <bean id="propertyConfigurer"
+          class="org.jasypt.spring31.properties.EncryptablePropertyPlaceholderConfigurer">
+        <constructor-arg ref="configurationEncryptor" />
+        <property name="locations">
+            <list>
+                <value>classpath:data.properties</value>
+            </list>
+        </property>
+   
+    </bean>
+    
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+    <!--<bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">-->
+
+        <!--encrypt-->
+        <property name="jdbcUrl" value="${datasource.url}" />
+        <property name="user" value="${datasource.username}" />
+        <property name="password" value="${datasource.password}" />
+        <property name="driverClass" value="${datasource.driver}" />
+        <!--none encrypt-->
+<!--        <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/yenbinh" />
+        <property name="user" value="work" />
+        <property name="password" value="123456a@" />
+        <property name="driverClass" value="com.mysql.jdbc.Driver" />-->
+        <!--openshift-->
+<!--        <property name="jdbcUrl" value="jdbc:mysql://127.5.152.130:3306/smartoffice" />
+        <property name="user" value="admin6B5dgWD" />
+        <property name="password" value="uTy9yymyEB5T" />
+        <property name="driverClass" value="com.mysql.jdbc.Driver" />-->
+        <property name="minPoolSize" value="1" />
+        <property name="maxPoolSize" value="100" />
+<!--        <property name="checkoutTimeout" value="60000" />-->
+        <property name="maxStatements" value="50" />
+        <property name="idleConnectionTestPeriod" value="60" />
+    </bean>
+
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean" name="sessionFactory">
+        <property name="dataSource" ref="dataSource" />
+        <property name="configLocation" value="classpath:hibernate.cfg.xml" />
+    </bean>
+
+    <!-- ====================================================== -->
+    <!--             Define the transaction manager             -->
+    <!--    A PlatformTransactionManager is still required      -->
+    <!-- ====================================================== -->
+    <bean id="transactionManager"
+          class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+    <!-- ====================================================== -->
+    <!-- Hibernate Template -->
+    <!-- ====================================================== -->
+    <bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate">
+        <property name="sessionFactory" ref="sessionFactory" />
+        <property name="maxResults" value="3000" />
+    </bean>
+
+    <!-- ====================================================== -->
+    <!-- Search class from Hibernate-Generic-DAO framework -->
+    <!-- ====================================================== -->
+    <!--    <bean id="hibernateSearchSupport" class="de.forsthaus.backend.dao.impl.HibernateSearchSupportImpl">
+        <property name="sessionFactory" ref="sessionFactory" />
+        <property name="hibernateSearchProcessor">
+            <bean class="com.trg.search.hibernate.HibernateSearchProcessor" factory-method="getInstanceForSessionFactory">
+                <constructor-arg ref="sessionFactory" />
+            </bean>
+        </property>
+    </bean>-->
+
+
+    <!-- ====================================================== -->
+    <!-- !!! NON WebRequest database action bean -->
+    <!-- ====================================================== -->
+    <!--    <bean id="nonWebRequestDBAction" p:hibernateTemplate-ref="hibernateTemplate"
+  		class="de.forsthaus.backend.nonwebrequestdbservice.NonWebRequestDBAction" />-->
+
+    <!-- ====================================================== -->
+    <!-- Base bean -->
+    <!-- ====================================================== -->
+
+    <bean id="basicDAO" abstract="true" p:hibernateTemplate-ref="hibernateTemplate" class="com.tech4.corp.dao.impl.BasicDAO"/>
+
+    <bean id="userWorkspace" class="com.tech4.corp.common.UserWorkspace" scope="session" />
+
+    <!-- bean for getting access to the spring applicationContext -->
+    <bean id="applicationContextProvider" class="com.tech4.corp.application.ApplicationContextProvider"></bean>
+
+    <bean id="basicController" abstract="true" scope="prototype" class="com.tech4.corp.controller.BasicController">
+        <property name="userWorkspace" ref="userWorkspace" />
+    </bean>
+
+    <!--Import DAOs here-->
+    <import resource="applicationContext-dao.xml" />
+    <!--/DAOs-->
+
+    <!--Import services/beans here-->
+    <import resource="applicationContext-services.xml"/>
+    <!--/services-->
+
+    <!--Import controller here-->
+    <import resource="applicationContext-controller.xml"/>
+    <!--/controller-->
+    
+    <!--Thread-->
+    <task:annotation-driven />
+    <bean id="notificationUpdate" class="com.tech4.corp.thread.NotificationUpdate">
+        <property name="startUpService" ref="startUpService"/>
+    </bean>
+</beans>

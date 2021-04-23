@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <window title="${c:l('title.add.salary.landmark')}" width="400px" height="auto"
+            mode="overlapped" closable="true" apply="${addEditSalaryLmController}"
+            action="show: slideDown;hide: slideUp" border="none"
+            position="center, center">
+        <grid sclass="no-style">
+            <columns>
+                <column width="10%"/>
+                <column width="80%"/>
+                <column width="10%"/>
+            </columns>
+            <rows>
+                <row>
+                    <cell/>
+                    <datebox id="dbFromDate" mold="rounded" hflex="1"
+                             placeholder="${c:l('from.date')}" 
+                             tooltip="fromDateTooltip,position=end_before,delay=500"/>
+                </row>
+                <row>
+                    <cell/>
+                    <datebox id="dbToDate" mold="rounded" hflex="1"
+                             placeholder="${c:l('to.date')}" 
+                             tooltip="toDateTooltip,position=end_before,delay=500"/>
+                </row>
+                
+                <row>
+                    <cell sclass="z-require">
+                        <a iconSclass = "z-icon-star" 
+                                   tooltip="requireTooltip,position=start_after"/>
+                    </cell>
+                    <longbox id="lgbSalary" mold="rounded" maxlength="15"
+                             hflex="1" placeholder="${c:l('salary')}" 
+                             tooltip="salaryTooltip,position=end_before,delay=500"/>
+                </row>
+                
+            </rows>
+        </grid>
+        
+        <separator/>
+
+        <div align="center" sclass="z-button-action">
+            <button id="btnSave" type="button" label="${c:l('button.save')}" 
+                    iconSclass="z-icon-check" class="btn-success"/>
+            <button id="btnCancel" type="button" label="${c:l('button.cancel')}"
+                    iconSclass="z-icon-times" class="btn-default"/>
+        </div>
+        <!--pop up tooltip-->
+        
+        <popup id="fromDateTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('from.date')}"/>
+        </popup>
+        <popup id="toDateTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('to.date')}"/>
+        </popup>
+        <popup id="salaryTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('salary')}"/>
+        </popup>
+    </window>
+</zk>

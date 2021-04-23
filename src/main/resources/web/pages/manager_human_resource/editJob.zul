@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <window width="400px" closable="true" action="show: slideDown;hide: slideUp"
+            apply="${addEditJobController}" border="none" 
+            title="${c:l('title.add.job')}" position="center, center">
+        <grid sclass="no-style">
+            <columns>
+                <column width="47px"/>
+                <column/>
+                <column width="27px"/>
+            </columns>
+            <rows>
+                <row>
+                    <cell/>
+                    <div class="input-group">
+                        <textbox id = "tbJobTitle" mold="rounded" class="form-control"
+                             placeholder="${c:l('job.title')}" 
+                             tooltip="jobTitleTooltip,position=after_center,delay=0"/>
+                        <span class="input-group-btn">
+				<button id="btnAdd" iconSclass="z-icon-plus" zclass="btn-primary" 
+                                        tooltip="addJobTooltip,position=end_before,delay=0"/>
+                        </span>
+                    </div>
+                    
+                </row>
+            </rows>
+        </grid>
+        
+        <separator/>
+        
+        <listbox id="jobListbox" emptyMessage="${c:l('common.no.record.found')}"
+                 mold="paging" pageSize="10" width="100%" nonselectableTags="*"
+                 sclass="table table-striped table-bordered table-hover" height="460px">
+            <listhead>
+                <listheader width="53px" label="${c:l('common.column.number')}"/>
+                <listheader label="${c:l('job.title')}" hflex="1"/>
+                <listheader width="70px" align="center"/>
+            </listhead>
+        </listbox>
+        
+        <div align="center" sclass="z-button-action">
+            <button id="btnCancel" type="button" label="${c:l('button.cancel')}"
+                    iconSclass="z-icon-times" class="btn-default"/>
+        </div>
+        
+        <!--pop up tooltip-->
+        <popup id="jobTitleTooltip" zclass="tooltip" sclass="bottom">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('job.title')}"/>
+        </popup>
+        <popup id="addJobTooltip" zclass="tooltip" sclass="right tooltip-info">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('common.add')}"/>
+        </popup>
+    </window>
+</zk>

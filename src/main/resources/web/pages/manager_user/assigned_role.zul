@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <window width="500px"  mode="overlapped" position="center, center"
+            closable="true" apply="${userRoleController}"
+            action="show: slideDown;hide: slideUp" border="none">
+        <div sclass="table-responsive">
+            <listbox id="gridRole" emptyMessage="${c:l('common.no.record.found')}"
+                     mold="paging" pageSize="5" checkmark="true"
+                     sclass="table table-striped table-bordered table-hover">
+                <listhead sizable="true">
+                    <listheader width="40px"/>
+                    <listheader width="53px" label="${c:l('common.column.number')}"/>
+                    <listheader hflex="1" label ="${c:l('role.name')}"/>
+                    <listheader hflex="1" label ="${c:l('common.description')}"/>
+                </listhead>
+                <listfoot>
+                    <listfooter span="4">
+                        <button id="btnAdd" sclass="blue" iconSclass="z-icon-plus-circle"
+                                if="${sec:isAllGranted('manager_user_btnAssignRole')}"
+                                tooltip="addRoleTooltip, position=after_center"/>
+                        <button id="btnDelete" sclass="red" iconSclass="z-icon-trash-o"
+                                if="${sec:isAllGranted('manager_user_btnDelRole')}"
+                                tooltip="delTooltip, position=after_center"/>
+                    </listfooter>
+                </listfoot>
+            </listbox>
+            
+            <div class="space-4"></div>
+            
+            <div align="center" sclass="z-button-action">
+                <button id="btnCancel" type="button" label="${c:l('button.cancel')}"
+                        iconSclass="z-icon-times" class="btn-default"/>
+            </div>
+        
+            <!--pop up tooltip-->
+            <popup id="addRoleTooltip" zclass="tooltip" sclass="bottom tooltip-info">
+                <span zclass="tooltip-arrow"/>
+                <label zclass="tooltip-inner" value="${c:l('assign.role')}"/>
+            </popup>
+        </div>
+    </window>
+</zk>

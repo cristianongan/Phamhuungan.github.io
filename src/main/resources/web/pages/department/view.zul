@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <window apply="${departmentController}" width="400px" closable="true"
+            sizable="true" minwidth="400" minheight="700" style="position: fixed;"
+            action="show: slideDown;hide: slideUp" border="none" 
+            position="center, center" title="${c:l('title.department.manager')}">
+        <groupbox>
+            <div class="btn-group">
+                <button type="button" zclass="btn btn-app btn-info btn-xs" 
+                        iconSclass="z-icon-plus" label="${c:l('button.insert')}"
+                        id="btnInsert"/>
+                <button type="button" zclass="btn btn-app btn-info btn-xs" 
+                        iconSclass="z-icon-trash-o" label="${c:l('button.delete')}"
+                        id="btnDelete" disabled="true"/>
+                <button type="button" zclass="btn btn-app btn-info btn-xs" 
+                        iconSclass="z-icon-save" label="${c:l('button.save')}"
+                        id="btnSave" disabled="true"/>
+                <button type="button" zclass="btn btn-app btn-info btn-xs" 
+                        iconSclass="z-icon-refresh" label="${c:l('button.reset')}"
+                        id="btnReset" disabled="true"/>
+                <button type="button" zclass="btn btn-app btn-info btn-xs" 
+                        iconSclass="z-icon-arrow-up" label="${c:l('button.up')}"
+                        id="btnUp" disabled="true"/>
+                <button type="button" zclass="btn btn-app btn-info btn-xs" 
+                        iconSclass="z-icon-arrow-down" label="${c:l('button.down')}"
+                        id="btnDown" disabled="true"/>
+            </div>
+            <tree id="tree" height="550px">
+                <treecols sizable="true">
+                    <treecol>
+                        <a label="${c:l('department')}" 
+                           iconSclass="z-icon-sitemap" sclass="lighter z-label"/>
+                    </treecol>
+                </treecols>
+            </tree>
+            
+            <separator/>
+            
+            <div align="center" sclass="z-button-action">
+                <button id="btnCancel" type="button" label="${c:l('button.cancel')}"
+                    iconSclass="z-icon-times" class="btn-default"/>
+            </div>
+        </groupbox>
+    </window>
+</zk>

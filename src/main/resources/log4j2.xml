@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configuration status="WARN">
+    <properties>
+        <property name="pattern">%d{HH:mm:ss.SSS} | %t | %c{2} | %-5p %l| %m%n</property>
+        <!-- <property name="consolePattern">%highlight{%m%n}{FATAL=white, ERROR=red, WARN=blue, INFO=red, DEBUG=green, TRACE=blue}</property> -->
+    </properties>
+
+    <Appenders>
+        <!-- Show log on console, not write on file -->
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout>
+                <Pattern>${pattern}</Pattern>
+            </PatternLayout>
+        </Console>
+
+        <!-- Async Loggers will auto-flush in batches, so switch off immediateFlush. -->
+        <RollingRandomAccessFile name="errorLog" fileName="logs/error/errorLog.log"
+            filePattern="logs/error/$${date:yyyy-MM-dd}/errorLog.%d{yyyy-MM-dd-HH}_%i.log.gz" immediateFlush="true"
+            append="true">
+            <PatternLayout>
+                <Pattern>${pattern}</Pattern>
+            </PatternLayout>
+            <Policies>
+                <!-- Rotated 1 hour -->
+                <!--<TimeBasedTriggeringPolicy interval="1" modulate="true" />-->
+                <!-- Or every 100 MB -->
+                <SizeBasedTriggeringPolicy size="100MB" />
+            </Policies>
+            <!--<DefaultRolloverStrategy max="30" /> -->
+        </RollingRandomAccessFile>
+
+        <RollingRandomAccessFile name="wsLog" fileName="logs/wsLog/wsLog.log"
+            filePattern="logs/wsLog/$${date:yyyy-MM-dd}/wsLog.%d{yyyy-MM-dd-HH}_%i.log.gz" immediateFlush="true"
+            append="true">
+            <PatternLayout>
+                <Pattern>${pattern}</Pattern>
+            </PatternLayout>
+            <Policies>
+                <!-- Rotated 1 hour -->
+                <!--<TimeBasedTriggeringPolicy interval="1" modulate="true" />-->
+                <!-- Or every 100 MB -->
+                <SizeBasedTriggeringPolicy size="100MB" />
+            </Policies>
+            <!--<DefaultRolloverStrategy max="30" /> -->
+        </RollingRandomAccessFile>
+
+        <RollingRandomAccessFile name="tomcat" fileName="logs/tomcat/tomcat.log"
+            filePattern="logs/tomcat/$${date:yyyy-MM-dd}/tomcat.%d{yyyy-MM-dd-HH}_%i.log.gz" immediateFlush="true"
+            append="true">
+            <PatternLayout>
+                <Pattern>${pattern}</Pattern>
+            </PatternLayout>
+            <Policies>
+                <!-- Rotated 1 hour -->
+                <!--<TimeBasedTriggeringPolicy interval="1" modulate="true" />-->
+                <!-- Or every 100 MB -->
+                <SizeBasedTriggeringPolicy size="100MB" />
+            </Policies>
+            <!--<DefaultRolloverStrategy max="30" /> -->
+        </RollingRandomAccessFile>
+
+        <!-- Async Loggers will auto-flush in batches, so switch off immediateFlush. -->
+        <RollingRandomAccessFile name="consoleLog" fileName="logs/console/console.log"
+            filePattern="logs/console/$${date:yyyy-MM-dd}/console.%d{yyyy-MM-dd-HH-mm}_%i.log.gz" immediateFlush="true"
+            append="true">
+            <PatternLayout>
+                <Pattern>${pattern}</Pattern>
+            </PatternLayout>
+            <Policies>
+                <!-- Rotated every 10 minutes -->
+                <!-- <TimeBasedTriggeringPolicy interval="10" modulate="true" />-->
+                <!-- Or every 100 MB -->
+                <SizeBasedTriggeringPolicy size="100MB" />
+            </Policies>
+            <!--<DefaultRolloverStrategy max="30" /> -->
+        </RollingRandomAccessFile>
+
+        <!-- Async Loggers will auto-flush in batches, so switch off immediateFlush. -->
+    </Appenders>
+
+    <Loggers>
+        <AsyncLogger name="org.hibernate" level="info" additivity="false">
+            <AppenderRef ref="console" />
+            <AppenderRef ref="errorLog" />
+        </AsyncLogger>
+
+        <AsyncLogger name="org.hibernate.stat" level="info" additivity="false">
+            <AppenderRef ref="console" />
+        </AsyncLogger>
+
+        <AsyncLogger name="org.hibernate.SQL" level="info" additivity="false">
+            <AppenderRef ref="console" />
+        </AsyncLogger>
+
+        <AsyncLogger name="org.hibernate.type.descriptor.sql" level="info" additivity="false">
+            <AppenderRef ref="console" />
+        </AsyncLogger>
+
+        <AsyncLogger name="com.mchange.v2.c3p0" level="info" additivity="false">
+            <AppenderRef ref="console" />
+            <AppenderRef ref="errorLog" />
+        </AsyncLogger>
+
+        <AsyncLogger name="org.springframework" level="ERROR" additivity="false">
+            <AppenderRef ref="console" />
+            <AppenderRef ref="errorLog" />
+        </AsyncLogger>
+
+        <AsyncLogger name="com.mchange.v2" level="info" additivity="false">
+            <AppenderRef ref="console" />
+        </AsyncLogger>
+        
+        <AsyncLogger name="org.springframework.aop" level="info" additivity="false">
+            <AppenderRef ref="console" />
+        </AsyncLogger>
+
+        <AsyncLogger name="org.apache.catalina.session" level="info" additivity="false">
+            <AppenderRef ref="console" />
+            <AppenderRef ref="tomcat" />
+        </AsyncLogger>
+
+        <AsyncLogger name="org.apache.jasper.compiler" level="info" additivity="false">
+            <AppenderRef ref="console" />
+            <AppenderRef ref="tomcat" />
+        </AsyncLogger>
+
+        <AsyncLogger name="org.apache.commons.digester" level="info" additivity="false">
+            <AppenderRef ref="console" />
+            <AppenderRef ref="tomcat" />
+        </AsyncLogger>
+
+        <AsyncLogger name="com.tech4.util.LogUtil" level="debug" additivity="false">
+            <AppenderRef ref="console" />
+            <AppenderRef ref="consoleLog" />
+            <AppenderRef ref="wsLog" />
+        </AsyncLogger>
+
+        <AsyncLogger name="com.tech4.dao.BasicDAO" level="error" additivity="false">
+            <AppenderRef ref="console" />
+            <AppenderRef ref="consoleLog" />
+        </AsyncLogger>
+       
+
+        <AsyncLogger name="com.tech4.ws.model" level="error" additivity="false">
+            <AppenderRef ref="console" />
+            <AppenderRef ref="errorLog" />
+        </AsyncLogger>
+        <!-- <AsyncLogger name="org.springframework" level="error" -->
+        <!-- additivity="false"> -->
+        <!-- <AppenderRef ref="console" /> -->
+        <!-- <AppenderRef ref="errorLog" /> -->
+        <!-- </AsyncLogger> -->
+        <!-- ========================================================================= -->
+        <!-- Separate log into multi-file logger -->
+        <!-- The AsyncLogger's level must be bigger or equals than AppenderRef's level -->
+        <!-- ========================================================================= -->
+        <AsyncLogger name="com.tech4" level="error" additivity="false">
+            <AppenderRef ref="console" level="error" />
+            <AppenderRef ref="consoleLog" level="error" />
+        </AsyncLogger>
+
+        <Root level="all" includeLocation="false">
+            <AppenderRef ref="console" />
+            <AppenderRef ref="consoleLog" />
+            <AppenderRef ref="errorLog" />
+        </Root>
+    </Loggers>
+</Configuration>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <window id="winDetailDocument" width="700px" height="auto"  mode="overlapped" closable="true"
+            apply="${detailDocumentController}"
+            action="show: slideDown;hide: slideUp" border="normal">
+        <grid sclass="no-style">
+            <columns>
+                <column width="15%"/>
+                <column/>
+            </columns>
+            <rows>
+                <row>
+                    <cell style="background-color:#E5E5E5">
+                        <label value ="Số công văn (*)"/>
+                    </cell>
+                    <label id="lbDocumentNumber"/>
+                </row>
+                <row>
+                    <cell style="background-color:#E5E5E5">
+                        <label value ="Lĩnh vực (*)"/>
+                    </cell>
+                    <label id="lbDocumentType"/>
+                </row>
+                <row>
+                    <cell style="background-color:#E5E5E5">
+                        <label value ="Ngày ban hành"/>
+                    </cell>
+                    <label id="lbDate"/>
+                </row>
+                <row>
+                    <cell style="background-color:#E5E5E5">
+                        <label value ="Cơ quan ban hành"/>
+                    </cell>
+                    <label id="lbDepartment"/>
+                </row>
+                <row>
+                    <cell style="background-color:#E5E5E5">
+                        <label value ="Nộidung"/>
+                    </cell>
+                    <cell>
+                        <label id="lbContent"/>
+                    </cell>
+                </row>
+                <row>
+                    <cell colspan="2">
+                        <groupbox title = "File đính kèm" mold="3d">
+                            <div id="divFile">
+                            </div>
+                        
+                        </groupbox>
+                    </cell>
+                </row>
+                <row>
+                    <cell colspan="2">
+                        <iframe id="iFrameDocPreview" width="100%" height="500px" visible="false"/>
+                    </cell>
+                </row>
+                <row>
+                    <cell colspan="2" align="center">
+                        <button  id="btnClose" label="Đóng" image="/html/images/icons/cancel.png"/>
+                    </cell>
+                </row>
+            </rows>
+        </grid>
+    
+    </window>
+</zk>

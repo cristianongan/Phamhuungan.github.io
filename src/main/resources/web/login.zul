@@ -1,0 +1,394 @@
+<!--openshift-->
+<!--<?page id="loginZul" title="Tech4"?>-->
+<?page id="loginZul" title="Yên Bình Corp"?>
+<?page automaticTimeout="false"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+
+<!--
+<?link rel="shortcut icon" type="image/png" href="/html/images/favicon/favicon.png"?>
+<?link rel="icon" type="image/png" href="/html/images/favicon/favicon.png"?>
+-->
+<?link rel="stylesheet" type="text/css"	href="/html/css/login.css" ?>
+<?link rel="stylesheet" type="text/css"	href="/html/css/themes/bootstrap-cerulean.min.css"?>
+<?link rel="stylesheet" type="text/css"	href="/html/css/ace/ace.min.css" ?>
+<?link rel="stylesheet" type="text/css"	href="/html/css/ace/ace-rtl.min.css" ?>
+<?link rel="stylesheet" type="text/css"	href="/html/css/ace/ace-skins.min.css" ?>
+
+
+<zk xmlns="http://www.zkoss.org/2005/zul"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+    <div class="main-container" xmlns:ca="client/attribute" xmlns:w="client">
+        <h:div class="main-content" visible = "false" id="container">
+            <div class="row">
+                <div class="col-sm-10 col-sm-offset-1">
+                    <div class="login-container">
+                        <div class="center">
+                            <h:h1>
+                                <h:i class="z-icon-leaf blue"></h:i>
+                                <h:span class="red"> ${c:l('login.title')}</h:span>
+                                <h:span class="grey"> Smart Office</h:span>
+                            </h:h1>
+                            
+                            <a href="http://tech4.vn" target="_blank" sclass="bolder">
+                                <h:h4 class="blue">© Tech4 Việt Nam</h:h4>
+                            </a>
+                        </div>
+                        
+                        <div class="space-6"></div>
+                        
+                        <div class="position-relative">
+                            <h:div id="login-box" class="login-box visible widget-box no-border">
+                                <div class="widget-body" id="loginWin" apply="${loginController}">
+                                    <div class="widget-main">
+                                        <h:h4 class="header blue lighter bigger">
+                                            <h:i class="z-icon-coffee blue"></h:i>
+                                            ${c:l('login.info')}
+                                        </h:h4>
+                                        
+                                        <div class="space-6"></div>
+                                        
+                                        <h:form id="f" name="f" action="j_spring_security_check" method="POST" onSubmit="return false;">
+
+                                            <h:label class="block clearfix">
+                                                <h:span class="block input-icon input-icon-right">
+                                                    <h:input type="text" name="j_username" class="form-control"
+                                                             placeholder="${c:l('common.user.name')}" id="username" autofocus="true"/>
+                                                    <h:i class="ace-icon fa z-icon-user"></h:i>
+                                                </h:span>
+                                            </h:label>
+
+                                            <h:label class="block clearfix">
+                                                <h:span class="block input-icon input-icon-right">
+                                                    <h:input type="password" class="form-control" name="j_password"
+                                                             placeholder="${c:l('common.password')}" id="password"/>
+                                                    <h:i class="ace-icon fa z-icon-lock"></h:i>
+                                                </h:span>
+                                            </h:label>
+                                                
+                                            <div id="divVerify">
+                                                <h:span class="block input-icon input-icon-right">
+                                                    <textbox placeholder="${c:l('verify.code')}" id="captcha" sclass="form-control"/>
+                                                    <h:i class="ace-icon z-icon-hand-o-up"></h:i>
+                                                </h:span>
+                                                    
+                                                <div class="space-6"></div>
+                                                    
+                                                <hbox style="padding-left:10px">
+                                                    <captcha id="cpa" length="6" width="300px" height="50px" 
+                                                             fontColor = "#5090c1" bgColor="#eae7e7"/>
+                                                    <cell class="refresh-captcha">             
+                                                        <toolbarbutton id="btnReCaptcha" iconSclass="z-icon-refresh blue"
+                                                                       tooltiptext="Refresh"/>
+                                                    </cell>
+                                                </hbox>
+                                            </div>
+                                                
+                                            <div if="${not empty param.login_error}" style="text-align:center" height="20px">
+                                                <image src="/html/images/icons/error.png" style="vertical-align:middle"/>
+                                                <label if="${param.login_error=='1'}" style="color:red;font-weight: bold;vertical-align:middle" value="${c:l('username.or.password.is.incorrect')}"/>
+                                                <label if="${param.login_error=='2'}" style="color:red;font-weight: bold;vertical-align:middle" value="${c:l('user.is.already.logged.in')}"/>
+                                                <label if="${param.login_error=='3'}" style="color:red;font-weight: bold;vertical-align:middle" value="${c:l('message.verify.code.incorrect')}"/>
+                                            </div>
+                                                
+                                            <div class="space"></div>
+                                                
+                                            <div class="clearfix">
+                                                <h:label class="inline">
+                                                    <h:input type="checkbox" class="ace" />
+                                                    <h:span class="lbl">${c:l('remember.me')}</h:span>
+                                                </h:label>
+
+                                                <h:button class="width-35 pull-right btn btn-sm btn-primary"
+                                                          type="submit" forward="loginWin.onOK">
+                                                    <h:i class="ace-icon fa z-icon-key"></h:i>
+                                                    <h:span class="bigger-110">${c:l('button.login')}</h:span>
+                                                </h:button>
+                                            </div>
+
+                                            <div class="space-4"></div>
+                                        </h:form>
+                                        
+                                        <div class="social-or-login center">
+                                            <h:span class="bigger-110">${c:l('or.login.using')}</h:span>
+                                        </div>
+
+                                        <div class="space-6"></div>
+
+                                        <div class="social-login center">
+                                            <h:a class="btn btn-primary">
+                                                <h:i class="ace-icon z-icon-facebook"></h:i>
+                                            </h:a>
+
+                                            <h:a class="btn btn-danger">
+                                                <h:i class="ace-icon z-icon-google-plus"></h:i>
+                                            </h:a>
+                                        </div>
+
+                                    </div><!-- /.widget-main -->
+                                    
+                                    <div class="toolbar clearfix">
+                                        <div>
+                                            <h:a href="#" data-target="#forgot-box" class="forgot-password-link">
+                                                <h:i class="ace-icon z-icon-arrow-left"></h:i>
+                                                ${c:l('forgot.my.password')}
+                                            </h:a>
+                                        </div>
+
+                                        <div>
+                                            <h:a href="#" data-target="#signup-box" class="user-signup-link">
+                                                ${c:l('register.account')}
+                                                <h:i class="ace-icon z-icon-arrow-right"></h:i>
+                                            </h:a>
+                                        </div>
+                                    </div>
+                                </div><!-- /.widget-body -->
+                            </h:div><!-- /.login-box -->
+                            
+                            <h:div id="forgot-box" class="forgot-box widget-box no-border">
+                                <div class="widget-body" id="forgotPassWin" apply="${forgotPassController}">
+                                    <div class="widget-main">
+                                        <h:h4 class="header red lighter bigger">
+                                            <h:i class="ace-icon z-icon-key"></h:i>
+                                            ${c:l('retrieve.password')}
+                                        </h:h4>
+
+                                        <div class="space-6"></div>
+                                        <h:p>
+                                            ${c:l('enter.your.email.to.receive.instructions')}
+                                        </h:p>
+                                        <h:form>
+                                            <h:label class="block clearfix">
+                                                <h:span class="block input-icon input-icon-right">
+                                                    <textbox id="tbEmailRetrive" class="form-control" placeholder="Email"/>
+                                                    <h:i class="ace-icon z-icon-envelope"></h:i>
+                                                </h:span>
+                                            </h:label>
+                                        
+                                            <div class="clearfix">
+                                                <h:button class="width-35 pull-right btn btn-sm btn-danger"
+                                                      type="submit" forward="forgotPassWin.onOK">
+                                                    <h:i class="ace-icon z-icon-lightbulb-o"></h:i>
+                                                    <h:span class="bigger-110">${c:l('send.me')}</h:span>
+                                                </h:button>
+                                            </div>
+                                        </h:form>
+                                    </div><!-- /.widget-main -->
+
+                                    <div class="widget-main retrive-success">
+                                        <h:h4 class="header red lighter bigger">
+                                            <h:i class="ace-icon z-icon-check"></h:i>
+                                            ${c:l('check.your.email')}
+                                        </h:h4>
+                                        
+                                        <div class="space-6"></div>
+                                        <h:p>
+                                            ${c:l('retrive.success')}
+                                        </h:p>
+                                        <h:label class="block clearfix">
+                                            <h:span class="block input-icon input-icon-right">
+                                                <textbox id="tbVerify" class="form-control" placeholder="${c:l('verify.code')}"/>
+                                                <h:i class="ace-icon z-icon-key"></h:i>
+                                            </h:span>
+                                        </h:label>
+                                        <div class="clearfix">
+                                            <h:button class="width-35 pull-right btn btn-sm btn-danger"
+                                                          type="submit" forward="forgotPassWin.onVerify">
+                                                <h:i class="ace-icon z-icon-lightbulb-o"></h:i>
+                                                <h:span class="bigger-110">${c:l('verification')}</h:span>
+                                            </h:button>
+                                        </div>
+                                    </div>
+
+                                    <div class="toolbar center">
+                                        <h:a href="#" data-target="#login-box" class="back-to-login-link">
+                                            ${c:l('back.to.login')}
+                                            <h:i class="ace-icon z-icon-arrow-right"></h:i>
+                                        </h:a>
+                                    </div>
+                                </div><!-- /.widget-body -->
+                            </h:div><!-- /.forgot-box -->
+                            
+                            <h:div id="signup-box" class="signup-box widget-box no-border">
+                                <div class="widget-body" id="registerWin" apply="${registerController}">
+                                    <div class="widget-main register-form">
+                                        <h:h4 class="header green lighter bigger">
+                                            <h:i class="ace-icon z-icon-group blue"></h:i>
+                                            ${c:l('register.account')}
+                                        </h:h4>
+
+                                        <div class="space-4"></div>
+                                        <h:p> ${c:l('your.infomation')} : </h:p>
+
+                                        <h:form>
+                                            <h:label class="block clearfix">
+                                                <h:span class="block input-icon input-icon-right">
+                                                    <textbox id="tbEmail" class="form-control" placeholder="Email" 
+                                                             ca:autocomplete="off"/>
+                                                    <h:i class="ace-icon z-icon-envelope"></h:i>
+                                                </h:span>
+                                            </h:label>
+
+                                            <h:label class="block clearfix">
+                                                <h:span class="block input-icon input-icon-right">
+                                                    <textbox id="tbUserName" class="form-control" 
+                                                             placeholder="${c:l('common.user.name')}" ca:autocomplete="off"/>
+                                                    <h:i class="ace-icon z-icon-user"></h:i>
+                                                </h:span>
+                                            </h:label>
+
+                                            <h:label class="block clearfix">
+                                                <h:span class="block input-icon input-icon-right">
+                                                    <textbox id="tbPassword" type="password" class="form-control" 
+                                                             placeholder="${c:l('common.password')}" ca:autocomplete="off"/>
+                                                    <h:i class="ace-icon z-icon-lock"></h:i>
+                                                </h:span>
+                                            </h:label>
+
+                                            <h:label class="block clearfix">
+                                                <h:span class="block input-icon input-icon-right">
+                                                    <textbox id="tbConfirmPassword" type="password" class="form-control" 
+                                                             placeholder="${c:l('confirm.password')}" ca:autocomplete="off"/>
+                                                    <h:i class="ace-icon z-icon-retweet"></h:i>
+                                                </h:span>
+                                            </h:label>
+                                            
+                                            <div>
+                                                <h:span class="block input-icon input-icon-right">
+                                                    <textbox placeholder="${c:l('verify.code')}" id="captchaRegister" 
+                                                             sclass="form-control" ca:autocomplete="off"/>
+                                                    <h:i class="ace-icon z-icon-hand-o-up"></h:i>
+                                                </h:span>    
+                                                <div class="space-6"></div>
+                                                    
+                                                <hbox style="padding-left:10px">
+                                                    <captcha id="cpaRegister" length="6" width="300px" height="50px" 
+                                                             fontColor = "#87B87F" bgColor="#eae7e7"/>
+                                                    <cell class="refresh-captcha">             
+                                                        <toolbarbutton id="btnReCaptchaRegister" iconSclass="z-icon-refresh green"
+                                                                       tooltiptext="Refresh"/>
+                                                    </cell>
+                                                </hbox>
+                                            </div>
+                                            
+                                            <div class="space-4"></div>
+                                            
+                                            <h:label class="block">
+                                                <checkbox id="chkAccept" sclass="ace" w:onClick="acceptUserAgrement(this.isChecked())"/>
+                                                
+                                                <h:span class="lbl">
+                                                    ${c:l('i.accept')}
+                                                    <h:a href="#">${c:l('user.agreement')}</h:a>
+                                                </h:span>
+                                            </h:label>
+
+                                            <div class="space-2"></div>
+
+                                            <div class="clearfix">
+                                                <h:button type="reset" class="width-30 pull-left btn btn-sm">
+                                                    <h:i class="ace-icon z-icon-refresh"></h:i>
+                                                    <h:span class="bigger-110">Reset</h:span>
+                                                </h:button>
+
+                                                <h:button type="button" class="width-65 pull-right btn btn-sm btn-success" 
+                                                          forward="registerWin.onOK">
+                                                    <h:span class="bigger-110">${c:l('register')}</h:span>
+
+                                                    <h:i class="ace-icon z-icon-arrow-right icon-on-right"></h:i>
+                                                </h:button>
+                                            </div>
+                                        </h:form>
+                                    </div>
+                                    
+                                    <div class="widget-main register-success">
+                                        <h:h4 class="header green lighter bigger">
+                                            <h:i class="ace-icon z-icon-check green"></h:i>
+                                            ${c:l('register.complete')}
+                                        </h:h4>
+
+                                        <div class="space-4"></div>
+                                        <h:label>
+                                            <html sclass="native-html" id="htmlSuccess" zclass="green"/>
+                                        </h:label>    
+                                    </div>
+                                    
+                                    <div class="widget-main register-fail">
+                                        <h:h4 class="header red lighter bigger">
+                                            <h:i class="ace-icon z-icon-times-circle red"></h:i>
+                                            ${c:l('register.uncomplete')}
+                                        </h:h4>
+
+                                        <div class="space-4"></div>
+                                        <h:label>
+                                            <html sclass="native-html" id="htmlError" zclass="red"/>
+                                        </h:label>    
+                                    </div>
+                                    
+                                    <div class="toolbar center" style=" margin-top: -15px">
+                                        <h:a href="#" data-target="#login-box" class="back-to-login-link">
+                                            <h:i class="ace-icon z-icon-arrow-left"></h:i>
+                                            ${c:l('back.to.login')}
+                                        </h:a>
+                                    </div>
+                                </div><!-- /.widget-body -->
+                            </h:div><!-- /.signup-box -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </h:div>                                                
+    </div>
+    
+    <script type="text/javascript"><![CDATA[
+        zk.afterMount(function (){
+            $('body').addClass('login-layout').addClass('light-login');
+        
+            jQuery(function($) {
+                $(document).on('click', '.toolbar a[data-target]', function(e) {
+                    e.preventDefault();
+                    var target = $(this).data('target');
+                    $('.widget-box.visible').removeClass('visible');//hide others
+                    $(target).addClass('visible');//show target
+        
+                    //show signup box
+                    $('.signup-box .widget-main').css('display','none');//hide others
+                    $('.signup-box .widget-main.register-form').css('display', 'block');
+                });
+            });
+        });
+        
+        var showRegisterResult = function (divClass){
+            $('.signup-box .widget-main').css('display','none');//hide others
+            $('.signup-box .widget-main'+divClass).css('display', 'block');
+            $('.signup-box form').each(function(){
+                this.reset();
+            });
+            
+            //uncheck accept user agrement checkbox
+            zk.Widget.$('$chkAccept').setChecked(false);
+            $('$chkAccept').removeClass('checked');
+        };
+        
+        var acceptUserAgrement = function(checked){
+            var span = $('span.ace')
+            
+            if(checked){
+                span.addClass('checked');
+            } else {
+                span.removeClass('checked');
+            }
+        };
+        
+        var showRetriveEmailResult = function(divClass){
+            $('.forgot-box .widget-main').css('display','none');//hide others
+            $('.forgot-box .widget-main'+divClass).css('display', 'block');
+            $('.forgot-box form').each(function(){
+                this.reset();
+            });
+        }
+    ]]>
+    </script>
+</zk>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <window width="550px" position="center, center" 
+            apply="${notificationController}" title="${c:l('title.notification')}"
+            action="show: slideDown;hide: slideUp" border="none" closable="true">
+        <listbox id="lbNotify" sclass="task" mold="paging" pageSize="7">
+            <listhead>
+                <listheader width="40px"/>
+                <listheader hflex="3">
+                    <button iconSclass="z-icon-comments" sclass="blue" 
+                            tooltip="messageTooltip, position=after_center"/>
+                </listheader>
+                <listheader hflex="1">
+                    <button iconSclass="z-icon-calendar" sclass="blue" 
+                            tooltip="eventDateTooltip, position=after_center"/>
+                </listheader>
+                <listheader width="70px"/>
+            </listhead>
+        </listbox>
+        
+        <separator/>
+        
+        <div align="center" sclass="z-button-action">
+            <button id="btnCancel" type="button" label="${c:l('button.cancel')}"
+                    iconSclass="z-icon-times" class="btn-default"/>
+        </div>
+        
+        <popup id="messageTooltip" zclass="tooltip" sclass="bottom tooltip-info">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('content')}"/>
+        </popup>
+        <popup id="eventDateTooltip" zclass="tooltip" sclass="bottom tooltip-info">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('moment')}"/>
+        </popup>
+        
+        <popup id="extendContractTooltip" zclass="tooltip" sclass="bottom tooltip-info">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('extend.contract')}"/>
+        </popup>
+    </window>
+</zk>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <window title="${c:l('title.assign.right')}" width="550px"
+            height="auto" mode="overlapped" closable="true"
+            apply="${assignRightController}" position="center, center"
+            action="show: slideDown;hide: slideUp" border="none">
+        <div sclass="table-responsive">
+            <listbox id="searchResult" emptyMessage="${c:l('common.no.record.found')}"
+                     checkmark="true" width="100%" mold="paging" pageSize="10"
+                     sclass="table table-striped table-bordered table-hover">
+                <listhead sizable="true">
+                    <listheader width="40px"/>
+                    <listheader label="${c:l('right.name')}" hflex="2"/>
+                    <listheader label="${c:l('right.type')}" hflex="1"/>
+                    <listheader label="${c:l('common.description')}" hflex="2"/>
+                </listhead>
+            </listbox>
+
+            <div class="space-4"></div>
+
+            <div align="center" sclass="z-button-action">
+                <button id="btnSave" type="button" label="${c:l('button.save')}" 
+                    iconSclass="z-icon-check" class="btn-success"/>
+                <button id="btnCancel" type="button" label="${c:l('button.cancel')}"
+                    iconSclass="z-icon-times" class="btn-default"/>
+            </div>
+        </div>
+    </window>
+</zk>

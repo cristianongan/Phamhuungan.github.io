@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <div apply="${roleController}">
+        <div sclass="breadcrumbs">
+            <div sclass="breadcrumb">
+                <span sclass="home-icon z-icon-home"/>
+                <a label="${c:l('menu.main')}" onClick='Executions.sendRedirect("/index.zul")'/>
+                <span/>
+                <a id="adminPage" label="${c:l('menu.admin')}"/>
+                <label value="${c:l('menu.item.manager.role')}"/>
+            </div>
+        </div>    
+        <vlayout sclass="page-content" xmlns:n="native" spacing="0">
+            <div sclass="page-header">
+                <a label="${c:l('menu.item.manager.role')}" 
+                       iconSclass="z-icon-list" sclass="lighter z-label"/>
+            </div>
+
+            <div sclass="table-responsive">
+                
+                <listbox emptyMessage="${c:l('common.no.record.found')}"
+                             mold="paging" pageSize="25" hflex="1" width="100%" 
+                             id="searchResultGrid"  pagingPosition="both"
+                             sclass="table table-striped table-bordered table-hover">
+                    <listhead sizable="true">
+                        <listheader label="${c:l('common.column.number')}" width="53px"/>
+                        <listheader hflex="2" id="roleNameHeader" 
+                                        label="${c:l('role.name')}" sort="auto(roleName)"/>
+                        <listheader hflex="1" id="statusHeader" 
+                                        label="${c:l('status')}" sort="auto(status)"/>
+                        <listheader hflex="4" id="descriptionHeader" 
+                                        label="${c:l('common.description')}" 
+                                        sort="auto(description)"/>
+                        <listheader align="center" width="90px"/>
+                    </listhead>
+                    <listfoot>
+                        <listfooter span="5">
+                            <button id="btnAdd" sclass="blue" iconSclass="z-icon-plus-circle"
+                                        tooltip="addTooltip, position=after_center"/>
+                        </listfooter>
+                    </listfoot>
+                </listbox>
+            </div>
+            <!--pop up tooltip-->
+            <popup id="addTooltip" zclass="tooltip" sclass="bottom tooltip-info">
+                <span zclass="tooltip-arrow"/>
+                <label zclass="tooltip-inner" value="${c:l('title.add.menu')}"/>
+            </popup>
+        </vlayout>
+    </div>
+</zk>

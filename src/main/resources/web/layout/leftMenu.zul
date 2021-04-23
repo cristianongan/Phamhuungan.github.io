@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <tabbox id="tb" width="100%" height="auto" mold="accordion" >
+        <tabs>
+            <tab label="Grid" />
+            <tab label="Tree" />
+            <tab label="Form" />
+            <tab label="File" />
+            <tab label="Dialog" />
+            <tab label="Tab" />
+        </tabs>
+        <tabpanels>
+            <tabpanel>
+                <listbox  forward="onSelect=//mainPage/mainLayout.onSelectItemList">
+                    <listitem label="Grid Post Data" value="/controls/grid/gridPostDataMVC.zul"></listitem>
+                    <listitem label="Grid Basic" value="/controls/grid/gridBasic.zul"  ></listitem>
+                    <listitem label="Grid Inline Editting" value="/controls/grid/gridInline.zul" ></listitem>
+                    <listitem label="Grid Paging" value="/controls/grid/gridPaging.zul"  ></listitem>
+                    <listitem label="Grid Sorting" value="/controls/grid/gridSorting.zul" ></listitem>
+                    <listitem label="Grid Merge Header" value="/controls/grid/gridMergeHeader.zul" ></listitem>
+                    <listitem label="Grid Frozen" value="/controls/grid/gridFrozen.zul" ></listitem>
+                    
+                </listbox>
+            </tabpanel>
+            <tabpanel>
+                <listbox  forward="onSelect=//mainPage/mainLayout.onSelectItemList">
+                    <listitem label="Tree Basic" value="/controls/tree/treeBasic.zul"  ></listitem>
+                    <listitem label="Tree Paging and Style" value="/controls/tree/Treepaging.zul"  ></listitem>
+                    <listitem label="Tree Load DB" value="/controls/tree/treeLoadDB.zul" ></listitem>
+                    <listitem label="Multiple Select Tree" value="/controls/tree/multipleslect.zul" ></listitem>
+                    <listitem label="Ajax Tree" value="/controls/tree/AjaxTree.zul" ></listitem>
+                </listbox>
+            </tabpanel>
+            <tabpanel>
+                <listbox  forward="onSelect=//mainPage/mainLayout.onSelectItemList">
+                    <listitem label="Button" value="/controls/others/button.zul"  ></listitem>
+                    <listitem label="Spinner" value="/controls/others/spinner.zul"  ></listitem>
+                    <listitem label="Textbox" value="/controls/others/textbox.zul"  ></listitem>
+                    <listitem label="CheckBox" value="/controls/others/checkbox.zul"  ></listitem>
+                    <listitem label="RadioButton" value="/controls/others/radiobutton.zul"  ></listitem>
+                    <listitem label="SelectBox" value="/controls/others/selectBox.zul"  ></listitem>
+                    <listitem label="ComboBox" value="/controls/others/combobox.zul"  ></listitem>
+                    <listitem label="Date Time Picker" value="/controls/others/dateTimePicker.zul"  ></listitem>
+                    <listitem label="Form" value="/controls/others/form.zul"  ></listitem>
+                </listbox>
+            </tabpanel>
+            <tabpanel>
+                <listbox  forward="onSelect=//mainPage/mainLayout.onSelectItemList">
+                    <listitem label="File Upload" value="/controls/file/fileUpload.zul"  ></listitem>
+                </listbox>
+            </tabpanel>  
+            <tabpanel>
+                <listbox  forward="onSelect=//mainPage/mainLayout.onSelectItemList">
+                    <listitem label="Popup dialog" value="/controls/dialog/popupdialog.zul"  ></listitem>
+                    <listitem label="Message dialog" value="/controls/dialog/messageDialog.zul"  ></listitem>
+                </listbox>
+            </tabpanel>
+            <tabpanel>
+                <listbox  forward="onSelect=//mainPage/mainLayout.onSelectItemList">
+                    <listitem label="Simple TabBox" value="/controls/tab/simpleTabbox.zul"  ></listitem>
+                    <listitem label="Scrollable" value="/controls/tab/Scrollable.zul"  ></listitem>
+                    <listitem label="Load Ajax Tab" value="/controls/tab/LoadAjaxTab.zul"  ></listitem>
+                    <listitem label="Accordion Tab" value="/controls/tab/AccordionTab.zul"  ></listitem>
+                </listbox>
+            </tabpanel>
+        </tabpanels>
+    </tabbox>
+</zk>

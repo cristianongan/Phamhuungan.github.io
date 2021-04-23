@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <div apply="${userController}">
+        <div sclass="breadcrumbs">
+            <div sclass="breadcrumb">
+                <span sclass="home-icon z-icon-home"/>
+                <a label="${c:l('menu.main')}" onClick='Executions.sendRedirect("/index.zul")'/>
+                <span/>
+                <a id="adminPage" label="${c:l('menu.admin')}"/>
+                <label value="${c:l('menu.item.manager.user')}"/>
+            </div>
+            
+            <!-- Search input-->
+            <div sclass="nav-search">
+                <span class="input-prepend z-bandbox" style="">
+                    <textbox id="tbKeyword" zclass="z-bandbox-input" 
+                             placeholder="${c:l('button.search')}"/>
+                    <a id="btnBasicSearch" iconSclass="z-icon-search" 
+                       zclass="z-bandbox-button"/>
+                </span>
+                <button id="btnEnableAdvSearch" type="button"
+                        iconSclass="z-icon-search-plus"/>
+                <!--                    <a hflex="3" iconSclass="z-icon-question-circle"
+                tooltip="advSearchTooltip,after_start, delay = 0"/>-->
+            </div>
+            
+            <!--popup advance search-->
+            <popup id="advanceSearchPopup" width="500px" >
+                <grid id ="gridAdvSearch" sclass="no-style">
+                    <columns>
+                        <column width="45%"/>
+                        <column/>
+                        <column width="45%"/>
+                    </columns>
+                    <rows>
+                        <row>
+                            <textbox id="tbUserName" mold="rounded" hflex="1"
+                                     placeholder="${c:l('user.name')}"/>
+                            <a/>
+                            <textbox id="tbEmail" mold="rounded" hflex="1"
+                                     placeholder="${c:l('common.email')}"/>
+                   
+                        </row>
+                        <row>
+                            <combobox id="cbGender" mold="rounded" hflex="1"
+                                      readonly="true" placeholder="${c:l('gender')}">
+                                <template name="model">
+                                    <comboitem label="${each.label}" value="${each.value}"/>
+                                </template>
+                            </combobox>
+                            <a id="btnClearGender" iconSclass="z-icon-times" zclass="red"
+                               style="font-size: 18px" visible="false"/>
+                            <textbox id="tbBirthPlace" mold="rounded" hflex="1"
+                                     placeholder="${c:l('place.of.birth')}"/>
+                        </row>
+                        <row>
+                            <datebox id="dbBirthdayFrom" format="dd/MM/yyyy" 
+                                     mold="rounded" hflex="1" 
+                                     placeholder="${c:l('date.of.birth')}:${c:l('from.date')}"/>
+                            <a/>
+                            <datebox id="dbBirthdayTo" format="dd/MM/yyyy" 
+                                     mold="rounded" hflex="1" 
+                                     placeholder="${c:l('to.date')}"/>
+                        </row>
+                        <row>
+                            <textbox id="tbPhone" mold="rounded" hflex="1" 
+                                     placeholder="${c:l('common.phone')}"/>
+                            <a/>
+                            <textbox id="tbMobile" mold="rounded" hflex="1" 
+                                     placeholder="${c:l('common.mobile')}"/>
+                        </row>
+                        <row>
+                            <combobox id="cbStatus" mold="rounded" hflex="1"
+                                      readonly="true" placeholder="${c:l('status')}">
+                                <template name="model">
+                                    <comboitem label="${each.label}" value="${each.value}"/>
+                                </template>
+                            </combobox>
+                            <a id="btnClearStatus" iconSclass="z-icon-times" zclass="red"
+                               style="font-size: 18px"/>
+                            <textbox id="tbAccount" mold="rounded" hflex="1" 
+                                     placeholder="${c:l('account')}"/>
+                        </row>
+                        <row>
+                            <cell colspan="3" align="center">
+                                <toolbarbutton id = "btnAdvSearch" iconSclass="z-icon-search"
+                                               style="font-size:18px"/>
+                            </cell>
+                        </row>
+                    </rows>
+                </grid>
+            </popup>
+        </div>     
+        <vlayout sclass="page-content" xmlns:n="native" spacing="0">
+            <div sclass="page-header">
+                <a label="${c:l('menu.item.manager.user')}" 
+                   iconSclass="z-icon-list" sclass="lighter z-label"/>
+            </div>
+                
+            <div sclass="table-responsive">
+                <listbox emptyMessage="${c:l('common.no.record.found')}"
+                         mold="paging" pageSize="25" hflex="1" checkmark="true" 
+                         id="searchResultGrid"  pagingPosition="both"
+                         sclass="table table-striped table-bordered table-hover">
+                    <listhead sizable="true">
+                        <listheader width="40px"/>
+                        <listheader width="53px" label="${c:l('common.column.number')}"/>
+                        <listheader label ="${c:l('user.login.name')}"
+                                    sort="auto(userName)" hflex="2"/>
+                        <listheader label ="${c:l('common.email')}" 
+                                    sort="auto(email)" hflex="3"/>
+                        <listheader label ="${c:l('gender')}" hflex="1"/>
+                        <listheader label ="${c:l('phone')}/${c:l('mobile')}" hflex="2"/>
+                        <listheader label ="${c:l('full.name')}"
+                                    sort="auto(firstName)" hflex="2"/>
+                        <listheader label="${c:l('status')}"
+                                    sort="auto(status)" hflex="1"/>
+                        <listheader align="center" width="90px"/>
+                    </listhead>
+                    <listfoot>
+                        <listfooter span="9">
+                            <button id="btnAdd" sclass="blue" iconSclass="z-icon-plus-circle"
+                                    if="${sec:isAllGranted('manager_user_btnAdd')}"
+                                    tooltip="addUserTooltip, position=after_center"/>
+                            <button id="btnExport" sclass="orange" iconSclass="z-icon-table"
+                                    if="${sec:isAllGranted('manager_user_btnExport')}"
+                                    tooltip="exportTooltip, position=after_center"/>
+                            <button id="btnResetPwd" sclass="purple" iconSclass="z-icon-repeat"
+                                    if="${sec:isAllGranted('manager_user_btnResetPwd')}"
+                                    tooltip="resetPwdTooltip, position=after_center"/>
+                            <button id="btnLock" sclass="orange" iconSclass="z-icon-lock"
+                                    if="${sec:isAllGranted('manager_user_btnLockUser')}"
+                                    tooltip="lockTooltip, position=after_center"/>
+                            <button id="btnUnlock" sclass="orange" iconSclass="z-icon-unlock"
+                                    if="${sec:isAllGranted('manager_user_btnUnlockUser')}"
+                                    tooltip="unlockTooltip, position=after_center"/>
+                            <button id="btnDel" sclass="red" iconSclass="z-icon-trash-o"
+                                    if="${sec:isAllGranted('manager_user_btnDel')}"
+                                    tooltip="delTooltip, position=after_center"/>
+                            <button id="btnActivate" sclass="green" iconSclass="z-icon-check"
+                                    if="${sec:isAllGranted('manager_user_btnActivate')}"
+                                    tooltip="activateTooltip, position=after_center"/>
+                        </listfooter>
+                    </listfoot>
+                </listbox>
+            </div>
+                
+            <!--pop up tooltip-->
+            <popup id="addUserTooltip" zclass="tooltip" sclass="bottom tooltip-info">
+                <span zclass="tooltip-arrow"/>
+                <label zclass="tooltip-inner" value="${c:l('title.add.user')}"/>
+            </popup>
+            
+            <popup id="resetPwdTooltip" zclass="tooltip" sclass="bottom tooltip-detail">
+                <span zclass="tooltip-arrow"/>
+                <label zclass="tooltip-inner" value="${c:l('button.reset.password')}"/>
+            </popup>
+        </vlayout>
+    </div>    
+</zk>

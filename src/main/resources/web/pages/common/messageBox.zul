@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <window id="notice" title="${c:l('notice')}" position="center,top"
+            width="auto" closable="true" mode="overlapped" sclass="${arg.type}-box"
+            action="show: slideDown;hide: slideUp">
+        <hbox style="vertical-align: middle">
+            <image src="/html/images/message/${arg.type}.png"/>
+            <label value="${arg.notice}" style="padding: 10px;"/>
+        </hbox>
+        <timer onTimer="notice.detach()" delay="2000"/>
+    </window>
+</zk>

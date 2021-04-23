@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taglib>
+  <uri>http://www.zkoss.org/zkspring/security</uri>
+  <description>
+	Methods and actions for ZK + Spring Security
+	</description>
+  <!--           -->
+  <!-- Functions -->
+  <!--           -->
+  <function>
+    <name>isNoneGranted</name>
+    <function-class>com.tech4.corp.util.SecurityUtil</function-class>
+    <function-signature>
+	boolean isNoneGranted(java.lang.String authorities) {
+		</function-signature>
+    <description>
+	Return true if the authenticated principal is granted authorities 
+	of NONE the specified roles.
+		</description>
+  </function>
+  <function>
+    <name>isAllGranted</name>
+    <function-class>com.tech4.corp.util.SecurityUtil</function-class>
+    <function-signature>
+	boolean isAllGranted(java.lang.String authorities) {
+		</function-signature>
+    <description>
+	Return true if the authenticated principal is granted authorities 
+	of ALL the specified roles.
+		</description>
+  </function>
+  <function>
+    <name>isAnyGranted</name>
+    <function-class>com.tech4.corp.util.SecurityUtil</function-class>
+    <function-signature>
+	boolean isAnyGranted(java.lang.String authorities) {
+		</function-signature>
+    <description>
+	Return true if the authenticated principal is granted authorities 
+	of ANY the specified roles.
+		</description>
+  </function>
+</taglib>

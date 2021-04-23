@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <div apply="${menuController}">
+        <div sclass="breadcrumbs">
+            <div sclass="breadcrumb">
+                <span sclass="home-icon z-icon-home"/>
+                <a label="${c:l('menu.main')}" onClick='Executions.sendRedirect("/index.zul")'/>
+                <span/>
+                <a id="adminPage" label="${c:l('menu.admin')}"/>
+                <label value="${c:l('menu.item.menu')}"/>
+            </div>
+        </div>
+        <vlayout sclass="page-content" xmlns:n="native" spacing="0">
+            <div sclass="page-header">
+                <a label="${c:l('menu.item.menu')}" 
+                   iconSclass="z-icon-list" sclass="lighter z-label"/>
+            </div>
+
+            <separator/>
+            <tree id="treeMenu" checkmark="true" multiple="true">
+                <treecols>
+                    <!--<treecol width="40px"/>-->
+                    <treecol label = "${c:l('common.root.menu')}" hflex="3"/>
+                    <treecol label = "${c:l('menu.type')}" hflex="1"/>
+                    <treecol label = "${c:l('user.create')}" hflex="1"/>
+                    <treecol label = "${c:l('common.time.update')}" hflex="1"/>
+                    <treecol label = "${c:l('status')}" hflex="1"/>
+                    <treecol align="center" hflex="1"/>
+                </treecols>
+                <treefoot>
+                    <treefooter span="6">
+                        <button id="btnAdd" sclass="blue" iconSclass="z-icon-plus-circle"
+                                tooltip="addMenu, position=after_center"/>
+                    </treefooter>
+                </treefoot>
+            </tree>
+            <!--pop up tooltip-->
+            <popup id="addMenu" zclass="tooltip" sclass="bottom tooltip-info">
+                <span zclass="tooltip-arrow"/>
+                <label zclass="tooltip-inner" value="${c:l('title.add.menu')}"/>
+            </popup>
+        </vlayout>
+    </div>
+</zk>

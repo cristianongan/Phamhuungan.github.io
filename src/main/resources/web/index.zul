@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--openshift-->
+<!--<?page id="loginZul" title="Tech4"?>-->
+<?page id="mainPage" title="Yên Bình Corp"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?taglib uri="/WEB-INF/tld/security.tld" prefix="sec"?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+
+<!--<?link rel="shortcut icon" type="image/png" href="/html/images/favicon/favicon.png"?>
+<?link rel="icon" type="image/png" href="/html/images/favicon/favicon.png"?>-->
+
+<!--<?link rel="stylesheet" type="text/css"	href="/html/css/themes/bootstrap-${param.theme}.min.css" if="${not empty param.theme}"?>-->
+<?link rel="stylesheet" type="text/css"	href="/html/css/themes/bootstrap-cerulean.min.css"?>
+<?link rel="stylesheet" type="text/css"	href="/html/css/ace/ace.min.css" ?>
+<?link rel="stylesheet" type="text/css"	href="/html/css/ace/ace-rtl.min.css" ?>
+<?link rel="stylesheet" type="text/css"	href="/html/css/ace/ace-skins.min.css" ?>
+<?link rel="stylesheet" type="text/css"	href="/html/css/index.css.dsp"?>
+<?link rel="stylesheet" type="text/css"	href="/html/css/docs.css" ?>
+<?link rel="stylesheet" type="text/css"	href="/html/css/pygments-manni.css" ?>
+
+
+<zk xmlns="http://www.zkoss.org/2005/zul"
+    xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+    <div apply="${mainController}" width="100%" style="margin:auto;" sclass="main-container">
+
+        <div sclass="navbar navbar-default navbar-fixed-top bs-docs-nav">
+            
+            <div class="container" style="float:left">
+                <a label=" Smart Office " sclass="navbar-brand" 
+                   iconSclass="z-icon-leaf" onClick='Executions.sendRedirect("/index.zul")'/>
+                <navbar mold="bs-pills" sclass="navbar-nav" id="mainMenu">
+
+                </navbar>
+            </div>
+
+            <hlayout spacing="0"
+                     style="float:right" sclass="nav-user pull-right">
+                <a id="anoti" iconSclass="z-icon-bell" popup="notipp, position=after_end, type=toggle" sclass="green">
+                    <label id="lbNotiBag" sclass="badge badge-success"/>
+                </a>
+                <menubar sclass="user-menu light-blue">
+                    <menu id="mniUsername" image="/html/images/icons/medium/user.png">
+                        <menupopup>
+                            <menuitem label="Settings" iconSclass="z-icon-cog"/>
+                            <menuitem id="userDetail" label="${c:l('common.user.infomation')}" iconSclass="z-icon-user"/>
+                            <menuseparator/>
+                            <menuitem id="logout" label="${c:l('common.logout')}" iconSclass="z-icon-off"/>
+                        </menupopup>
+                    </menu>
+                </menubar>
+                <timer id="timer" delay="1800000" repeats="true"/>
+                <popup id="notipp" sclass="menu menu-pink" width="240px">
+                    <a id="aNotiTotal" sclass="header" iconSclass="z-icon-exclamation-triangle"/>
+                    <vlayout spacing="0">
+                        <a iconSclass="btn btn-xs no-hover btn-pink z-icon-copy" href="#">
+                            <label value="${c:l('contract.expired')}"/>
+                            <label id="lbContractEx" class="badge badge-info pull-right"/>
+                        </a>
+
+                        <a iconSclass="btn btn-xs no-hover btn-success z-icon-calendar" href="#">
+                            <label value="${c:l('birth.day')}"/>
+                            <label id="lbBirthDay" class="badge badge-info pull-right"/>
+                        </a>
+
+                        <a id="aSeeAll" label="${c:l('see.all.notifications')}" href="#">
+                            <span class="z-icon-arrow-right"/>
+                        </a>
+                    </vlayout>
+                </popup>
+            </hlayout>
+            
+        </div>
+        <div zclass="center-body" id="main">
+            <include id="bodyLayout"/>
+            <!--footer-->
+            <div zclass="footer">
+                <div zclass="footer-inner">
+                    <div zclass="footer-content">
+                        <label value="© Copyright"/>
+                        <label id="lbCurrentYear"/>
+                        <a href="http://tech4.vn" target="_blank" label="tech4.vn" sclass="bolder"/><label value=", All rights reserved"/>
+                    </div>
+                </div>
+            </div>
+            <!--go to top-->
+            <a id="aGotoTop" iconSclass="ace-icon icon-only z-icon-angle-double-up"
+               sclass="btn-scroll-up btn btn-sm btn-inverse btn-no-border"/>
+        </div>
+        
+        
+        <!--common tooltip-->
+        <popup id="requireTooltip" zclass="tooltip" sclass="left tooltip-error">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('message.require')}"/>
+        </popup>
+        
+        <popup id="editTooltip" zclass="tooltip" sclass="bottom tooltip-info">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('button.update2')}"/>
+        </popup>
+        <popup id="exportTooltip" zclass="tooltip" sclass="bottom tooltip-warning">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('button.export')}"/>
+        </popup>
+        
+        <popup id="delTooltip" zclass="tooltip" sclass="bottom tooltip-error">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('common.delete')}"/>
+        </popup>
+        
+        <popup id="calcelTooltip" zclass="tooltip" sclass="bottom tooltip-error">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('button.cancel')}"/>
+        </popup>
+        
+        <popup id="detailTooltip" zclass="tooltip" sclass="bottom tooltip-detail">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('common.detail')}"/>
+        </popup>
+        
+        <popup id="lockTooltip" zclass="tooltip" sclass="bottom tooltip-warning">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('button.lock')}"/>
+        </popup>
+        
+        <popup id="unlockTooltip" zclass="tooltip" sclass="bottom tooltip-warning">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('button.unlock')}"/>
+        </popup>
+        
+        <popup id="rightTooltip" zclass="tooltip" sclass="bottom tooltip-warning">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('button.right')}"/>
+        </popup>
+        
+        <popup id="assignRightTooltip" zclass="tooltip" sclass="bottom tooltip-detail">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('common.assign.right')}"/>
+        </popup>
+        
+        <popup id="assignRoleTooltip" zclass="tooltip" sclass="bottom tooltip-detail">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('assign.role')}"/>
+        </popup>
+        
+        <popup id="activateTooltip" zclass="tooltip" sclass="bottom tooltip-success">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('button.activate')}"/>
+        </popup>
+    </div>
+    <script type="text/javascript">
+        zk.afterMount(function (){
+            $(window).scroll(function(){
+                    if($(window).scrollTop()!=0){
+                            $('.btn-scroll-up').addClass("display");
+                    } else {
+                            $('.btn-scroll-up').removeClass("display");
+                    }
+            });
+        
+            $('.btn-scroll-up').click(function(){
+                $('body,html').animate({scrollTop:0},800);
+            }); 
+        });
+
+        
+    </script>
+</zk>

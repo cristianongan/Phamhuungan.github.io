@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <window title="${c:l('title.add.group')}" width="400px"
+            height="auto" mode="overlapped" closable="true"
+            apply="${addEditGroupController}" position="center, center"
+            action="show: slideDown;hide: slideUp" border="none">
+        <grid sclass="no-style">
+            <columns>
+                <column width="10%"/>
+                <column width="80%"/>
+                <column width="10%"/>
+            </columns>
+            <rows>
+                <row>
+                    <cell sclass="z-require">
+                        <a iconSclass = "z-icon-star" 
+                           tooltip="requireTooltip,position=start_after"/>
+                    </cell>
+                    <textbox id = "tbGroupsName" hflex="1" mold="rounded" 
+                             placeholder="${c:l('group.name')}" focus="true"
+                             tooltip="groupNameTooltip,position=end_before,delay=500"/>
+                    <cell/>
+                </row>
+                <row>
+                    <cell/>
+                    <textbox id = "tbDescription" hflex="1" mold="rounded" 
+                             rows="2" placeholder="${c:l('common.description')}" 
+                             tooltip="descriptionTooltip,position=end_before,delay=500"/>
+                    <cell/>
+                </row>
+            </rows>
+        </grid>
+
+        <separator/>
+
+        <div align="center" sclass="z-button-action">
+            <button id="btnSave" type="button" label="${c:l('button.save')}" 
+                    iconSclass="z-icon-check" class="btn-success"/>
+            <button id="btnCancel" type="button" label="${c:l('button.cancel')}"
+                    iconSclass="z-icon-times" class="btn-default"/>
+        </div>
+
+        <!--pop up tooltip-->
+        <popup id="groupNameTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('group.name')}"/>
+        </popup>
+        <popup id="descriptionTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('common.description')}"/>
+        </popup>
+    </window>
+</zk>

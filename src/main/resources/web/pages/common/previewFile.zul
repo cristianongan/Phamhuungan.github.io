@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <window border="none" title="View" apply="${previewFileController}"
+            height="100%" width="100%"
+            closable="true" mode="overlapped" action="show: slideDown;hide: slideUp">
+        <iframe id="viewer" height="100%" width="100%" autohide="true">
+            
+        </iframe>
+    </window>
+</zk>

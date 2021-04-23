@@ -1,0 +1,449 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:n="native">
+    <window width="720px" height="600px"  mode="overlapped" position="center, center"
+            apply="${addEditStaffController}" title="${c:l('title.add.staff')}"
+            action="show: slideDown;hide: slideUp" border="none" closable="true"
+            sclass="add-edit-staff">
+        <div class="col-md-4">
+            <n:div id="target_nav" class="bs-sidebar hidden-print">
+                <n:ul class="nav bs-sidenav">
+                    <n:li class="active">
+                        <n:a href="#general-information">${c:l('common.general.information')}</n:a>
+                    </n:li>
+                    <n:li>
+                        <n:a href="#labor-contract">${c:l('labor.contract')}</n:a>
+                    </n:li>
+                    <n:li>
+                        <n:a href="#social-insurance">${c:l('social.insurance')}</n:a>
+                    </n:li>
+                    <n:li>
+                        <n:a href="#qualifications">${c:l('qualifications')}</n:a>
+                    </n:li>
+                    <n:li>
+                        <n:a href="#identification">${c:l('identification')}</n:a>
+                    </n:li>
+                    <n:li>
+                        <n:a href="#contact">${c:l('contact')}</n:a>
+                    </n:li>
+                </n:ul>
+            </n:div>
+        </div>
+        <div class="col-md-8">
+            <n:div id="scroll-able">
+                <grid height="500px" sclass="grid-scrollable">
+                    <columns>
+                        <column width="7%"/>
+                        <column width="83%"/>
+                        <column width="10%"/>
+                    </columns>
+                    <rows>
+                        <row>
+                            <cell/>
+                            <n:h3 id="general-information">
+                                <span sclass="z-icon-user"/> ${c:l('common.general.information')}</n:h3>
+                        </row>    
+                        <row>
+                            <cell sclass="z-require">
+                                <a iconSclass = "z-icon-star" 
+                                   tooltip="requireTooltip,position=start_after"/>
+                            </cell>
+                            <textbox id="tbStaffName" mold="rounded" focus="true"
+                                     hflex="1" placeholder="${c:l('full.name')}" 
+                                     tooltip="staffNameTooltip,position=end_before,delay=500"/>
+                        </row>
+                        <row>
+                            <cell/>
+                            <bandbox id="bbDepartment" mold="rounded" hflex="1" 
+                                     readonly="true" placeholder="${c:l('department')}" 
+                                     tooltip="departmentTooltip,position=end_before,delay=500">
+                                <bandpopup width="320px">
+                                    <include id="icDepartment"/>
+                                </bandpopup>
+                            </bandbox>
+                            <a id="btnClearDept" iconSclass="z-icon-times" zclass="red"
+                               style="font-size: 18px" visible="false"/>
+                        </row>
+                        <row>
+                            <cell/>
+                            <combobox id="cbJobTitle" hflex="1" mold="rounded" readonly="true"
+                                      placeholder="${c:l('job.title')}" value="${c:l('common.defaultValue')}"
+                                      tooltip="jobTitleTooltip,position=end_before,delay=500">
+                                <template name="model">
+                                    <comboitem label="${each.jobTitle}" value="${each.jobId}">
+                                        <custom-attributes data="${each}"/>
+                                    </comboitem>
+                                </template>
+                            </combobox>
+                            
+                            <a id="btnAddJob" iconSclass="z-icon-plus" zclass="blue"
+                               tooltip="addJobTooltip,position=end_before,delay=0" 
+                               style="font-size: 18px" />
+                        </row>
+                
+                        <row>
+                            <cell/>
+                            <datebox id="dbWorkDate" mold="rounded" hflex="1"
+                                     placeholder="${c:l('work.date')}" 
+                                     tooltip="workDateTooltip,position=end_before,delay=500"/>
+                            <cell/>
+                        </row>
+                        <row>
+                            <cell/>
+                            <datebox id="dbDateOfBirth" mold="rounded" hflex="1"
+                                     placeholder="${c:l('date.of.birth')}" 
+                                     tooltip="dateOfBirthTooltip,position=end_before,delay=500"/>
+                            <cell/>
+                        </row>
+                        <row>
+                            <cell/>
+                            <textbox id="tbPermanentResidence" mold="rounded" focus="true"
+                                     hflex="1" placeholder="${c:l('permanent.residence')}" 
+                                     tooltip="permanentResidenceTooltip,position=end_before,delay=500"/>
+                        </row>
+                        <row>
+                            <cell/>
+                            <textbox id="tbCurrentResidence" mold="rounded" focus="true"
+                                     hflex="1" placeholder="${c:l('current.residence')}" 
+                                     tooltip="currentResidenceTooltip,position=end_before,delay=500"/>
+                        </row>
+                
+                        <row>
+                            <cell/>
+                            <combobox id="cbStatus" hflex="1" mold="rounded" readonly="true"
+                                      placeholder="${c:l('status')}" value="${c:l('common.defaultValue')}"
+                                      tooltip="statusTooltip,position=end_before,delay=500">
+                                <template name="model">
+                                    <comboitem label="${each.label}" value="${each.value}"/>
+                                </template>
+                            </combobox>
+                        </row>
+                
+                        <row>
+                            <cell/>
+                            <textbox id="tbNote" rows="2" mold="rounded"
+                                     hflex="1" placeholder="${c:l('common.note')}" 
+                                     tooltip="noteTooltip,position=end_before,delay=500"/>
+                        </row>
+                
+                        <row>
+                            <cell/>
+                            <n:h3 id="labor-contract">
+                                <span sclass="z-icon-copy"/> ${c:l('labor.contract')}</n:h3>
+                        </row>
+                
+                        <row>
+                            <cell/>
+                            <combobox id="cbContractType" hflex="1" mold="rounded" readonly="true"
+                                      placeholder="${c:l('contract.type')}" value="${c:l('common.defaultValue')}"
+                                      tooltip="contractTypeTooltip,position=end_before,delay=500">
+                                <template name="model">
+                                    <comboitem label="${each.contractTypeName}" value="${each.contractTypeId}">
+                                        <custom-attributes data="${each}"/>
+                                    </comboitem>
+                                </template>
+                            </combobox>
+                            <a id="btnAddContractType" iconSclass="z-icon-plus" zclass="blue"
+                               tooltip="addContractTypeTooltip,position=end_before,delay=0" 
+                               style="font-size: 18px" />
+                        </row>
+                
+                        <row>
+                            <cell/>
+                            <datebox id="dbContractFromDate" mold="rounded" hflex="1"
+                                     placeholder="${c:l('from.date')}" 
+                                     tooltip="contractFromDateTooltip,position=end_before,delay=500"/>
+                            <cell/>
+                        </row>
+                        
+                        <row>
+                            <cell/>
+                            <datebox id="dbContractToDate" mold="rounded" hflex="1"
+                                     placeholder="${c:l('to.date')}" 
+                                     tooltip="contractToDateTooltip,position=end_before,delay=500"/>
+                            <cell/>
+                        </row>
+                
+                        <row>
+                            <cell/>
+                            <textbox id="tbContractNumber" mold="rounded"
+                                     hflex="1" placeholder="${c:l('contract.number')}" 
+                                     tooltip="contractNumberTooltip,position=end_before,delay=500"/>
+                        </row>
+                        <row>
+                            <cell/>
+                            <textbox id="tbTaxCode" mold="rounded"
+                                     hflex="1" placeholder="${c:l('tax.code')}" 
+                                     tooltip="taxCodeTooltip,position=end_before,delay=500"/>
+                        </row>
+                
+                        <row>
+                            <cell/>
+                            <n:h3 id="social-insurance">
+                                <span sclass="z-icon-hospital"/> ${c:l('social.insurance')}</n:h3>
+                        </row>
+                
+                        <row>
+                            <cell/>
+                            <longbox id="lgbSalaryBasic" mold="rounded" maxlength="15"
+                                     hflex="1" placeholder="${c:l('salary.basic')}" 
+                                     tooltip="salaryBasicTooltip,position=end_before,delay=500"/>
+                        </row>
+                
+                        <row>
+                            <cell/>
+                            <datebox id="dbInsurancePaidDate" mold="rounded" hflex="1"
+                                     placeholder="${c:l('insurance.paid.date')}" 
+                                     tooltip="insurancePaidDateTooltip,position=end_before,delay=500"/>
+                            <cell/>
+                        </row>
+                
+                        <row>
+                            <cell/>
+                            <textbox id="tbInsuranceBookNumber" mold="rounded"
+                                     hflex="1" placeholder="${c:l('insurance.book.number')}" 
+                                     tooltip="insuranceBookNumberTooltip,position=end_before,delay=500"/>
+                        </row>
+                
+                        <row>
+                            <cell/>
+                            <textbox id="tbPaidPlace" mold="rounded"
+                                     hflex="1" placeholder="${c:l('paid.insurance.place')}" 
+                                     tooltip="paidPlaceTooltip,position=end_before,delay=500"/>
+                        </row>
+                
+                        <row>
+                            <cell/>
+                            <n:h3 id="qualifications">
+                                <span sclass="z-icon-book"/> ${c:l('qualifications')}</n:h3>
+                        </row>
+                
+                        <row>
+                            <cell/>
+                            <textbox id="tbLevels" mold="rounded"
+                                     hflex="1" placeholder="${c:l('degree')}" 
+                                     tooltip="levelsTooltip,position=end_before,delay=500"/>
+                        </row>
+                
+                        <row>
+                            <cell/>
+                            <textbox id="tbMajors" mold="rounded"
+                                     hflex="1" placeholder="${c:l('majors')}" 
+                                     tooltip="majorsTooltip,position=end_before,delay=500"/>
+                        </row>
+                
+                        <row>
+                            <cell/>
+                            <textbox id="tbCollege" mold="rounded"
+                                     hflex="1" placeholder="${c:l('college')}" 
+                                     tooltip="collegeTooltip,position=end_before,delay=500"/>
+                        </row>
+                
+                        <row>
+                            <cell/>
+                            <n:h3 id="identification">
+                                <span sclass="z-icon-barcode"/> ${c:l('identification')}</n:h3>
+                        </row>
+                
+                        <row>
+                            <cell/>
+                            <textbox id="tbIdentityCard" mold="rounded"
+                                     hflex="1" placeholder="${c:l('identity.card')}" 
+                                     tooltip="identityCardTooltip,position=end_before,delay=500"/>
+                        </row>
+                
+                        <row>
+                            <cell/>
+                            <datebox id="dbGrantDate" mold="rounded"
+                                     hflex="1" placeholder="${c:l('grant.date')}" 
+                                     tooltip="grantDateTooltip,position=end_before,delay=500"/>
+                        </row>
+                
+                        <row>
+                            <cell/>
+                            <textbox id="tbGrantPlace" mold="rounded"
+                                     hflex="1" placeholder="${c:l('grant.place')}" 
+                                     tooltip="grantPlaceTooltip,position=end_before,delay=500"/>
+                        </row>
+                
+                        <row>
+                            <cell/>
+                            <n:h3 id="contact">
+                                <span sclass="z-icon-phone"/> ${c:l('contact')}</n:h3>
+                    
+                        </row>
+                
+                        <row>
+                            <cell/>
+                            <textbox id="tbMobile" mold="rounded"
+                                     hflex="1" placeholder="${c:l('mobile')}" 
+                                     tooltip="mobileTooltip,position=end_before,delay=500"/>
+                        </row>
+                
+                        <row>
+                            <cell/>
+                            <textbox id="tbHomePhone" mold="rounded"
+                                     hflex="1" placeholder="${c:l('home.phone')}" 
+                                     tooltip="homePhoneTooltip,position=end_before,delay=500"/>
+                        </row>
+                
+                        <row>
+                            <cell/>
+                            <textbox id="tbEmail" mold="rounded"
+                                     hflex="1" placeholder="${c:l('common.email')}" 
+                                     tooltip="emailTooltip,position=end_before,delay=500"/>
+                        </row>
+                        <row height="400px">
+                            <cell/>
+                        </row>
+                    </rows>
+                </grid>
+            </n:div>
+            
+            <div class="space-6"></div>
+        
+            <div align="center" sclass="z-button-action">
+                <button id="btnPrevious" type="button" label="${c:l('button.previous')}" 
+                        iconSclass="z-icon-backward" class="btn-info" if="${not empty arg.object}"/>
+                <button id="btnNext" type="button" label="${c:l('button.next')}" 
+                        iconSclass="z-icon-forward" class="btn-info" if="${not empty arg.object}"/>
+                <button id="btnSave" type="button" label="${c:l('button.save')}" 
+                        iconSclass="z-icon-check" class="btn-success"/>
+                <button id="btnCancel" type="button" label="${c:l('button.cancel')}"
+                        iconSclass="z-icon-times" class="btn-default"/>
+            </div>
+        </div>
+        
+        
+        <!--pop up tooltip-->
+        <popup id="addJobTooltip" zclass="tooltip" sclass="right tooltip-info">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('title.add.job')}"/>
+        </popup>
+        <popup id="addContractTypeTooltip" zclass="tooltip" sclass="right tooltip-info">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('title.add.contract.type')}"/>
+        </popup>
+        
+        <popup id="staffNameTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('full.name')}"/>
+        </popup>
+        <popup id="departmentTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('department')}"/>
+        </popup>
+        <popup id="jobTitleTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('job.title')}"/>
+        </popup>
+        <popup id="workDateTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('work.date')}"/>
+        </popup>
+        <popup id="dateOfBirthTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('date.of.birth')}"/>
+        </popup>
+        <popup id="permanentResidenceTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('permanent.residence')}"/>
+        </popup>
+        <popup id="currentResidenceTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('current.residence')}"/>
+        </popup>
+        <popup id="statusTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('status')}"/>
+        </popup>
+        <popup id="noteTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('common.note')}"/>
+        </popup>
+        <popup id="contractTypeTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('contract.type')}"/>
+        </popup>
+        <popup id="contractFromDateTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('from.date')}"/>
+        </popup>
+        <popup id="contractToDateTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('to.date')}"/>
+        </popup>
+        <popup id="contractNumberTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('contract.number')}"/>
+        </popup>
+        <popup id="taxCodeTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('tax.code')}"/>
+        </popup>
+        <popup id="salaryBasicTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('salary.basic')}"/>
+        </popup>
+        <popup id="insurancePaidDateTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('insurance.paid.date')}"/>
+        </popup>
+        <popup id="insuranceBookNumberTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('insurance.book.number')}"/>
+        </popup>
+        <popup id="paidPlaceTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('paid.insurance.place')}"/>
+        </popup>
+        <popup id="levelsTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('degree')}"/>
+        </popup>
+        <popup id="majorsTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('majors')}"/>
+        </popup>
+        <popup id="collegeTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('college')}"/>
+        </popup>
+        <popup id="identityCardTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('identity.card')}"/>
+        </popup>
+        <popup id="grantDateTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('grant.date')}"/>
+        </popup>
+        <popup id="grantPlaceTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('grant.place')}"/>
+        </popup>
+        <popup id="mobileTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('mobile')}"/>
+        </popup>
+        <popup id="homePhoneTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('home.phone')}"/>
+        </popup>
+        <popup id="emailTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('common.email')}"/>
+        </popup>
+        <script><![CDATA[
+	zk.afterMount(function () {
+		$.getScript("./html/js/application.js", function () {
+			  if (location.hash && (!zk.ie || zk.ie > 8)) {
+			  setTimeout(function () {
+				$('.bs-sidebar a[href*=#]')[0].click();
+				$('.grid-scrollable .z-grid-body').scrollspy('process');
+				}, 300);
+			  }
+		});
+	});
+	]]></script>
+    </window>
+</zk>

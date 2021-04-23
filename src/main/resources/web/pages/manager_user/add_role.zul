@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <window title="${c:l('assign.role')}" width="500px" position="center, center"
+            mode="overlapped" closable="true" apply="${assignRoleController}"
+            action="show: slideDown;hide: slideUp" border="none">
+        <div sclass="table-responsive">
+            <listbox id="gridRole" emptyMessage="${c:l('common.no.record.found')}"
+                     mold="paging" pageSize="5" checkmark="true"
+                     sclass="table table-striped table-bordered table-hover">
+                <listhead sizable="true" >
+                    <listheader width="40px"/>
+                    <listheader width="53px" label="${c:l('common.column.number')}"/>
+                    <listheader hflex="1" label ="${c:l('role.name')}"/>
+                    <listheader hflex="1" label ="${c:l('common.description')}"/>
+                </listhead>
+            </listbox>
+            
+            <div class="space-4"></div>
+            
+            <div align="center" sclass="z-button-action">
+                <button id="btnAdd" label="${c:l('button.add')}"
+                        if="${sec:isAllGranted('manager_user_btnSaveAssignRole')}"
+                        iconSclass="z-icon-plus-circle" class="btn-info"/>
+                <button id="btnCancel" label = "${c:l('button.cancel')}"
+                        iconSclass="z-icon-times" class="btn-default"/>
+            </div>
+        </div>
+    </window>
+</zk>

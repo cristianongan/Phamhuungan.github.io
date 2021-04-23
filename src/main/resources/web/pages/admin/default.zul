@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <div>
+        <div sclass="breadcrumbs">
+            <div sclass="breadcrumb">
+                <span sclass="home-icon z-icon-home"/>
+                <a label="${c:l('menu.main')}" onClick='Executions.sendRedirect("/index.zul")'/>
+                <label value="${c:l('menu.admin')}"/>
+            </div>
+        </div>
+        <vlayout sclass="page-content" xmlns:n="native" spacing="0">
+        
+        </vlayout>
+    </div>
+</zk>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <window apply="${rolePermissionController}"
+            title="${c:l('role.group.list')}" width="800px"
+            height="460px"  mode="overlapped" closable="true"
+            position="center, center"
+            action="show: slideDown;hide: slideUp" border="none">
+        <hlayout spacing="0" height="88%">
+            <tree id="treeMenu" multiple="false" width="200px" height="350px">
+                <treecols>
+                    <!--<treecol width="40px"/>-->
+                    <treecol label = "${c:l('common.root.menu')}" hflex="1"/>
+                </treecols>
+            </tree>
+            <listbox id="searchResult" emptyMessage="${c:l('common.no.record.found')}"
+                     checkmark="true" hflex="1" height="350px" multiple="true"
+                     sclass="table table-striped table-bordered table-hover table-box">     
+                <listhead sizable="true">
+                    <listheader width="40px"/>
+                    <listheader label="${c:l('group.name')}" hflex="1"/>
+                    <listheader label="${c:l('common.description')}" hflex="2"/>
+                </listhead>
+            </listbox>
+        </hlayout>
+
+        <separator/>
+
+        <div align="center" sclass="z-button-action">
+            <button id="btnSave" type="button" label="${c:l('button.save')}" 
+                    iconSclass="z-icon-check" class="btn-success" visible="false"/>
+            <button id="btnCancel" type="button" label="${c:l('button.cancel')}"
+                    iconSclass="z-icon-times" class="btn-default"/>
+        </div>
+    </window>
+</zk>

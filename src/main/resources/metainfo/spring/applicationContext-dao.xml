@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xmlns:aop="http://www.springframework.org/schema/aop" 
+xmlns:tx="http://www.springframework.org/schema/tx" 
+xsi:schemaLocation="http://www.springframework.org/schema/beans 
+http://www.springframework.org/schema/beans/spring-beans-3.2.xsd 
+http://www.springframework.org/schema/aop 
+http://www.springframework.org/schema/aop/spring-aop-3.2.xsd 
+http://www.springframework.org/schema/tx
+http://www.springframework.org/schema/tx/spring-tx-3.2.xsd 
+">
+<!-- ====================================================== -->
+    <!-- DAO beans -->
+    <!-- ====================================================== -->
+    <bean id="userDAO" class="com.tech4.corp.dao.impl.UserDAOImpl" parent="basicDAO" />
+    <bean id="usersLoginDAO" class="com.tech4.corp.dao.impl.UsersLoginDAOImpl" parent="basicDAO" />
+    <bean id="roleDAO" class="com.tech4.corp.dao.impl.RoleDAOImpl" parent="basicDAO" />
+    <bean id="rightDAO" class="com.tech4.corp.dao.impl.RightDAOImpl" parent="basicDAO" />
+    <bean id="groupDAO" class="com.tech4.corp.dao.impl.GroupDAOImpl" parent="basicDAO" />
+    <bean id="categoryDAO" class="com.tech4.corp.dao.impl.CategoryDAOImpl" parent="basicDAO" />
+    <bean id="folderEntryDAO" class="com.tech4.corp.dao.impl.FolderEntryDAOImpl" parent="basicDAO" />
+    <bean id="fileEntryDAO" class="com.tech4.corp.dao.impl.FileEntryDAOImpl" parent="basicDAO" />
+    <!--manhnn1-->
+    <bean id="documentTypeDAO" class="com.tech4.corp.dao.impl.DocumentTypeDAOImpl" parent="basicDAO" />
+    <bean id="documentDAO" class="com.tech4.corp.dao.impl.DocumentDAOImpl" parent="basicDAO" />
+    <bean id="staffDAO" class="com.tech4.corp.dao.impl.StaffDAOImpl" parent="basicDAO" />
+    <bean id="departmentDAO" class="com.tech4.corp.dao.impl.DepartmentDAOImpl" parent="basicDAO" />
+    <bean id="jobDAO" class="com.tech4.corp.dao.impl.JobDAOImpl" parent="basicDAO" />
+    <bean id="contractTypeDAO" class="com.tech4.corp.dao.impl.ContractTypeDAOImpl" parent="basicDAO" />
+    <bean id="salaryLandmarkDAO" class="com.tech4.corp.dao.impl.SalaryLandmarkDAOImpl" parent="basicDAO" />
+    <bean id="workProcessDAO" class="com.tech4.corp.dao.impl.WorkProcessDAOImpl" parent="basicDAO" />
+    <bean id="notificationDAO" class="com.tech4.corp.dao.impl.NotificationDAOImpl" parent="basicDAO" />
+    <!--manhnn1_end-->
+</beans>

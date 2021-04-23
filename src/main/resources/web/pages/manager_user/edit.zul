@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    
+    <window title="${c:l('title.add.user')}" width="400px"
+            height="auto" mode="overlapped" closable="true"
+            apply="${addEditUserController}" position="center, center"
+            action="show: slideDown;hide: slideUp" border="none">
+        <grid sclass="no-style">
+            <columns>
+                <column width="10%"/>
+                <column width="80%"/>
+                <column width="10%"/>
+            </columns>
+            <rows>
+                <row>
+                    <cell sclass="z-require">
+                        <a iconSclass = "z-icon-star" 
+                           tooltip="requireTooltip,position=start_after"/>
+                    </cell>
+                    <textbox id="tbUserName" mold="rounded" focus="true"
+                                 hflex="1" placeholder="${c:l('user.login.name')}" 
+                                 tooltip="userNumberTooltip,position=end_before,delay=500"/>
+                    <cell/>
+                </row>
+                
+                <row>
+                    <cell sclass="z-require">
+                        <a iconSclass = "z-icon-star" 
+                           tooltip="requireTooltip,position=start_after"/>
+                    </cell>
+                    <textbox id="tbEmail" mold="rounded"
+                             hflex="1" placeholder="${c:l('common.email')}" 
+                             tooltip="emailTooltip,position=end_before,delay=500"/>
+                    <cell/>
+                </row>
+                <row>
+                    <cell sclass="z-require">
+                        <a iconSclass = "z-icon-star" 
+                           tooltip="requireTooltip,position=start_after"/>
+                    </cell>
+                    <cell>
+                        <textbox id="tbFirstName" mold="rounded" sclass="no-border-right"
+                                 width="30%" placeholder="${c:l('first.name')}" 
+                                 tooltip="firstNameTooltip,position=end_before,delay=500"/>
+                        <textbox id="tbMiddleName" mold="rounded" sclass="no-border-right"
+                                 width="30%" placeholder="${c:l('middle.name')}" 
+                                 tooltip="middleNameTooltip,position=end_before,delay=500"/>
+                        <textbox id="tbLastName" mold="rounded"
+                                 width="40%" placeholder="${c:l('last.name')}" 
+                                 tooltip="lastNameTooltip,position=end_before,delay=500"/>
+                    </cell>
+                    <cell/>
+                </row>
+                
+                <row>
+                    <cell/>
+                    <combobox id="cbGender" mold="rounded" hflex="1"
+                              placeholder="${c:l('gender')}" readonly="true"
+                              tooltip="genderTooltip,position=end_before,delay=500">
+                        <template name="model">
+                            <comboitem label="${each.label}" value="${each.value}"/>
+                        </template>
+                    </combobox>
+                    <a id="btnClearGender" iconSclass="z-icon-times" zclass="red"
+                       style="font-size: 18px" visible="false"/>
+                </row>
+                
+                <row>
+                    <cell/>
+                    <datebox id="dbBirthday" format="dd/MM/yyyy" 
+                             mold="rounded" hflex="1" placeholder="${c:l('date.of.birth')}"
+                             tooltip="dateOfBirthTooltip,position=end_before,delay=500"/>
+                    <cell/>
+                </row>
+                <row>
+                    <cell/>
+                    <textbox id="tbBirthplace" mold="rounded"
+                             hflex="1" placeholder="${c:l('place.of.birth')}" 
+                             tooltip="birthplaceTooltip,position=end_before,delay=500"/>
+                    <cell/>
+                </row>
+                
+                <row>
+                    <cell/>
+                    <textbox id="tbAddress" mold="rounded"
+                             hflex="1" placeholder="${c:l('address')}" 
+                             tooltip="addressTooltip,position=end_before,delay=500"/>
+                    <cell/>
+                </row>
+                
+                <row>
+                    <cell/>
+                    <textbox id="tbPhone" mold="rounded"
+                             hflex="1" placeholder="${c:l('phone')}" 
+                             tooltip="phoneTooltip,position=end_before,delay=500"/>
+                    <cell/>
+                </row>
+                
+                <row>
+                    <cell/>
+                    <textbox id="tbMobile" mold="rounded"
+                             hflex="1" placeholder="${c:l('mobile')}" 
+                             tooltip="mobileTooltip,position=end_before,delay=500"/>
+                    <cell/>
+                </row>
+            </rows>
+        </grid>
+        
+        <div class="space-6"></div>
+        
+        <div align="center" sclass="z-button-action">
+            <button id="btnPrevious" type="button" label="${c:l('button.previous')}" 
+                    iconSclass="z-icon-backward" class="btn-info" if="${not empty arg.object}"/>
+            <button id="btnNext" type="button" label="${c:l('button.next')}" 
+                    iconSclass="z-icon-forward" class="btn-info" if="${not empty arg.object}"/>
+            <button id="btnSave" type="button" label="${c:l('button.save')}" 
+                    iconSclass="z-icon-check" class="btn-success"/>
+            <!--            <button id="btnSaveAndContinue" label="${c:l('button.save.and.continue')}"
+            image="/html/images/icons/save_and_add.png"
+            if="${sec:isAllGranted('manager_user_btnSave')}"/>-->
+            <button id="btnCancel" type="button" label="${c:l('button.cancel')}"
+                    iconSclass="z-icon-times" class="btn-default"/>
+        </div>
+        <!--pop up tooltip-->
+        
+        <popup id="userNumberTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('user.login.name')}"/>
+        </popup>
+        
+        <popup id="emailTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('common.email')}"/>
+        </popup>
+        
+        <popup id="firstNameTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('first.name')}"/>
+        </popup>
+        
+        <popup id="middleNameTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('middle.name')}"/>
+        </popup>
+        
+        <popup id="lastNameTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('last.name')}"/>
+        </popup>
+        
+        <popup id="genderTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('gender')}"/>
+        </popup>
+        
+        <popup id="dateOfBirthTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('date.of.birth')}"/>
+        </popup>
+        
+        <popup id="birthplaceTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('place.of.birth')}"/>
+        </popup>
+        
+        <popup id="addressTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('address')}"/>
+        </popup>
+        
+        <popup id="phoneTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('phone')}"/>
+        </popup>
+        
+        <popup id="mobileTooltip" zclass="tooltip" sclass="right">
+            <span zclass="tooltip-arrow"/>
+            <label zclass="tooltip-inner" value="${c:l('mobile')}"/>
+        </popup>
+    </window>
+</zk>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <window id="winMr" title="${c:l('menu.model.resource')}" width="1025"
+            height="auto"  mode="overlapped" closable="true"
+            apply="${modelResourceController}"
+            action="show: slideDown;hide: slideUp" border="normal">
+        <groupbox mold="3d">
+            
+        </groupbox>
+    </window>
+</zk>

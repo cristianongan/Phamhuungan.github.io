@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:n="native">
+    <window width="800px" height="600px"  mode="overlapped" position="center, center"
+            apply="${detailStaffController}" sclass="add-edit-staff"
+            action="show: slideDown;hide: slideUp" border="none" closable="true">
+        <div class="col-md-4">
+            <n:div id="target_nav" class="bs-sidebar hidden-print">
+                <n:ul class="nav bs-sidenav">
+                    <n:li class="active">
+                        <n:a href="#general-information">${c:l('common.general.information')}</n:a>
+                    </n:li>
+                    <n:li>
+                        <n:a href="#labor-contract">${c:l('labor.contract')}</n:a>
+                    </n:li>
+                    <n:li>
+                        <n:a href="#social-insurance">${c:l('social.insurance')}</n:a>
+                    </n:li>
+                    <n:li>
+                        <n:a href="#qualifications">${c:l('qualifications')}</n:a>
+                    </n:li>
+                    <n:li>
+                        <n:a href="#identification">${c:l('identification')}</n:a>
+                    </n:li>
+                    <n:li>
+                        <n:a href="#contact">${c:l('contact')}</n:a>
+                    </n:li>
+                    <n:li>
+                        <n:a href="#salary-landmark">${c:l('salary.landmark')}</n:a>
+                    </n:li>
+                    <n:li>
+                        <n:a href="#work-process">${c:l('work.process')}</n:a>
+                    </n:li>
+                </n:ul>
+            </n:div>
+        </div>
+        <div class="col-md-8">
+            <n:div id="scroll-able">
+                <grid height="500px" sclass="grid-scrollable grid-info">
+                    <columns>
+                        <column width="40%"/>
+                        <column width="60%"/>
+                    </columns>
+                    <rows>
+                        <row>
+                            <cell colspan="2">
+                                <n:h3 id="general-information">
+                                    <span sclass="z-icon-user"/> ${c:l('common.general.information')}
+                                </n:h3>
+                            </cell>
+                        </row>    
+                        <row zclass="grid-info-row">
+                            <label value="${c:l('full.name')}"/>
+                            <label id="lbStaffName"/>
+                        </row>
+                        <row zclass="grid-info-row">
+                            <label value="${c:l('department')}"/>
+                            <label id="lbDeptName"/>
+                        </row>
+                        <row zclass="grid-info-row"> 
+                            <label value="${c:l('job.title')}"/>
+                            <label id="lbJobTitle"/>
+                        </row>
+                
+                        <row zclass="grid-info-row">
+                            <label value="${c:l('work.date')}"/>
+                            <label id="lbWorkDate"/>
+                        </row>
+                        <row zclass="grid-info-row">
+                            <label value="${c:l('date.of.birth')}"/>
+                            <label id="lbDateOfBirth"/>
+                        </row>
+                        <row zclass="grid-info-row">
+                            <label value="${c:l('permanent.residence')}"/>
+                            <label id="lbPermanentResidence"/>
+                        </row>
+                        <row zclass="grid-info-row">
+                            <label value="${c:l('current.residence')}"/>
+                            <label id="lbCurrentResidence"/>
+                        </row>
+                
+                        <row zclass="grid-info-row">
+                            <label value="${c:l('status')}"/>
+                            <label id="lbStatus"/>
+                        </row>
+                
+                        <row zclass="grid-info-row">
+                            <label value="${c:l('common.note')}"/>
+                            <label id="lbNote" value="${staff.note}"/>
+                        </row>
+                
+                        <row>
+                            <cell colspan="2">
+                                <n:h3 id="labor-contract">
+                                    <span sclass="z-icon-copy"/> ${c:l('labor.contract')}
+                                </n:h3>
+                            </cell>
+                        </row>
+                
+                        <row zclass="grid-info-row">
+                            <label value="${c:l('contract.type')}"/>
+                            <label id="lbContractType"/>
+                        </row>
+                
+                        <row zclass="grid-info-row">
+                            <label value="${c:l('from.date')}"/>
+                            <label id="lbContractFromDate"/>
+                        </row>
+                        
+                        <row zclass="grid-info-row">
+                            <label value="${c:l('to.date')}"/>
+                            <label id="lbContractToDate"/>
+                        </row>
+                
+                        <row zclass="grid-info-row">
+                            <label value="${c:l('contract.number')}"/>
+                            <label id="lbContractNumber"/>
+                        </row>
+                        <row zclass="grid-info-row">
+                            <label value="${c:l('tax.code')}"/>
+                            <label id="lbTaxCode"/>
+                        </row>
+                
+                        <row>
+                            <cell colspan="2">
+                                <n:h3 id="social-insurance">
+                                    <span sclass="z-icon-hospital"/> ${c:l('social.insurance')}
+                                </n:h3>
+                            </cell>    
+                        </row>
+                
+                        <row zclass="grid-info-row">
+                            <label value="${c:l('salary.basic')}"/>
+                            <label id="lbSalaryBasic"/>
+                        </row>
+                
+                        <row zclass="grid-info-row">
+                            <label value="${c:l('insurance.paid.date')}"/>
+                            <label id="lbInsurancePaidDate"/>
+                        </row>
+                
+                        <row zclass="grid-info-row">
+                            <label value="${c:l('insurance.book.number')}"/>
+                            <label id="lbInsuranceBookNumber"/>
+                        </row>
+                
+                        <row zclass="grid-info-row">
+                            <label value="${c:l('paid.insurance.place')}"/>
+                            <label id="lbPaidPlace"/>
+                        </row>
+                
+                        <row>
+                            <cell colspan="2">
+                                <n:h3 id="qualifications">
+                                    <span sclass="z-icon-book"/> ${c:l('qualifications')}
+                                </n:h3>
+                            </cell>    
+                        </row>
+                
+                        <row zclass="grid-info-row">
+                            <label value="${c:l('degree')}"/>
+                            <label id="lbLevels"/>
+                        </row>
+                
+                        <row zclass="grid-info-row">
+                            <label value="${c:l('majors')}"/>
+                            <label id="lbMajors"/>
+                        </row>
+                
+                        <row zclass="grid-info-row">
+                            <label value="${c:l('college')}"/>
+                            <label id="lbCollege"/>
+                        </row>
+                
+                        <row>
+                            <cell colspan="2">
+                                <n:h3 id="identification">
+                                    <span sclass="z-icon-barcode"/> ${c:l('identification')}
+                                </n:h3>
+                            </cell>
+                        </row>
+                
+                        <row zclass="grid-info-row">
+                            <label value="${c:l('identity.card')}"/>
+                            <label id="lbIdentityCard"/>
+                        </row>
+                
+                        <row zclass="grid-info-row">
+                            <label value="${c:l('grant.date')}"/>
+                            <label id="lbGrantDate"/>
+                        </row>
+                
+                        <row zclass="grid-info-row">
+                            <label value="${c:l('grant.place')}"/>
+                            <label id="lbGrantPlace"/>
+                        </row>
+                
+                        <row>
+                            <cell colspan="2">
+                                <n:h3 id="contact">
+                                    <span sclass="z-icon-phone"/> ${c:l('contact')}
+                                </n:h3>
+                            </cell>    
+                        </row>
+                
+                        <row zclass="grid-info-row">
+                            <label value="${c:l('mobile')}"/>
+                            <label id="lbMobile"/>
+                        </row>
+                
+                        <row zclass="grid-info-row">
+                            <label value="${c:l('home.phone')}"/>
+                            <label id="lbHomePhone"/>
+                        </row>
+                
+                        <row zclass="grid-info-row">
+                            <label value="${c:l('common.email')}"/>
+                            <label id="lbEmail"/>
+                        </row>
+                        
+                        <row>
+                            <cell colspan="2">
+                                <n:h3 id="salary-landmark">
+                                    <span sclass="z-icon-usd"/> ${c:l('salary.landmark')}
+                                    <button id="btnAddSalaryLm" sclass="blue" iconSclass="z-icon-plus"
+                                                    tooltip="addTooltip, position=after_center"/>
+                                </n:h3>
+                            </cell>    
+                        </row>
+                        
+                        <row zclass="grid-info-row-list">
+                            <cell colspan="2">
+                                <listbox id="listSalaryLm" emptyMessage="${c:l('common.no.record.found')}"
+                                         mold="paging" pageSize="25" nonselectableTags="*" span="true"
+                                         width="100%" pagingPosition="both">
+                                    <listhead>
+                                        <!--<listheader width="53px" label="${c:l('common.column.number')}"/>-->
+                                        <listheader label="${c:l('common.from')}" hflex="2" />
+                                        <listheader label="${c:l('common.to')}" hflex="2"/>
+                                        <listheader label="${c:l('salary')}" hflex="4"/>
+                                        <listheader hflex="1"/>
+                                    </listhead>
+                                </listbox>
+                            </cell>
+                        </row>
+                        
+                        <row>
+                            <cell colspan="2">
+                                <n:h3 id="work-process">
+                                    <span sclass="z-icon-file-text-o"/> ${c:l('work.process')}
+                                    <button id="btnAddWorkProcess" sclass="blue" iconSclass="z-icon-plus"
+                                                    tooltip="addTooltip, position=after_center"/>
+                                </n:h3>
+                            </cell>    
+                        </row>
+                        
+                        <row zclass="grid-info-row-list">
+                            <cell colspan="2">
+                                <listbox id="listWorkProcess" emptyMessage="${c:l('common.no.record.found')}"
+                                         mold="paging" pageSize="25" nonselectableTags="*" span="true"
+                                         width="100%" pagingPosition="both">
+                                    <listhead>
+                                        <!--<listheader width="53px" label="${c:l('common.column.number')}"/>-->
+                                        <listheader label="${c:l('common.from')}" hflex="2" />
+                                        <listheader label="${c:l('common.to')}" hflex="2"/>
+                                        <listheader label="${c:l('work.at')}" hflex="2"/>
+                                        <listheader label="${c:l('job.title')}" hflex="2"/>
+                                        <listheader hflex="1"/>
+                                    </listhead>
+                                </listbox>
+                            </cell>
+                        </row>
+                        
+                        <row height="400px">
+                            <cell/>
+                        </row>
+                    </rows>
+                </grid>
+                
+                <!--pop up tooltip-->
+                <popup id="addTooltip" zclass="tooltip" sclass="bottom tooltip-info">
+                    <span zclass="tooltip-arrow"/>
+                    <label zclass="tooltip-inner" value="${c:l('common.add')}"/>
+                </popup>
+            </n:div>
+            <div class="space-6"></div>
+        
+            <div align="center" sclass="z-button-action">
+                <button id="btnPrevious" type="button" label="${c:l('button.previous')}" 
+                        iconSclass="z-icon-backward" class="btn-info" />
+                <button id="btnNext" type="button" label="${c:l('button.next')}" 
+                        iconSclass="z-icon-forward" class="btn-info" />
+                <button id="btnCancel" type="button" label="${c:l('button.cancel')}"
+                        iconSclass="z-icon-times" class="btn-default"/>
+            </div>
+        </div>
+        
+        
+        <!--pop up tooltip-->
+        
+        <script><![CDATA[
+	zk.afterMount(function () {
+		$.getScript("./html/js/application.js", function () {
+			  if (location.hash && (!zk.ie || zk.ie > 8)) {
+			  setTimeout(function () {
+				$('.bs-sidebar a[href*=#]')[0].click();
+				$('.grid-scrollable .z-grid-body').scrollspy('process');
+				}, 300);
+			  }
+		});
+	});
+	]]></script>
+    </window>
+</zk>
