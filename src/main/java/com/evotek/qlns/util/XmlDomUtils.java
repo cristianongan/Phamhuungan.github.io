@@ -50,9 +50,9 @@ public class XmlDomUtils {
     
     public Document read(File file) {
         try {
-            DocumentBuilder db = dbf.newDocumentBuilder();
+            DocumentBuilder db = this.dbf.newDocumentBuilder();
 
-            dom = db.parse(file);
+            this.dom = db.parse(file);
         } catch (ParserConfigurationException pce) {
             pce.printStackTrace();
         } catch (SAXException se) {
@@ -61,14 +61,14 @@ public class XmlDomUtils {
             ioe.printStackTrace();
         }
 
-        return dom;
+        return this.dom;
     }
 
     public Document read(InputStream inputStream) {
         try {
-            DocumentBuilder db = dbf.newDocumentBuilder();
+            DocumentBuilder db = this.dbf.newDocumentBuilder();
 
-            dom = db.parse(inputStream);
+            this.dom = db.parse(inputStream);
         } catch (ParserConfigurationException pce) {
             pce.printStackTrace();
         } catch (SAXException se) {
@@ -77,7 +77,7 @@ public class XmlDomUtils {
             ioe.printStackTrace();
         }
 
-        return dom;
+        return this.dom;
     }
 
     public Document read(Blob blob) {
@@ -86,11 +86,11 @@ public class XmlDomUtils {
                 return null;
             }
 
-            DocumentBuilder db = dbf.newDocumentBuilder();
+            DocumentBuilder db = this.dbf.newDocumentBuilder();
 
             InputStream inputStream = blob.getBinaryStream();
 
-            dom = db.parse(inputStream);
+            this.dom = db.parse(inputStream);
         } catch (ParserConfigurationException pce) {
             pce.printStackTrace();
         } catch (SAXException se) {
@@ -101,14 +101,14 @@ public class XmlDomUtils {
             sqle.printStackTrace();
         }
 
-        return dom;
+        return this.dom;
     }
 
     public Document read(String uri) {
         try {
-            DocumentBuilder db = dbf.newDocumentBuilder();
+            DocumentBuilder db = this.dbf.newDocumentBuilder();
 
-            dom = db.parse(uri);
+            this.dom = db.parse(uri);
         } catch (ParserConfigurationException pce) {
             pce.printStackTrace();
         } catch (SAXException se) {
@@ -117,58 +117,58 @@ public class XmlDomUtils {
             ioe.printStackTrace();
         }
 
-        return dom;
+        return this.dom;
     }
 
     public Document read(File file, boolean namespaceAware) {
         try {
-            dbf.setNamespaceAware(namespaceAware);
+            this.dbf.setNamespaceAware(namespaceAware);
 
-            dom = read(file);
+            this.dom = read(file);
 
-            this.setNamespaceContext(dom);
+            this.setNamespaceContext(this.dom);
         } catch (Exception ioe) {
             ioe.printStackTrace();
         }
 
-        return dom;
+        return this.dom;
     }
 
     public Document read(InputStream inputStream, boolean namespaceAware) {
         try {
-            dbf.setNamespaceAware(namespaceAware);
+            this.dbf.setNamespaceAware(namespaceAware);
 
-            dom = read(inputStream);
+            this.dom = read(inputStream);
 
-            this.setNamespaceContext(dom);
+            this.setNamespaceContext(this.dom);
         } catch (Exception ioe) {
             ioe.printStackTrace();
         }
 
-        return dom;
+        return this.dom;
     }
 
     public Document read(String uri, boolean namespaceAware) {
         try {
-            dbf.setNamespaceAware(namespaceAware);
+            this.dbf.setNamespaceAware(namespaceAware);
 
-            dom = read(uri);
+            this.dom = read(uri);
 
-            this.setNamespaceContext(dom);
+            this.setNamespaceContext(this.dom);
         } catch (Exception ioe) {
             ioe.printStackTrace();
         }
 
-        return dom;
+        return this.dom;
     }
 
     public Document readString(String xml) {
         try {
-            DocumentBuilder db = dbf.newDocumentBuilder();
+            DocumentBuilder db = this.dbf.newDocumentBuilder();
 
             InputSource is = new InputSource(new StringReader(xml));
 
-            dom = db.parse(is);
+            this.dom = db.parse(is);
         }catch (ParserConfigurationException pce) {
             pce.printStackTrace();
         } catch (SAXException se) {
@@ -177,7 +177,7 @@ public class XmlDomUtils {
             ioe.printStackTrace();
         }
 
-        return dom;
+        return this.dom;
     }
 
     public Element getRootElement(Document doc) {
@@ -186,14 +186,14 @@ public class XmlDomUtils {
 
     public Document createDocument() {
         try {
-            DocumentBuilder db = dbf.newDocumentBuilder();
+            DocumentBuilder db = this.dbf.newDocumentBuilder();
 
-            dom = db.newDocument();
+            this.dom = db.newDocument();
         } catch (ParserConfigurationException ex) {
             ex.printStackTrace();
         }
 
-        return dom;
+        return this.dom;
     }
 
     public NodeList selectNodeList(Document doc, String tagName) {
@@ -432,7 +432,7 @@ public class XmlDomUtils {
         NodeList nodes = null;
 
         try {
-            XPathExpression xPathExpression = xpath.compile(path);
+            XPathExpression xPathExpression = this.xpath.compile(path);
 
             Object result = xPathExpression.evaluate(doc, XPathConstants.NODESET);
 
@@ -453,7 +453,7 @@ public class XmlDomUtils {
         Node node = null;
 
         try {
-            XPathExpression xPathExpression = xpath.compile(path);
+            XPathExpression xPathExpression = this.xpath.compile(path);
 
             Object result = xPathExpression.evaluate(doc, XPathConstants.NODE);
 
@@ -494,7 +494,7 @@ public class XmlDomUtils {
         NodeList nodes = null;
 
         try {
-            XPathExpression xPathExpression = xpath.compile(path);
+            XPathExpression xPathExpression = this.xpath.compile(path);
 
             Object result = xPathExpression.evaluate(e, XPathConstants.NODESET);
 
@@ -516,7 +516,7 @@ public class XmlDomUtils {
 
         try {
 
-            XPathExpression xPathExpression = xpath.compile(path);
+            XPathExpression xPathExpression = this.xpath.compile(path);
 
             Object result = xPathExpression.evaluate(e, XPathConstants.NODE);
 
@@ -555,8 +555,8 @@ public class XmlDomUtils {
     private void setNamespaceContext(Document doc)
             throws Exception {
         try {
-            if (dbf.isNamespaceAware()) {
-                xpath.setNamespaceContext(new NamespaceContextImpl(doc, true));
+            if (this.dbf.isNamespaceAware()) {
+                this.xpath.setNamespaceContext(new NamespaceContextImpl(doc, true));
             }
         } catch (Exception ex) {
             _log.error(ex.getMessage(), ex);

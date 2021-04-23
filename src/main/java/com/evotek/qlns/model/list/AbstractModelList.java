@@ -30,23 +30,24 @@ public abstract class AbstractModelList<T> extends AbstractListModel implements
 
     @Override
     public Object getElementAt(int index) {
-        if (_cache == null || index < _beginOffset || index >= _beginOffset + _pageSize) {
-            _beginOffset = index;
-            loadToCache(index, _pageSize);
+        if (this._cache == null || index < this._beginOffset || index >= this._beginOffset + this._pageSize) {
+            this._beginOffset = index;
+            loadToCache(index, this._pageSize);
         }
-        return _cache.get(index - _beginOffset);
+        return this._cache.get(index - this._beginOffset);
     }
 
-    public abstract int getSize();
+    @Override
+	public abstract int getSize();
 
 //    public abstract boolean remove(int index);
 
     @Override
     public void sort(Comparator comparator, boolean flag) {
         if (comparator instanceof FieldComparator) {
-            _orderByType = flag ? "asc" : "desc";
-            _cache = null;
-            _orderByColumn = ((FieldComparator) comparator).getRawOrderBy();
+            this._orderByType = flag ? "asc" : "desc";
+            this._cache = null;
+            this._orderByColumn = ((FieldComparator) comparator).getRawOrderBy();
             fireEvent(ListDataEvent.CONTENTS_CHANGED, -1, -1);
         }
     }

@@ -27,14 +27,14 @@ public class BandboxCategoryRender<Component> implements TreeitemRenderer<Catego
     private Bandbox bbTemp;
 
     public BandboxCategoryRender(Bandbox bb) {
-        bbTemp = bb;
+        this.bbTemp = bb;
     }
 
     @Override
     public void render(Treeitem trtm, CategoryTreeNode t, int i) throws Exception {
         CategoryTreeNode dtn = t;
 
-        final Category category = (Category) dtn.getData();
+        final Category category = dtn.getData();
 
         trtm.setValue(dtn);
         trtm.setOpen(dtn.isOpen());
@@ -55,13 +55,13 @@ public class BandboxCategoryRender<Component> implements TreeitemRenderer<Catego
                 CategoryTreeNode clickedNodeValue = ((Treeitem) 
                         t.getTarget()).getValue();
 
-                bbTemp.setValue(Labels.getLabel(clickedNodeValue.getData().
+                BandboxCategoryRender.this.bbTemp.setValue(Labels.getLabel(clickedNodeValue.getData().
                         getLanguageKey()));
                 
-                bbTemp.setAttribute("categoryId", category.getCategoryId());
+                BandboxCategoryRender.this.bbTemp.setAttribute("categoryId", category.getCategoryId());
 
-                bbTemp.setOpen(true);
-                bbTemp.setOpen(false);
+                BandboxCategoryRender.this.bbTemp.setOpen(true);
+                BandboxCategoryRender.this.bbTemp.setOpen(false);
             }
         });
     }

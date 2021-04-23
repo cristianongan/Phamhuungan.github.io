@@ -9,6 +9,9 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.evotek.qlns.dao.CategoryDAO;
 import com.evotek.qlns.dao.NotificationDAO;
@@ -21,52 +24,40 @@ import com.evotek.qlns.util.key.Values;
  *
  * @author linhlh2
  */
-public class MainServiceImpl implements MainService{
+@Service
+@Transactional
+public class MainServiceImpl implements MainService {
 
-    private transient CategoryDAO categoryDAO;
-    private transient NotificationDAO notificationDAO;
-    
-    public CategoryDAO getCategoryDAO() {
-        return categoryDAO;
-    }
+	private static final Logger _log = LogManager.getLogger(MainServiceImpl.class);
 
-    public void setCategoryDAO(CategoryDAO categoryDAO) {
-        this.categoryDAO = categoryDAO;
-    }
+	@Autowired
+	private transient CategoryDAO categoryDAO;
 
-    public NotificationDAO getNotificationDAO() {
-        return notificationDAO;
-    }
+	@Autowired
+	private transient NotificationDAO notificationDAO;
 
-    public void setNotificationDAO(NotificationDAO notificationDAO) {
-        this.notificationDAO = notificationDAO;
-    }
-    
-    public List<Category> getAllCategory() throws Exception {
-        return categoryDAO.getAllCategory();
-    }
+	@Override
+	public List<Category> getAllCategory() throws Exception {
+		return this.categoryDAO.getAllCategory();
+	}
 
-    public List<Category> getCategoryByUser(User user) throws Exception{
-        return categoryDAO.getCategoryByUser(user);
-    }
+	@Override
+	public int getBirthDayCount() {
+		return this.notificationDAO.getNotificationCountByT_S_E(Values.NOTI_BIRTHDAY, Values.STATUS_ACTIVE, false);
+	}
 
-    public Category getCategoryById(Long categoryId) throws Exception{
-        return categoryDAO.getCategoryById(categoryId);
-    }
+	@Override
+	public Category getCategoryById(Long categoryId) throws Exception {
+		return this.categoryDAO.getCategoryById(categoryId);
+	}
 
-    
-    public int getContractExpiredCount(){
-        return notificationDAO.getNotificationCountByT_S(Values.NOTI_CONTRACT_EXPIRED, 
-                Values.STATUS_ACTIVE);
-    }
+	@Override
+	public List<Category> getCategoryByUser(User user) throws Exception {
+		return this.categoryDAO.getCategoryByUser(user);
+	}
 
-    public int getBirthDayCount(){
-        return notificationDAO.getNotificationCountByT_S_E(Values.NOTI_BIRTHDAY, 
-                Values.STATUS_ACTIVE, false);
-    }
-    
-    
-
-    private static final Logger _log =
-            LogManager.getLogger(MainServiceImpl.class);
+	@Override
+	public int getContractExpiredCount() {
+		return this.notificationDAO.getNotificationCountByT_S(Values.NOTI_CONTRACT_EXPIRED, Values.STATUS_ACTIVE);
+	}
 }

@@ -53,7 +53,7 @@ public class DocumentType implements Serializable, Comparable<DocumentType> {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     public DocumentType getParentDocumentType() {
-        return parentDocumentType;
+        return this.parentDocumentType;
     }
 
     public void setParentDocumentType(DocumentType parentDocumentType) {
@@ -71,7 +71,7 @@ public class DocumentType implements Serializable, Comparable<DocumentType> {
 //    @IndexColumn(name = "ordinal", base = 0)
     @Fetch(FetchMode.SELECT)
     public List<DocumentType> getChildDocumentTypes() {
-        return childDocumentTypes;
+        return this.childDocumentTypes;
     }
 
     public void setChildDocumentTypes(List<DocumentType> childDocumentTypes) {
@@ -82,7 +82,7 @@ public class DocumentType implements Serializable, Comparable<DocumentType> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "document_type_id", unique = true, nullable = false, precision = 22, scale = 0)
     public Long getDocumentTypeId() {
-        return documentTypeId;
+        return this.documentTypeId;
     }
 
     public void setDocumentTypeId(Long documentTypeId) {
@@ -91,7 +91,7 @@ public class DocumentType implements Serializable, Comparable<DocumentType> {
 
     @Column(name = "type_name", length = 255)
     public String getTypeName() {
-        return typeName;
+        return this.typeName;
     }
 
     public void setTypeName(String typeName) {
@@ -100,7 +100,7 @@ public class DocumentType implements Serializable, Comparable<DocumentType> {
 
     @Column(name = "user_id", precision = 22, scale = 0)
     public Long getUserId() {
-        return userId;
+        return this.userId;
     }
 
     public void setUserId(Long userId) {
@@ -109,7 +109,7 @@ public class DocumentType implements Serializable, Comparable<DocumentType> {
 
     @Column(name = "user_name", length = 75)
     public String getUserName() {
-        return userName;
+        return this.userName;
     }
 
     public void setUserName(String userName) {
@@ -119,7 +119,7 @@ public class DocumentType implements Serializable, Comparable<DocumentType> {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date", length = 7)
     public Date getCreateDate() {
-        return createDate;
+        return this.createDate;
     }
 
     public void setCreateDate(Date createDate) {
@@ -129,7 +129,7 @@ public class DocumentType implements Serializable, Comparable<DocumentType> {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "modified_date", length = 7)
     public Date getModifiedDate() {
-        return modifiedDate;
+        return this.modifiedDate;
     }
 
     public void setModifiedDate(Date modifiedDate) {
@@ -138,7 +138,7 @@ public class DocumentType implements Serializable, Comparable<DocumentType> {
 
     @Column(name = "ordinal", precision = 22, scale = 0)
     public Long getOrdinal() {
-        return ordinal;
+        return this.ordinal;
     }
 
     public void setOrdinal(Long ordinal) {
@@ -147,7 +147,7 @@ public class DocumentType implements Serializable, Comparable<DocumentType> {
 
     @Column(name = "description")
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     public void setDescription(String description) {
@@ -156,7 +156,7 @@ public class DocumentType implements Serializable, Comparable<DocumentType> {
 
     @Column(name = "status", precision = 22, scale = 0)
     public Long getStatus() {
-        return status;
+        return this.status;
     }
 
     public void setStatus(Long status) {
@@ -165,15 +165,16 @@ public class DocumentType implements Serializable, Comparable<DocumentType> {
 
     @Column(name = "icon", length = 75)
     public String getIcon() {
-        return icon;
+        return this.icon;
     }
 
     public void setIcon(String icon) {
         this.icon = icon;
     }
     
-    public int compareTo(DocumentType o) {
-        if (ordinal == null) {
+    @Override
+	public int compareTo(DocumentType o) {
+        if (this.ordinal == null) {
             return 1;
         }
 
@@ -181,7 +182,7 @@ public class DocumentType implements Serializable, Comparable<DocumentType> {
             return -1;
         }
 
-        return ordinal.compareTo(o.ordinal);
+        return this.ordinal.compareTo(o.ordinal);
     }
 
     @Override

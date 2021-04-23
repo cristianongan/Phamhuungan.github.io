@@ -97,7 +97,7 @@ public class ExcelUtil<T> {
 
             OutputStream outputStream = new FileOutputStream(fileOut);
 
-            wb.write(outputStream);
+            this.wb.write(outputStream);
 
             outputStream.close();
             //download
@@ -146,7 +146,7 @@ public class ExcelUtil<T> {
 
             OutputStream outputStream = new FileOutputStream(fileOut);
 
-            wb.write(outputStream);
+            this.wb.write(outputStream);
 
             outputStream.close();
             //download
@@ -160,9 +160,9 @@ public class ExcelUtil<T> {
             List<Object[]> headerInfors, List<String> properties,
             List<T> datas) throws Exception {
         try {
-            Sheet sheet = wb.getSheetAt(sheetPosition);
+            Sheet sheet = this.wb.getSheetAt(sheetPosition);
 
-            wb.getNumberOfSheets();
+            this.wb.getNumberOfSheets();
             
             int endCol = headerInfors.size() - 1;
 
@@ -191,7 +191,7 @@ public class ExcelUtil<T> {
     public void transformerXlsx(int sheetPosition, List<Object[]> headerInfors)
             throws Exception {
         try {
-            Sheet sheet = wb.getSheetAt(sheetPosition);
+            Sheet sheet = this.wb.getSheetAt(sheetPosition);
             
             CellStyle headerCellStyle = getCellStyle(sheet, TITLE_ROW,
                     COL_START);
@@ -210,9 +210,9 @@ public class ExcelUtil<T> {
         try {
             inp = new FileInputStream(filePath);
 
-            wb = new XSSFWorkbook(inp);
+            this.wb = new XSSFWorkbook(inp);
 
-            df = wb.createDataFormat();
+            this.df = this.wb.createDataFormat();
 
         } catch (FileNotFoundException fnfe) {
             _log.error(fnfe.getMessage(), fnfe);
@@ -226,7 +226,7 @@ public class ExcelUtil<T> {
             }
         }
 
-        return wb;
+        return this.wb;
     }
 
     public Row getOrCreateRow(Sheet sheet, int rowIndex) {
@@ -392,9 +392,9 @@ public class ExcelUtil<T> {
                             data, properties.get(j));
                     }
 
-                    if (Validator.isNotNull(convertMap)
-                            && Validator.isNotNull(convertMap.get(j))) {
-                        value = getStringValue((Long) value, convertMap.get(j));
+                    if (Validator.isNotNull(this.convertMap)
+                            && Validator.isNotNull(this.convertMap.get(j))) {
+                        value = getStringValue((Long) value, this.convertMap.get(j));
                     }
 
                     getOrCreateCell(row, j + 1,
@@ -419,12 +419,12 @@ public class ExcelUtil<T> {
                 Object value = PropertyUtils.getProperty(
                         data, properties.get(i));
 
-                cellStyles[i] = wb.createCellStyle();
+                cellStyles[i] = this.wb.createCellStyle();
 
                 cellStyles[i].cloneStyleFrom(baseStyle);
 
-                if (Validator.isNotNull(convertMap)
-                        && Validator.isNotNull(convertMap.get(i))) {
+                if (Validator.isNotNull(this.convertMap)
+                        && Validator.isNotNull(this.convertMap.get(i))) {
                     cellStyles[i].setAlignment(CellStyle.ALIGN_LEFT);
                 } else {
                     cellStyles[i] = setTextAlign(cellStyles[i], value);
@@ -447,7 +447,7 @@ public class ExcelUtil<T> {
             cellStyle.setAlignment(CellStyle.ALIGN_LEFT);
         } else if (data instanceof Date) {
             cellStyle.setAlignment(CellStyle.ALIGN_CENTER);
-            cellStyle.setDataFormat(df.getFormat(DateUtil.SHORT_DATE_PATTERN));
+            cellStyle.setDataFormat(this.df.getFormat(DateUtil.SHORT_DATE_PATTERN));
         } else {
             cellStyle.setAlignment(CellStyle.ALIGN_LEFT);
         }

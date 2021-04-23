@@ -51,7 +51,7 @@ public class DepartmentTreeNode extends DefaultTreeNode<Department> {
     }
 
     public boolean isOpen() {
-        return open;
+        return this.open;
     }
 
     public void setOpen(boolean open) {

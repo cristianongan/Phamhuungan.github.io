@@ -64,38 +64,40 @@ public class UserListModel<User> extends AbstractModelList{
         setMultiple(true);
     }
 
-    public void loadToCache(int itemStartNumber, int pageSize) {
+    @Override
+	public void loadToCache(int itemStartNumber, int pageSize) {
         try {
-            if (_isAdvance) {
-            _cache = _userService.getUsers(_userName, _email, _gender,
-                    _birthPlace, _birthdayFrom, _birthdayTo, _phone, _mobile,
-                    _account, _status, itemStartNumber, pageSize,
-                    _orderByColumn, _orderByType);
+            if (this._isAdvance) {
+            this._cache = this._userService.getUsers(this._userName, this._email, this._gender,
+                    this._birthPlace, this._birthdayFrom, this._birthdayTo, this._phone, this._mobile,
+                    this._account, this._status, itemStartNumber, pageSize,
+                    this._orderByColumn, this._orderByType);
             } else{
-                _cache = _userService.getUsers(_keyword,
-                        itemStartNumber, pageSize, _orderByColumn, _orderByType);
+                this._cache = this._userService.getUsers(this._keyword,
+                        itemStartNumber, pageSize, this._orderByColumn, this._orderByType);
             }
         } catch (Exception ex) {
             _log.error(ex.getMessage(), ex);
         }
     }
 
-    public int getSize() {
-        if (_cachedSize < 0) {
+    @Override
+	public int getSize() {
+        if (this._cachedSize < 0) {
             try {
-                if (_isAdvance) {
-                     _cachedSize = _userService.getUsersCount(_userName,
-                             _email, _gender, _birthPlace, _birthdayFrom,
-                             _birthdayTo, _phone, _mobile, _account, _status);
+                if (this._isAdvance) {
+                     this._cachedSize = this._userService.getUsersCount(this._userName,
+                             this._email, this._gender, this._birthPlace, this._birthdayFrom,
+                             this._birthdayTo, this._phone, this._mobile, this._account, this._status);
                 } else{
-                    _cachedSize = _userService.getUsersCount(_keyword);
+                    this._cachedSize = this._userService.getUsersCount(this._keyword);
                 }
                
             } catch (Exception ex) {
                 _log.error(ex.getMessage(), ex);
             }
         }
-        return _cachedSize;
+        return this._cachedSize;
     }
 
     private static final Logger _log =

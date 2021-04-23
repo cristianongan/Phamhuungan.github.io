@@ -94,28 +94,28 @@ public abstract class Account implements Serializable {
     }
 
     public String getHost() {
-        return _host;
+        return this._host;
     }
 
     public String getPassword() {
-        return _password;
+        return this._password;
     }
 
     public int getPort() {
-        return _port;
+        return this._port;
     }
 
     public String getProtocol() {
-        return _protocol;
+        return this._protocol;
     }
 
     public String getUser() {
-        return _user;
+        return this._user;
     }
 
     public boolean isRequiresAuthentication() {
-        if (Validator.isNotNull(_user)
-                && Validator.isNotNull(_password)) {
+        if (Validator.isNotNull(this._user)
+                && Validator.isNotNull(this._password)) {
 
             return true;
         } else {
@@ -124,29 +124,29 @@ public abstract class Account implements Serializable {
     }
 
     public boolean isSecure() {
-        return _secure;
+        return this._secure;
     }
 
     public void setHost(String host) {
-        _host = host;
+        this._host = host;
     }
 
     public void setPassword(String password) {
-        _password = password;
+        this._password = password;
     }
 
     public void setPort(int port) {
-        _port = port;
+        this._port = port;
     }
 
     public void setUser(String user) {
-        _user = user;
+        this._user = user;
     }
 
     protected Account(String protocol, boolean secure, int port) {
-        _protocol = protocol;
-        _secure = secure;
-        _port = port;
+        this._protocol = protocol;
+        this._secure = secure;
+        this._port = port;
     }
 
     private String _host;

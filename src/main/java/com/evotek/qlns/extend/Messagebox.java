@@ -140,13 +140,15 @@ public class Messagebox {
 			Executions.getCurrent().getDesktop().getWebApp().getAppName());
 		arg.put("icon", icon);
 
-		if (buttons == null)
+		if (buttons == null) {
 			buttons = DEFAULT_BUTTONS;
+		}
 
 		int btnmask = 0;
 		for (int j = 0; j < buttons.length; ++j) {
-			if (buttons[j] == null)
+			if (buttons[j] == null) {
 				throw new IllegalArgumentException("The "+j+"-th button is null");
+			}
 
 			//Backward compatible to ZK 5: put buttons and id to arg
 			btnmask += buttons[j].id;
@@ -154,14 +156,17 @@ public class Messagebox {
 		}
 		arg.put("buttons", btnmask);
 
-		if (params != null)
+		if (params != null) {
 			arg.putAll(params);
+		}
 
 		final MessageboxDlg dlg = (MessageboxDlg)
 			Executions.createComponents(_templ, null, arg);
 		dlg.setEventListener(listener);
 		dlg.setButtons(buttons, btnLabels);
-		if (focus != null) dlg.setFocus(focus);
+		if (focus != null) {
+			dlg.setFocus(focus);
+		}
 
 		if (dlg.getDesktop().getWebApp().getConfiguration().isEventThreadEnabled()) {
 			try {
@@ -414,20 +419,27 @@ public class Messagebox {
 	}
 	private static Button[] toButtonTypes(int buttons) {
 		final List<Button> btntypes = new ArrayList<Button>();
-		if ((buttons & OK) != 0)
+		if ((buttons & OK) != 0) {
 			btntypes.add(toButtonType(OK));
-		if ((buttons & CANCEL) != 0)
+		}
+		if ((buttons & CANCEL) != 0) {
 			btntypes.add(toButtonType(CANCEL));
-		if ((buttons & YES) != 0)
+		}
+		if ((buttons & YES) != 0) {
 			btntypes.add(toButtonType(YES));
-		if ((buttons & NO) != 0)
+		}
+		if ((buttons & NO) != 0) {
 			btntypes.add(toButtonType(NO));
-		if ((buttons & RETRY) != 0)
+		}
+		if ((buttons & RETRY) != 0) {
 			btntypes.add(toButtonType(RETRY));
-		if ((buttons & ABORT) != 0)
+		}
+		if ((buttons & ABORT) != 0) {
 			btntypes.add(toButtonType(ABORT));
-		if ((buttons & IGNORE) != 0)
+		}
+		if ((buttons & IGNORE) != 0) {
 			btntypes.add(toButtonType(IGNORE));
+		}
 		return btntypes.toArray(new Button[btntypes.size()]);
 	}
 	private static
@@ -680,8 +692,9 @@ public class Messagebox {
 	 * change the component's ID.
 	 */
 	public static void setTemplate(String uri) {
-		if (uri == null || uri.length() == 0)
+		if (uri == null || uri.length() == 0) {
 			throw new IllegalArgumentException("empty");
+		}
 		_templ = uri;
 	}
 	/** Returns the template used to create the message dialog.
@@ -746,16 +759,18 @@ public class Messagebox {
 	private static class ButtonListener implements SerializableEventListener<ClickEvent> {
 		private final EventListener<Event> _listener;
 		private ButtonListener(EventListener<Event> listener) {
-			_listener = listener;
+			this._listener = listener;
 		}
+		@Override
 		public void onEvent(ClickEvent event) throws Exception {
 			final Button btn = event.getButton();
-			_listener.onEvent(
+			this._listener.onEvent(
 				new Event(event.getName(), event.getTarget(),
 					btn != null ? btn.id: -1));
 		}
+		@Override
 		public String toString() {
-			return _listener.toString();
+			return this._listener.toString();
 		}
 	}
 }

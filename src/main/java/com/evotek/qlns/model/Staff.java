@@ -124,7 +124,7 @@ public class Staff implements Serializable, Comparable<Staff> {
     }
 
     public Long getStaffId() {
-        return staffId;
+        return this.staffId;
     }
 
     public void setStaffId(Long staffId) {
@@ -132,7 +132,7 @@ public class Staff implements Serializable, Comparable<Staff> {
     }
 
     public Long getUserId() {
-        return userId;
+        return this.userId;
     }
 
     public void setUserId(Long userId) {
@@ -140,7 +140,7 @@ public class Staff implements Serializable, Comparable<Staff> {
     }
 
     public String getUserName() {
-        return userName;
+        return this.userName;
     }
 
     public void setUserName(String userName) {
@@ -148,7 +148,7 @@ public class Staff implements Serializable, Comparable<Staff> {
     }
 
     public Date getCreateDate() {
-        return createDate;
+        return this.createDate;
     }
 
     public void setCreateDate(Date createDate) {
@@ -156,7 +156,7 @@ public class Staff implements Serializable, Comparable<Staff> {
     }
 
     public Date getModifiedDate() {
-        return modifiedDate;
+        return this.modifiedDate;
     }
 
     public void setModifiedDate(Date modifiedDate) {
@@ -164,7 +164,7 @@ public class Staff implements Serializable, Comparable<Staff> {
     }
 
     public String getStaffName() {
-        return staffName;
+        return this.staffName;
     }
 
     public void setStaffName(String staffName) {
@@ -172,11 +172,11 @@ public class Staff implements Serializable, Comparable<Staff> {
     }
 
     public Department getDepartment() {
-        if(department == null){
+        if(this.department == null){
             return new Department();
         }
         
-        return department;
+        return this.department;
     }
 
     public void setDepartment(Department department) {
@@ -184,11 +184,11 @@ public class Staff implements Serializable, Comparable<Staff> {
     }
 
     public Job getJob() {
-        if(job == null){
+        if(this.job == null){
             return new Job();
         }
         
-        return job;
+        return this.job;
     }
 
     public void setJob(Job job) {
@@ -196,7 +196,7 @@ public class Staff implements Serializable, Comparable<Staff> {
     }
 
     public Date getWorkDate() {
-        return workDate;
+        return this.workDate;
     }
 
     public void setWorkDate(Date workDate) {
@@ -204,7 +204,7 @@ public class Staff implements Serializable, Comparable<Staff> {
     }
 
     public Date getDateOfBirth() {
-        return dateOfBirth;
+        return this.dateOfBirth;
     }
 
     public void setDateOfBirth(Date dateOfBirth) {
@@ -212,7 +212,7 @@ public class Staff implements Serializable, Comparable<Staff> {
     }
 
     public String getPermanentResidence() {
-        return permanentResidence;
+        return this.permanentResidence;
     }
 
     public void setPermanentResidence(String permanentResidence) {
@@ -220,7 +220,7 @@ public class Staff implements Serializable, Comparable<Staff> {
     }
 
     public String getCurrentResidence() {
-        return currentResidence;
+        return this.currentResidence;
     }
 
     public void setCurrentResidence(String currentResidence) {
@@ -228,7 +228,7 @@ public class Staff implements Serializable, Comparable<Staff> {
     }
 
     public Long getStatus() {
-        return status;
+        return this.status;
     }
 
     public void setStatus(Long status) {
@@ -236,7 +236,7 @@ public class Staff implements Serializable, Comparable<Staff> {
     }
     
     public String getNote() {
-        return note;
+        return this.note;
     }
 
     public void setNote(String note) {
@@ -244,11 +244,11 @@ public class Staff implements Serializable, Comparable<Staff> {
     }
 
     public ContractType getContractType() {
-        if(contractType == null){
+        if(this.contractType == null){
             return new ContractType();
         }
         
-        return contractType;
+        return this.contractType;
     }
 
     public void setContractType(ContractType contractType) {
@@ -256,7 +256,7 @@ public class Staff implements Serializable, Comparable<Staff> {
     }
 
     public Date getContractFromDate() {
-        return contractFromDate;
+        return this.contractFromDate;
     }
 
     public void setContractFromDate(Date contractFromDate) {
@@ -264,7 +264,7 @@ public class Staff implements Serializable, Comparable<Staff> {
     }
 
     public Date getContractToDate() {
-        return contractToDate;
+        return this.contractToDate;
     }
 
     public void setContractToDate(Date contractToDate) {
@@ -272,7 +272,7 @@ public class Staff implements Serializable, Comparable<Staff> {
     }
 
     public String getContractNumber() {
-        return contractNumber;
+        return this.contractNumber;
     }
 
     public void setContractNumber(String contractNumber) {
@@ -280,7 +280,7 @@ public class Staff implements Serializable, Comparable<Staff> {
     }
 
     public String getTaxCode() {
-        return taxCode;
+        return this.taxCode;
     }
 
     public void setTaxCode(String taxCode) {
@@ -288,7 +288,7 @@ public class Staff implements Serializable, Comparable<Staff> {
     }
 
     public Long getSalaryBasic() {
-        return salaryBasic;
+        return this.salaryBasic;
     }
 
     public void setSalaryBasic(Long salaryBasic) {
@@ -296,7 +296,7 @@ public class Staff implements Serializable, Comparable<Staff> {
     }
 
     public Date getInsurancePaidDate() {
-        return insurancePaidDate;
+        return this.insurancePaidDate;
     }
 
     public void setInsurancePaidDate(Date insurancePaidDate) {
@@ -304,7 +304,7 @@ public class Staff implements Serializable, Comparable<Staff> {
     }
 
     public String getInsuranceBookNumber() {
-        return insuranceBookNumber;
+        return this.insuranceBookNumber;
     }
 
     public void setInsuranceBookNumber(String insuranceBookNumber) {
@@ -312,7 +312,7 @@ public class Staff implements Serializable, Comparable<Staff> {
     }
 
     public String getPaidPlace() {
-        return paidPlace;
+        return this.paidPlace;
     }
 
     public void setPaidPlace(String paidPlace) {
@@ -320,7 +320,7 @@ public class Staff implements Serializable, Comparable<Staff> {
     }
 
     public String getLevels() {
-        return levels;
+        return this.levels;
     }
 
     public void setLevels(String levels) {
@@ -328,7 +328,7 @@ public class Staff implements Serializable, Comparable<Staff> {
     }
 
     public String getMajors() {
-        return majors;
+        return this.majors;
     }
 
     public void setMajors(String majors) {
@@ -336,7 +336,7 @@ public class Staff implements Serializable, Comparable<Staff> {
     }
 
     public String getCollege() {
-        return college;
+        return this.college;
     }
 
     public void setCollege(String college) {
@@ -344,7 +344,7 @@ public class Staff implements Serializable, Comparable<Staff> {
     }
 
     public String getIdentityCard() {
-        return identityCard;
+        return this.identityCard;
     }
 
     public void setIdentityCard(String identityCard) {
@@ -352,7 +352,7 @@ public class Staff implements Serializable, Comparable<Staff> {
     }
 
     public Date getGrantDate() {
-        return grantDate;
+        return this.grantDate;
     }
 
     public void setGrantDate(Date grantDate) {
@@ -360,7 +360,7 @@ public class Staff implements Serializable, Comparable<Staff> {
     }
 
     public String getGrantPlace() {
-        return grantPlace;
+        return this.grantPlace;
     }
 
     public void setGrantPlace(String grantPlace) {
@@ -368,7 +368,7 @@ public class Staff implements Serializable, Comparable<Staff> {
     }
 
     public String getMobile() {
-        return mobile;
+        return this.mobile;
     }
 
     public void setMobile(String mobile) {
@@ -376,7 +376,7 @@ public class Staff implements Serializable, Comparable<Staff> {
     }
 
     public String getHomePhone() {
-        return homePhone;
+        return this.homePhone;
     }
 
     public void setHomePhone(String homePhone) {
@@ -384,7 +384,7 @@ public class Staff implements Serializable, Comparable<Staff> {
     }
 
     public String getEmail() {
-        return email;
+        return this.email;
     }
 
     public void setEmail(String email) {
@@ -392,7 +392,7 @@ public class Staff implements Serializable, Comparable<Staff> {
     }
 
     public String getGender() {
-        return gender;
+        return this.gender;
     }
 
     public void setGender(String gender) {
@@ -400,7 +400,7 @@ public class Staff implements Serializable, Comparable<Staff> {
     }
 
     public String getMarried() {
-        return married;
+        return this.married;
     }
 
     public void setMarried(String married) {
@@ -408,14 +408,15 @@ public class Staff implements Serializable, Comparable<Staff> {
     }
 
     public Long getChildNumber() {
-        return childNumber;
+        return this.childNumber;
     }
 
     public void setChildNumber(Long childNumber) {
         this.childNumber = childNumber;
     }
 
-    public int compareTo(Staff o) {
+    @Override
+	public int compareTo(Staff o) {
         if (o == null) {
             return -1;
         }
@@ -424,13 +425,13 @@ public class Staff implements Serializable, Comparable<Staff> {
             return 1;
         }
 
-        return staffId.compareTo(o.staffId);
+        return this.staffId.compareTo(o.staffId);
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (staffId != null ? staffId.hashCode() : 0);
+        hash += (this.staffId != null ? this.staffId.hashCode() : 0);
         return hash;
     }
 
@@ -457,7 +458,7 @@ public class Staff implements Serializable, Comparable<Staff> {
 
     @Override
     public String toString() {
-        return "com.evotek.qlns.model.Staff[ staffId=" + staffId + " ]";
+        return "com.evotek.qlns.model.Staff[ staffId=" + this.staffId + " ]";
     }
 
 }

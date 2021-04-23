@@ -30,7 +30,7 @@ public class FolderEntry implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "folder_id", unique = true, nullable = false, precision = 22, scale = 0)
     public Long getFolderId() {
-        return folderId;
+        return this.folderId;
     }
 
     public void setFolderId(Long folderId) {
@@ -39,7 +39,7 @@ public class FolderEntry implements Serializable {
 
     @Column(name = "parent_folder_id", precision = 22, scale = 0)
     public Long getParentFolderId() {
-        return parentFolderId;
+        return this.parentFolderId;
     }
 
     public void setParentFolderId(Long parentFolderId) {
@@ -48,7 +48,7 @@ public class FolderEntry implements Serializable {
 
     @Column(name = "name", length = 200)
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(String name) {
@@ -57,7 +57,7 @@ public class FolderEntry implements Serializable {
 
     @Column(name = "user_id", precision = 22, scale = 0)
     public Long getUserId() {
-        return userId;
+        return this.userId;
     }
 
     public void setUserId(Long userId) {
@@ -66,7 +66,7 @@ public class FolderEntry implements Serializable {
 
     @Column(name = "description", length = 2000)
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     public void setDescription(String description) {
@@ -75,7 +75,7 @@ public class FolderEntry implements Serializable {
 
     @Column(name = "user_name", length = 200)
     public String getUserName() {
-        return userName;
+        return this.userName;
     }
 
     public void setUserName(String userName) {
@@ -85,7 +85,7 @@ public class FolderEntry implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date", length = 7)
     public Date getCreateDate() {
-        return createDate;
+        return this.createDate;
     }
 
     public void setCreateDate(Date createDate) {
@@ -95,7 +95,7 @@ public class FolderEntry implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "modified_date", length = 7)
     public Date getModifiedDate() {
-        return modifiedDate;
+        return this.modifiedDate;
     }
 
     public void setModifiedDate(Date modifiedDate) {
@@ -104,7 +104,7 @@ public class FolderEntry implements Serializable {
 
     @Column(name = "file_count", precision = 22, scale = 0)
     public Long getFileCount() {
-        return fileCount;
+        return this.fileCount;
     }
 
     public void setFileCount(Long fileCount) {

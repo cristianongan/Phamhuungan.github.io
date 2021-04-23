@@ -69,22 +69,22 @@ public class AddEditRightController extends BasicController<Window>
     //init data
     public void initData() throws Exception {
         try {
-            winTemp = (Window) arg.get(Constants.PARENT_WINDOW);
+            this.winTemp = (Window) this.arg.get(Constants.PARENT_WINDOW);
 
-            category = (Category) arg.get(Constants.OBJECT);
+            this.category = (Category) this.arg.get(Constants.OBJECT);
 
-            if(Validator.isNull(category)){
-                category = new Category();
+            if(Validator.isNull(this.category)){
+                this.category = new Category();
             }
 
-            right = (Right) arg.get(Constants.EDIT_OBJECT);
+            this.right = (Right) this.arg.get(Constants.EDIT_OBJECT);
 
-            if(Validator.isNotNull(right)){
-                winEditRight.setTitle((String) arg.get(Constants.TITLE));
+            if(Validator.isNotNull(this.right)){
+                this.winEditRight.setTitle((String) this.arg.get(Constants.TITLE));
 
                 this._setEditForm();
             } else {
-                tbRightName.setValue(category.getFolderName());
+                this.tbRightName.setValue(this.category.getFolderName());
             }
         } catch (Exception ex) {
             _log.error(ex.getMessage(), ex);
@@ -92,64 +92,64 @@ public class AddEditRightController extends BasicController<Window>
     }
 
     private void _setEditForm(){
-        tbRightName.setValue(right.getRightName());
-        tbDescription.setValue(right.getDescription());
+        this.tbRightName.setValue(this.right.getRightName());
+        this.tbDescription.setValue(this.right.getDescription());
     }
 
     //even method
     public void onCreate$cbRightType(){
-        List<SimpleModel> rightTypes = categoryService.getRightType();
+        List<SimpleModel> rightTypes = this.categoryService.getRightType();
 
-        cbRightType.setModel(new ListModelList<SimpleModel>(rightTypes));
+        this.cbRightType.setModel(new ListModelList<SimpleModel>(rightTypes));
     }
 
     public void onAfterRender$cbRightType() {
-        if (Validator.isNotNull(right)
-                && Validator.isNotNull(right.getRightType())) {
-            cbRightType.setSelectedIndex(right.getRightType().intValue());
+        if (Validator.isNotNull(this.right)
+                && Validator.isNotNull(this.right.getRightType())) {
+            this.cbRightType.setSelectedIndex(this.right.getRightType().intValue());
         } else {
-            cbRightType.setSelectedIndex(Values.FIRST_INDEX);
+            this.cbRightType.setSelectedIndex(Values.FIRST_INDEX);
         }
     }
 
     public void onClick$btnCancel(){
-        winEditRight.detach();
+        this.winEditRight.detach();
     }
 
     public void onClick$btnSave() throws Exception {
         boolean update = true;
 
         try {
-            String rightName = GetterUtil.getString(tbRightName.getValue());
-            Long rightType = ComponentUtil.getComboboxValue(cbRightType);
-            String description = GetterUtil.getString(tbDescription.getValue());
+            String rightName = GetterUtil.getString(this.tbRightName.getValue());
+            Long rightType = ComponentUtil.getComboboxValue(this.cbRightType);
+            String description = GetterUtil.getString(this.tbDescription.getValue());
 
             if (_validate(rightName, description)) {
-                if(Validator.isNull(right)){
+                if(Validator.isNull(this.right)){
                     update = false;
 
-                    right = new Right();
+                    this.right = new Right();
 
-                    right.setUserId(getUserId());
-                    right.setUserName(getUserName());
-                    right.setCreateDate(new Date());
-                    right.setCategoryId(category.getCategoryId());
-                    right.setStatus(Values.STATUS_ACTIVE);
+                    this.right.setUserId(getUserId());
+                    this.right.setUserName(getUserName());
+                    this.right.setCreateDate(new Date());
+                    this.right.setCategoryId(this.category.getCategoryId());
+                    this.right.setStatus(Values.STATUS_ACTIVE);
                 }
 
-                right.setRightName(rightName);
-                right.setRightType(rightType);
-                right.setDescription(description);
-                right.setModifiedDate(new Date());
+                this.right.setRightName(rightName);
+                this.right.setRightType(rightType);
+                this.right.setDescription(description);
+                this.right.setModifiedDate(new Date());
 
-                categoryService.saveOrUpdateRight(right);
+                this.categoryService.saveOrUpdateRight(this.right);
 
                 ComponentUtil.createSuccessMessageBox(
                         ComponentUtil.getSuccessKey(update));
 
-                winEditRight.detach();
+                this.winEditRight.detach();
 
-                Events.sendEvent("onLoadRight", winTemp, null);
+                Events.sendEvent("onLoadRight", this.winTemp, null);
             }
 
         } catch (Exception ex) {
@@ -164,22 +164,22 @@ public class AddEditRightController extends BasicController<Window>
     private boolean _validate(String rightName, String description)
             throws Exception{
         if(Validator.isNull(rightName)){
-            tbRightName.setErrorMessage(Values.getRequiredInputMsg(
+            this.tbRightName.setErrorMessage(Values.getRequiredInputMsg(
                     Labels.getLabel(LanguageKeys.RIGHT_NAME)));
 
             return false;
         }
 
         if (rightName.length() > Values.MEDIUM_LENGTH) {
-            tbRightName.setErrorMessage(Values.getMaxLengthInvalidMsg(
+            this.tbRightName.setErrorMessage(Values.getMaxLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.RIGHT_NAME),
                     Values.MEDIUM_LENGTH));
 
             return false;
         }
 
-        if(categoryService.isRightExist(rightName, right)){
-            tbRightName.setErrorMessage(Values.getDuplicateMsg(
+        if(this.categoryService.isRightExist(rightName, this.right)){
+            this.tbRightName.setErrorMessage(Values.getDuplicateMsg(
                     Labels.getLabel(LanguageKeys.RIGHT_NAME)));
 
             return false;
@@ -187,7 +187,7 @@ public class AddEditRightController extends BasicController<Window>
 
         if (Validator.isNotNull(description)
                 && description.length() > Values.GREATE_LONG_LENGTH) {
-            tbDescription.setErrorMessage(Values.getMaxLengthInvalidMsg(
+            this.tbDescription.setErrorMessage(Values.getMaxLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.DESCRIPTION),
                     Values.GREATE_LONG_LENGTH));
 

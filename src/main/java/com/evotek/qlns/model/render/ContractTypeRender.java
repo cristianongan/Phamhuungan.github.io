@@ -39,7 +39,8 @@ public class ContractTypeRender implements ListitemRenderer<ContractType>{
         this._window = _window;
     }
     
-    public void render(Listitem item, ContractType ct, int index) throws Exception {
+    @Override
+	public void render(Listitem item, ContractType ct, int index) throws Exception {
         item.setAttribute("data", ct);
         
         this.renderNoneEditing(item, ct, index);
@@ -88,7 +89,8 @@ public class ContractTypeRender implements ListitemRenderer<ContractType>{
         
         btnEdit.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
-            public void onEvent(Event t) throws Exception {
+            @Override
+			public void onEvent(Event t) throws Exception {
                 item.getChildren().clear();
                 
                 renderEditing(item, ct, index);
@@ -97,7 +99,7 @@ public class ContractTypeRender implements ListitemRenderer<ContractType>{
         
         hlayout.appendChild(btnEdit);
         
-        hlayout.appendChild(ComponentUtil.createButton(_window,
+        hlayout.appendChild(ComponentUtil.createButton(this._window,
                 Labels.getLabel(LanguageKeys.DELETE), ComponentUtil.DEL_TOOLTIP,
                 Events.ON_CLICK, "onDelete", ct,
                 Constants.Z_ICON_TRASH_O, Constants.RED));
@@ -122,7 +124,8 @@ public class ContractTypeRender implements ListitemRenderer<ContractType>{
         
         btnSave.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
-            public void onEvent(Event t) throws Exception {
+            @Override
+			public void onEvent(Event t) throws Exception {
                 Component cmp1 = item.getFellowIfAny(
                         ct.getContractTypeId()+"-"+"contract-type");
                 Component cmp2 = item.getFellowIfAny(
@@ -134,7 +137,7 @@ public class ContractTypeRender implements ListitemRenderer<ContractType>{
                     ct.setMonthDuration(GetterUtil.getLong(
                             ((Spinner) cmp2).getValue()));
                     
-                    Events.sendEvent("onUpdateJob", _window, ct);
+                    Events.sendEvent("onUpdateJob", ContractTypeRender.this._window, ct);
                 }
                 
                 item.getChildren().clear();
@@ -151,7 +154,8 @@ public class ContractTypeRender implements ListitemRenderer<ContractType>{
         
         btnCancel.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
-            public void onEvent(Event t) throws Exception {
+            @Override
+			public void onEvent(Event t) throws Exception {
                 item.getChildren().clear();
                 
                 renderNoneEditing(item, ct, index);

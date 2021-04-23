@@ -84,12 +84,12 @@ public class AddEditMenuController extends BasicController<Window>
     //init data
     public void initData() throws Exception {
         try {
-            winTemp = (Div) arg.get(Constants.PARENT_WINDOW);
+            this.winTemp = (Div) this.arg.get(Constants.PARENT_WINDOW);
 
-            category = (Category) arg.get(Constants.OBJECT);
+            this.category = (Category) this.arg.get(Constants.OBJECT);
 
-            if(Validator.isNotNull(category)){
-                winAddMenu.setTitle((String) arg.get(Constants.TITLE));
+            if(Validator.isNotNull(this.category)){
+                this.winAddMenu.setTitle((String) this.arg.get(Constants.TITLE));
 
                 this._setEditForm();
             }
@@ -100,33 +100,33 @@ public class AddEditMenuController extends BasicController<Window>
 
     private void _setEditForm() throws Exception {
         try {
-            if (MENU_CATEGORY.equals(category.getType())) {
+            if (MENU_CATEGORY.equals(this.category.getType())) {
                 _showHideControlItem(false);
-            } else if (MENU_ITEM.equals(category.getType())) {
+            } else if (MENU_ITEM.equals(this.category.getType())) {
                 _showHideControlItem(true);
 
                 this.onCreateTree();
 
-                if (Validator.isNotNull(category.getParentId())) {
-                    Category parentCategory = categoryService.getParentCategory(
-                            category.getParentId());
+                if (Validator.isNotNull(this.category.getParentId())) {
+                    Category parentCategory = this.categoryService.getParentCategory(
+                            this.category.getParentId());
 
-                    bbMenuParent.setAttribute("categoryId",
+                    this.bbMenuParent.setAttribute("categoryId",
                             parentCategory.getCategoryId());
 
-                    bbMenuParent.setValue(Labels.getLabel(
+                    this.bbMenuParent.setValue(Labels.getLabel(
                             parentCategory.getLanguageKey()));
                 }
 
                 
-                tbIcon.setValue(category.getIcon());
+                this.tbIcon.setValue(this.category.getIcon());
             }
 
-            tbFolderName.setValue(category.getFolderName());
-            tbViewPage.setValue(category.getViewPage());
-            tbLanguageKey.setValue(category.getLanguageKey());
-            tbWeight.setValue(GetterUtil.getString(category.getWeight()));
-            tbDescription.setValue(category.getDescription());
+            this.tbFolderName.setValue(this.category.getFolderName());
+            this.tbViewPage.setValue(this.category.getViewPage());
+            this.tbLanguageKey.setValue(this.category.getLanguageKey());
+            this.tbWeight.setValue(GetterUtil.getString(this.category.getWeight()));
+            this.tbDescription.setValue(this.category.getDescription());
         } catch (Exception e) {
             _log.error(e.getMessage(), e);
         }
@@ -135,26 +135,26 @@ public class AddEditMenuController extends BasicController<Window>
 
     private void _showHideControlItem(boolean check) {
 
-        rowIconUrl.setVisible(check);
+        this.rowIconUrl.setVisible(check);
 
 //        rowNameFolder.setVisible(check);
 
 //        rowViewPage.setVisible(check);
 
-        rowMenu.setVisible(check);
+        this.rowMenu.setVisible(check);
     }
 
     //event
     public void onAfterRender$cbMenuType() {
-        if (Validator.isNotNull(category)
-                && Validator.isNotNull(category.getType())) {
-            cbMenuType.setSelectedIndex(category.getType().intValue());
+        if (Validator.isNotNull(this.category)
+                && Validator.isNotNull(this.category.getType())) {
+            this.cbMenuType.setSelectedIndex(this.category.getType().intValue());
             
-            _showHideControlItem(MENU_ITEM.equals(category.getType()));
+            _showHideControlItem(MENU_ITEM.equals(this.category.getType()));
 
-            cbMenuType.setDisabled(true);
+            this.cbMenuType.setDisabled(true);
         } else {
-            cbMenuType.setSelectedIndex(MENU_CATEGORY.intValue());
+            this.cbMenuType.setSelectedIndex(MENU_CATEGORY.intValue());
 
             _showHideControlItem(false);
         }
@@ -162,7 +162,7 @@ public class AddEditMenuController extends BasicController<Window>
 
     public void onChange$cbMenuType() throws Exception {
         try {
-            Long categoryType = ComponentUtil.getComboboxValue(cbMenuType);
+            Long categoryType = ComponentUtil.getComboboxValue(this.cbMenuType);
 
             if (categoryType.equals(Values.MENU_TYPE_CATEGORY)) {
                 _showHideControlItem(false);
@@ -178,18 +178,18 @@ public class AddEditMenuController extends BasicController<Window>
     }
 
     public void onCreate$cbMenuType(){
-        List<SimpleModel> menuTypes = categoryService.getMenuType();
+        List<SimpleModel> menuTypes = this.categoryService.getMenuType();
 
-        cbMenuType.setModel(new ListModelList<SimpleModel>(menuTypes));
+        this.cbMenuType.setModel(new ListModelList<SimpleModel>(menuTypes));
     }
     //event
 
     public void onCreateTree() throws Exception {
         try {
-            treeCategoryModelUtil = new TreeBasicModel(_buildCategoryTree());
+            this.treeCategoryModelUtil = new TreeBasicModel(_buildCategoryTree());
 
-            treeMenu.setItemRenderer(new BandboxCategoryRender(bbMenuParent));
-            treeMenu.setModel(treeCategoryModelUtil);
+            this.treeMenu.setItemRenderer(new BandboxCategoryRender(this.bbMenuParent));
+            this.treeMenu.setModel(this.treeCategoryModelUtil);
         } catch (Exception ex) {
             _log.error(ex.getMessage(), ex);
         }
@@ -202,7 +202,7 @@ public class AddEditMenuController extends BasicController<Window>
                 new CategoryTreeNode[]{});
 
         try{
-            List<Category> roots = categoryService.getCategoryByParentId(null);
+            List<Category> roots = this.categoryService.getCategoryByParentId(null);
 
             for(Category root: roots){
                 CategoryTreeNode item = new CategoryTreeNode(root);
@@ -217,62 +217,62 @@ public class AddEditMenuController extends BasicController<Window>
     }
 
     public void onClick$btnCancel(){
-        winAddMenu.detach();
+        this.winAddMenu.detach();
     }
 
     public void onClick$btnSave() throws Exception {
         boolean update = true;
 
         try{
-            Long categoryType = ComponentUtil.getComboboxValue(cbMenuType);
+            Long categoryType = ComponentUtil.getComboboxValue(this.cbMenuType);
             Long parentId = GetterUtil.getLong(
-                    bbMenuParent.getAttribute("categoryId"));
-            String languageKey = GetterUtil.getString(tbLanguageKey.getValue());
-            String folderName = GetterUtil.getString(tbFolderName.getValue());
-            String viewPage = GetterUtil.getString(tbViewPage.getValue());
-            String icon = GetterUtil.getString(tbIcon.getValue());
-            String weight = GetterUtil.getString(tbWeight.getValue());
-            String description = GetterUtil.getString(tbDescription.getValue());
+                    this.bbMenuParent.getAttribute("categoryId"));
+            String languageKey = GetterUtil.getString(this.tbLanguageKey.getValue());
+            String folderName = GetterUtil.getString(this.tbFolderName.getValue());
+            String viewPage = GetterUtil.getString(this.tbViewPage.getValue());
+            String icon = GetterUtil.getString(this.tbIcon.getValue());
+            String weight = GetterUtil.getString(this.tbWeight.getValue());
+            String description = GetterUtil.getString(this.tbDescription.getValue());
             
             if (_validate(categoryType, parentId, languageKey, folderName,
                     viewPage, icon, weight, description)) {
-                if(Validator.isNull(category)){
+                if(Validator.isNull(this.category)){
                     update = false;
 
-                    category = new Category();
+                    this.category = new Category();
 
-                    category.setType(categoryType);
-                    category.setCreateDate(new Date());
-                    category.setUserId(getUserId());
-                    category.setUserName(getUserName());
-                    category.setStatus(Values.STATUS_ACTIVE);
+                    this.category.setType(categoryType);
+                    this.category.setCreateDate(new Date());
+                    this.category.setUserId(getUserId());
+                    this.category.setUserName(getUserName());
+                    this.category.setStatus(Values.STATUS_ACTIVE);
                 }
 
-                String rightName = category.getFolderName();
+                String rightName = this.category.getFolderName();
 
-                category.setModifiedDate(new Date());
-                category.setLanguageKey(languageKey);
-                category.setWeight(GetterUtil.getDouble(weight));
-                category.setDescription(description);
-                category.setImmune(Values.NOT_IMMUNE);
-                category.setFolderName(folderName);
-                category.setViewPage(viewPage);
+                this.category.setModifiedDate(new Date());
+                this.category.setLanguageKey(languageKey);
+                this.category.setWeight(GetterUtil.getDouble(weight));
+                this.category.setDescription(description);
+                this.category.setImmune(Values.NOT_IMMUNE);
+                this.category.setFolderName(folderName);
+                this.category.setViewPage(viewPage);
                 
                 if (categoryType.equals(Values.MENU_TYPE_ITEM)) {
-                    category.setParentId(parentId);
+                    this.category.setParentId(parentId);
 //                    category.setFolderName(folderName);
 //                    category.setViewPage(viewPage);
-                    category.setIcon(icon);
+                    this.category.setIcon(icon);
                 }
 
-                categoryService.saveOrUpdateCategory(category, rightName, !update);
+                this.categoryService.saveOrUpdateCategory(this.category, rightName, !update);
 
                 ComponentUtil.createSuccessMessageBox(
                         ComponentUtil.getSuccessKey(update));
 
-                winAddMenu.detach();
+                this.winAddMenu.detach();
 
-                Events.sendEvent("onLoadData", winTemp, null);
+                Events.sendEvent("onLoadData", this.winTemp, null);
             }
 
         }catch (Exception ex) {
@@ -296,14 +296,14 @@ public class AddEditMenuController extends BasicController<Window>
 //        }
 
         if (Validator.isNull(languageKey)) {
-            tbLanguageKey.setErrorMessage(Values.getRequiredInputMsg(
+            this.tbLanguageKey.setErrorMessage(Values.getRequiredInputMsg(
                     Labels.getLabel(LanguageKeys.LANGUAGE_KEY)));
 
             return false;
         }
 
         if (languageKey.length() > Values.MEDIUM_LENGTH) {
-            tbLanguageKey.setErrorMessage(Values.getMaxLengthInvalidMsg(
+            this.tbLanguageKey.setErrorMessage(Values.getMaxLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.LANGUAGE_KEY),
                     Values.MEDIUM_LENGTH));
 
@@ -312,14 +312,14 @@ public class AddEditMenuController extends BasicController<Window>
 
 //        if (isMenuItem) {
         if (Validator.isNull(folderName)) {
-            tbFolderName.setErrorMessage(Values.getRequiredInputMsg(
+            this.tbFolderName.setErrorMessage(Values.getRequiredInputMsg(
                     Labels.getLabel(LanguageKeys.FOLDER_NAME)));
 
             return false;
         }
 
         if (folderName.length() > Values.MEDIUM_LENGTH) {
-            tbFolderName.setErrorMessage(Values.getMaxLengthInvalidMsg(
+            this.tbFolderName.setErrorMessage(Values.getMaxLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.FOLDER_NAME),
                     Values.MEDIUM_LENGTH));
 
@@ -327,14 +327,14 @@ public class AddEditMenuController extends BasicController<Window>
         }
 
         if (Validator.isNull(viewPage)) {
-            tbViewPage.setErrorMessage(Values.getRequiredInputMsg(
+            this.tbViewPage.setErrorMessage(Values.getRequiredInputMsg(
                     Labels.getLabel(LanguageKeys.VIEW_PAGE)));
 
             return false;
         }
 
         if (viewPage.length() > Values.MEDIUM_LENGTH) {
-            tbViewPage.setErrorMessage(Values.getMaxLengthInvalidMsg(
+            this.tbViewPage.setErrorMessage(Values.getMaxLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.VIEW_PAGE),
                     Values.MEDIUM_LENGTH));
 
@@ -344,7 +344,7 @@ public class AddEditMenuController extends BasicController<Window>
 
         if (Validator.isNotNull(icon)
                 && icon.length() > Values.LONG_LENGTH) {
-            tbIcon.setErrorMessage(Values.getMaxLengthInvalidMsg(
+            this.tbIcon.setErrorMessage(Values.getMaxLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.ICON),
                     Values.MEDIUM_LENGTH));
 
@@ -353,7 +353,7 @@ public class AddEditMenuController extends BasicController<Window>
 
         if(Validator.isNotNull(weight)
                 && !Validator.isNumberic(weight)){
-            tbWeight.setErrorMessage(Values.getInputNumberOnlyMsg(
+            this.tbWeight.setErrorMessage(Values.getInputNumberOnlyMsg(
                         Labels.getLabel(LanguageKeys.WEIGHT)));
 
             return false;
@@ -361,7 +361,7 @@ public class AddEditMenuController extends BasicController<Window>
 
         if (Validator.isNotNull(description)
                 && description.length() > Values.GREATE_LONG_LENGTH) {
-            tbDescription.setErrorMessage(Values.getMaxLengthInvalidMsg(
+            this.tbDescription.setErrorMessage(Values.getMaxLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.DESCRIPTION),
                     Values.GREATE_LONG_LENGTH));
 

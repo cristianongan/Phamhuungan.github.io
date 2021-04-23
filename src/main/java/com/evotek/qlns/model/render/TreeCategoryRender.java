@@ -42,7 +42,7 @@ public class TreeCategoryRender<Component> implements
 
     @Override
     public void render(Treeitem trtm, CategoryTreeNode t, int i) throws Exception {
-        final Category category = (Category) t.getData();
+        final Category category = t.getData();
 
         //tree cell
         Treerow dataRow = new Treerow();
@@ -109,7 +109,7 @@ public class TreeCategoryRender<Component> implements
             if(Validator.isNotNull(status)
                     && status.equals(Values.STATUS_ACTIVE)){
                 //Thêm action "Khóa"
-                hlayout.appendChild(ComponentUtil.createButton(winTemp,
+                hlayout.appendChild(ComponentUtil.createButton(this.winTemp,
                         Labels.getLabel(LanguageKeys.BUTTON_LOCK), 
                         ComponentUtil.LOCK_TOOLTIP, 
                         Events.ON_CLICK, "onLockCategory", category, 
@@ -118,14 +118,14 @@ public class TreeCategoryRender<Component> implements
                 
             } else{
                 //Thêm action "Mở khóa"
-                hlayout.appendChild(ComponentUtil.createButton(winTemp,
+                hlayout.appendChild(ComponentUtil.createButton(this.winTemp,
                         Labels.getLabel(LanguageKeys.BUTTON_UNLOCK), 
                         ComponentUtil.UNLOCK_TOOLTIP, Events.ON_CLICK,
                         "onUnlockCategory", category, Constants.Z_ICON_UNLOCK,
                         Constants.ORANGE));
 
                 //Thêm action "Xóa"
-                hlayout.appendChild(ComponentUtil.createButton(winTemp,
+                hlayout.appendChild(ComponentUtil.createButton(this.winTemp,
                         Labels.getLabel(LanguageKeys.BUTTON_DELETE), 
                         ComponentUtil.DEL_TOOLTIP, Events.ON_CLICK,
                         "onDeleteCategory", category, Constants.Z_ICON_TRASH_O,
@@ -160,7 +160,7 @@ public class TreeCategoryRender<Component> implements
     private Map<String, Object> _createParameterMap(Category category) {
         Map<String, Object> parameters = new HashMap<String, Object>();
 
-        parameters.put(Constants.PARENT_WINDOW, winTemp);
+        parameters.put(Constants.PARENT_WINDOW, this.winTemp);
         parameters.put(Constants.TITLE, 
                 Labels.getLabel(LanguageKeys.TITLE_EDIT_MENU));
         parameters.put(Constants.OBJECT, category);

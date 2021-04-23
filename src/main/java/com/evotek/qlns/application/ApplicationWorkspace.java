@@ -39,7 +39,7 @@ public class ApplicationWorkspace implements Serializable {
 	}
 
 	public String getApplicationRealPath() {
-		return applicationRealPath;
+		return this.applicationRealPath;
 	}
 
 	public void setApplicationRealPath(String applicationRealPath) {

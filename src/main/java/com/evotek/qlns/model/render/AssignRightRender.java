@@ -30,14 +30,15 @@ public class AssignRightRender implements ListitemRenderer<Right>{
         this.rights = rights;
     }
 
-    public void render(Listitem items, Right right, int index) throws Exception {
+    @Override
+	public void render(Listitem items, Right right, int index) throws Exception {
         items.appendChild(ComponentUtil.createListcell(StringPool.BLANK,
                 Constants.STYLE_TEXT_ALIGN_CENTER));
         items.appendChild(new Listcell(right.getRightName()));
         items.appendChild(new Listcell(getRightTypeName(right.getRightType())));
         items.appendChild(new Listcell(right.getDescription()));
 
-        items.setSelected(rights.contains(right));
+        items.setSelected(this.rights.contains(right));
 
         items.setAttribute("data", right);
     }

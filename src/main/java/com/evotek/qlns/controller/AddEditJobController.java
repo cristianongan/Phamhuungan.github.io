@@ -67,16 +67,16 @@ public class AddEditJobController extends BasicController<Window>
     }
     
     public void initData() {
-        winParent = (Window) arg.get(Constants.PARENT_WINDOW);
+        this.winParent = (Window) this.arg.get(Constants.PARENT_WINDOW);
         
         refreshModel();
     }
     
     public void refreshModel() {
-        jobs = staffService.getJobTitle();
+        this.jobs = this.staffService.getJobTitle();
         
-        jobListbox.setModel(new ListModelList<Job>(jobs));
-        jobListbox.setItemRenderer(new JobRender(winEditJob));
+        this.jobListbox.setModel(new ListModelList<Job>(this.jobs));
+        this.jobListbox.setItemRenderer(new JobRender(this.winEditJob));
     }
     
     public void onDelete(Event event) {
@@ -87,15 +87,16 @@ public class AddEditJobController extends BasicController<Window>
                 Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION, 
                 Messagebox.OK, new EventListener() {
 
-                    public void onEvent(Event e) throws Exception {
+                    @Override
+					public void onEvent(Event e) throws Exception {
                         if (Messagebox.ON_OK.equals(e.getName())) {
                             try {
-                                staffService.deleteJob(job);
+                                AddEditJobController.this.staffService.deleteJob(job);
 
                                 ComponentUtil.createSuccessMessageBox(
                                         LanguageKeys.MESSAGE_DELETE_SUCCESS);
 
-                                jobs.remove(job);
+                                AddEditJobController.this.jobs.remove(job);
                                 
                                 refreshModel();
 
@@ -114,12 +115,12 @@ public class AddEditJobController extends BasicController<Window>
         final Job job = (Job) event.getData();
             
         try {
-            staffService.saveOrUpdate(job);
+            this.staffService.saveOrUpdate(job);
             
             ComponentUtil.createSuccessMessageBox(
                         ComponentUtil.getSuccessKey(true));
             
-            Events.sendEvent("onUpdateCbJob", winParent, null);
+            Events.sendEvent("onUpdateCbJob", this.winParent, null);
         } catch (Exception ex) {
             _log.error(ex.getMessage());
 
@@ -133,7 +134,7 @@ public class AddEditJobController extends BasicController<Window>
     public void onClick$btnAdd() throws Exception{
         try {
             String jobTitle = GetterUtil.getString(
-                    tbJobTitle.getValue());
+                    this.tbJobTitle.getValue());
             
             if (_validate(jobTitle)) {
                 Job job = new Job();
@@ -145,16 +146,16 @@ public class AddEditJobController extends BasicController<Window>
                 job.setJobTitle(jobTitle);
                 job.setDescription(jobTitle);
                 
-                staffService.saveOrUpdate(job);
+                this.staffService.saveOrUpdate(job);
                 
                 ComponentUtil.createSuccessMessageBox(
                         ComponentUtil.getSuccessKey(true));
 
-                tbJobTitle.setValue(StringPool.BLANK);
+                this.tbJobTitle.setValue(StringPool.BLANK);
                 
                 refreshModel();
                 
-                Events.sendEvent("onUpdateCbJob", winParent, null);
+                Events.sendEvent("onUpdateCbJob", this.winParent, null);
             }
         }catch (Exception ex) {
             _log.error(ex.getMessage());
@@ -166,20 +167,20 @@ public class AddEditJobController extends BasicController<Window>
     
     private boolean _validate(String jobTitle) {
         if (Validator.isNull(jobTitle)) {
-            tbJobTitle.setErrorMessage(Values.getRequiredInputMsg(
+            this.tbJobTitle.setErrorMessage(Values.getRequiredInputMsg(
                     Labels.getLabel(LanguageKeys.JOB_TITLE)));
             
-            tbJobTitle.setFocus(true);
+            this.tbJobTitle.setFocus(true);
             
             return false;
         }
         
         if (jobTitle.length() > Values.MEDIUM_LENGTH) {
-            tbJobTitle.setErrorMessage(Values.getMaxLengthInvalidMsg(
+            this.tbJobTitle.setErrorMessage(Values.getMaxLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.JOB_TITLE),
                     Values.MEDIUM_LENGTH));
             
-            tbJobTitle.setFocus(true);
+            this.tbJobTitle.setFocus(true);
             
             return false;
         }
@@ -188,15 +189,15 @@ public class AddEditJobController extends BasicController<Window>
     }
     
     public void onClick$btnCancel(){
-        winEditJob.detach();
+        this.winEditJob.detach();
     }
     //get set service
     public StaffService getStaffService() {
-        if (staffService == null) {
-            staffService = (StaffService) SpringUtil.getBean("staffService");
-            setStaffService(staffService);
+        if (this.staffService == null) {
+            this.staffService = (StaffService) SpringUtil.getBean("staffService");
+            setStaffService(this.staffService);
         }
-        return staffService;
+        return this.staffService;
     }
 
     public void setStaffService(StaffService staffService) {

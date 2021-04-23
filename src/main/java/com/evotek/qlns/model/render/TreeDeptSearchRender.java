@@ -35,8 +35,9 @@ public class TreeDeptSearchRender implements
         this.btnClear = btnClear;
     }
 
-    public void render(Treeitem treeItem, DepartmentTreeNode t, int i) throws Exception {
-        Department dept = (Department) t.getData();
+    @Override
+	public void render(Treeitem treeItem, DepartmentTreeNode t, int i) throws Exception {
+        Department dept = t.getData();
 
         Treerow dataRow = new Treerow();
 
@@ -48,17 +49,17 @@ public class TreeDeptSearchRender implements
             public void onEvent(Event t) throws Exception {
                 DepartmentTreeNode clickedNodeValue = ((Treeitem) t.getTarget()).getValue();
 
-                bbTemp.setValue(clickedNodeValue.getData().getDeptName());
+                TreeDeptSearchRender.this.bbTemp.setValue(clickedNodeValue.getData().getDeptName());
                 
-                bbTemp.setAttribute(Constants.OBJECT,
+                TreeDeptSearchRender.this.bbTemp.setAttribute(Constants.OBJECT,
                         clickedNodeValue.getData());
-                bbTemp.setAttribute(Constants.ID,
+                TreeDeptSearchRender.this.bbTemp.setAttribute(Constants.ID,
                         clickedNodeValue.getData().getDeptId());
                
-                bbTemp.close();
+                TreeDeptSearchRender.this.bbTemp.close();
                 
-                btnClear.setVisible(true);
-                btnClear.setDisabled(false);
+                TreeDeptSearchRender.this.btnClear.setVisible(true);
+                TreeDeptSearchRender.this.btnClear.setDisabled(false);
             }
         });
 

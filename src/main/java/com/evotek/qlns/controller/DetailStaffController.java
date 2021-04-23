@@ -93,19 +93,19 @@ public class DetailStaffController extends BasicController<Window>
     public void doAfterCompose(Window comp) throws Exception {
         super.doAfterCompose(comp);
 
-        staff = (Staff) arg.get(Constants.OBJECT);
+        this.staff = (Staff) this.arg.get(Constants.OBJECT);
 
-        model = (ListModel) arg.get(Constants.MODEL);
+        this.model = (ListModel) this.arg.get(Constants.MODEL);
         
-        index = (Integer) arg.get(Constants.INDEX);
+        this.index = (Integer) this.arg.get(Constants.INDEX);
         
         initData();
     }
 
     public void initData() {
-        if (Validator.isNotNull(staff)) {
-            winDetailStaff.setTitle(Labels.getLabel(LanguageKeys.TITLE_STAFF_DETAIL,
-                    new Object[]{staff.getStaffName()}));
+        if (Validator.isNotNull(this.staff)) {
+            this.winDetailStaff.setTitle(Labels.getLabel(LanguageKeys.TITLE_STAFF_DETAIL,
+                    new Object[]{this.staff.getStaffName()}));
 
             this.onLoadData();
 
@@ -116,62 +116,62 @@ public class DetailStaffController extends BasicController<Window>
     }
 
     public void onLoadData() {
-        lbStaffName.setValue(staff.getStaffName());
-        lbDeptName.setValue(staff.getDepartment()!=null?
-                staff.getDepartment().getDeptName():StringPool.BLANK);
-        lbJobTitle.setValue(staff.getJob()!=null?
-                staff.getJob().getJobTitle():StringPool.BLANK);
-        lbWorkDate.setValue(GetterUtil.getDate(
-                staff.getWorkDate(), DateUtil.SHORT_DATE_PATTERN));
-        lbDateOfBirth.setValue(GetterUtil.getDate(
-                staff.getDateOfBirth(), DateUtil.SHORT_DATE_PATTERN));
-        lbPermanentResidence.setValue(staff.getPermanentResidence());
-        lbCurrentResidence.setValue(staff.getCurrentResidence());
-        lbStatus.setValue(Values.getStaffStatus(staff.getStatus()));
-        lbNote.setValue(staff.getNote());
-        lbContractType.setValue(staff.getContractType()!=null?
-                staff.getContractType().getContractTypeName():StringPool.BLANK);
-        lbContractFromDate.setValue(GetterUtil.getDate(
-                staff.getContractFromDate(), DateUtil.SHORT_DATE_PATTERN));
-        lbContractToDate.setValue(GetterUtil.getDate(
-                staff.getContractToDate(), DateUtil.SHORT_DATE_PATTERN));
-        lbContractNumber.setValue(staff.getContractNumber());
-        lbTaxCode.setValue(staff.getTaxCode());
-        lbSalaryBasic.setValue(GetterUtil.getFormat(staff.getSalaryBasic()));
-        lbInsurancePaidDate.setValue(GetterUtil.getDate(
-                staff.getInsurancePaidDate(), DateUtil.SHORT_DATE_PATTERN));
-        lbInsuranceBookNumber.setValue(staff.getInsuranceBookNumber());
-        lbPaidPlace.setValue(staff.getPaidPlace());
-        lbLevels.setValue(staff.getLevels());
-        lbMajors.setValue(staff.getMajors());
-        lbCollege.setValue(staff.getCollege());
-        lbIdentityCard.setValue(staff.getIdentityCard());
-        lbGrantDate.setValue(GetterUtil.getDate(
-                staff.getGrantDate(), DateUtil.SHORT_DATE_PATTERN));
-        lbGrantPlace.setValue(staff.getGrantPlace());
-        lbMobile.setValue(staff.getMobile());
-        lbHomePhone.setValue(staff.getHomePhone());
-        lbEmail.setValue(staff.getEmail());
+        this.lbStaffName.setValue(this.staff.getStaffName());
+        this.lbDeptName.setValue(this.staff.getDepartment()!=null?
+                this.staff.getDepartment().getDeptName():StringPool.BLANK);
+        this.lbJobTitle.setValue(this.staff.getJob()!=null?
+                this.staff.getJob().getJobTitle():StringPool.BLANK);
+        this.lbWorkDate.setValue(GetterUtil.getDate(
+                this.staff.getWorkDate(), DateUtil.SHORT_DATE_PATTERN));
+        this.lbDateOfBirth.setValue(GetterUtil.getDate(
+                this.staff.getDateOfBirth(), DateUtil.SHORT_DATE_PATTERN));
+        this.lbPermanentResidence.setValue(this.staff.getPermanentResidence());
+        this.lbCurrentResidence.setValue(this.staff.getCurrentResidence());
+        this.lbStatus.setValue(Values.getStaffStatus(this.staff.getStatus()));
+        this.lbNote.setValue(this.staff.getNote());
+        this.lbContractType.setValue(this.staff.getContractType()!=null?
+                this.staff.getContractType().getContractTypeName():StringPool.BLANK);
+        this.lbContractFromDate.setValue(GetterUtil.getDate(
+                this.staff.getContractFromDate(), DateUtil.SHORT_DATE_PATTERN));
+        this.lbContractToDate.setValue(GetterUtil.getDate(
+                this.staff.getContractToDate(), DateUtil.SHORT_DATE_PATTERN));
+        this.lbContractNumber.setValue(this.staff.getContractNumber());
+        this.lbTaxCode.setValue(this.staff.getTaxCode());
+        this.lbSalaryBasic.setValue(GetterUtil.getFormat(this.staff.getSalaryBasic()));
+        this.lbInsurancePaidDate.setValue(GetterUtil.getDate(
+                this.staff.getInsurancePaidDate(), DateUtil.SHORT_DATE_PATTERN));
+        this.lbInsuranceBookNumber.setValue(this.staff.getInsuranceBookNumber());
+        this.lbPaidPlace.setValue(this.staff.getPaidPlace());
+        this.lbLevels.setValue(this.staff.getLevels());
+        this.lbMajors.setValue(this.staff.getMajors());
+        this.lbCollege.setValue(this.staff.getCollege());
+        this.lbIdentityCard.setValue(this.staff.getIdentityCard());
+        this.lbGrantDate.setValue(GetterUtil.getDate(
+                this.staff.getGrantDate(), DateUtil.SHORT_DATE_PATTERN));
+        this.lbGrantPlace.setValue(this.staff.getGrantPlace());
+        this.lbMobile.setValue(this.staff.getMobile());
+        this.lbHomePhone.setValue(this.staff.getHomePhone());
+        this.lbEmail.setValue(this.staff.getEmail());
     }
 
     public void onLoadSalaryLandmark() {
         List<SalaryLandmark> salaryLandmarks = 
-                staffService.getSalaryLandmarkByStaffId(staff.getStaffId());
+                this.staffService.getSalaryLandmarkByStaffId(this.staff.getStaffId());
 
-        listSalaryLm.setItemRenderer(new SalaryLandmarkRender(winDetailStaff, staff));
-        listSalaryLm.setModel(new ListModelList<SalaryLandmark>(salaryLandmarks));
+        this.listSalaryLm.setItemRenderer(new SalaryLandmarkRender(this.winDetailStaff, this.staff));
+        this.listSalaryLm.setModel(new ListModelList<SalaryLandmark>(salaryLandmarks));
     }
 
     public void onLoadWorkProcess() {
         List<WorkProcess> workProcesses = 
-                staffService.getWorkProcessByStaffId(staff.getStaffId());
+                this.staffService.getWorkProcessByStaffId(this.staff.getStaffId());
         
-        listWorkProcess.setItemRenderer(new WorkProcessRender(winDetailStaff, staff));
-        listWorkProcess.setModel(new ListModelList<WorkProcess>(workProcesses));
+        this.listWorkProcess.setItemRenderer(new WorkProcessRender(this.winDetailStaff, this.staff));
+        this.listWorkProcess.setModel(new ListModelList<WorkProcess>(workProcesses));
     }
 
     public void onClick$btnCancel() {
-        winDetailStaff.detach();
+        this.winDetailStaff.detach();
     }
 
     public void onDeleteStaff(Event event) throws Exception {
@@ -183,10 +183,11 @@ public class DetailStaffController extends BasicController<Window>
                 Messagebox.QUESTION,
                 new EventListener() {
 
-                    public void onEvent(Event e) throws Exception {
+                    @Override
+					public void onEvent(Event e) throws Exception {
                         if (Messagebox.ON_OK.equals(e.getName())) {
                             try {
-                                staffService.deleteSalaryLm(salaryLm);
+                                DetailStaffController.this.staffService.deleteSalaryLm(salaryLm);
 
                                 ComponentUtil.createSuccessMessageBox(
                                         LanguageKeys.MESSAGE_DELETE_SUCCESS);
@@ -212,10 +213,11 @@ public class DetailStaffController extends BasicController<Window>
                 Messagebox.QUESTION,
                 new EventListener() {
 
-                    public void onEvent(Event e) throws Exception {
+                    @Override
+					public void onEvent(Event e) throws Exception {
                         if (Messagebox.ON_OK.equals(e.getName())) {
                             try {
-                                staffService.deleteWorkProcess(wp);
+                                DetailStaffController.this.staffService.deleteWorkProcess(wp);
 
                                 ComponentUtil.createSuccessMessageBox(
                                         LanguageKeys.MESSAGE_DELETE_SUCCESS);
@@ -235,8 +237,8 @@ public class DetailStaffController extends BasicController<Window>
     public void onClick$btnAddSalaryLm() {
         Map map = new HashMap();
 
-        map.put(Constants.PARENT_WINDOW, winDetailStaff);
-        map.put(Constants.OBJECT, staff);
+        map.put(Constants.PARENT_WINDOW, this.winDetailStaff);
+        map.put(Constants.OBJECT, this.staff);
 
         Window win = (Window) Executions.createComponents(
                 ADD_EDIT_SALARY_LANDMARK_PAGE, null, map);
@@ -247,8 +249,8 @@ public class DetailStaffController extends BasicController<Window>
     public void onClick$btnAddWorkProcess() {
         Map map = new HashMap();
 
-        map.put(Constants.PARENT_WINDOW, winDetailStaff);
-        map.put(Constants.OBJECT, staff);
+        map.put(Constants.PARENT_WINDOW, this.winDetailStaff);
+        map.put(Constants.OBJECT, this.staff);
 
         Window win = (Window) Executions.createComponents(
                 ADD_EDIT_WORK_PROCESS_PAGE, null, map);
@@ -265,36 +267,36 @@ public class DetailStaffController extends BasicController<Window>
     }
     
     public void onClick$btnPrevious() throws Exception{
-        if(index == 0){
-            index = (model.getSize() - 1);
+        if(this.index == 0){
+            this.index = (this.model.getSize() - 1);
         } else {
-            index--;
+            this.index--;
         }
         
-        staff = (Staff) model.getElementAt(index);
+        this.staff = (Staff) this.model.getElementAt(this.index);
         
         initData();
     }
     
     public void onClick$btnNext() throws Exception{
-        if(index == (model.getSize() - 1)){
-            index = 0;
+        if(this.index == (this.model.getSize() - 1)){
+            this.index = 0;
         } else {
-            index++;
+            this.index++;
         }
         
-        staff = (Staff) model.getElementAt(index);
+        this.staff = (Staff) this.model.getElementAt(this.index);
         
         initData();
     }
     
     //get set service
     public StaffService getStaffService() {
-        if (staffService == null) {
-            staffService = (StaffService) SpringUtil.getBean("staffService");
-            setStaffService(staffService);
+        if (this.staffService == null) {
+            this.staffService = (StaffService) SpringUtil.getBean("staffService");
+            setStaffService(this.staffService);
         }
-        return staffService;
+        return this.staffService;
     }
 
     public void setStaffService(StaffService staffService) {

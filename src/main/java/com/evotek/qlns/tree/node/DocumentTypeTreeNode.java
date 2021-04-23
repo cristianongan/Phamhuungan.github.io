@@ -49,7 +49,7 @@ public class DocumentTypeTreeNode extends DefaultTreeNode<DocumentType> {
     }
 
     public boolean isOpen() {
-        return open;
+        return this.open;
     }
 
     public void setOpen(boolean open) {

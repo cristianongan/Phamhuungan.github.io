@@ -22,10 +22,11 @@ import com.evotek.qlns.model.ContractType;
  *
  * @author My PC
  */
-public class ContractTypeDAOImpl extends BasicDAO<ContractType> implements 
+public class ContractTypeDAOImpl extends AbstractDAO<ContractType> implements 
         ContractTypeDAO{
 
-    public List<ContractType> getContract() {
+    @Override
+	public List<ContractType> getContract() {
         List<ContractType> results = new ArrayList<ContractType>();
 
         try {
@@ -35,7 +36,7 @@ public class ContractTypeDAOImpl extends BasicDAO<ContractType> implements
 
             cri.addOrder(Order.asc("contractTypeName"));
 
-            results = (List<ContractType>) cri.list();
+            results = cri.list();
 
         } catch (Exception e) {
             _log.error(e.getMessage(), e);

@@ -39,7 +39,8 @@ public class WorkProcessRender implements ListitemRenderer<WorkProcess>{
         this._staff = staff;
     }
     
-    public void render(Listitem item, WorkProcess wp, int index) throws Exception {
+    @Override
+	public void render(Listitem item, WorkProcess wp, int index) throws Exception {
         item.setAttribute("data", wp);
         
         item.appendChild(ComponentUtil.createListcell(GetterUtil.getDate(
@@ -71,7 +72,7 @@ public class WorkProcessRender implements ListitemRenderer<WorkProcess>{
                 Constants.Z_ICON_PENCIL, Constants.BLUE));
 
         //Thêm action "Xóa"
-        hlayout.appendChild(ComponentUtil.createButton(_winParent,
+        hlayout.appendChild(ComponentUtil.createButton(this._winParent,
                 Labels.getLabel(LanguageKeys.BUTTON_DELETE), 
                 ComponentUtil.DEL_TOOLTIP, Events.ON_CLICK,
                 "onDeleteWorkProcess", wp, Constants.Z_ICON_TRASH_O,
@@ -88,9 +89,9 @@ public class WorkProcessRender implements ListitemRenderer<WorkProcess>{
             WorkProcess wp, String title) {
         Map<String, Object> parameters = new HashMap<String, Object>();
 
-        parameters.put(Constants.PARENT_WINDOW, _winParent);
+        parameters.put(Constants.PARENT_WINDOW, this._winParent);
         parameters.put(Constants.TITLE, title);
-        parameters.put(Constants.OBJECT, _staff);
+        parameters.put(Constants.OBJECT, this._staff);
         parameters.put(Constants.EDIT_OBJECT, wp);
 
         return parameters;

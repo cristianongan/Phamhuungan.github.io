@@ -53,25 +53,27 @@ public class LikeExpression implements Criterion {
         this.escapeChar = escapeChar;
     }
 
-    public String toSqlString(
+    @Override
+	public String toSqlString(
             Criteria criteria,
             CriteriaQuery criteriaQuery) throws HibernateException {
         Dialect dialect = criteriaQuery.getFactory().getDialect();
-        String[] columns = criteriaQuery.getColumnsUsingProjection(criteria, propertyName);
+        String[] columns = criteriaQuery.getColumnsUsingProjection(criteria, this.propertyName);
         if (columns.length != 1) {
             throw new HibernateException("Like may only be used with single-column properties");
         }
         String lhs = lhs(dialect, columns[0]);
-        return lhs + " like ?" + (escapeChar == null ? "" : " escape ?");
+        return lhs + " like ?" + (this.escapeChar == null ? "" : " escape ?");
 
     }
 
-    public TypedValue[] getTypedValues(
+    @Override
+	public TypedValue[] getTypedValues(
             Criteria criteria,
             CriteriaQuery criteriaQuery) throws HibernateException {
         return new TypedValue[]{
-                    criteriaQuery.getTypedValue(criteria, propertyName, typedValue(value)),
-                    criteriaQuery.getTypedValue(criteria, propertyName, escapeChar.toString())
+                    criteriaQuery.getTypedValue(criteria, this.propertyName, typedValue(this.value)),
+                    criteriaQuery.getTypedValue(criteria, this.propertyName, this.escapeChar.toString())
                 };
     }
 

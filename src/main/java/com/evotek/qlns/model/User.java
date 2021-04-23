@@ -51,7 +51,7 @@ public class User implements Serializable {
 
     @Column(name = "dept_id", precision = 22, scale = 0)
     public Long getDeptId() {
-        return deptId;
+        return this.deptId;
     }
 
     public void setDeptId(Long deptId) {
@@ -62,7 +62,7 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id", unique = true, nullable = false, precision = 22, scale = 0)
     public Long getUserId() {
-        return userId;
+        return this.userId;
     }
 
     public void setUserId(Long userId) {
@@ -71,7 +71,7 @@ public class User implements Serializable {
 
     @Column(name = "description", length = 1000)
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     public void setDescription(String description) {
@@ -80,7 +80,7 @@ public class User implements Serializable {
 
     @Column(name = "phone", length = 20)
     public String getPhone() {
-        return phone;
+        return this.phone;
     }
 
     public void setPhone(String phone) {
@@ -90,7 +90,7 @@ public class User implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "modified_date", length = 7)
     public Date getModifiedDate() {
-        return modifiedDate;
+        return this.modifiedDate;
     }
 
     public void setModifiedDate(Date modifiedDate) {
@@ -99,7 +99,7 @@ public class User implements Serializable {
 
     @Column(name = "status", nullable = false, precision = 22, scale = 0)
     public Long getStatus() {
-        return status;
+        return this.status;
     }
 
     public void setStatus(Long status) {
@@ -108,7 +108,7 @@ public class User implements Serializable {
 
     @Column(name = "mobile", length = 20)
     public String getMobile() {
-        return mobile;
+        return this.mobile;
     }
 
     public void setMobile(String mobile) {
@@ -117,7 +117,7 @@ public class User implements Serializable {
 
     @Column(name = "last_name", length = 200)
     public String getLastName() {
-        return lastName;
+        return this.lastName;
     }
 
     public void setLastName(String lastName) {
@@ -126,7 +126,7 @@ public class User implements Serializable {
 
     @Column(name = "first_name", length = 200)
     public String getFirstName() {
-        return firstName;
+        return this.firstName;
     }
 
     public void setFirstName(String firstName) {
@@ -135,7 +135,7 @@ public class User implements Serializable {
 
     @Column(name = "middle_name", length = 200)
     public String getMiddleName() {
-        return middleName;
+        return this.middleName;
     }
 
     public void setMiddleName(String middleName) {
@@ -144,7 +144,7 @@ public class User implements Serializable {
 
     @Column(name = "user_name", unique = true, length = 200)
     public String getUserName() {
-        return userName;
+        return this.userName;
     }
 
     public void setUserName(String userName) {
@@ -153,7 +153,7 @@ public class User implements Serializable {
 
     @Column(name = "gender", precision = 22, scale = 0)
     public Long getGender() {
-        return gender;
+        return this.gender;
     }
 
     public void setGender(Long gender) {
@@ -163,7 +163,7 @@ public class User implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "date_of_birth", length = 7)
     public Date getDateOfBirth() {
-        return dateOfBirth;
+        return this.dateOfBirth;
     }
 
     public void setDateOfBirth(Date dateOfBirth) {
@@ -172,7 +172,7 @@ public class User implements Serializable {
 
     @Column(name = "email", length = 100)
     public String getEmail() {
-        return email;
+        return this.email;
     }
 
     public void setEmail(String email) {
@@ -182,7 +182,7 @@ public class User implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date", length = 7)
     public Date getCreateDate() {
-        return createDate;
+        return this.createDate;
     }
 
     public void setCreateDate(Date createDate) {
@@ -191,7 +191,7 @@ public class User implements Serializable {
 
     @Column(name = "password", length = 255)
     public String getPassword() {
-        return password;
+        return this.password;
     }
 
     public void setPassword(String password) {
@@ -200,7 +200,7 @@ public class User implements Serializable {
 
     @Column(name = "birth_place", length = 200)
     public String getBirthPlace() {
-        return birthPlace;
+        return this.birthPlace;
     }
 
     public void setBirthPlace(String birthPlace) {
@@ -209,7 +209,7 @@ public class User implements Serializable {
 
     @Column(name = "address", length = 200)
     public String getAddress() {
-        return address;
+        return this.address;
     }
 
     public void setAddress(String address) {
@@ -225,7 +225,7 @@ public class User implements Serializable {
 //    @LazyCollection(LazyCollectionOption.EXTRA)
     @Fetch(FetchMode.SELECT)
     public Set<Role> getRoles() {
-        return roles;
+        return this.roles;
     }
 
     public void setRoles(Set<Role> roles) {
@@ -234,7 +234,7 @@ public class User implements Serializable {
 
     @Column(name = "verification_code", length = 255)
     public String getVerificationCode() {
-        return verificationCode;
+        return this.verificationCode;
     }
 
     public void setVerificationCode(String verificationCode) {
@@ -244,16 +244,16 @@ public class User implements Serializable {
     
     @Transient
     public boolean isActive() {
-        if (status == null) {
+        if (this.status == null) {
             return false;
         }
 
-        return !status.equals(0L);
+        return !this.status.equals(0L);
     }
 
     @Transient
     public String getDeptName() {
-        return deptName;
+        return this.deptName;
     }
 
     public void setDeptName(String deptName) {

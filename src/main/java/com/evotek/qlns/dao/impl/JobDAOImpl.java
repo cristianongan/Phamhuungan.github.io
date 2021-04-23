@@ -23,9 +23,10 @@ import com.evotek.qlns.model.Job;
  *
  * @author My PC
  */
-public class JobDAOImpl extends BasicDAO<Job> implements 
+public class JobDAOImpl extends AbstractDAO<Job> implements 
         JobDAO{
-    public List<Job> getJobTitle(){
+    @Override
+	public List<Job> getJobTitle(){
         List<Job> results = new ArrayList<Job>();
 
         try {
@@ -35,7 +36,7 @@ public class JobDAOImpl extends BasicDAO<Job> implements
 
             cri.addOrder(Order.asc("jobTitle"));
 
-            results = (List<Job>) cri.list();
+            results = cri.list();
 
         } catch (Exception e) {
             _log.error(e.getMessage(), e);
@@ -44,7 +45,8 @@ public class JobDAOImpl extends BasicDAO<Job> implements
         return results;
     }
     
-    public List<String> getJobTitleOnly() {
+    @Override
+	public List<String> getJobTitleOnly() {
         List<String> results = new ArrayList<String>();
 
         try {
@@ -57,7 +59,7 @@ public class JobDAOImpl extends BasicDAO<Job> implements
             
             cri.addOrder(Order.asc("jobTitle"));
 
-            results = (List<String>) cri.list();
+            results = cri.list();
 
         } catch (Exception e) {
             _log.error(e.getMessage(), e);

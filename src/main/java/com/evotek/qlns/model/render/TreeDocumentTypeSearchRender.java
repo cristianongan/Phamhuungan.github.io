@@ -33,8 +33,9 @@ public class TreeDocumentTypeSearchRender implements
         this.btnClear = btnClear;
     }
 
-    public void render(Treeitem treeItem, DocumentTypeTreeNode t, int i) throws Exception {
-        DocumentType documentType = (DocumentType) t.getData();
+    @Override
+	public void render(Treeitem treeItem, DocumentTypeTreeNode t, int i) throws Exception {
+        DocumentType documentType = t.getData();
 
         Treerow dataRow = new Treerow();
 
@@ -46,17 +47,17 @@ public class TreeDocumentTypeSearchRender implements
             public void onEvent(Event t) throws Exception {
                 DocumentTypeTreeNode clickedNodeValue = ((Treeitem) t.getTarget()).getValue();
 
-                bbTemp.setValue(clickedNodeValue.getData().getTypeName());
+                TreeDocumentTypeSearchRender.this.bbTemp.setValue(clickedNodeValue.getData().getTypeName());
                 
-                bbTemp.setAttribute(Constants.OBJECT,
+                TreeDocumentTypeSearchRender.this.bbTemp.setAttribute(Constants.OBJECT,
                         clickedNodeValue.getData());
-                bbTemp.setAttribute(Constants.ID,
+                TreeDocumentTypeSearchRender.this.bbTemp.setAttribute(Constants.ID,
                         clickedNodeValue.getData().getDocumentTypeId());
                
-                bbTemp.close();
+                TreeDocumentTypeSearchRender.this.bbTemp.close();
                 
-                btnClear.setVisible(true);
-                btnClear.setDisabled(false);
+                TreeDocumentTypeSearchRender.this.btnClear.setVisible(true);
+                TreeDocumentTypeSearchRender.this.btnClear.setDisabled(false);
             }
         });
 

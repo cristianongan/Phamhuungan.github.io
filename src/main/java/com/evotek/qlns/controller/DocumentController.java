@@ -114,7 +114,7 @@ public class DocumentController extends BasicController<Hlayout>
         
         ServletContext context = Sessions.getCurrent().getWebApp().getServletContext();
         
-        docTypeMap = documentTypeService.getDocTypeMap(context);
+        this.docTypeMap = this.documentTypeService.getDocTypeMap(context);
     }
     
     @Override
@@ -131,7 +131,7 @@ public class DocumentController extends BasicController<Hlayout>
     }
 
     public void onCreate$navbar() {
-        List<DocumentType> roots = docTypeMap.get(null);
+        List<DocumentType> roots = this.docTypeMap.get(null);
         
         Collections.sort(roots);
 
@@ -140,18 +140,18 @@ public class DocumentController extends BasicController<Hlayout>
                 continue;
             }
 
-            createDocTypeNav(root, navbar);
+            createDocTypeNav(root, this.navbar);
         }
     }
     
     public void onCreate$navbarSearch() {
-        docTypes = documentTypeService.getAllDocumentType();
+        this.docTypes = this.documentTypeService.getAllDocumentType();
     }
     
     public void onFilterDocType(String _key) {
-        navbarSearch.getChildren().clear();
+        this.navbarSearch.getChildren().clear();
 
-        for (DocumentType docType : docTypes) {
+        for (DocumentType docType : this.docTypes) {
             if (docType.getTypeName().toLowerCase().contains(_key.toLowerCase())) {
                 final Navitem navItem = new Navitem();
 
@@ -165,15 +165,16 @@ public class DocumentController extends BasicController<Hlayout>
 
                 navItem.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
-                    public void onEvent(Event t) throws Exception {
+                    @Override
+					public void onEvent(Event t) throws Exception {
                         navItem.setSelected(true);
                     }
                 });
 
-                navItem.addForward(Events.ON_CLICK, winDocument, ZkKeys.ON_LOAD_DATA, 
+                navItem.addForward(Events.ON_CLICK, this.winDocument, ZkKeys.ON_LOAD_DATA, 
                     new Object[]{navItem, docType});
                 
-                navbarSearch.appendChild(navItem);
+                this.navbarSearch.appendChild(navItem);
             }
         }
         
@@ -181,7 +182,7 @@ public class DocumentController extends BasicController<Hlayout>
     }
     
     private void createDocTypeNav(DocumentType docType, Component parentNode){
-        List<DocumentType> childs = docTypeMap.get(docType.getDocumentTypeId());
+        List<DocumentType> childs = this.docTypeMap.get(docType.getDocumentTypeId());
         
         if(Validator.isNull(childs)){
             final Navitem navItem = new Navitem();
@@ -196,12 +197,13 @@ public class DocumentController extends BasicController<Hlayout>
             
             navItem.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
-                public void onEvent(Event t) throws Exception {
+                @Override
+				public void onEvent(Event t) throws Exception {
                     navItem.setSelected(true);
                 }
             });
             
-            navItem.addForward(Events.ON_CLICK, winDocument, ZkKeys.ON_LOAD_DATA, 
+            navItem.addForward(Events.ON_CLICK, this.winDocument, ZkKeys.ON_LOAD_DATA, 
                     new Object[]{navItem, docType});
             
             parentNode.appendChild(navItem);
@@ -224,7 +226,7 @@ public class DocumentController extends BasicController<Hlayout>
                 createDocTypeNav(child, nav);
             }
             
-            nav.addForward(Events.ON_OPEN, winDocument, ZkKeys.ON_LOAD_DATA, 
+            nav.addForward(Events.ON_OPEN, this.winDocument, ZkKeys.ON_LOAD_DATA, 
                     new Object[]{nav, docType});
             
             parentNode.appendChild(nav);
@@ -232,25 +234,25 @@ public class DocumentController extends BasicController<Hlayout>
     }
     
     public void onClick$toggler() {
-        Include include = (Include) winDocument.getParent();
+        Include include = (Include) this.winDocument.getParent();
         
-        if (navbar.isCollapsed()) {
-            sidebar.setSclass("sidebar");
-            navbar.setCollapsed(false);
-            toggler.setIconSclass("z-icon-angle-double-left");
+        if (this.navbar.isCollapsed()) {
+            this.sidebar.setSclass("sidebar");
+            this.navbar.setCollapsed(false);
+            this.toggler.setIconSclass("z-icon-angle-double-left");
             include.setSclass("bodylayout-max");
             
-            tbSearchDocType.setVisible(true);
+            this.tbSearchDocType.setVisible(true);
         } else {
-            sidebar.setSclass("sidebar sidebar-min");
-            navbar.setCollapsed(true);
-            toggler.setIconSclass("z-icon-angle-double-right");
+            this.sidebar.setSclass("sidebar sidebar-min");
+            this.navbar.setCollapsed(true);
+            this.toggler.setIconSclass("z-icon-angle-double-right");
             include.setSclass("bodylayout-min");
             
-            tbSearchDocType.setVisible(false);
+            this.tbSearchDocType.setVisible(false);
         }
         // Force the hlayout contains sidebar to recalculate its size
-        Clients.resize(sidebar.getRoot().query("#main"));
+        Clients.resize(this.sidebar.getRoot().query("#main"));
     }
     
     public void onChanging$tbSearchDocType(InputEvent event){
@@ -258,10 +260,10 @@ public class DocumentController extends BasicController<Hlayout>
         
         boolean visible = Validator.isNotNull(_key);
         
-        navbarSearch.setVisible(visible);
-        togglerBack.setVisible(visible);
-        navbar.setVisible(!visible);
-        toggler.setVisible(!visible);
+        this.navbarSearch.setVisible(visible);
+        this.togglerBack.setVisible(visible);
+        this.navbar.setVisible(!visible);
+        this.toggler.setVisible(!visible);
         
         if(visible){
             this.onFilterDocType(_key);
@@ -269,12 +271,12 @@ public class DocumentController extends BasicController<Hlayout>
     }
     
     public void onClick$togglerBack(){
-        tbSearchDocType.setValue(StringPool.BLANK);
+        this.tbSearchDocType.setValue(StringPool.BLANK);
         
-        navbarSearch.setVisible(false);
-        togglerBack.setVisible(false);
-        navbar.setVisible(true);
-        toggler.setVisible(true);
+        this.navbarSearch.setVisible(false);
+        this.togglerBack.setVisible(false);
+        this.navbar.setVisible(true);
+        this.toggler.setVisible(true);
     }
     
     public void onLoadData(Event event) {
@@ -288,28 +290,28 @@ public class DocumentController extends BasicController<Hlayout>
             
             if(!nav.isOpen()){
                 return;
-            } else if (selectedNavitem!=null){
-                selectedNavitem.setSelected(false);
+            } else if (this.selectedNavitem!=null){
+                this.selectedNavitem.setSelected(false);
             }
         } else if(comp instanceof Navitem){
-            selectedNavitem = (Navitem) comp;
+            this.selectedNavitem = (Navitem) comp;
         }
         
         List<Long> docTypeIds = new ArrayList<Long>();
 
         getListDocumentTypeChild(docType, docTypeIds);
         
-        paramMap.put("docTypeIds", docTypeIds);
+        this.paramMap.put("docTypeIds", docTypeIds);
         
-        ListModel model = new ManagerDocumentListModel(listboxResult.getPageSize(), 
-                StringPool.BLANK, true, docTypeIds, true, documentService);
+        ListModel model = new ManagerDocumentListModel(this.listboxResult.getPageSize(), 
+                StringPool.BLANK, true, docTypeIds, true, this.documentService);
         
-        listboxResult.setModel(model);
+        this.listboxResult.setModel(model);
         
-        listboxResult.setItemRenderer(
-                new ListboxDocumentRender(winDocument, model, documentService));
+        this.listboxResult.setItemRenderer(
+                new ListboxDocumentRender(this.winDocument, model, this.documentService));
 
-        listboxResult.setMultiple(true);
+        this.listboxResult.setMultiple(true);
     }
     
     public List<Long> getListDocumentTypeChild(DocumentType docParent, 
@@ -318,7 +320,7 @@ public class DocumentController extends BasicController<Hlayout>
             return docTypeList;
         }
 
-        List<DocumentType> childs = docTypeMap.get(docParent.getDocumentTypeId());
+        List<DocumentType> childs = this.docTypeMap.get(docParent.getDocumentTypeId());
 
         docTypeList.add(docParent.getDocumentTypeId());
         
@@ -336,24 +338,24 @@ public class DocumentController extends BasicController<Hlayout>
     }
     
     public void onOK$tbKeyword() {
-        isAdvance = false;
+        this.isAdvance = false;
         
         this.refreshModel();
     }
     
     public void onClick$btnBasicSearch() {
-        isAdvance = false;
+        this.isAdvance = false;
         
         this.refreshModel();
         
     }
     
     public void onClick$btnEnableAdvSearch() {
-        advanceSearchPopup.open(btnEnableAdvSearch, ZkKeys.OVERLAP_END);
+        this.advanceSearchPopup.open(this.btnEnableAdvSearch, ZkKeys.OVERLAP_END);
         
-        txtDocumentNumber.setFocus(true);
+        this.txtDocumentNumber.setFocus(true);
         
-        isAdvance = true;
+        this.isAdvance = true;
     }
     
     public void onClick$btnAdvSearch(){
@@ -377,10 +379,11 @@ public class DocumentController extends BasicController<Hlayout>
                     Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION, 
                     Messagebox.OK, new EventListener() {
 
-                        public void onEvent(Event e) throws Exception {
+                        @Override
+						public void onEvent(Event e) throws Exception {
                             if (Messagebox.ON_OK.equals(e.getName())) {
                                 try {
-                                    documentService.deleteAll(docs);
+                                    DocumentController.this.documentService.deleteAll(docs);
 
                                     ComponentUtil.createSuccessMessageBox(
                                             LanguageKeys.MESSAGE_DELETE_SUCCESS);
@@ -402,7 +405,7 @@ public class DocumentController extends BasicController<Hlayout>
     private List<Document> getSelectedDocument(){
         List<Document> docs = new ArrayList<Document>();
 
-        for (Listitem item : listboxResult.getSelectedItems()) {
+        for (Listitem item : this.listboxResult.getSelectedItems()) {
             Document doc = (Document) item.getAttribute("data");
 
             if(Validator.isNotNull(doc)){
@@ -414,9 +417,9 @@ public class DocumentController extends BasicController<Hlayout>
     }
     
     public void refreshModel() {
-        navbar.clearSelection();
+        this.navbar.clearSelection();
         
-        if (isAdvance) {
+        if (this.isAdvance) {
             this.advanceSearch();
         } else {
             this.basicSearch();
@@ -426,10 +429,10 @@ public class DocumentController extends BasicController<Hlayout>
     public void onClick$btnAddDoc() {
         Map map = new HashMap();
         
-        map.put(Constants.PARENT_WINDOW, winDocument);
+        map.put(Constants.PARENT_WINDOW, this.winDocument);
         map.put(Constants.OBJECT, null);
 
-        Window win = (Window) Executions.createComponents(EDIT_PAGE, null, map);
+        Window win = (Window) Executions.createComponents(this.EDIT_PAGE, null, map);
         
         win.doModal();
     }
@@ -442,10 +445,11 @@ public class DocumentController extends BasicController<Hlayout>
                 Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION, 
                 Messagebox.OK, new EventListener() {
 
-                    public void onEvent(Event e) throws Exception {
+                    @Override
+					public void onEvent(Event e) throws Exception {
                         if (Messagebox.ON_OK.equals(e.getName())) {
                             try {
-                                documentService.delete(document);
+                                DocumentController.this.documentService.delete(document);
 
                                 ComponentUtil.createSuccessMessageBox(
                                         LanguageKeys.MESSAGE_DELETE_SUCCESS);
@@ -466,9 +470,9 @@ public class DocumentController extends BasicController<Hlayout>
     public void onClick$btnDocTypeManager() {
         Map map = new HashMap();
         
-        map.put(Constants.PARENT_WINDOW, winDocument);
+        map.put(Constants.PARENT_WINDOW, this.winDocument);
 
-        Window win = (Window) Executions.createComponents(DOCUMENT_TYPE_PAGE, 
+        Window win = (Window) Executions.createComponents(this.DOCUMENT_TYPE_PAGE, 
                 null, map);
         
         win.doModal();
@@ -537,29 +541,29 @@ public class DocumentController extends BasicController<Hlayout>
         List<Document> results = new ArrayList<Document>();
 
         try {
-            List<Long> docTypeIds = (List<Long>) paramMap.get("docTypeIds");
+            List<Long> docTypeIds = (List<Long>) this.paramMap.get("docTypeIds");
             
             if(Validator.isNotNull(docTypeIds)){
-                return documentService.getDocumentListByIdList(docTypeIds,
+                return this.documentService.getDocumentListByIdList(docTypeIds,
                         QueryUtil.GET_ALL, QueryUtil.GET_ALL, null, null);
             }
             
-            if (isAdvance) {
-                String documentContent = (String) paramMap.get("documentContent");
-                String documentNumber = (String) paramMap.get("documentNumber");
-                Long documentType = (Long) paramMap.get("documentType");
-                String department = (String) paramMap.get("department");
-                Date fromDate = (Date) paramMap.get("fromDate");
-                Date toDate = (Date) paramMap.get("toDate");
+            if (this.isAdvance) {
+                String documentContent = (String) this.paramMap.get("documentContent");
+                String documentNumber = (String) this.paramMap.get("documentNumber");
+                Long documentType = (Long) this.paramMap.get("documentType");
+                String department = (String) this.paramMap.get("department");
+                Date fromDate = (Date) this.paramMap.get("fromDate");
+                Date toDate = (Date) this.paramMap.get("toDate");
 
-                results = documentService.getDocumentListAdv(documentContent,
+                results = this.documentService.getDocumentListAdv(documentContent,
                             documentNumber, documentType, department, fromDate,
                             toDate, QueryUtil.GET_ALL, QueryUtil.GET_ALL, null, 
                             null);
             } else {
-                String keyword = (String) paramMap.get("keyword");
+                String keyword = (String) this.paramMap.get("keyword");
 
-                results = documentService.getDocumentListBasic(keyword,
+                results = this.documentService.getDocumentListBasic(keyword,
                         QueryUtil.GET_ALL, QueryUtil.GET_ALL, null, null);
             }
         } catch (Exception ex) {
@@ -574,7 +578,7 @@ public class DocumentController extends BasicController<Hlayout>
     }
 
     public void onLoadPage(Event event){
-        Component comp = winDocument.getParent();
+        Component comp = this.winDocument.getParent();
         
         if(comp instanceof Include){
             Include inc = (Include) comp;
@@ -587,66 +591,67 @@ public class DocumentController extends BasicController<Hlayout>
     }
 
     public void onCreate$cbDepartment() {
-        ListModel dictModel = new SimpleListModel(documentService.getDepartment());
-        cbDepartment.setModel(dictModel);
+        ListModel dictModel = new SimpleListModel(this.documentService.getDepartment());
+        this.cbDepartment.setModel(dictModel);
     }
 
     public void advanceSearch() {
-        String documentContent = GetterUtil.getString(txtDocumentContent.getValue());
-        String documentNumber = GetterUtil.getString(txtDocumentNumber.getValue());
-        Long documentType = ComponentUtil.getBandboxValue(bbDocumentType);
-        String department = GetterUtil.getString(cbDepartment.getValue());
-        Date fromDate = dbFromDate.getValue();
-        Date toDate = dbToDate.getValue();
+        String documentContent = GetterUtil.getString(this.txtDocumentContent.getValue());
+        String documentNumber = GetterUtil.getString(this.txtDocumentNumber.getValue());
+        Long documentType = ComponentUtil.getBandboxValue(this.bbDocumentType);
+        String department = GetterUtil.getString(this.cbDepartment.getValue());
+        Date fromDate = this.dbFromDate.getValue();
+        Date toDate = this.dbToDate.getValue();
         
         //create param map
-        paramMap.put("documentContent", documentContent);
-        paramMap.put("documentNumber", documentNumber);
-        paramMap.put("documentType", documentType);
-        paramMap.put("department", department);
-        paramMap.put("fromDate", fromDate);
-        paramMap.put("toDate", toDate);
+        this.paramMap.put("documentContent", documentContent);
+        this.paramMap.put("documentNumber", documentNumber);
+        this.paramMap.put("documentType", documentType);
+        this.paramMap.put("department", department);
+        this.paramMap.put("fromDate", fromDate);
+        this.paramMap.put("toDate", toDate);
         
-        ListModel model = new ManagerDocumentListModel(listboxResult.getPageSize(),
+        ListModel model = new ManagerDocumentListModel(this.listboxResult.getPageSize(),
                 documentContent, documentNumber, documentType, department,
-                fromDate, toDate, isAdvance, null, false, documentService);
+                fromDate, toDate, this.isAdvance, null, false, this.documentService);
         
-        listboxResult.setModel(model);
+        this.listboxResult.setModel(model);
         
-        listboxResult.setItemRenderer(
-                new ListboxDocumentRender(winDocument, model, documentService));
+        this.listboxResult.setItemRenderer(
+                new ListboxDocumentRender(this.winDocument, model, this.documentService));
         
-        listboxResult.setMultiple(true);
+        this.listboxResult.setMultiple(true);
         
-        paramMap.remove("docTypeIds");
+        this.paramMap.remove("docTypeIds");
     }
 
     public void basicSearch() {
-        String keyword = GetterUtil.getString(tbKeyword.getValue());
+        String keyword = GetterUtil.getString(this.tbKeyword.getValue());
 
-        paramMap.put("keyword", keyword);
+        this.paramMap.put("keyword", keyword);
         
-        ListModel model = new ManagerDocumentListModel(listboxResult.getPageSize(), 
-                keyword, isAdvance, null, false, documentService);
+        ListModel model = new ManagerDocumentListModel(this.listboxResult.getPageSize(), 
+                keyword, this.isAdvance, null, false, this.documentService);
         
-        listboxResult.setModel(model);
+        this.listboxResult.setModel(model);
         
-        listboxResult.setItemRenderer(
-                new ListboxDocumentRender(winDocument, model, documentService));
+        this.listboxResult.setItemRenderer(
+                new ListboxDocumentRender(this.winDocument, model, this.documentService));
 
-        listboxResult.setMultiple(true);
+        this.listboxResult.setMultiple(true);
         
-        paramMap.remove("docTypeIds");
+        this.paramMap.remove("docTypeIds");
         
         if(Validator.isNotNull(keyword)){
             this.onHightLight(keyword);
             
-            listboxResult.addEventListener("onPaging", new EventListener<Event>() {
+            this.listboxResult.addEventListener("onPaging", new EventListener<Event>() {
                 
-                public void onEvent(Event t) throws Exception {
-                    String keyword = GetterUtil.getString(tbKeyword.getValue());
+                @Override
+				public void onEvent(Event t) throws Exception {
+                    String keyword = GetterUtil.getString(DocumentController.this.tbKeyword.getValue());
                     
-                    if(!isAdvance && Validator.isNotNull(keyword)){
+                    if(!DocumentController.this.isAdvance && Validator.isNotNull(keyword)){
                         onHightLight(keyword);
                     }
                 }
@@ -665,30 +670,30 @@ public class DocumentController extends BasicController<Hlayout>
     
     //Bandbox documentType
     public void onClick$btnClearDoc() {
-        bbDocumentType.setValue(StringPool.BLANK);
-        bbDocumentType.setAttribute(Constants.ID, null);
+        this.bbDocumentType.setValue(StringPool.BLANK);
+        this.bbDocumentType.setAttribute(Constants.ID, null);
         
-        btnClearDoc.setDisabled(true);
-        btnClearDoc.setVisible(false);
+        this.btnClearDoc.setDisabled(true);
+        this.btnClearDoc.setVisible(false);
     }
     
     public void onOpen$bbDocumentType(){
-        if(bbDocumentType.isOpen() 
-                && Validator.isNull(icDocumentType.getSrc())) {
-            icDocumentType.setAttribute("bandbox", bbDocumentType);
-            icDocumentType.setAttribute("btnclear", btnClearDoc);
+        if(this.bbDocumentType.isOpen() 
+                && Validator.isNull(this.icDocumentType.getSrc())) {
+            this.icDocumentType.setAttribute("bandbox", this.bbDocumentType);
+            this.icDocumentType.setAttribute("btnclear", this.btnClearDoc);
             
-            icDocumentType.setSrc(Constants.TREE_DOCUMENT_TYPE_PAGE);
+            this.icDocumentType.setSrc(Constants.TREE_DOCUMENT_TYPE_PAGE);
         }
     }
     //get set service
     public DocumentService getDocumentService() {
-        if (documentService == null) {
-            documentService = (DocumentService)
+        if (this.documentService == null) {
+            this.documentService = (DocumentService)
                     SpringUtil.getBean("documentService");
-            setDocumentService(documentService);
+            setDocumentService(this.documentService);
         }
-        return documentService;
+        return this.documentService;
     }
 
     public void setDocumentService(DocumentService documentService) {
@@ -696,12 +701,12 @@ public class DocumentController extends BasicController<Hlayout>
     }
 
     public DocumentTypeService getDocumentTypeService() {
-        if (documentTypeService == null) {
-            documentTypeService = (DocumentTypeService)
+        if (this.documentTypeService == null) {
+            this.documentTypeService = (DocumentTypeService)
                     SpringUtil.getBean("documentTypeService");
-            setDocumentTypeService(documentTypeService);
+            setDocumentTypeService(this.documentTypeService);
         }
-        return documentTypeService;
+        return this.documentTypeService;
     }
 
     public void setDocumentTypeService(DocumentTypeService documentTypeService) {

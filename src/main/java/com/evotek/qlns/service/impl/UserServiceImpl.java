@@ -12,11 +12,14 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Executions;
 
-import com.evotek.qlns.dao.CategoryDAO;
 import com.evotek.qlns.dao.GroupDAO;
 import com.evotek.qlns.dao.RightDAO;
 import com.evotek.qlns.dao.RoleDAO;
@@ -35,7 +38,6 @@ import com.evotek.qlns.util.DateUtil;
 import com.evotek.qlns.util.EncryptUtil;
 import com.evotek.qlns.util.GetterUtil;
 import com.evotek.qlns.util.MailUtil;
-import com.evotek.qlns.util.PermissionUtil;
 import com.evotek.qlns.util.RandomStringGeneratorUtil;
 import com.evotek.qlns.util.StaticUtil;
 import com.evotek.qlns.util.StringPool;
@@ -48,457 +50,447 @@ import com.evotek.qlns.util.key.Values;
  *
  * @author linhlh2
  */
+@Service
+@Transactional
 public class UserServiceImpl implements UserService {
 
-    private transient UserDAO userDAO;
-    private transient UsersLoginDAO usersLoginDAO;
-    private transient RoleDAO roleDAO;
-    private transient RightDAO rightDAO;
-    private transient GroupDAO groupDAO;
-    private transient CategoryDAO categoryDAO;
+	@Autowired
+	private UserDAO userDAO;
 
-    //get set method
+	@Autowired
+	private UsersLoginDAO usersLoginDAO;
 
-    public UserDAO getUserDAO() {
-        return userDAO;
-    }
+	@Autowired
+	private RoleDAO roleDAO;
 
-    public void setUserDAO(UserDAO usersDAO) {
-        this.userDAO = usersDAO;
-    }
+	@Autowired
+	private RightDAO rightDAO;
 
-    public CategoryDAO getCategoryDAO() {
-        return categoryDAO;
-    }
+	@Autowired
+	private GroupDAO groupDAO;
 
-    public void setCategoryDAO(CategoryDAO categoryDAO) {
-        this.categoryDAO = categoryDAO;
-    }
+	@Autowired
+	public PasswordEncoder passwordEncoder;
 
-    public GroupDAO getGroupDAO() {
-        return groupDAO;
-    }
+	// get set method
+	@Override
+	public User getNewUser() {
+		return this.userDAO.getNewUser();
+	}
 
-    public void setGroupDAO(GroupDAO groupDAO) {
-        this.groupDAO = groupDAO;
-    }
+	@Override
+	public int getCountAllUsers() throws Exception {
+		return this.userDAO.getCountAllUsers();
+	}
 
-    public RightDAO getRightDAO() {
-        return rightDAO;
-    }
+	@Override
+	public List<User> getAllUsers() throws Exception {
+		return this.userDAO.getAllUsers();
+	}
 
-    public void setRightDAO(RightDAO rightDAO) {
-        this.rightDAO = rightDAO;
-    }
+	@Override
+	public User getUserById(Long userId) throws Exception {
+		return this.userDAO.getUserById(userId);
+	}
 
-    public RoleDAO getRoleDAO() {
-        return roleDAO;
-    }
+	@Override
+	public User getUserByUserName(String userName) throws Exception {
+		return this.userDAO.getUserByUserName(userName);
+	}
 
-    public void setRoleDAO(RoleDAO roleDAO) {
-        this.roleDAO = roleDAO;
-    }
+	@Override
+	public List<User> getUsersLikeUserName(String value) throws Exception {
+		return this.userDAO.getUsersLikeUserName(value);
+	}
 
-    public UsersLoginDAO getUsersLoginDAO() {
-        return usersLoginDAO;
-    }
+	@Override
+	public List<User> getUsersLikeLastname(String value) throws Exception {
+		return this.userDAO.getUsersLikeLastname(value);
+	}
 
-    public void setUsersLoginDAO(UsersLoginDAO usersLoginDAO) {
-        this.usersLoginDAO = usersLoginDAO;
-    }
+	@Override
+	public List<User> getUsersLikeEmail(String value) throws Exception {
+		return this.userDAO.getUsersLikeEmail(value);
+	}
 
-    //get set method
-    public User getNewUser() {
-        return userDAO.getNewUser();
-    }
+	// LinhLH fix
+	@Override
+	public List<Language> getAllLanguages() throws Exception {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 
-    public int getCountAllUsers() throws Exception {
-        return userDAO.getCountAllUsers();
-    }
-
-    public List<User> getAllUsers() throws Exception {
-        return userDAO.getAllUsers();
-    }
-
-    public User getUserById(Long userId) throws Exception {
-        return userDAO.getUserById(userId);
-    }
-
-    public User getUserByUserName(String userName) throws Exception {
-        return userDAO.getUserByUserName(userName);
-    }
-
-    public List<User> getUsersLikeUserName(String value) throws Exception {
-        return userDAO.getUsersLikeUserName(value);
-    }
-
-    public List<User> getUsersLikeLastname(String value) throws Exception {
-        return userDAO.getUsersLikeLastname(value);
-    }
-
-    public List<User> getUsersLikeEmail(String value) throws Exception {
-        return userDAO.getUsersLikeEmail(value);
-    }
-
-    //LinhLH fix
-    public List<Language> getAllLanguages() throws Exception {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public Language getLanguageByLocale(String lan_locale) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+	@Override
+	public Language getLanguageByLocale(String lan_locale) throws Exception {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 
 //    public void saveOrUpdate(Users user) {
 //        usersDAO.saveOrUpdate(user);
 //    }
 
-    public void saveOrUpdate(User user) {
-        Long userId = user.getUserId();
+	@Override
+	public void saveOrUpdate(User user) {
+		Long userId = user.getUserId();
 
-        if(Validator.isNull(userId)){
-            //get role users
-            addRole(user, PermissionConstants.ROLE_USERS);
-        }
+		if (Validator.isNull(userId)) {
+			// get role users
+			addRole(user, PermissionConstants.ROLE_USERS);
+		}
 
-        userDAO.saveOrUpdate(user);
-    }
+		this.userDAO.saveOrUpdate(user);
+	}
 
-    public void addRole(User user, String roleName) {
-        try {
-            List<Role> roleUsers = roleDAO.getRoleByRN(
-                    roleName, null);
+	@Override
+	public void addRole(User user, String roleName) {
+		try {
+			List<Role> roleUsers = this.roleDAO.getRoleByRN(roleName, null);
 
-            if (Validator.isNotNull(roleUsers)) {
-                user.getRoles().addAll(roleUsers);
-            }
-        } catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
-        }
-    }
+			if (Validator.isNotNull(roleUsers)) {
+				user.getRoles().addAll(roleUsers);
+			}
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+	}
 
-    public void delete(User user) throws Exception {
-        userDAO.delete(user);
-    }
+	@Override
+	public void delete(User user) throws Exception {
+		this.userDAO.delete(user);
+	}
 
 //    public List<Role> getRolesByUser(User user) throws Exception {
 //        return roleDAO.getRolesByUser(user);
 //    }
 
-    public List<String> getRolesNameByUser(User user) throws Exception {
-        List<String> roleNames = new ArrayList<String>();
+	@Override
+	public List<String> getRolesNameByUser(User user) throws Exception {
+		List<String> roleNames = new ArrayList<String>();
 
-        for(Role role: user.getRoles()){
-            if(Validator.isNotNull(role.getRoleName())){
-                roleNames.add(role.getRoleName());
-            }
-        }
+		for (Role role : user.getRoles()) {
+			if (Validator.isNotNull(role.getRoleName())) {
+				roleNames.add(role.getRoleName());
+			}
+		}
 
-        return roleNames;
-    }
+		return roleNames;
+	}
 
-    public List<Right> getRightsByUser(User user) throws Exception {
-        return rightDAO.getRightsByUser(user);
-    }
+	@Override
+	public List<Right> getRightsByUser(User user) throws Exception {
+		return this.rightDAO.getRightsByUser(user);
+	}
 
-    public List<RightView> getRightViewByUserId(Long userId) throws Exception {
-        return rightDAO.getRightViewByUserId(userId);
-    }
+	@Override
+	public List<RightView> getRightViewByUserId(Long userId) throws Exception {
+		return this.rightDAO.getRightViewByUserId(userId);
+	}
 
-    public List<Group> getGroupsByUser(User user) throws Exception {
-        return groupDAO.getGroupByUser(user);
-    }
+	@Override
+	public List<Group> getGroupsByUser(User user) throws Exception {
+		return this.groupDAO.getGroupByUser(user);
+	}
 
-    public Role getRoleByName(String roleName) throws Exception {
-        return roleDAO.getRoleByName(roleName);
-    }
+	@Override
+	public Role getRoleByName(String roleName) throws Exception {
+		return this.roleDAO.getRoleByName(roleName);
+	}
 
-    public boolean isIpAdrRequireCaptcha(String ip){
-        int invalidCount = usersLoginDAO.countByIp(ip);
+	@Override
+	public boolean isIpAdrRequireCaptcha(String ip) {
+		int invalidCount = this.usersLoginDAO.countByIp(ip);
 
-        return invalidCount>= StaticUtil.LOGIN_POLICY_LIMIT_FAILURE_TIME;
-    }
+		return invalidCount >= StaticUtil.LOGIN_POLICY_LIMIT_FAILURE_TIME;
+	}
 
-    public void remove(String ip){
-        List<UserLogin> userLogins = usersLoginDAO.getUsersLogin(ip);
+	@Override
+	public void remove(String ip) {
+		List<UserLogin> userLogins = this.usersLoginDAO.getUsersLogin(ip);
 
-        usersLoginDAO.delete(userLogins);
-    }
+		this.usersLoginDAO.delete(userLogins);
+	}
 
-    public void saveOrUpdate(UserLogin loginLog){
-        usersLoginDAO.saveOrUpdate(loginLog);
-    }
+	@Override
+	public void saveOrUpdate(UserLogin loginLog) {
+		this.usersLoginDAO.saveOrUpdate(loginLog);
+	}
 
-    public List<User> getUsers(String userName, String email, Long gender,
-            String birthPlace, Date birthdayFrom, Date birthdayTo, String phone,
-            String mobile, String account, Long status, int itemStartNumber,
-            int pageSize, String orderByColumn, String orderByType) {
-        return userDAO.getUsers(userName, email, gender, birthPlace, birthdayFrom,
-                birthdayTo, phone, mobile, account, status, itemStartNumber,
-                pageSize, orderByColumn, orderByType);
-    }
+	@Override
+	public List<User> getUsers(String userName, String email, Long gender, String birthPlace, Date birthdayFrom,
+			Date birthdayTo, String phone, String mobile, String account, Long status, int itemStartNumber,
+			int pageSize, String orderByColumn, String orderByType) {
+		return this.userDAO.getUsers(userName, email, gender, birthPlace, birthdayFrom, birthdayTo, phone, mobile, account,
+				status, itemStartNumber, pageSize, orderByColumn, orderByType);
+	}
 
-    public int getUsersCount(String userName, String email, Long gender,
-            String birthPlace, Date birthdayFrom, Date birthdayTo, String phone,
-            String mobile, String account, Long status) {
-        return userDAO.getUsersCount(userName, email, gender, birthPlace,
-                birthdayFrom, birthdayTo, phone, mobile, account, status);
-    }
+	@Override
+	public int getUsersCount(String userName, String email, Long gender, String birthPlace, Date birthdayFrom,
+			Date birthdayTo, String phone, String mobile, String account, Long status) {
+		return this.userDAO.getUsersCount(userName, email, gender, birthPlace, birthdayFrom, birthdayTo, phone, mobile,
+				account, status);
+	}
 
-    public List<User> getUsers(String keyword, int itemStartNumber, int pageSize,
-            String orderByColumn, String orderByType) {
-        return userDAO.getUsers(keyword, itemStartNumber, pageSize, orderByColumn,
-                orderByType);
-    }
+	@Override
+	public List<User> getUsers(String keyword, int itemStartNumber, int pageSize, String orderByColumn,
+			String orderByType) {
+		return this.userDAO.getUsers(keyword, itemStartNumber, pageSize, orderByColumn, orderByType);
+	}
 
-    public int getUsersCount(String keyword) {
-        return userDAO.getUsersCount(keyword);
-    }
+	@Override
+	public int getUsersCount(String keyword) {
+		return this.userDAO.getUsersCount(keyword);
+	}
 
-    public List<SimpleModel> getGenderType() {
-        List<SimpleModel> genders = new ArrayList<SimpleModel>();
+	@Override
+	public List<SimpleModel> getGenderType() {
+		List<SimpleModel> genders = new ArrayList<SimpleModel>();
 
 //        genders.add(new SimpleModel(Values.DEFAULT_OPTION_VALUE_INT,
 //                Labels.getLabel(LanguageKeys.OPTION)));
 
-        genders.add(new SimpleModel(Values.MALE,
-                Labels.getLabel(LanguageKeys.MALE)));
+		genders.add(new SimpleModel(Values.MALE, Labels.getLabel(LanguageKeys.MALE)));
 
-        genders.add(new SimpleModel(Values.FEMALE,
-                Labels.getLabel(LanguageKeys.FEMALE)));
+		genders.add(new SimpleModel(Values.FEMALE, Labels.getLabel(LanguageKeys.FEMALE)));
 
-        return genders;
-    }
+		return genders;
+	}
 
-    public void lockUser(User user) {
-        try {
-            user.setStatus(Values.STATUS_DEACTIVE);
+	@Override
+	public void lockUser(User user) {
+		try {
+			user.setStatus(Values.STATUS_DEACTIVE);
 
-            userDAO.saveOrUpdate(user);
-        } catch (DataAccessException ex) {
-            _log.error(ex.getMessage(), ex);
-        }
-    }
+			this.userDAO.saveOrUpdate(user);
+		} catch (DataAccessException ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+	}
 
-    public void lockUser(List<User> users) {
-        try {
-            for (User user : users) {
-                user.setStatus(Values.STATUS_DEACTIVE);
-            }
+	@Override
+	public void lockUser(List<User> users) {
+		try {
+			for (User user : users) {
+				user.setStatus(Values.STATUS_DEACTIVE);
+			}
 
-            userDAO.saveOrUpdateAll(users);
-        } catch (DataAccessException ex) {
-            _log.error(ex.getMessage(), ex);
-        }
-    }
+			this.userDAO.saveOrUpdateAll(users);
+		} catch (DataAccessException ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+	}
 
-    public void unlockUser(User user) {
-        try {
-            user.setStatus(Values.STATUS_ACTIVE);
+	@Override
+	public void unlockUser(User user) {
+		try {
+			user.setStatus(Values.STATUS_ACTIVE);
 
-            userDAO.saveOrUpdate(user);
-        } catch (DataAccessException ex) {
-            _log.error(ex.getMessage(), ex);
-        }
-    }
+			this.userDAO.saveOrUpdate(user);
+		} catch (DataAccessException ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+	}
 
-    public void unlockUser(List<User> users) {
-        try {
-            for (User user : users) {
-                user.setStatus(Values.STATUS_ACTIVE);
-            }
+	@Override
+	public void unlockUser(List<User> users) {
+		try {
+			for (User user : users) {
+				user.setStatus(Values.STATUS_ACTIVE);
+			}
 
-            userDAO.saveOrUpdateAll(users);
-        } catch (DataAccessException ex) {
-            _log.error(ex.getMessage(), ex);
-        }
-    }
+			this.userDAO.saveOrUpdateAll(users);
+		} catch (DataAccessException ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+	}
 
-    public void resetPassword(List<User> users) {
-        try {
-            String randomPwd = null;
-            
-            for (User user : users) {
-                randomPwd = RandomStringGeneratorUtil.generate(16);
-                
-                user.setPassword(PermissionUtil.encodePassword(
-                        randomPwd, user.getUserId()));
-                user.setModifiedDate(new Date());
-                
-                //send email to user create
-                
-                MailUtil.sendPwdResetEmail(user.getEmail(), user.getUserName(), 
-                        randomPwd, user.getFullName());
-            }
+	@Override
+	public void resetPassword(List<User> users) {
+		try {
+			String randomPwd = null;
 
-            userDAO.saveOrUpdateAll(users);
-        } catch (DataAccessException ex) {
-            _log.error(ex.getMessage(), ex);
-        }
-    }
+			for (User user : users) {
+				randomPwd = RandomStringGeneratorUtil.generate(16);
 
-    public void activateUser(List<User> users) {
-        try {
-            for (User user : users) {
-                user.setStatus(Values.STATUS_ACTIVE);
-            }
+				user.setPassword(this.passwordEncoder.encode(randomPwd));
+				user.setModifiedDate(new Date());
 
-            userDAO.saveOrUpdateAll(users);
-        } catch (DataAccessException ex) {
-            _log.error(ex.getMessage(), ex);
-        }
-    }
+				// send email to user create
 
-    public void createPassword(User user) {
-        String randomPass = RandomStringGeneratorUtil.generate(16);
+				MailUtil.sendPwdResetEmail(user.getEmail(), user.getUserName(), randomPwd, user.getFullName());
+			}
 
-        if (randomPass.length() > 0) {
-            user.setPassword(PermissionUtil.encodePassword(
-                    randomPass, user.getUserId()));
-        }
+			this.userDAO.saveOrUpdateAll(users);
+		} catch (DataAccessException ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+	}
 
-        this.saveOrUpdate(user);
+	@Override
+	public void activateUser(List<User> users) {
+		try {
+			for (User user : users) {
+				user.setStatus(Values.STATUS_ACTIVE);
+			}
 
-        //send email to user create
-        HttpServletRequest req = (HttpServletRequest) 
-                Executions.getCurrent().getNativeRequest();
+			this.userDAO.saveOrUpdateAll(users);
+		} catch (DataAccessException ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+	}
 
-        String hostAddress = GetterUtil.getServerUrl(req);
+	@Override
+	public void createPassword(User user) {
+		String randomPass = RandomStringGeneratorUtil.generate(16);
 
-        MailUtil.sendUserCreateEmail(user.getEmail(), user.getUserName(),
-                randomPass, user.getFullName(), hostAddress);
-    }
-    
-    public void delete(List<Role> roles, User user) {
-        try {
-            user.getRoles().removeAll(roles);
+		if (randomPass.length() > 0) {
+			user.setPassword(this.passwordEncoder.encode(randomPass));
+		}
 
-            userDAO.saveOrUpdate(user);
-        } catch (DataAccessException ex) {
-            _log.error(ex.getMessage(), ex);
-        }
-    }
+		this.saveOrUpdate(user);
 
-    public List<String> delete(List<User> users) throws Exception{
-        List<String> userNotDel = new ArrayList<String>();
+		// send email to user create
+		HttpServletRequest req = (HttpServletRequest) Executions.getCurrent().getNativeRequest();
 
-        for (User user : users) {
-            if (Values.STATUS_NOT_READY.equals(user.getStatus())) {
-                
-                this.delete(user);
-            } else {
-                userNotDel.add(user.getUserName());
-            }
-        }
+		String hostAddress = GetterUtil.getServerUrl(req);
 
-        return userNotDel;
-    }
+		MailUtil.sendUserCreateEmail(user.getEmail(), user.getUserName(), randomPass, user.getFullName(), hostAddress);
+	}
 
-    public boolean isUserNameExits(Long userId, String userName) {
-        List<User> results = new ArrayList<User>();
+	@Override
+	public void delete(List<Role> roles, User user) {
+		try {
+			user.getRoles().removeAll(roles);
 
-        try {
-            results = userDAO.getUsersByI_UN(userId, userName);
-        } catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
-        }
+			this.userDAO.saveOrUpdate(user);
+		} catch (DataAccessException ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+	}
 
-        return !results.isEmpty();
-    }
+	@Override
+	public List<String> delete(List<User> users) throws Exception {
+		List<String> userNotDel = new ArrayList<String>();
 
-    public boolean isEmailExits(Long userId, String email) {
-        List<User> results = new ArrayList<User>();
+		for (User user : users) {
+			if (Values.STATUS_NOT_READY.equals(user.getStatus())) {
 
-        try {
-            results = userDAO.getUsersByI_E(userId, email);
-        } catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
-        }
+				this.delete(user);
+			} else {
+				userNotDel.add(user.getUserName());
+			}
+		}
 
-        return !results.isEmpty();
-    }
+		return userNotDel;
+	}
 
-    public User getUserByEmail(Long userId, String email){
-        User user = null;
-        
-        try {
-            List<User> results = userDAO.getUsersByI_E(userId, email);
-            
-            if(Validator.isNotNull(results)){
-                user = results.get(0);
-            }
-        } catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
-        }
-        
-        return user;
-    }
-    
-    public void addRole(Long userId, String roleName) {
-        try {
-            User user = userDAO.getUserById(userId);
+	@Override
+	public boolean isUserNameExits(Long userId, String userName) {
+		List<User> results = new ArrayList<User>();
 
-            if (user != null) {
-                addRole(user, roleName);
-            }
-        } catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
-        }
-    }
+		try {
+			results = this.userDAO.getUsersByI_UN(userId, userName);
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
 
-    //New
-    public List<Role> getRoles(boolean isAdmin) {
-        return roleDAO.getRoles(isAdmin);
-    }
+		return !results.isEmpty();
+	}
 
-    public List<Role> searchRoles(String roleName) {
-        return roleDAO.searchRole(roleName);
-    }
+	@Override
+	public boolean isEmailExits(Long userId, String email) {
+		List<User> results = new ArrayList<User>();
 
-    private static final Logger _log =
-            LogManager.getLogger(UserServiceImpl.class);
+		try {
+			results = this.userDAO.getUsersByI_E(userId, email);
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
 
-    public void saveOrUpdate(List<User> users) throws Exception {
-        for(User user: users){
-            saveOrUpdate(user);
-        }
-    }
+		return !results.isEmpty();
+	}
 
-    public void assignRoleToUser(User user, List<Role> roles, boolean isAdmin)
-            throws Exception{
-        for(Role role: roles){
-            if(isAdmin || role.getShareable()){
-                user.getRoles().add(role);
-            }
-        }
+	@Override
+	public User getUserByEmail(Long userId, String email) {
+		User user = null;
 
-        userDAO.saveOrUpdate(user);
-    }
-    
-    public void addVerifyResetPwd(User user) {
-        if (Values.STATUS_DEACTIVE.equals(user.getStatus())) {
-            MailUtil.sendVerifyResetPwd(user.getEmail(), user.getUserName(), 
-                    user.getFullName());
-        } else {
-            StringBuilder sb = new StringBuilder();
-            
-            sb.append(user.getUserId());
-            sb.append(StringPool.COMMA);
-            sb.append(Values.VERIFY_RESET_PWD);
-            sb.append(StringPool.COMMA);
-            sb.append(DateUtil.formatLongDate(
-                    DateUtil.getDateAfter(StaticUtil.VERIFY_RESET_PASSWORD_AVAIABLE_TIME)));
+		try {
+			List<User> results = this.userDAO.getUsersByI_E(userId, email);
 
-            //create verify
-            String verifyCode = new EncryptUtil().encrypt(sb.toString());
-            
-            user.setVerificationCode(verifyCode);
-            
-            userDAO.saveOrUpdate(user);
-            //
-            
-            MailUtil.sendVerifyResetPwd(user.getEmail(), user.getUserName(), 
-                    user.getFullName(), verifyCode);
-        }
-    }
+			if (Validator.isNotNull(results)) {
+				user = results.get(0);
+			}
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+
+		return user;
+	}
+
+	@Override
+	public void addRole(Long userId, String roleName) {
+		try {
+			User user = this.userDAO.getUserById(userId);
+
+			if (user != null) {
+				addRole(user, roleName);
+			}
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+	}
+
+	// New
+	@Override
+	public List<Role> getRoles(boolean isAdmin) {
+		return this.roleDAO.getRoles(isAdmin);
+	}
+
+	@Override
+	public List<Role> searchRoles(String roleName) {
+		return this.roleDAO.searchRole(roleName);
+	}
+
+	private static final Logger _log = LogManager.getLogger(UserServiceImpl.class);
+
+	@Override
+	public void saveOrUpdate(List<User> users) throws Exception {
+		for (User user : users) {
+			saveOrUpdate(user);
+		}
+	}
+
+	@Override
+	public void assignRoleToUser(User user, List<Role> roles, boolean isAdmin) throws Exception {
+		for (Role role : roles) {
+			if (isAdmin || role.getShareable()) {
+				user.getRoles().add(role);
+			}
+		}
+
+		this.userDAO.saveOrUpdate(user);
+	}
+
+	@Override
+	public void addVerifyResetPwd(User user) {
+		if (Values.STATUS_DEACTIVE.equals(user.getStatus())) {
+			MailUtil.sendVerifyResetPwd(user.getEmail(), user.getUserName(), user.getFullName());
+		} else {
+			StringBuilder sb = new StringBuilder();
+
+			sb.append(user.getUserId());
+			sb.append(StringPool.COMMA);
+			sb.append(Values.VERIFY_RESET_PWD);
+			sb.append(StringPool.COMMA);
+			sb.append(DateUtil.formatLongDate(DateUtil.getDateAfter(StaticUtil.VERIFY_RESET_PASSWORD_AVAIABLE_TIME)));
+
+			// create verify
+			String verifyCode = new EncryptUtil().encrypt(sb.toString());
+
+			user.setVerificationCode(verifyCode);
+
+			this.userDAO.saveOrUpdate(user);
+			//
+
+			MailUtil.sendVerifyResetPwd(user.getEmail(), user.getUserName(), user.getFullName(), verifyCode);
+		}
+	}
 }

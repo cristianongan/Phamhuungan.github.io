@@ -70,16 +70,16 @@ public class AddEditContractTypeController extends BasicController<Window>
     }
     
     public void initData() {
-        winParent = (Window) arg.get(Constants.PARENT_WINDOW);
+        this.winParent = (Window) this.arg.get(Constants.PARENT_WINDOW);
         
         refreshModel();
     }
     
     public void refreshModel() {
-        contractTypes = staffService.getContract();
+        this.contractTypes = this.staffService.getContract();
         
-        contractTypeListbox.setModel(new ListModelList<ContractType>(contractTypes));
-        contractTypeListbox.setItemRenderer(new ContractTypeRender(winEditContractType));
+        this.contractTypeListbox.setModel(new ListModelList<ContractType>(this.contractTypes));
+        this.contractTypeListbox.setItemRenderer(new ContractTypeRender(this.winEditContractType));
     }
     
     public void onDelete(Event event) {
@@ -90,15 +90,16 @@ public class AddEditContractTypeController extends BasicController<Window>
                 Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION, 
                 Messagebox.OK, new EventListener() {
 
-                    public void onEvent(Event e) throws Exception {
+                    @Override
+					public void onEvent(Event e) throws Exception {
                         if (Messagebox.ON_OK.equals(e.getName())) {
                             try {
-                                staffService.deleteContractType(ct);
+                                AddEditContractTypeController.this.staffService.deleteContractType(ct);
 
                                 ComponentUtil.createSuccessMessageBox(
                                         LanguageKeys.MESSAGE_DELETE_SUCCESS);
 
-                                contractTypes.remove(ct);
+                                AddEditContractTypeController.this.contractTypes.remove(ct);
                                 
                                 refreshModel();
 
@@ -117,12 +118,12 @@ public class AddEditContractTypeController extends BasicController<Window>
         final ContractType ct = (ContractType) event.getData();
             
         try {
-            staffService.saveOrUpdate(ct);
+            this.staffService.saveOrUpdate(ct);
             
             ComponentUtil.createSuccessMessageBox(
                         ComponentUtil.getSuccessKey(true));
             
-            Events.sendEvent("onUpdateCbContractType", winParent, null);
+            Events.sendEvent("onUpdateCbContractType", this.winParent, null);
         } catch (Exception ex) {
             _log.error(ex.getMessage());
 
@@ -134,8 +135,8 @@ public class AddEditContractTypeController extends BasicController<Window>
     public void onClick$btnAdd() throws Exception{
         try {
             String contractType = GetterUtil.getString(
-                    tbContractType.getValue());
-            Long monthDuration = GetterUtil.getLong(spMonthDuration.getValue());
+                    this.tbContractType.getValue());
+            Long monthDuration = GetterUtil.getLong(this.spMonthDuration.getValue());
             
             if (_validate(contractType, monthDuration)) {
                 ContractType ct = new ContractType();
@@ -148,16 +149,16 @@ public class AddEditContractTypeController extends BasicController<Window>
                 ct.setMonthDuration(monthDuration);
                 ct.setDescription(contractType);
                 
-                staffService.saveOrUpdate(ct);
+                this.staffService.saveOrUpdate(ct);
                 
                 ComponentUtil.createSuccessMessageBox(
                         ComponentUtil.getSuccessKey(true));
 
-                tbContractType.setValue(StringPool.BLANK);
+                this.tbContractType.setValue(StringPool.BLANK);
                 
                 refreshModel();
                 
-                Events.sendEvent("onUpdateCbContractType", winParent, null);
+                Events.sendEvent("onUpdateCbContractType", this.winParent, null);
             }
         }catch (Exception ex) {
             _log.error(ex.getMessage());
@@ -169,31 +170,31 @@ public class AddEditContractTypeController extends BasicController<Window>
     
     private boolean _validate(String contractType, Long monthDuration) {
         if (Validator.isNull(contractType)) {
-            tbContractType.setErrorMessage(Values.getRequiredInputMsg(
+            this.tbContractType.setErrorMessage(Values.getRequiredInputMsg(
                     Labels.getLabel(LanguageKeys.CONTRACT_TYPE)));
             
-            tbContractType.setFocus(true);
+            this.tbContractType.setFocus(true);
             
             return false;
         }
         
         if (contractType.length() > Values.MEDIUM_LENGTH) {
-            tbContractType.setErrorMessage(Values.getMaxLengthInvalidMsg(
+            this.tbContractType.setErrorMessage(Values.getMaxLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.CONTRACT_TYPE),
                     Values.MEDIUM_LENGTH));
             
-            tbContractType.setFocus(true);
+            this.tbContractType.setFocus(true);
             
             return false;
         }
 
         if (monthDuration != null
                 && (monthDuration <= 0 || monthDuration > 3600)) {
-            spMonthDuration.setErrorMessage(Values.getValueMustInRangeMsg(
+            this.spMonthDuration.setErrorMessage(Values.getValueMustInRangeMsg(
                     Labels.getLabel(LanguageKeys.CONTRACT_DURATION),
                     0, 3600));
 
-            spMonthDuration.setFocus(true);
+            this.spMonthDuration.setFocus(true);
 
             return false;
         }
@@ -202,15 +203,15 @@ public class AddEditContractTypeController extends BasicController<Window>
     }
     
     public void onClick$btnCancel(){
-        winEditContractType.detach();
+        this.winEditContractType.detach();
     }
     //get set service
     public StaffService getStaffService() {
-        if (staffService == null) {
-            staffService = (StaffService) SpringUtil.getBean("staffService");
-            setStaffService(staffService);
+        if (this.staffService == null) {
+            this.staffService = (StaffService) SpringUtil.getBean("staffService");
+            setStaffService(this.staffService);
         }
-        return staffService;
+        return this.staffService;
     }
 
     public void setStaffService(StaffService staffService) {

@@ -55,32 +55,36 @@ public class UserPrincipalImpl extends org.springframework.security.core.userdet
 
 		this.userId = user.getUserId();
 		this.userName = user.getUserName();
-		this.userToken = Validator.isNotNull(userId) ? DigestUtils.md5DigestAsHex(userId.toString().getBytes())
+		this.userToken = Validator.isNotNull(this.userId) ? DigestUtils.md5DigestAsHex(this.userId.toString().getBytes())
 				: StringPool.BLANK;
 		this.user = user;
 		this.roles = roles;
 	}
 
 	public String getUserToken() {
-		return userToken;
+		return this.userToken;
 	}
 
 	public void setUserToken(String userToken) {
 		this.userToken = userToken;
 	}
 
+	@Override
 	public Long getUserId() {
 		return this.userId;
 	}
 
+	@Override
 	public User getUser() {
 		return this.user;
 	}
 
+	@Override
 	public String getUserName() {
 		return this.userName;
 	}
 
+	@Override
 	public Collection<String> getRoles() {
 		return this.roles;
 	}

@@ -61,7 +61,7 @@ public class SalaryLandmark implements Serializable {
     }
 
     public Long getSalaryLandmarkId() {
-        return salaryLandmarkId;
+        return this.salaryLandmarkId;
     }
 
     public void setSalaryLandmarkId(Long salaryLandmarkId) {
@@ -69,7 +69,7 @@ public class SalaryLandmark implements Serializable {
     }
 
     public Long getUserId() {
-        return userId;
+        return this.userId;
     }
 
     public void setUserId(Long userId) {
@@ -77,7 +77,7 @@ public class SalaryLandmark implements Serializable {
     }
 
     public String getUserName() {
-        return userName;
+        return this.userName;
     }
 
     public void setUserName(String userName) {
@@ -85,7 +85,7 @@ public class SalaryLandmark implements Serializable {
     }
 
     public Date getCreateDate() {
-        return createDate;
+        return this.createDate;
     }
 
     public void setCreateDate(Date createDate) {
@@ -93,7 +93,7 @@ public class SalaryLandmark implements Serializable {
     }
 
     public Date getModifiedDate() {
-        return modifiedDate;
+        return this.modifiedDate;
     }
 
     public void setModifiedDate(Date modifiedDate) {
@@ -101,7 +101,7 @@ public class SalaryLandmark implements Serializable {
     }
 
     public Long getStaffId() {
-        return staffId;
+        return this.staffId;
     }
 
     public void setStaffId(Long staffId) {
@@ -109,7 +109,7 @@ public class SalaryLandmark implements Serializable {
     }
 
     public Date getFromDate() {
-        return fromDate;
+        return this.fromDate;
     }
 
     public void setFromDate(Date fromDate) {
@@ -117,7 +117,7 @@ public class SalaryLandmark implements Serializable {
     }
 
     public Date getToDate() {
-        return toDate;
+        return this.toDate;
     }
 
     public void setToDate(Date toDate) {
@@ -125,7 +125,7 @@ public class SalaryLandmark implements Serializable {
     }
 
     public Long getSalary() {
-        return salary;
+        return this.salary;
     }
 
     public void setSalary(Long salary) {
@@ -133,7 +133,7 @@ public class SalaryLandmark implements Serializable {
     }
 
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     public void setDescription(String description) {
@@ -143,7 +143,7 @@ public class SalaryLandmark implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (salaryLandmarkId != null ? salaryLandmarkId.hashCode() : 0);
+        hash += (this.salaryLandmarkId != null ? this.salaryLandmarkId.hashCode() : 0);
         return hash;
     }
 
@@ -165,7 +165,7 @@ public class SalaryLandmark implements Serializable {
 
     @Override
     public String toString() {
-        return "com.evotek.qlns.model.SalaryLandmark[ salaryLandmarkId=" + salaryLandmarkId + " ]";
+        return "com.evotek.qlns.model.SalaryLandmark[ salaryLandmarkId=" + this.salaryLandmarkId + " ]";
     }
     
 }

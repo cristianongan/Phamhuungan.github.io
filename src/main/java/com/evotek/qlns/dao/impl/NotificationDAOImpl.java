@@ -28,9 +28,10 @@ import com.evotek.qlns.util.Validator;
  *
  * @author linhlh2
  */
-public class NotificationDAOImpl extends BasicDAO<Notification>
+public class NotificationDAOImpl extends AbstractDAO<Notification>
         implements NotificationDAO{
-    public int getNotificationCountByT_S(Long notificationType, Long status){
+    @Override
+	public int getNotificationCountByT_S(Long notificationType, Long status){
         int result = 0;
 
         try {
@@ -54,7 +55,8 @@ public class NotificationDAOImpl extends BasicDAO<Notification>
         return result;
     }
     
-    public int getNotificationCountByT_S_E(Long notificationType, Long status, 
+    @Override
+	public int getNotificationCountByT_S_E(Long notificationType, Long status, 
             boolean expired){
         int result = 0;
 
@@ -85,7 +87,8 @@ public class NotificationDAOImpl extends BasicDAO<Notification>
         return result;
     }
     
-    public List<Long> getStaffIdByT_S(Long notificationType, Long status){
+    @Override
+	public List<Long> getStaffIdByT_S(Long notificationType, Long status){
         List<Long> results = new ArrayList<Long>();
 
         try {
@@ -103,7 +106,7 @@ public class NotificationDAOImpl extends BasicDAO<Notification>
             
             cri.setProjection(Projections.property("classPk"));
 
-            results =  (List<Long>) cri.list();
+            results =  cri.list();
         } catch (Exception ex) {
             _log.error(ex.getMessage(), ex);
         }
@@ -111,7 +114,8 @@ public class NotificationDAOImpl extends BasicDAO<Notification>
         return results;
     }
     
-    public List<Long> getStaffIdByT_S_E(Long notificationType, Long status, 
+    @Override
+	public List<Long> getStaffIdByT_S_E(Long notificationType, Long status, 
             boolean expired){
         List<Long> results = new ArrayList<Long>();
 
@@ -136,7 +140,7 @@ public class NotificationDAOImpl extends BasicDAO<Notification>
             
             cri.setProjection(Projections.property("classPk"));
 
-            results =  (List<Long>) cri.list();
+            results =  cri.list();
         } catch (Exception ex) {
             _log.error(ex.getMessage(), ex);
         }
@@ -144,7 +148,8 @@ public class NotificationDAOImpl extends BasicDAO<Notification>
         return results;
     }
     
-    public int updateNotificationStatus(){
+    @Override
+	public int updateNotificationStatus(){
         int result = 0;
         
         try {
@@ -163,7 +168,8 @@ public class NotificationDAOImpl extends BasicDAO<Notification>
         return result;
     }
     
-    public List<Notification> getNotifies(Long status, boolean expired){
+    @Override
+	public List<Notification> getNotifies(Long status, boolean expired){
         List<Notification> results = new ArrayList<Notification>();
         
         try {
@@ -188,7 +194,7 @@ public class NotificationDAOImpl extends BasicDAO<Notification>
             cri.addOrder(Order.asc("notificationType"));
             cri.addOrder(Order.desc("eventDate"));
             
-            results = (List<Notification>) cri.list();
+            results = cri.list();
         } catch (Exception ex) {
             _log.error(ex.getMessage(), ex);
         }

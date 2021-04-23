@@ -26,139 +26,139 @@ public class MailMessage implements Serializable {
             InternetAddress from, InternetAddress to, String subject, String body,
             boolean htmlFormat) {
 
-        _from = from;
+        this._from = from;
 
         if (to != null) {
-            _to = new InternetAddress[]{to};
+            this._to = new InternetAddress[]{to};
         } else {
-            _to = new InternetAddress[0];
+            this._to = new InternetAddress[0];
         }
 
-        _subject = subject;
-        _body = body;
-        _htmlFormat = htmlFormat;
+        this._subject = subject;
+        this._body = body;
+        this._htmlFormat = htmlFormat;
     }
 
     public void addAttachment(File attachment) {
         if (attachment != null) {
-            _attachments.add(attachment);
+            this._attachments.add(attachment);
         }
     }
 
     public File[] getAttachments() {
-        return _attachments.toArray(new File[_attachments.size()]);
+        return this._attachments.toArray(new File[this._attachments.size()]);
     }
 
     public InternetAddress[] getBCC() {
-        return _bcc;
+        return this._bcc;
     }
 
     public String getBody() {
-        return _body;
+        return this._body;
     }
 
     public InternetAddress[] getBulkAddresses() {
-        return _bulkAddresses;
+        return this._bulkAddresses;
     }
 
     public InternetAddress[] getCC() {
-        return _cc;
+        return this._cc;
     }
 
     public InternetAddress getFrom() {
-        return _from;
+        return this._from;
     }
 
     public boolean getHTMLFormat() {
-        return _htmlFormat;
+        return this._htmlFormat;
     }
 
     public String getInReplyTo() {
-        return _inReplyTo;
+        return this._inReplyTo;
     }
 
     public String getMessageId() {
-        return _messageId;
+        return this._messageId;
     }
 
     public InternetAddress[] getReplyTo() {
-        return _replyTo;
+        return this._replyTo;
     }
 
     public SMTPAccount getSMTPAccount() {
-        return _smtpAccount;
+        return this._smtpAccount;
     }
 
     public String getSubject() {
-        return _subject;
+        return this._subject;
     }
 
     public InternetAddress[] getTo() {
-        return _to;
+        return this._to;
     }
 
     public boolean isHTMLFormat() {
-        return _htmlFormat;
+        return this._htmlFormat;
     }
 
     public void setBCC(InternetAddress bcc) {
-        _bcc = new InternetAddress[]{bcc};
+        this._bcc = new InternetAddress[]{bcc};
     }
 
     public void setBCC(InternetAddress[] bcc) {
-        _bcc = bcc;
+        this._bcc = bcc;
     }
 
     public void setBody(String body) {
-        _body = body;
+        this._body = body;
     }
 
     public void setBulkAddresses(InternetAddress[] bulkAddresses) {
-        _bulkAddresses = bulkAddresses;
+        this._bulkAddresses = bulkAddresses;
     }
 
     public void setCC(InternetAddress cc) {
-        _cc = new InternetAddress[]{cc};
+        this._cc = new InternetAddress[]{cc};
     }
 
     public void setCC(InternetAddress[] cc) {
-        _cc = cc;
+        this._cc = cc;
     }
 
     public void setFrom(InternetAddress from) {
-        _from = from;
+        this._from = from;
     }
 
     public void setHTMLFormat(boolean htmlFormat) {
-        _htmlFormat = htmlFormat;
+        this._htmlFormat = htmlFormat;
     }
 
     public void setInReplyTo(String inReplyTo) {
-        _inReplyTo = inReplyTo;
+        this._inReplyTo = inReplyTo;
     }
 
     public void setMessageId(String messageId) {
-        _messageId = messageId;
+        this._messageId = messageId;
     }
 
     public void setReplyTo(InternetAddress[] replyTo) {
-        _replyTo = replyTo;
+        this._replyTo = replyTo;
     }
 
     public void setSMTPAccount(SMTPAccount account) {
-        _smtpAccount = account;
+        this._smtpAccount = account;
     }
 
     public void setSubject(String subject) {
-        _subject = subject;
+        this._subject = subject;
     }
 
     public void setTo(InternetAddress to) {
-        _to = new InternetAddress[]{to};
+        this._to = new InternetAddress[]{to};
     }
 
     public void setTo(InternetAddress[] to) {
-        _to = to;
+        this._to = to;
     }
 
     private InternetAddress _from;

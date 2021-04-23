@@ -18,7 +18,7 @@ public class SimpleModel implements Serializable {
     private Long parentId;
 
     public Long getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(Long id) {
@@ -26,7 +26,7 @@ public class SimpleModel implements Serializable {
     }
 
     public Long getParentId() {
-        return parentId;
+        return this.parentId;
     }
 
     public void setParentId(Long parentId) {
@@ -34,7 +34,7 @@ public class SimpleModel implements Serializable {
     }
 
     public String getLabel() {
-        return label;
+        return this.label;
     }
 
     public void setLabel(String label) {
@@ -42,7 +42,7 @@ public class SimpleModel implements Serializable {
     }
 
     public Object getValue() {
-        return value;
+        return this.value;
     }
 
     public void setValue(Object value) {

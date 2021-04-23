@@ -114,77 +114,77 @@ public class AddEditStaffController extends BasicController<Window>
     public void doAfterCompose(Window comp) throws Exception {
         super.doAfterCompose(comp);
 
-        staffId = (Long) arg.get(Constants.OBJECT_ID);
+        this.staffId = (Long) this.arg.get(Constants.OBJECT_ID);
         
-        if(Validator.isNotNull(staffId)){
-            staff = staffService.getStaff(staffId);
+        if(Validator.isNotNull(this.staffId)){
+            this.staff = this.staffService.getStaff(this.staffId);
         } else {
-            staff = (Staff) arg.get(Constants.OBJECT);
+            this.staff = (Staff) this.arg.get(Constants.OBJECT);
         }
         
-        model = (ListModel) arg.get(Constants.MODEL);
+        this.model = (ListModel) this.arg.get(Constants.MODEL);
 
-        index = (Integer) arg.get(Constants.INDEX);
+        this.index = (Integer) this.arg.get(Constants.INDEX);
 
         initData();
     }
 
     public void initData() {
-        if((Validator.isNull(index) 
-                || Validator.isNull(model)) && Validator.isNotNull(staff)){            
-            dbContractFromDate.setFocus(true);
+        if((Validator.isNull(this.index) 
+                || Validator.isNull(this.model)) && Validator.isNotNull(this.staff)){            
+            this.dbContractFromDate.setFocus(true);
         } else {
-            winParent = (Hlayout) arg.get(Constants.PARENT_WINDOW);
+            this.winParent = (Hlayout) this.arg.get(Constants.PARENT_WINDOW);
         }
         
-        if (Validator.isNotNull(staff)) {
-            winEditStaff.setTitle((String) arg.get(Constants.TITLE));
+        if (Validator.isNotNull(this.staff)) {
+            this.winEditStaff.setTitle((String) this.arg.get(Constants.TITLE));
             
             this.onLoadEditForm();
         }
     }
 
     private void onLoadEditForm() {
-        Department dept = staff.getDepartment();
+        Department dept = this.staff.getDepartment();
         
-        tbStaffName.setValue(staff.getStaffName());
+        this.tbStaffName.setValue(this.staff.getStaffName());
         
         //thong tin chung
         if(dept.getDeptId()!=null){
-            bbDepartment.setValue(dept.getDeptName());
-            bbDepartment.setAttribute(Constants.ID, dept.getDeptId());
+            this.bbDepartment.setValue(dept.getDeptName());
+            this.bbDepartment.setAttribute(Constants.ID, dept.getDeptId());
             
-            bbDepartment.setAttribute(Constants.OBJECT, dept);
-            btnClearDept.setVisible(true);
+            this.bbDepartment.setAttribute(Constants.OBJECT, dept);
+            this.btnClearDept.setVisible(true);
         }
         
-        dbWorkDate.setValue(staff.getWorkDate());
-        dbDateOfBirth.setValue(staff.getDateOfBirth());
-        tbPermanentResidence.setValue(staff.getPermanentResidence());
-        tbCurrentResidence.setValue(staff.getCurrentResidence());
-        tbNote.setValue(staff.getNote());
+        this.dbWorkDate.setValue(this.staff.getWorkDate());
+        this.dbDateOfBirth.setValue(this.staff.getDateOfBirth());
+        this.tbPermanentResidence.setValue(this.staff.getPermanentResidence());
+        this.tbCurrentResidence.setValue(this.staff.getCurrentResidence());
+        this.tbNote.setValue(this.staff.getNote());
         //Hop dong lao dong
-        dbContractFromDate.setValue(staff.getContractFromDate());
-        dbContractToDate.setValue(staff.getContractToDate());
-        tbContractNumber.setValue(staff.getContractNumber());
-        tbTaxCode.setValue(staff.getTaxCode());
+        this.dbContractFromDate.setValue(this.staff.getContractFromDate());
+        this.dbContractToDate.setValue(this.staff.getContractToDate());
+        this.tbContractNumber.setValue(this.staff.getContractNumber());
+        this.tbTaxCode.setValue(this.staff.getTaxCode());
         //Bao hiem xa hoi
-        lgbSalaryBasic.setValue(staff.getSalaryBasic());
-        dbInsurancePaidDate.setValue(staff.getInsurancePaidDate());
-        tbInsuranceBookNumber.setValue(staff.getInsuranceBookNumber());
-        tbPaidPlace.setValue(staff.getPaidPlace());
+        this.lgbSalaryBasic.setValue(this.staff.getSalaryBasic());
+        this.dbInsurancePaidDate.setValue(this.staff.getInsurancePaidDate());
+        this.tbInsuranceBookNumber.setValue(this.staff.getInsuranceBookNumber());
+        this.tbPaidPlace.setValue(this.staff.getPaidPlace());
         //Trinh do chuyen mon
-        tbLevels.setValue(staff.getLevels());
-        tbMajors.setValue(staff.getMajors());
-        tbCollege.setValue(staff.getCollege());
+        this.tbLevels.setValue(this.staff.getLevels());
+        this.tbMajors.setValue(this.staff.getMajors());
+        this.tbCollege.setValue(this.staff.getCollege());
         //Chung minh nhan dan
-        tbIdentityCard.setValue(staff.getIdentityCard());
-        dbGrantDate.setValue(staff.getGrantDate());
-        tbGrantPlace.setValue(staff.getGrantPlace());
+        this.tbIdentityCard.setValue(this.staff.getIdentityCard());
+        this.dbGrantDate.setValue(this.staff.getGrantDate());
+        this.tbGrantPlace.setValue(this.staff.getGrantPlace());
         //Lien he
-        tbMobile.setValue(staff.getMobile());
-        tbHomePhone.setValue(staff.getHomePhone());
-        tbEmail.setValue(staff.getEmail());
+        this.tbMobile.setValue(this.staff.getMobile());
+        this.tbHomePhone.setValue(this.staff.getHomePhone());
+        this.tbEmail.setValue(this.staff.getEmail());
                 
     }
     
@@ -193,114 +193,114 @@ public class AddEditStaffController extends BasicController<Window>
 
         try {
             String staffName            = GetterUtil.getString(
-                    tbStaffName.getValue());
+                    this.tbStaffName.getValue());
             //thong tin chung
-            Department dept             = (Department) bbDepartment.
+            Department dept             = (Department) this.bbDepartment.
                     getAttribute(Constants.OBJECT);
-            Job job                     = (Job) cbJobTitle.getSelectedItem().
+            Job job                     = (Job) this.cbJobTitle.getSelectedItem().
                     getAttribute("data");
-            Date workDate               = dbWorkDate.getValue();
-            Date dateOfBirth            = dbDateOfBirth.getValue();
+            Date workDate               = this.dbWorkDate.getValue();
+            Date dateOfBirth            = this.dbDateOfBirth.getValue();
             String permanentResidence   = GetterUtil.getString(
-                    tbPermanentResidence.getValue());
+                    this.tbPermanentResidence.getValue());
             String currentResidence     = GetterUtil.getString(
-                    tbCurrentResidence.getValue());
+                    this.tbCurrentResidence.getValue());
             Long status                 = ComponentUtil.getComboboxValue(
-                    cbStatus);
+                    this.cbStatus);
             String note                 = GetterUtil.getString(
-                    tbNote.getValue());
+                    this.tbNote.getValue());
             //Hop dong lao dong
             ContractType contractType   = (ContractType) 
-                    cbContractType.getSelectedItem().getAttribute("data");
-            Date contractFromDate       = dbContractFromDate.getValue();
-            Date contractToDate         = dbContractToDate.getValue();
+                    this.cbContractType.getSelectedItem().getAttribute("data");
+            Date contractFromDate       = this.dbContractFromDate.getValue();
+            Date contractToDate         = this.dbContractToDate.getValue();
             String contractNumber       = GetterUtil.getString(
-                    tbContractNumber.getValue());
+                    this.tbContractNumber.getValue());
             String taxCode              = GetterUtil.getString(
-                    tbTaxCode.getValue());
+                    this.tbTaxCode.getValue());
             
             //Bao hiem xa hoi
-            Long salaryBasic            = lgbSalaryBasic.getValue();
-            Date insurancePaidDate      = dbInsurancePaidDate.getValue();
+            Long salaryBasic            = this.lgbSalaryBasic.getValue();
+            Date insurancePaidDate      = this.dbInsurancePaidDate.getValue();
             String insuranceBookNumber  = GetterUtil.getString(
-                    tbInsuranceBookNumber.getValue());
+                    this.tbInsuranceBookNumber.getValue());
             String paidPlace            = GetterUtil.getString(
-                    tbPaidPlace.getValue());
+                    this.tbPaidPlace.getValue());
             //Trinh do chuyen mon
             String levels               = GetterUtil.getString(
-                    tbLevels.getValue());
+                    this.tbLevels.getValue());
             String majors               = GetterUtil.getString(
-                    tbMajors.getValue());
+                    this.tbMajors.getValue());
             String college              = GetterUtil.getString(
-                    tbCollege.getValue());
+                    this.tbCollege.getValue());
             //Chung minh nhan dan
             String identityCard         = GetterUtil.getString(
-                    tbIdentityCard.getValue());
-            Date grantDate              = dbGrantDate.getValue();
+                    this.tbIdentityCard.getValue());
+            Date grantDate              = this.dbGrantDate.getValue();
             String grantPlace           = GetterUtil.getString(
-                    tbGrantPlace.getValue());
+                    this.tbGrantPlace.getValue());
             //Lien he
             String mobile               = GetterUtil.getString(
-                    tbMobile.getValue());
+                    this.tbMobile.getValue());
             String homePhone            = GetterUtil.getString(
-                    tbHomePhone.getValue());
+                    this.tbHomePhone.getValue());
             String email                = GetterUtil.getString(
-                    tbEmail.getValue());
+                    this.tbEmail.getValue());
             
             if (_validate(staffName, permanentResidence, currentResidence, note, 
                     contractNumber, taxCode, insuranceBookNumber, paidPlace, 
                     levels, majors, college, identityCard, grantPlace, mobile, 
                     homePhone, email)) {
-                if(Validator.isNull(staff)){
+                if(Validator.isNull(this.staff)){
                     update = false;
                     
-                    staff = new Staff();
+                    this.staff = new Staff();
                     
-                    staff.setUserId(getUserId());
-                    staff.setUserName(getUserName());
-                    staff.setCreateDate(new Date());
-                    staff.setStatus(status);
+                    this.staff.setUserId(getUserId());
+                    this.staff.setUserName(getUserName());
+                    this.staff.setCreateDate(new Date());
+                    this.staff.setStatus(status);
                 }
                 
-                staff.setStaffName(staffName);
-                staff.setDepartment(Validator.isNotNull(dept)?dept:null);
-                staff.setJob(Validator.isNotNull(job.getJobId())?job:null);
-                staff.setWorkDate(workDate);
-                staff.setDateOfBirth(dateOfBirth);
-                staff.setPermanentResidence(permanentResidence);
-                staff.setCurrentResidence(currentResidence);
-                staff.setNote(note);
-                staff.setContractType(Validator.isNotNull(
+                this.staff.setStaffName(staffName);
+                this.staff.setDepartment(Validator.isNotNull(dept)?dept:null);
+                this.staff.setJob(Validator.isNotNull(job.getJobId())?job:null);
+                this.staff.setWorkDate(workDate);
+                this.staff.setDateOfBirth(dateOfBirth);
+                this.staff.setPermanentResidence(permanentResidence);
+                this.staff.setCurrentResidence(currentResidence);
+                this.staff.setNote(note);
+                this.staff.setContractType(Validator.isNotNull(
                         contractType.getContractTypeId())?contractType:null);
-                staff.setContractFromDate(contractFromDate);
-                staff.setContractToDate(contractToDate);
-                staff.setContractNumber(contractNumber);
-                staff.setTaxCode(taxCode);
-                staff.setSalaryBasic(salaryBasic);
-                staff.setInsurancePaidDate(insurancePaidDate);
-                staff.setInsuranceBookNumber(insuranceBookNumber);
-                staff.setPaidPlace(paidPlace);
-                staff.setLevels(levels);
-                staff.setMajors(majors);
-                staff.setCollege(college);
-                staff.setIdentityCard(identityCard);
-                staff.setGrantDate(grantDate);
-                staff.setGrantPlace(grantPlace);
-                staff.setMobile(mobile);
-                staff.setHomePhone(homePhone);
-                staff.setEmail(email);
+                this.staff.setContractFromDate(contractFromDate);
+                this.staff.setContractToDate(contractToDate);
+                this.staff.setContractNumber(contractNumber);
+                this.staff.setTaxCode(taxCode);
+                this.staff.setSalaryBasic(salaryBasic);
+                this.staff.setInsurancePaidDate(insurancePaidDate);
+                this.staff.setInsuranceBookNumber(insuranceBookNumber);
+                this.staff.setPaidPlace(paidPlace);
+                this.staff.setLevels(levels);
+                this.staff.setMajors(majors);
+                this.staff.setCollege(college);
+                this.staff.setIdentityCard(identityCard);
+                this.staff.setGrantDate(grantDate);
+                this.staff.setGrantPlace(grantPlace);
+                this.staff.setMobile(mobile);
+                this.staff.setHomePhone(homePhone);
+                this.staff.setEmail(email);
                 
-                staff.setModifiedDate(new Date());
+                this.staff.setModifiedDate(new Date());
                 
-                staffService.saveOrUpdate(staff);
+                this.staffService.saveOrUpdate(this.staff);
                 
                 ComponentUtil.createSuccessMessageBox(
                         ComponentUtil.getSuccessKey(update));
 
-                winEditStaff.detach();
+                this.winEditStaff.detach();
                 
-                if(Validator.isNotNull(winParent)){
-                    Events.sendEvent("onLoadData", winParent, null);
+                if(Validator.isNotNull(this.winParent)){
+                    Events.sendEvent("onLoadData", this.winParent, null);
                 }
             }
         } catch (Exception ex) {
@@ -317,180 +317,180 @@ public class AddEditStaffController extends BasicController<Window>
             String levels, String majors, String college, String identityCard, 
             String grantPlace, String mobile, String homePhone, String email){
         if (Validator.isNull(staffName)) {
-            tbStaffName.setErrorMessage(Values.getRequiredInputMsg(
+            this.tbStaffName.setErrorMessage(Values.getRequiredInputMsg(
                     Labels.getLabel(LanguageKeys.FULL_NAME)));
             
-            tbStaffName.setFocus(true);
+            this.tbStaffName.setFocus(true);
             
             return false;
         }
         
         if (staffName.length() > Values.MEDIUM_LENGTH) {
-            tbStaffName.setErrorMessage(Values.getMaxLengthInvalidMsg(
+            this.tbStaffName.setErrorMessage(Values.getMaxLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.FULL_NAME),
                     Values.MEDIUM_LENGTH));
             
-            tbStaffName.setFocus(true);
+            this.tbStaffName.setFocus(true);
             
             return false;
         }
         
         if (permanentResidence.length() > Values.LONG_LENGTH) {
-            tbPermanentResidence.setErrorMessage(Values.getMaxLengthInvalidMsg(
+            this.tbPermanentResidence.setErrorMessage(Values.getMaxLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.PERMANENT_RESIDENCE),
                     Values.LONG_LENGTH));
             
-            tbPermanentResidence.setFocus(true);
+            this.tbPermanentResidence.setFocus(true);
             
             return false;
         }
         
         if (currentResidence.length() > Values.LONG_LENGTH) {
-            tbCurrentResidence.setErrorMessage(Values.getMaxLengthInvalidMsg(
+            this.tbCurrentResidence.setErrorMessage(Values.getMaxLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.CURRENT_RESIDENCE),
                     Values.LONG_LENGTH));
             
-            tbCurrentResidence.setFocus(true);
+            this.tbCurrentResidence.setFocus(true);
             
             return false;
         }
         
         if (note.length() > Values.GREATE_LONG_LENGTH) {
-            tbNote.setErrorMessage(Values.getMaxLengthInvalidMsg(
+            this.tbNote.setErrorMessage(Values.getMaxLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.NOTE),
                     Values.GREATE_LONG_LENGTH));
             
-            tbNote.setFocus(true);
+            this.tbNote.setFocus(true);
             
             return false;
         }
         
         if (contractNumber.length() > Values.SHORT_LENGTH) {
-            tbContractNumber.setErrorMessage(Values.getMaxLengthInvalidMsg(
+            this.tbContractNumber.setErrorMessage(Values.getMaxLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.CONTRACT_NUMBER),
                     Values.SHORT_LENGTH));
             
-            tbContractNumber.setFocus(true);
+            this.tbContractNumber.setFocus(true);
             
             return false;
         }
         
         if (taxCode.length() > Values.SHORT_LENGTH) {
-            tbTaxCode.setErrorMessage(Values.getMaxLengthInvalidMsg(
+            this.tbTaxCode.setErrorMessage(Values.getMaxLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.TAX_CODE),
                     Values.SHORT_LENGTH));
             
-            tbTaxCode.setFocus(true);
+            this.tbTaxCode.setFocus(true);
             
             return false;
         }
         
         if (insuranceBookNumber.length() > Values.SHORT_LENGTH) {
-            tbInsuranceBookNumber.setErrorMessage(Values.getMaxLengthInvalidMsg(
+            this.tbInsuranceBookNumber.setErrorMessage(Values.getMaxLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.INSURANCE_BOOK_NUMBER),
                     Values.SHORT_LENGTH));
             
-            tbInsuranceBookNumber.setFocus(true);
+            this.tbInsuranceBookNumber.setFocus(true);
             
             return false;
         }
         
         if (paidPlace.length() > Values.LONG_LENGTH) {
-            tbPaidPlace.setErrorMessage(Values.getMaxLengthInvalidMsg(
+            this.tbPaidPlace.setErrorMessage(Values.getMaxLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.PAID_INSURANCE_PLACE),
                     Values.LONG_LENGTH));
             
-            tbPaidPlace.setFocus(true);
+            this.tbPaidPlace.setFocus(true);
             
             return false;
         }
         
         if (levels.length() > Values.MEDIUM_LENGTH) {
-            tbLevels.setErrorMessage(Values.getMaxLengthInvalidMsg(
+            this.tbLevels.setErrorMessage(Values.getMaxLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.DEGREE),
                     Values.MEDIUM_LENGTH));
             
-            tbLevels.setFocus(true);
+            this.tbLevels.setFocus(true);
             
             return false;
         }
         
         if (majors.length() > Values.MEDIUM_LENGTH) {
-            tbMajors.setErrorMessage(Values.getMaxLengthInvalidMsg(
+            this.tbMajors.setErrorMessage(Values.getMaxLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.MAJORS),
                     Values.MEDIUM_LENGTH));
             
-            tbMajors.setFocus(true);
+            this.tbMajors.setFocus(true);
             
             return false;
         }
         
         if (college.length() > Values.MEDIUM_LENGTH) {
-            tbCollege.setErrorMessage(Values.getMaxLengthInvalidMsg(
+            this.tbCollege.setErrorMessage(Values.getMaxLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.COLLEGE),
                     Values.MEDIUM_LENGTH));
             
-            tbCollege.setFocus(true);
+            this.tbCollege.setFocus(true);
             
             return false;
         }
         
         if (identityCard.length() > Values.SHORT_LENGTH) {
-            tbIdentityCard.setErrorMessage(Values.getMaxLengthInvalidMsg(
+            this.tbIdentityCard.setErrorMessage(Values.getMaxLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.IDENTITY_CARD),
                     Values.SHORT_LENGTH));
             
-            tbIdentityCard.setFocus(true);
+            this.tbIdentityCard.setFocus(true);
             
             return false;
         }
         
         if (grantPlace.length() > Values.LONG_LENGTH) {
-            tbGrantPlace.setErrorMessage(Values.getMaxLengthInvalidMsg(
+            this.tbGrantPlace.setErrorMessage(Values.getMaxLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.GRANT_PLACE),
                     Values.LONG_LENGTH));
             
-            tbGrantPlace.setFocus(true);
+            this.tbGrantPlace.setFocus(true);
             
             return false;
         }
         
         if (mobile.length() > Values.VERY_SHORT_LENGTH) {
-            tbMobile.setErrorMessage(Values.getMaxLengthInvalidMsg(
+            this.tbMobile.setErrorMessage(Values.getMaxLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.MOBILE),
                     Values.VERY_SHORT_LENGTH));
             
-            tbMobile.setFocus(true);
+            this.tbMobile.setFocus(true);
             
             return false;
         }
         
         if (homePhone.length() > Values.VERY_SHORT_LENGTH) {
-            tbHomePhone.setErrorMessage(Values.getMaxLengthInvalidMsg(
+            this.tbHomePhone.setErrorMessage(Values.getMaxLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.HOME_PHONE),
                     Values.VERY_SHORT_LENGTH));
             
-            tbHomePhone.setFocus(true);
+            this.tbHomePhone.setFocus(true);
             
             return false;
         }
         
         if (email.length() > Values.SHORT_LENGTH) {
-            tbEmail.setErrorMessage(Values.getMaxLengthInvalidMsg(
+            this.tbEmail.setErrorMessage(Values.getMaxLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.EMAIL),
                     Values.SHORT_LENGTH));
             
-            tbEmail.setFocus(true);
+            this.tbEmail.setFocus(true);
             
             return false;
         }
         
         if(Validator.isNotNull(email) 
                 && !Validator.isEmailAddress(email)){
-            tbEmail.setErrorMessage(Values.getFormatInvalidMsg(
+            this.tbEmail.setErrorMessage(Values.getFormatInvalidMsg(
                     Labels.getLabel(LanguageKeys.EMAIL)));
             
-            tbEmail.setFocus(true);
+            this.tbEmail.setFocus(true);
             
             return false;
         }
@@ -501,7 +501,7 @@ public class AddEditStaffController extends BasicController<Window>
     public void onClick$btnAddJob() {
         Map map = new HashMap();
 
-        map.put(Constants.PARENT_WINDOW, winEditStaff);
+        map.put(Constants.PARENT_WINDOW, this.winEditStaff);
         map.put(Constants.OBJECT, null);
 
         Window win = (Window) Executions.createComponents(
@@ -513,7 +513,7 @@ public class AddEditStaffController extends BasicController<Window>
     public void onClick$btnAddContractType() {
         Map map = new HashMap();
 
-        map.put(Constants.PARENT_WINDOW, winEditStaff);
+        map.put(Constants.PARENT_WINDOW, this.winEditStaff);
         map.put(Constants.OBJECT, null);
 
         Window win = (Window) Executions.createComponents(
@@ -525,44 +525,44 @@ public class AddEditStaffController extends BasicController<Window>
     
     
     public void onClick$btnCancel(){
-        winEditStaff.detach();
+        this.winEditStaff.detach();
     }
     //Bandbox documentType
     public void onClick$btnClearDept() {
-        bbDepartment.setValue(StringPool.BLANK);
-        bbDepartment.setAttribute(Constants.ID, null);
+        this.bbDepartment.setValue(StringPool.BLANK);
+        this.bbDepartment.setAttribute(Constants.ID, null);
         
-        btnClearDept.setDisabled(true);
-        btnClearDept.setVisible(false);
+        this.btnClearDept.setDisabled(true);
+        this.btnClearDept.setVisible(false);
     }
     
     public void onOpen$bbDepartment(){
-        if(bbDepartment.isOpen() 
-                && Validator.isNull(icDepartment.getSrc())) {
-            icDepartment.setAttribute("bandbox", bbDepartment);
-            icDepartment.setAttribute("btnclear", btnClearDept);
+        if(this.bbDepartment.isOpen() 
+                && Validator.isNull(this.icDepartment.getSrc())) {
+            this.icDepartment.setAttribute("bandbox", this.bbDepartment);
+            this.icDepartment.setAttribute("btnclear", this.btnClearDept);
             
-            icDepartment.setSrc(Constants.TREE_DEPARTMENT_PAGE);
+            this.icDepartment.setSrc(Constants.TREE_DEPARTMENT_PAGE);
         }
     }
 
     //Bandbox documentType
     //combobox jobtitle
     public void onCreate$cbJobTitle() throws Exception {
-        jobs = staffService.getJobTitle();
+        this.jobs = this.staffService.getJobTitle();
         
-        jobs.add(0, new Job(Labels.getLabel(LanguageKeys.OPTION)));
+        this.jobs.add(0, new Job(Labels.getLabel(LanguageKeys.OPTION)));
 
-        cbJobTitle.setModel(new ListModelList<Job>(jobs));
+        this.cbJobTitle.setModel(new ListModelList<Job>(this.jobs));
         
-        if (Validator.isNotNull(staff)
-                && Validator.isNotNull(staff.getJob())) {
-            jobIndex = jobs.indexOf(staff.getJob());
+        if (Validator.isNotNull(this.staff)
+                && Validator.isNotNull(this.staff.getJob())) {
+            this.jobIndex = this.jobs.indexOf(this.staff.getJob());
         }
     }
     
     public void onAfterRender$cbJobTitle() {
-        cbJobTitle.setSelectedIndex(jobIndex);
+        this.cbJobTitle.setSelectedIndex(this.jobIndex);
     }
     
     public void onUpdateCbJob(Event event) throws Exception{
@@ -585,64 +585,64 @@ public class AddEditStaffController extends BasicController<Window>
         statusList.add(new SimpleModel(Values.STATUS_ACTIVE,
                 Labels.getLabel(LanguageKeys.STATUS_WORKING)));
 
-        cbStatus.setModel(new ListModelList<SimpleModel>(statusList));
+        this.cbStatus.setModel(new ListModelList<SimpleModel>(statusList));
     }
 
     public void onAfterRender$cbStatus() {
-        if (Validator.isNotNull(staff)
-                && Validator.isNotNull(staff.getStatus())) {
-            cbStatus.setSelectedIndex(staff.getStatus().intValue()+1);
+        if (Validator.isNotNull(this.staff)
+                && Validator.isNotNull(this.staff.getStatus())) {
+            this.cbStatus.setSelectedIndex(this.staff.getStatus().intValue()+1);
         } else {
-            cbStatus.setSelectedIndex(Values.FIRST_INDEX);
+            this.cbStatus.setSelectedIndex(Values.FIRST_INDEX);
         }
     }
     //combobox contract type
     public void onCreate$cbContractType() throws Exception {
-        List<ContractType> contracts = staffService.getContract();
+        List<ContractType> contracts = this.staffService.getContract();
         
         contracts.add(0, new ContractType(Labels.getLabel(LanguageKeys.OPTION)));
 
-        cbContractType.setModel(new ListModelList<ContractType>(contracts));
+        this.cbContractType.setModel(new ListModelList<ContractType>(contracts));
         
-        if (Validator.isNotNull(staff)
-                && Validator.isNotNull(staff.getContractType())) {
-            contractTypeIndex = contracts.indexOf(staff.getContractType());
+        if (Validator.isNotNull(this.staff)
+                && Validator.isNotNull(this.staff.getContractType())) {
+            this.contractTypeIndex = contracts.indexOf(this.staff.getContractType());
         }
     }
     
     public void onAfterRender$cbContractType() {
-        cbContractType.setSelectedIndex(contractTypeIndex);
+        this.cbContractType.setSelectedIndex(this.contractTypeIndex);
     }
     
     public void onChange$dbContractFromDate(){
-        if(dbContractFromDate.getValue()!=null 
-                && cbContractType.getSelectedItem().getAttribute("data")!=null) {
-            Date fromDate = dbContractFromDate.getValue();
+        if(this.dbContractFromDate.getValue()!=null 
+                && this.cbContractType.getSelectedItem().getAttribute("data")!=null) {
+            Date fromDate = this.dbContractFromDate.getValue();
             
             Calendar cal = Calendar.getInstance();
             
             cal.setTime(fromDate);
             
             ContractType ct = (ContractType) 
-                    cbContractType.getSelectedItem().getAttribute("data");
+                    this.cbContractType.getSelectedItem().getAttribute("data");
             
             if(Validator.isNotNull(ct.getMonthDuration())){
                 cal.add(Calendar.MONTH, ct.getMonthDuration().intValue());
                 
-                dbContractToDate.setValue(cal.getTime());
+                this.dbContractToDate.setValue(cal.getTime());
             }
         }
     }
     
     public void onClick$btnPrevious() throws Exception {
-        if (Validator.isNotNull(staff)) {
-            if (index == 0) {
-                index = (model.getSize() - 1);
+        if (Validator.isNotNull(this.staff)) {
+            if (this.index == 0) {
+                this.index = (this.model.getSize() - 1);
             } else {
-                index--;
+                this.index--;
             }
 
-            staff = (Staff) model.getElementAt(index);
+            this.staff = (Staff) this.model.getElementAt(this.index);
 
             initData();
             
@@ -653,14 +653,14 @@ public class AddEditStaffController extends BasicController<Window>
     }
     
     public void onClick$btnNext() throws Exception {
-        if (Validator.isNotNull(staff)) {
-            if (index == (model.getSize() - 1)) {
-                index = 0;
+        if (Validator.isNotNull(this.staff)) {
+            if (this.index == (this.model.getSize() - 1)) {
+                this.index = 0;
             } else {
-                index++;
+                this.index++;
             }
 
-            staff = (Staff) model.getElementAt(index);
+            this.staff = (Staff) this.model.getElementAt(this.index);
 
             initData();
             
@@ -671,11 +671,11 @@ public class AddEditStaffController extends BasicController<Window>
     }
     //get set service
     public StaffService getStaffService() {
-        if (staffService == null) {
-            staffService = (StaffService) SpringUtil.getBean("staffService");
-            setStaffService(staffService);
+        if (this.staffService == null) {
+            this.staffService = (StaffService) SpringUtil.getBean("staffService");
+            setStaffService(this.staffService);
         }
-        return staffService;
+        return this.staffService;
     }
 
     public void setStaffService(StaffService staffService) {

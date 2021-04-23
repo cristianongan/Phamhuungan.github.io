@@ -68,44 +68,46 @@ public class StaffListModel extends AbstractModelList<Staff> {
     
     
 
-    public void loadToCache(int itemStartNumber, int pageSize) {
+    @Override
+	public void loadToCache(int itemStartNumber, int pageSize) {
         try {
-            if (!_view) {
-                if (_isAdvance) {
-                    _cache = _staffService.getStaff(_staffName,
-                            _yearOfBirth, _dept, _email, _job, _phone,  
-                            itemStartNumber, pageSize, _orderByColumn, _orderByType);
+            if (!this._view) {
+                if (this._isAdvance) {
+                    this._cache = this._staffService.getStaff(this._staffName,
+                            this._yearOfBirth, this._dept, this._email, this._job, this._phone,  
+                            itemStartNumber, pageSize, this._orderByColumn, this._orderByType);
                 } else {
-                    _cache = _staffService.getStaff(_keyword,
-                            itemStartNumber, pageSize, _orderByColumn, _orderByType);
+                    this._cache = this._staffService.getStaff(this._keyword,
+                            itemStartNumber, pageSize, this._orderByColumn, this._orderByType);
                 }
             } else {
-                _cache = _staffService.getStaffByIdList(_idList,
-                        itemStartNumber, pageSize, _orderByColumn, _orderByType);
+                this._cache = this._staffService.getStaffByIdList(this._idList,
+                        itemStartNumber, pageSize, this._orderByColumn, this._orderByType);
             }
         } catch (Exception ex) {
             _log.error(ex.getMessage(), ex);
         }
     }
 
-    public int getSize() {
-        if (_cachedSize < 0) {
+    @Override
+	public int getSize() {
+        if (this._cachedSize < 0) {
             try {
-                if (!_view) {
-                    if (_isAdvance) {
-                        _cachedSize = _staffService.getStaffCount(_staffName, 
-                                _yearOfBirth, _dept, _email, _job, _phone);
+                if (!this._view) {
+                    if (this._isAdvance) {
+                        this._cachedSize = this._staffService.getStaffCount(this._staffName, 
+                                this._yearOfBirth, this._dept, this._email, this._job, this._phone);
                     } else {
-                        _cachedSize = _staffService.getStaffCount(_keyword);
+                        this._cachedSize = this._staffService.getStaffCount(this._keyword);
                     }
                 } else {
-                    _cachedSize = _staffService.getStaffCountByIdList(_idList);
+                    this._cachedSize = this._staffService.getStaffCountByIdList(this._idList);
                 }
             } catch (Exception ex) {
                 _log.error(ex.getMessage(), ex);
             }
         }
 
-        return _cachedSize;
+        return this._cachedSize;
     }
 }

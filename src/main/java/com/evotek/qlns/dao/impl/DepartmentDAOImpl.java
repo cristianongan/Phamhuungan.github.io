@@ -29,9 +29,10 @@ import com.evotek.qlns.util.Validator;
  *
  * @author My PC
  */
-public class DepartmentDAOImpl extends BasicDAO<Department> implements 
+public class DepartmentDAOImpl extends AbstractDAO<Department> implements 
         DepartmentDAO{
-    public List<Department> getDepartmentByParentId(Long parentId){
+    @Override
+	public List<Department> getDepartmentByParentId(Long parentId){
         List<Department> results = new ArrayList<Department>();
 
         try {
@@ -47,7 +48,7 @@ public class DepartmentDAOImpl extends BasicDAO<Department> implements
 
             cri.addOrder(Order.asc("ordinal"));
 
-            results = (List<Department>) cri.list();
+            results = cri.list();
 
         } catch (HibernateException e) {
             _log.error(e.getMessage(), e);
@@ -56,7 +57,8 @@ public class DepartmentDAOImpl extends BasicDAO<Department> implements
         return results;
     }
     
-    public int delete(List<Long> deptIds){
+    @Override
+	public int delete(List<Long> deptIds){
         int result = 0;
         
         try{
@@ -77,7 +79,8 @@ public class DepartmentDAOImpl extends BasicDAO<Department> implements
         return result;
     }
     
-    public void updateOrdinal(Long parentId, Long deletedIndex){
+    @Override
+	public void updateOrdinal(Long parentId, Long deletedIndex){
         try {
             Map params = new HashMap();
             
@@ -107,11 +110,13 @@ public class DepartmentDAOImpl extends BasicDAO<Department> implements
         }
     }
     
-    public Department get(Long deptId){
+    @Override
+	public Department get(Long deptId){
         return get(Department.class, deptId);
     }
     
-    public Long getNextOrdinal(Long parentId){
+    @Override
+	public Long getNextOrdinal(Long parentId){
         Long index = 0L;
         
         try {

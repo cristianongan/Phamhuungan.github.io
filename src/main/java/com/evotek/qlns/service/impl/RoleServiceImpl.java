@@ -9,8 +9,10 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.evotek.qlns.dao.CategoryDAO;
 import com.evotek.qlns.dao.GroupDAO;
 import com.evotek.qlns.dao.RoleDAO;
 import com.evotek.qlns.model.Group;
@@ -20,95 +22,80 @@ import com.evotek.qlns.util.key.Values;
 
 /**
  *
- * @author hungnt78
+ * @author LinhLH
  */
+@Service
+@Transactional
 public class RoleServiceImpl implements RoleService {
-    private static final Logger _log =
-            LogManager.getLogger(RoleServiceImpl.class);
+	private static final Logger _log = LogManager.getLogger(RoleServiceImpl.class);
 
-    private transient RoleDAO roleDAO;
-    private transient GroupDAO groupDAO;
-    private transient CategoryDAO categoryDAO;
+	@Autowired
+	private RoleDAO roleDAO;
 
-    public RoleDAO getRoleDAO() {
-        return roleDAO;
-    }
+	@Autowired
+	private GroupDAO groupDAO;
 
-    public void setRoleDAO(RoleDAO roleDAO) {
-        this.roleDAO = roleDAO;
-    }
+	@Override
+	public List<Role> getRoles(String roleName, Long status) throws Exception {
+		return this.roleDAO.getRoles(roleName, status);
+	}
 
-    public GroupDAO getGroupDAO() {
-        return groupDAO;
-    }
+	@Override
+	public void lockRole(Role role) throws Exception {
+		try {
+			role.setStatus(Values.STATUS_DEACTIVE);
 
-    public void setGroupDAO(GroupDAO groupDAO) {
-        this.groupDAO = groupDAO;
-    }
+			this.roleDAO.saveOrUpdate(role);
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+	}
 
-    public CategoryDAO getCategoryDAO() {
-        return categoryDAO;
-    }
+	@Override
+	public void unlockRole(Role role) throws Exception {
+		try {
+			role.setStatus(Values.STATUS_ACTIVE);
 
-    public void setCategoryDAO(CategoryDAO categoryDAO) {
-        this.categoryDAO = categoryDAO;
-    }
+			this.roleDAO.saveOrUpdate(role);
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+	}
 
-    public List<Role> getRoles(String roleName, Long status)
-            throws Exception {
-        return roleDAO.getRoles(roleName, status);
-    }
+	@Override
+	public void deleteRole(Role role) throws Exception {
+		try {
+			Long status = role.getStatus();
 
-    public void lockRole(Role role) throws Exception {
-        try{
-            role.setStatus(Values.STATUS_DEACTIVE);
+			if (!Values.STATUS_ACTIVE.equals(status)) {
+				this.roleDAO.delete(role);
+			}
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+	}
 
-            roleDAO.saveOrUpdate(role);
-        }catch(Exception ex){
-            _log.error(ex.getMessage(), ex);
-        }
-    }
+	@Override
+	public List<Group> getGroupByCategoryId(Long categoryId) throws Exception {
+		return this.groupDAO.getGroupByCategoryId(categoryId);
+	}
 
-    public void unlockRole(Role role) throws Exception {
-        try{
-            role.setStatus(Values.STATUS_ACTIVE);
+	@Override
+	public boolean isRoleExist(String roleName, Role role) throws Exception {
+		Long roleId = null;
 
-            roleDAO.saveOrUpdate(role);
-        }catch(Exception ex){
-            _log.error(ex.getMessage(), ex);
-        }
-    }
+		if (role != null) {
+			roleId = role.getRoleId();
+		}
 
-    public void deleteRole(Role role) throws Exception {
-        try{
-            Long status = role.getStatus();
+		List<Role> roles = this.roleDAO.getRoleByRN(roleName, roleId);
 
-            if(!Values.STATUS_ACTIVE.equals(status)){
-                roleDAO.delete(role);
-            }
-        }catch(Exception ex){
-            _log.error(ex.getMessage(), ex);
-        }
-    }
+		return !roles.isEmpty();
+	}
 
-    public List<Group> getGroupByCategoryId(Long categoryId) throws Exception{
-        return groupDAO.getGroupByCategoryId(categoryId);
-    }
+	@Override
+	public void saveOrUpdateRole(Role role) throws Exception {
+		this.roleDAO.saveOrUpdate(role);
+	}
 
-    public boolean isRoleExist(String roleName, Role role) throws Exception{
-        Long roleId = null;
-
-        if(role!=null){
-            roleId = role.getRoleId();
-        }
-
-        List<Role> roles = roleDAO.getRoleByRN(roleName, roleId);
-
-        return !roles.isEmpty();
-    }
-
-    public void saveOrUpdateRole(Role role) throws Exception{
-        roleDAO.saveOrUpdate(role);
-    }
-    
 }

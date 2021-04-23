@@ -58,7 +58,7 @@ public class Notification implements Serializable {
     }
 
     public Long getNotificationId() {
-        return notificationId;
+        return this.notificationId;
     }
 
     public void setNotificationId(Long notificationId) {
@@ -66,7 +66,7 @@ public class Notification implements Serializable {
     }
 
     public Long getNotificationType() {
-        return notificationType;
+        return this.notificationType;
     }
 
     public void setNotificationType(Long notificationType) {
@@ -74,7 +74,7 @@ public class Notification implements Serializable {
     }
 
     public Date getCreateDate() {
-        return createDate;
+        return this.createDate;
     }
 
     public void setCreateDate(Date createDate) {
@@ -82,7 +82,7 @@ public class Notification implements Serializable {
     }
 
     public Date getExpiredDate() {
-        return expiredDate;
+        return this.expiredDate;
     }
 
     public void setExpiredDate(Date expiredDate) {
@@ -90,7 +90,7 @@ public class Notification implements Serializable {
     }
 
     public Date getEventDate() {
-        return eventDate;
+        return this.eventDate;
     }
 
     public void setEventDate(Date eventDate) {
@@ -98,7 +98,7 @@ public class Notification implements Serializable {
     }
 
     public String getMessage() {
-        return message;
+        return this.message;
     }
 
     public void setMessage(String message) {
@@ -106,7 +106,7 @@ public class Notification implements Serializable {
     }
 
     public Long getStatus() {
-        return status;
+        return this.status;
     }
 
     public void setStatus(Long status) {
@@ -114,7 +114,7 @@ public class Notification implements Serializable {
     }
 
     public String getClassName() {
-        return className;
+        return this.className;
     }
 
     public void setClassName(String className) {
@@ -122,7 +122,7 @@ public class Notification implements Serializable {
     }
 
     public Long getClassPk() {
-        return classPk;
+        return this.classPk;
     }
 
     public void setClassPk(Long classPk) {
@@ -132,7 +132,7 @@ public class Notification implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (notificationId != null ? notificationId.hashCode() : 0);
+        hash += (this.notificationId != null ? this.notificationId.hashCode() : 0);
         return hash;
     }
 
@@ -153,7 +153,7 @@ public class Notification implements Serializable {
 
     @Override
     public String toString() {
-        return "com.evotek.qlns.model.Notification[ notificationId=" + notificationId + " ]";
+        return "com.evotek.qlns.model.Notification[ notificationId=" + this.notificationId + " ]";
     }
     
 }

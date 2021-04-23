@@ -37,7 +37,8 @@ public class JobRender implements ListitemRenderer<Job>{
         this._window = _window;
     }
     
-    public void render(Listitem item, Job job, int index) throws Exception {
+    @Override
+	public void render(Listitem item, Job job, int index) throws Exception {
         item.setAttribute("data", job);
         
         this.renderNoneEditing(item, job, index);
@@ -74,7 +75,8 @@ public class JobRender implements ListitemRenderer<Job>{
         
         btnEdit.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
-            public void onEvent(Event t) throws Exception {
+            @Override
+			public void onEvent(Event t) throws Exception {
                 item.getChildren().clear();
                 
                 renderEditing(item, job, index);
@@ -83,7 +85,7 @@ public class JobRender implements ListitemRenderer<Job>{
         
         hlayout.appendChild(btnEdit);
         
-        hlayout.appendChild(ComponentUtil.createButton(_window,
+        hlayout.appendChild(ComponentUtil.createButton(this._window,
                 Labels.getLabel(LanguageKeys.DELETE), ComponentUtil.DEL_TOOLTIP,
                 Events.ON_CLICK, "onDelete", job,
                 Constants.Z_ICON_TRASH_O, Constants.RED));
@@ -108,14 +110,15 @@ public class JobRender implements ListitemRenderer<Job>{
         
         btnSave.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
-            public void onEvent(Event t) throws Exception {
+            @Override
+			public void onEvent(Event t) throws Exception {
                 Component cmp = item.getFellowIfAny(job.getJobId()+"-"+"job-title");
                 
                 if(cmp instanceof Textbox){
                     job.setJobTitle(GetterUtil.getString(
                             ((Textbox) cmp).getValue()));
                     
-                    Events.sendEvent("onUpdateJob", _window, job);
+                    Events.sendEvent("onUpdateJob", JobRender.this._window, job);
                 }
                 
                 item.getChildren().clear();
@@ -132,7 +135,8 @@ public class JobRender implements ListitemRenderer<Job>{
         
         btnCancel.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
-            public void onEvent(Event t) throws Exception {
+            @Override
+			public void onEvent(Event t) throws Exception {
                 item.getChildren().clear();
                 
                 renderNoneEditing(item, job, index);

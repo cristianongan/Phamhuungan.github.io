@@ -29,15 +29,15 @@ public class WindowBaseController extends Window implements AfterCompose,
     protected transient Map args;
 
     public void doOnCreateCommon(Window w) throws Exception {
-        binder = new AnnotateDataBinder(w);
-        binder.loadAll();
+        this.binder = new AnnotateDataBinder(w);
+        this.binder.loadAll();
     }
 
     @SuppressWarnings("unchecked")
     public void doOnCreateCommon(Window w, Event fe) throws Exception {
         doOnCreateCommon(w);
         CreateEvent ce = (CreateEvent) ((ForwardEvent) fe).getOrigin();
-        args = ce.getArg();
+        this.args = ce.getArg();
     }
 
     public WindowBaseController() {

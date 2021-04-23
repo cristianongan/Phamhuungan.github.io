@@ -45,7 +45,8 @@ public class OnUploadAttachmentListener implements EventListener<UploadEvent> {
         this.divFileList = divFileList;
     }
 
-    public void onEvent(UploadEvent event) throws Exception {
+    @Override
+	public void onEvent(UploadEvent event) throws Exception {
         Media[] medias = event.getMedias();
 
         Grid grid = ComponentUtil.createGrid(StringPool.BLANK,
@@ -57,17 +58,18 @@ public class OnUploadAttachmentListener implements EventListener<UploadEvent> {
         grid.setModel(new ListModelList<Media>(medias));
         grid.setRowRenderer(new RowRenderer<Media>() {
 
-            public void render(final Row row, final Media media, int index)
+            @Override
+			public void render(final Row row, final Media media, int index)
                     throws Exception {
                 String name = media.getName();
                 String extension = FileUtil.getFileExtension(name);
                 int size = getSize(media);
 
                 if (size == 0) {
-                    Messagebox.show(Labels.getLabel(
+                    org.zkoss.zul.Messagebox.show(Labels.getLabel(
                             LanguageKeys.MESSAGE_FILE_IS_EMPTY),
                             Labels.getLabel(LanguageKeys.ERROR),
-                            Messagebox.OK, Messagebox.ERROR);
+                            org.zkoss.zul.Messagebox.OK, org.zkoss.zul.Messagebox.ERROR);
 
                     row.getParent().removeChild(row);
 
@@ -76,11 +78,11 @@ public class OnUploadAttachmentListener implements EventListener<UploadEvent> {
 
                 if (Validator.isNull(extension)
                         || !isInstanceValidFileExtension(extension)) {
-                    Messagebox.show(Labels.getLabel(
+                    org.zkoss.zul.Messagebox.show(Labels.getLabel(
                             LanguageKeys.MESSAGE_INVALID_FILE_UPLOAD_EXTENSION,
                             new String[]{StaticUtil.ATTACH_FILE_UPLOAD_ALLOW_EXTENSION}),
                             Labels.getLabel(LanguageKeys.ERROR),
-                            Messagebox.OK, Messagebox.ERROR);
+                            org.zkoss.zul.Messagebox.OK, org.zkoss.zul.Messagebox.ERROR);
 
                     row.getParent().removeChild(row);
 
@@ -88,11 +90,11 @@ public class OnUploadAttachmentListener implements EventListener<UploadEvent> {
                 }
 
                 if (!isInstanceValidMaxSize(size)) {
-                    Messagebox.show(Labels.getLabel(
+                    org.zkoss.zul.Messagebox.show(Labels.getLabel(
                             LanguageKeys.MESSAGE_INVALID_FILE_MAX_SIZE,
                             new Long[]{getInstanceValidMaxSizeMB()}),
                             Labels.getLabel(LanguageKeys.ERROR),
-                            Messagebox.OK, Messagebox.ERROR);
+                            org.zkoss.zul.Messagebox.OK, org.zkoss.zul.Messagebox.ERROR);
 
                     row.getParent().removeChild(row);
 
@@ -109,8 +111,9 @@ public class OnUploadAttachmentListener implements EventListener<UploadEvent> {
 
                 button.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
-                    public void onEvent(Event event) throws Exception {
-                        medium.remove(media);
+                    @Override
+					public void onEvent(Event event) throws Exception {
+                        OnUploadAttachmentListener.this.medium.remove(media);
 
                         row.getParent().removeChild(row);
                     }
@@ -120,12 +123,12 @@ public class OnUploadAttachmentListener implements EventListener<UploadEvent> {
 
                 row.setStyle(Constants.STYLE_NO_PADDING);
 
-                medium.add(media);
+                OnUploadAttachmentListener.this.medium.add(media);
 
             }
         });
 
-        divFileList.appendChild(grid);
+        this.divFileList.appendChild(grid);
     }
 
     private boolean isInstanceValidFileExtension(String extension) {

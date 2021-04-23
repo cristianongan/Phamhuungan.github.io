@@ -25,7 +25,7 @@ public class EncryptUtil {
     };
     
     public EncryptUtil() {
-        encryptor = Encryptors.queryableText(new String(_password), 
+        this.encryptor = Encryptors.queryableText(new String(_password), 
                 new String(_salt));
     }
     
@@ -34,10 +34,10 @@ public class EncryptUtil {
     }
     
     public String encrypt(String str){
-        return encryptor.encrypt(str);
+        return this.encryptor.encrypt(str);
     }
     
     public String decrypt(String str) {
-        return encryptor.decrypt(str);
+        return this.encryptor.decrypt(str);
     }
 }

@@ -72,15 +72,15 @@ public class UserRoleController extends BasicController<Window>
 
     public void initData() throws Exception {
         try {
-            winParent = (Div) arg.get(Constants.PARENT_WINDOW);
+            this.winParent = (Div) this.arg.get(Constants.PARENT_WINDOW);
 
-            user = (User) arg.get(Constants.OBJECT);
+            this.user = (User) this.arg.get(Constants.OBJECT);
 
-            winUserRole.setTitle(Labels.getLabel(
+            this.winUserRole.setTitle(Labels.getLabel(
                     LanguageKeys.ROLE_ASSIGNED_TO_USER,
-                    new Object[]{user.getUserName()}));
+                    new Object[]{this.user.getUserName()}));
 
-            isAdmin = this.getUserWorkspace().isAdministrator();
+            this.isAdmin = this.getUserWorkspace().isAdministrator();
 
             this.onSearch();
         } catch (Exception ex) {
@@ -89,28 +89,28 @@ public class UserRoleController extends BasicController<Window>
     }
 
     public void onClick$btnCancel() {
-        winUserRole.detach();
+        this.winUserRole.detach();
     }
 
     public void onSearch() {
-        if (user != null) {
-            _roles = user.getRoles();
+        if (this.user != null) {
+            this._roles = this.user.getRoles();
 
-            gridRole.setItemRenderer(new UserRoleRender());
-            gridRole.setModel(new SimpleModelList<Role>(_roles));
-            gridRole.setMultiple(true);
+            this.gridRole.setItemRenderer(new UserRoleRender());
+            this.gridRole.setModel(new SimpleModelList<Role>(this._roles));
+            this.gridRole.setMultiple(true);
         }
     }
 
     public void onClick$btnAdd() {
         Map<String, Object> parameters = new HashMap<String, Object>();
 
-        parameters.put(Constants.PARENT_WINDOW, winUserRole);
-        parameters.put(Constants.OBJECT, user);
-        parameters.put(Constants.SECOND_OBJECT, _roles);
+        parameters.put(Constants.PARENT_WINDOW, this.winUserRole);
+        parameters.put(Constants.OBJECT, this.user);
+        parameters.put(Constants.SECOND_OBJECT, this._roles);
 
         Window win = (Window) Executions.createComponents(ADD_ROLE_PAGE,
-                winUserRole, parameters);
+                this.winUserRole, parameters);
 
         win.doModal();
     }
@@ -129,10 +129,11 @@ public class UserRoleController extends BasicController<Window>
                     Messagebox.QUESTION,
                     new EventListener<Event>() {
 
-                        public void onEvent(Event e) throws Exception {
+                        @Override
+						public void onEvent(Event e) throws Exception {
                             if (Messagebox.ON_OK.equals(e.getName())) {
                                 try {
-                                    userService.delete(roles, user);
+                                    UserRoleController.this.userService.delete(roles, UserRoleController.this.user);
 
                                     ComponentUtil.createSuccessMessageBox(
                                                  LanguageKeys.MESSAGE_DELETE_SUCCESS);
@@ -157,7 +158,7 @@ public class UserRoleController extends BasicController<Window>
     private List<Role> getRoleSelected(){
         List<Role> roles = new ArrayList<Role>();
 
-        for (Listitem item : gridRole.getSelectedItems()) {
+        for (Listitem item : this.gridRole.getSelectedItems()) {
             Role role = (Role) item.getAttribute("data");
 
             if(Validator.isNotNull(role)){

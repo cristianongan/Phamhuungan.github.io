@@ -39,7 +39,8 @@ public class SalaryLandmarkRender implements ListitemRenderer<SalaryLandmark>{
         this._staff = staff;
     }
     
-    public void render(Listitem item, SalaryLandmark salaryLm, int index) 
+    @Override
+	public void render(Listitem item, SalaryLandmark salaryLm, int index) 
             throws Exception {
         item.setAttribute("data", salaryLm);
         
@@ -72,7 +73,7 @@ public class SalaryLandmarkRender implements ListitemRenderer<SalaryLandmark>{
                 Constants.Z_ICON_PENCIL, Constants.BLUE));
 
         //Thêm action "Xóa"
-        hlayout.appendChild(ComponentUtil.createButton(_winParent,
+        hlayout.appendChild(ComponentUtil.createButton(this._winParent,
                 Labels.getLabel(LanguageKeys.BUTTON_DELETE), 
                 ComponentUtil.DEL_TOOLTIP, Events.ON_CLICK,
                 "onDeleteSalaryLm", salaryLm, Constants.Z_ICON_TRASH_O,
@@ -89,9 +90,9 @@ public class SalaryLandmarkRender implements ListitemRenderer<SalaryLandmark>{
             SalaryLandmark salaryLm, String title) {
         Map<String, Object> parameters = new HashMap<String, Object>();
 
-        parameters.put(Constants.PARENT_WINDOW, _winParent);
+        parameters.put(Constants.PARENT_WINDOW, this._winParent);
         parameters.put(Constants.TITLE, title);
-        parameters.put(Constants.OBJECT, _staff);
+        parameters.put(Constants.OBJECT, this._staff);
         parameters.put(Constants.EDIT_OBJECT, salaryLm);
 
         return parameters;

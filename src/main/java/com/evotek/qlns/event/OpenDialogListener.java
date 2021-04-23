@@ -29,9 +29,10 @@ public class OpenDialogListener implements EventListener<Event>{
         this.parameters = parameters;
     }
 
-    public void onEvent(Event t) throws Exception {
+    @Override
+	public void onEvent(Event t) throws Exception {
         Window win = (Window) Executions.createComponents(
-                url, comp, parameters);
+                this.url, this.comp, this.parameters);
         
         win.doModal();
     }

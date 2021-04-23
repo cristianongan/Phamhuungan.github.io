@@ -21,10 +21,11 @@ import com.evotek.qlns.util.LikeCriterionMaker;
  *
  * @author linhlh2
  */
-public class UsersLoginDAOImpl extends BasicDAO<UserLogin>
+public class UsersLoginDAOImpl extends AbstractDAO<UserLogin>
         implements UsersLoginDAO {
 
-    public int countByIp(String ip) {
+    @Override
+	public int countByIp(String ip) {
         int count = 0;
 
         try {
@@ -42,7 +43,8 @@ public class UsersLoginDAOImpl extends BasicDAO<UserLogin>
         return count;
     }
 
-    public List<UserLogin> getUsersLogin(String ip){
+    @Override
+	public List<UserLogin> getUsersLogin(String ip){
         List<UserLogin> results = new ArrayList<UserLogin>();
 
         try {
@@ -50,7 +52,7 @@ public class UsersLoginDAOImpl extends BasicDAO<UserLogin>
 
             cri.add(LikeCriterionMaker.ilike("ip", ip, MatchMode.EXACT));
 
-            results = (List<UserLogin>) cri.list();
+            results = cri.list();
         } catch (Exception e) {
             _log.error(e.getMessage(), e);
         }
@@ -58,7 +60,8 @@ public class UsersLoginDAOImpl extends BasicDAO<UserLogin>
         return results;
     }
 
-    public void delete(List<UserLogin> userLogins){
+    @Override
+	public void delete(List<UserLogin> userLogins){
         deleteAll(userLogins);
     }
 

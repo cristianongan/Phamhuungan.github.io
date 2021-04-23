@@ -11,9 +11,11 @@ import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.evotek.qlns.dao.ContractTypeDAO;
-import com.evotek.qlns.dao.DepartmentDAO;
 import com.evotek.qlns.dao.JobDAO;
 import com.evotek.qlns.dao.SalaryLandmarkDAO;
 import com.evotek.qlns.dao.StaffDAO;
@@ -29,206 +31,188 @@ import com.evotek.qlns.util.key.Values;
 
 /**
  *
- * @author PC
+ * @author LinhLH
  */
+@Service
+@Transactional
 public class StaffServiceImpl implements StaffService {
 
-    private transient StaffDAO staffDAO;
-    private transient DepartmentDAO departmentDAO;
-    private transient JobDAO jobDAO;
-    private transient ContractTypeDAO contractTypeDAO;
-    private transient SalaryLandmarkDAO salaryLandmarkDAO;
-    private transient WorkProcessDAO workProcessDAO;
+	@Autowired
+	private StaffDAO staffDAO;
 
-    public StaffDAO getStaffDAO() {
-        return staffDAO;
-    }
+	@Autowired
+	private JobDAO jobDAO;
 
-    public void setStaffDAO(StaffDAO staffDAO) {
-        this.staffDAO = staffDAO;
-    }
+	@Autowired
+	private ContractTypeDAO contractTypeDAO;
 
-    public DepartmentDAO getDepartmentDAO() {
-        return departmentDAO;
-    }
+	@Autowired
+	private SalaryLandmarkDAO salaryLandmarkDAO;
 
-    public void setDepartmentDAO(DepartmentDAO departmentDAO) {
-        this.departmentDAO = departmentDAO;
-    }
+	@Autowired
+	private WorkProcessDAO workProcessDAO;
 
-    public JobDAO getJobDAO() {
-        return jobDAO;
-    }
+	@Override
+	public Staff getStaff(Long staffId) {
+		return this.staffDAO.getStaff(staffId);
+	}
 
-    public void setJobDAO(JobDAO jobDAO) {
-        this.jobDAO = jobDAO;
-    }
+	@Override
+	public List<Staff> getStaff(String keyword, int firstResult, int maxResult, String orderByColumn,
+			String orderByType) {
+		return this.staffDAO.getStaff(keyword, firstResult, maxResult, orderByColumn, orderByType);
+	}
 
-    public ContractTypeDAO getContractTypeDAO() {
-        return contractTypeDAO;
-    }
+	@Override
+	public int getStaffCount(String keyword) {
+		return this.staffDAO.getStaffCount(keyword);
+	}
 
-    public void setContractTypeDAO(ContractTypeDAO contractTypeDAO) {
-        this.contractTypeDAO = contractTypeDAO;
-    }
+	@Override
+	public List<Staff> getStaff(String staffName, Long yearOfBirth, Department dept, String email, Job job,
+			String phone, int firstResult, int maxResult, String orderByColumn, String orderByType) {
+		return this.staffDAO.getStaff(staffName, yearOfBirth, dept, email, job, phone, firstResult, maxResult,
+				orderByColumn, orderByType);
+	}
 
-    public SalaryLandmarkDAO getSalaryLandmarkDAO() {
-        return salaryLandmarkDAO;
-    }
+	@Override
+	public int getStaffCount(String staffName, Long yearOfBirth, Department dept, String email, Job job, String phone) {
+		return this.staffDAO.getStaffCount(staffName, yearOfBirth, dept, email, job, phone);
+	}
 
-    public void setSalaryLandmarkDAO(SalaryLandmarkDAO salaryLandmarkDAO) {
-        this.salaryLandmarkDAO = salaryLandmarkDAO;
-    }
+	@Override
+	public List<Staff> getStaffByIdList(List<Long> idList, int firstResult, int maxResult, String orderByColumn,
+			String orderByType) {
+		return this.staffDAO.getStaffByIdList(idList, firstResult, maxResult, orderByColumn, orderByType);
+	}
 
-    public WorkProcessDAO getWorkProcessDAO() {
-        return workProcessDAO;
-    }
+	@Override
+	public int getStaffCountByIdList(List<Long> idList) {
+		return this.staffDAO.getStaffCountByIdList(idList);
+	}
 
-    public void setWorkProcessDAO(WorkProcessDAO workProcessDAO) {
-        this.workProcessDAO = workProcessDAO;
-    }
+	@Override
+	public void lockStaff(Staff staff) throws Exception {
+		try {
+			staff.setStatus(Values.STATUS_DEACTIVE);
 
-    public Staff getStaff(Long staffId){
-        return staffDAO.getStaff(staffId);
-    }
-    
-    public List<Staff> getStaff(String keyword, int firstResult, 
-            int maxResult, String orderByColumn, String orderByType) {
-        return staffDAO.getStaff(keyword, firstResult, 
-                maxResult, orderByColumn, orderByType);
-    }
-    
-    public int getStaffCount(String keyword) {
-        return staffDAO.getStaffCount(keyword);
-    }
+			this.staffDAO.saveOrUpdate(staff);
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+	}
 
-    public List<Staff> getStaff(String staffName, Long yearOfBirth, 
-            Department dept, String email, Job job, String phone, 
-            int firstResult, int maxResult, String orderByColumn, 
-            String orderByType){
-        return staffDAO.getStaff(staffName, yearOfBirth, dept, email, job, phone, 
-                firstResult, maxResult, orderByColumn, orderByType);
-    }
-    
-    public int getStaffCount(String staffName, Long yearOfBirth, Department dept, 
-            String email, Job job, String phone){
-        return staffDAO.getStaffCount(staffName, yearOfBirth, dept, email, job, phone);
-    }
-    
-    public List<Staff> getStaffByIdList(List<Long> idList, int firstResult, 
-            int maxResult, String orderByColumn, String orderByType){
-        return staffDAO.getStaffByIdList(idList, firstResult, maxResult, 
-                orderByColumn, orderByType);
-    }
-    
-    public int getStaffCountByIdList(List<Long> idList){
-        return staffDAO.getStaffCountByIdList(idList);
-    }
-    
-    public void lockStaff(Staff staff) throws Exception {
-        try{
-            staff.setStatus(Values.STATUS_DEACTIVE);
+	@Override
+	public void unlockStaff(Staff staff) throws Exception {
+		try {
+			staff.setStatus(Values.STATUS_ACTIVE);
 
-            staffDAO.saveOrUpdate(staff);
-        }catch(Exception ex){
-            _log.error(ex.getMessage(), ex);
-        }
-    }
+			this.staffDAO.saveOrUpdate(staff);
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+	}
 
-    public void unlockStaff(Staff staff) throws Exception {
-        try{
-            staff.setStatus(Values.STATUS_ACTIVE);
+	@Override
+	public void deleteStaff(Staff staff) throws Exception {
+		try {
+			Long status = staff.getStatus();
 
-            staffDAO.saveOrUpdate(staff);
-        }catch(Exception ex){
-            _log.error(ex.getMessage(), ex);
-        }
-    }
+			if (!Values.STATUS_ACTIVE.equals(status)) {
+				this.staffDAO.delete(staff);
+			}
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+	}
 
-    public void deleteStaff(Staff staff) throws Exception {
-        try{
-            Long status = staff.getStatus();
+	@Override
+	public void deleteJob(Job job) throws Exception {
+		this.jobDAO.delete(job);
+	}
 
-            if(!Values.STATUS_ACTIVE.equals(status)){
-                staffDAO.delete(staff);
-            }
-        }catch(Exception ex){
-            _log.error(ex.getMessage(), ex);
-        }
-    }
-    
-    public void deleteJob(Job job) throws Exception {
-        jobDAO.delete(job);
-    }
-    
-    public void deleteContractType(ContractType ct) throws Exception {
-        contractTypeDAO.delete(ct);
-    }
-    
-    public void saveOrUpdate(Staff staff) throws Exception {
-        staffDAO.saveOrUpdate(staff);
-    }
+	@Override
+	public void deleteContractType(ContractType ct) throws Exception {
+		this.contractTypeDAO.delete(ct);
+	}
 
-    public void saveOrUpdate(Job job) throws Exception {
-        jobDAO.saveOrUpdate(job);
-    }
-    
-    public void saveOrUpdate(ContractType ct) throws Exception {
-        contractTypeDAO.saveOrUpdate(ct);
-    }
-    
-    public void saveOrUpdate(SalaryLandmark salaryLm) throws Exception{
-        salaryLandmarkDAO.saveOrUpdate(salaryLm);
-    }
-    
-    public void saveOrUpdate(WorkProcess wp) throws Exception {
-        workProcessDAO.saveOrUpdate(wp);
-    }
-    
-    public void deleteAll(List<Staff> staff) throws Exception {
-        staffDAO.deleteAllStaff(staff);
-    }
-    
-    public List<Job> getJobTitle() {
-        return jobDAO.getJobTitle();
-    }
-    
-    public List<ContractType> getContract(){
-        return contractTypeDAO.getContract();
-    }
-    
-    public List<SalaryLandmark> getSalaryLandmarkByStaffId(Long staffId){
-        return salaryLandmarkDAO.getSalaryLandmarkByStaffId(staffId);
-    }
-    
-    public void deleteSalaryLm(SalaryLandmark salaryLm){
-        salaryLandmarkDAO.delete(salaryLm);
-    }
-    
-    public List<WorkProcess> getWorkProcessByStaffId(Long staffId){
-        return workProcessDAO.getWorkProcessByStaffId(staffId);
-    }
-    
-    public void deleteWorkProcess(WorkProcess wp){
-        workProcessDAO.delete(wp);
-    }
-    
-    public List<String> getCompanyName(){
-        return workProcessDAO.getCompanyName();
-    }
-    
-    public List<String> getTotalJobTitle() {
-        List<String> _l1 = jobDAO.getJobTitleOnly();
-        List<String> _l2 = workProcessDAO.getJobTitle();
-        
-        Set<String> _s = new HashSet<String>(_l1);
-        
-        _s.addAll(_l2);
-        
-        return new ArrayList<String>(_s);
-    }
-    
-    private static final Logger _log =
-            LogManager.getLogger(StaffServiceImpl.class);
+	@Override
+	public void saveOrUpdate(Staff staff) throws Exception {
+		this.staffDAO.saveOrUpdate(staff);
+	}
+
+	@Override
+	public void saveOrUpdate(Job job) throws Exception {
+		this.jobDAO.saveOrUpdate(job);
+	}
+
+	@Override
+	public void saveOrUpdate(ContractType ct) throws Exception {
+		this.contractTypeDAO.saveOrUpdate(ct);
+	}
+
+	@Override
+	public void saveOrUpdate(SalaryLandmark salaryLm) throws Exception {
+		this.salaryLandmarkDAO.saveOrUpdate(salaryLm);
+	}
+
+	@Override
+	public void saveOrUpdate(WorkProcess wp) throws Exception {
+		this.workProcessDAO.saveOrUpdate(wp);
+	}
+
+	@Override
+	public void deleteAll(List<Staff> staff) throws Exception {
+		this.staffDAO.deleteAllStaff(staff);
+	}
+
+	@Override
+	public List<Job> getJobTitle() {
+		return this.jobDAO.getJobTitle();
+	}
+
+	@Override
+	public List<ContractType> getContract() {
+		return this.contractTypeDAO.getContract();
+	}
+
+	@Override
+	public List<SalaryLandmark> getSalaryLandmarkByStaffId(Long staffId) {
+		return this.salaryLandmarkDAO.getSalaryLandmarkByStaffId(staffId);
+	}
+
+	@Override
+	public void deleteSalaryLm(SalaryLandmark salaryLm) {
+		this.salaryLandmarkDAO.delete(salaryLm);
+	}
+
+	@Override
+	public List<WorkProcess> getWorkProcessByStaffId(Long staffId) {
+		return this.workProcessDAO.getWorkProcessByStaffId(staffId);
+	}
+
+	@Override
+	public void deleteWorkProcess(WorkProcess wp) {
+		this.workProcessDAO.delete(wp);
+	}
+
+	@Override
+	public List<String> getCompanyName() {
+		return this.workProcessDAO.getCompanyName();
+	}
+
+	@Override
+	public List<String> getTotalJobTitle() {
+		List<String> _l1 = this.jobDAO.getJobTitleOnly();
+		List<String> _l2 = this.workProcessDAO.getJobTitle();
+
+		Set<String> _s = new HashSet<String>(_l1);
+
+		_s.addAll(_l2);
+
+		return new ArrayList<String>(_s);
+	}
+
+	private static final Logger _log = LogManager.getLogger(StaffServiceImpl.class);
 
 }

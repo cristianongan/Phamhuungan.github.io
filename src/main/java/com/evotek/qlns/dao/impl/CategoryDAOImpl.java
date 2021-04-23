@@ -1,20 +1,19 @@
-
-/*
- * Copyright 2013 Viettel Telecom. All rights reserved.
- * VIETTEL PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- */
 package com.evotek.qlns.dao.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Order;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.Criteria;
-import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
+import org.springframework.stereotype.Repository;
 
 import com.evotek.qlns.dao.CategoryDAO;
 import com.evotek.qlns.model.Category;
@@ -27,139 +26,174 @@ import com.evotek.qlns.util.key.Values;
  *
  * @author LinhLH2
  */
-public class CategoryDAOImpl extends BasicDAO<Category> implements CategoryDAO {
+@Repository
+public class CategoryDAOImpl extends AbstractDAO<Category> implements CategoryDAO {
 
-    public List<Category> getAllCategory() throws Exception {
-        List<Category> categories = new ArrayList<Category>();
+	private static final Logger _log = LogManager.getLogger(CategoryDAOImpl.class);
 
-        try {
-            Session session = currentSession();
+	@Override
+	public List<Category> getAllCategory() throws Exception {
+		List<Category> categories = new ArrayList<Category>();
 
-            Criteria cri = session.createCriteria(Category.class);
+		try {
+			Session session = getCurrentSession();
 
-            cri.add(Restrictions.ne("status", QueryUtil.STATUS_DEACTIVE));
+			CriteriaBuilder builder = session.getCriteriaBuilder();
 
-            cri.addOrder(Order.asc("type"));
-            cri.addOrder(Order.asc("weight"));
-            cri.addOrder(Order.asc("createDate"));
+			CriteriaQuery<Category> criteria = builder.createQuery(Category.class);
 
-            categories = (List<Category>) cri.list();
+			Root<Category> root = criteria.from(Category.class);
 
-        } catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
-        }
+			criteria.select(root).where(builder.notEqual(root.get("status"), QueryUtil.STATUS_DEACTIVE));
 
-        return categories;
-    }
+			List<Order> orderList = new ArrayList<>();
 
-    public List<Category> getCategoryItems() throws Exception{
-        List<Category> categories = new ArrayList<Category>();
+			orderList.add(builder.asc(root.get("type")));
+			orderList.add(builder.asc(root.get("weight")));
+			orderList.add(builder.asc(root.get("createDate")));
 
-        try {
-            Session session = currentSession();
+			criteria.orderBy(orderList);
 
-            Criteria cri = session.createCriteria(Category.class);
+			categories = session.createQuery(criteria).getResultList();
 
-            cri.add(Restrictions.eq("type", Values.MENU_TYPE_ITEM));
-            cri.add(Restrictions.ne("status", QueryUtil.STATUS_DEACTIVE));
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
 
-            cri.addOrder(Order.asc("type"));
-            cri.addOrder(Order.asc("weight"));
-            cri.addOrder(Order.asc("createDate"));
+		return categories;
+	}
 
-            categories = (List<Category>) cri.list();
+	@Override
+	public Category getCategoryById(Long categoryId) throws Exception {
+		return findById(Category.class, categoryId);
+	}
 
-        } catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
-        }
+	@Override
+	public List<Category> getCategoryByParentId(Long parentId) throws Exception {
+		List<Category> results = new ArrayList<Category>();
 
-        return categories;
-    }
+		try {
+			Session session = getCurrentSession();
 
-    public List<Category> getCategoryByUser(User user) throws Exception {
-        List<Category> categorys = new ArrayList<Category>();
+			CriteriaBuilder builder = session.getCriteriaBuilder();
 
-        try {
-            Session session = currentSession();
+			CriteriaQuery<Category> criteria = builder.createQuery(Category.class);
 
-            StringBuilder sb = new StringBuilder();
+			Root<Category> root = criteria.from(Category.class);
 
-            sb.append("SELECT distinct c FROM Category c, RightView rv");
-            sb.append(" WHERE rv.userId = :userId AND rv.rightType in (1, 2)");
-            sb.append(" AND c.folderName = rv.rightName AND rv.status = 1");
-            sb.append(" AND c.status = 1");
-            sb.append(" ORDER BY c.type ASC, c.weight ASC, c.createDate ASC");
+			Predicate pre = Validator.isNull(parentId) ? builder.isNull(root.get("parentId"))
+					: builder.equal(root.get("parentId"), parentId);
 
-            Query q = session.createQuery(sb.toString());
+			criteria.select(root).where(pre);
 
-            q.setParameter("userId", user.getUserId());
+			List<Order> orderList = new ArrayList<>();
 
-            categorys = (List<Category>) q.list();
-        } catch (Exception e) {
-            _log.error(e.getMessage(), e);
-        }
+			orderList.add(builder.asc(root.get("weight")));
+			orderList.add(builder.asc(root.get("createDate")));
 
-        return categorys;
-    }
+			criteria.orderBy(orderList);
 
-    public List<Category> getCategoryByParentId(Long parentId) throws Exception {
-        List<Category> results = new ArrayList<Category>();
+			results = session.createQuery(criteria).getResultList();
+		} catch (Exception e) {
+			_log.error(e.getMessage(), e);
+		}
 
-        try {
-            Session session = currentSession();
+		return results;
+	}
 
-            Criteria cri = session.createCriteria(Category.class);
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<Category> getCategoryByUser(User user) throws Exception {
+		List<Category> categorys = new ArrayList<Category>();
 
-            if(Validator.isNull(parentId)){
-                cri.add(Restrictions.isNull("parentId"));
-            }else{
-                cri.add(Restrictions.eq("parentId", parentId));
-            }
+		try {
+			Session session = getCurrentSession();
 
-            cri.addOrder(Order.asc("weight"));
-            cri.addOrder(Order.asc("createDate"));
+			StringBuilder sb = new StringBuilder();
 
-            results = (List<Category>) cri.list();
-            
-        } catch (Exception e) {
-            _log.error(e.getMessage(), e);
-        }
+			sb.append("SELECT distinct c FROM Category c, RightView rv");
+			sb.append(" WHERE rv.userId = :userId AND rv.rightType in (1, 2)");
+			sb.append(" AND c.folderName = rv.rightName AND rv.status = 1");
+			sb.append(" AND c.status = 1");
+			sb.append(" ORDER BY c.type ASC, c.weight ASC, c.createDate ASC");
 
-        return results;
-    }
+			Query q = session.createQuery(sb.toString());
 
-    public List<Category> getCategoryMenuByParentId(Long parentId) throws Exception {
-        List<Category> results = new ArrayList<Category>();
+			q.setParameter("userId", user.getUserId());
 
-        try {
-            Session session = currentSession();
+			categorys = q.getResultList();
+		} catch (Exception e) {
+			_log.error(e.getMessage(), e);
+		}
 
-            Criteria cri = session.createCriteria(Category.class);
+		return categorys;
+	}
 
-            if(Validator.isNull(parentId)){
-                cri.add(Restrictions.isNull("parentId"));
-            }else{
-                cri.add(Restrictions.eq("parentId", parentId));
-            }
+	@Override
+	public List<Category> getCategoryItems() throws Exception {
+		List<Category> categories = new ArrayList<Category>();
 
-            cri.add(Restrictions.eq("type", Values.MENU_TYPE_CATEGORY));
+		try {
+			Session session = getCurrentSession();
 
-            cri.addOrder(Order.asc("weight"));
-            cri.addOrder(Order.asc("createDate"));
+			CriteriaBuilder builder = session.getCriteriaBuilder();
 
-            results = (List<Category>) cri.list();
+			CriteriaQuery<Category> criteria = builder.createQuery(Category.class);
 
-        } catch (Exception e) {
-            _log.error(e.getMessage(), e);
-        }
+			Root<Category> root = criteria.from(Category.class);
 
-        return results;
-    }
+			criteria.select(root).where(builder.equal(root.get("type"), Values.MENU_TYPE_ITEM),
+					builder.notEqual(root.get("status"), QueryUtil.STATUS_DEACTIVE));
 
-    public Category getCategoryById(Long categoryId) throws Exception{
-        return get(Category.class, categoryId);
-    }
+			List<Order> orderList = new ArrayList<>();
 
-    private static final Logger _log =
-            LogManager.getLogger(CategoryDAOImpl.class);
+			orderList.add(builder.asc(root.get("type")));
+			orderList.add(builder.asc(root.get("weight")));
+			orderList.add(builder.asc(root.get("createDate")));
+
+			criteria.orderBy(orderList);
+
+			categories = session.createQuery(criteria).getResultList();
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+
+		return categories;
+	}
+
+	@Override
+	public List<Category> getCategoryMenuByParentId(Long parentId) throws Exception {
+		List<Category> results = new ArrayList<Category>();
+
+		try {
+			Session session = getCurrentSession();
+
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+
+			CriteriaQuery<Category> criteria = builder.createQuery(Category.class);
+
+			Root<Category> root = criteria.from(Category.class);
+
+			Predicate preParentId = Validator.isNull(parentId) ? builder.isNull(root.get("parentId"))
+					: builder.equal(root.get("parentId"), parentId);
+
+			Predicate preType = builder.equal(root.get("type"), Values.MENU_TYPE_CATEGORY);
+
+			criteria.select(root).where(preParentId, preType);
+
+			List<Order> orderList = new ArrayList<>();
+
+			orderList.add(builder.asc(root.get("weight")));
+			orderList.add(builder.asc(root.get("createDate")));
+
+			criteria.orderBy(orderList);
+
+			results = session.createQuery(criteria).getResultList();
+
+		} catch (Exception e) {
+			_log.error(e.getMessage(), e);
+		}
+
+		return results;
+	}
 }

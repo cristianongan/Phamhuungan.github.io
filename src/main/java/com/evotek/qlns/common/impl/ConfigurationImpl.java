@@ -40,16 +40,17 @@ public class ConfigurationImpl implements com.evotek.qlns.common.Configuration {
 
         EasyConf.refreshAll();
 
-        _componentConfiguration = EasyConf.getConfiguration(
+        this._componentConfiguration = EasyConf.getConfiguration(
                     getFileName(classLoader, name));
 
         printSources();
     }
 
-    public void addProperties(Properties properties) {
+    @Override
+	public void addProperties(Properties properties) {
         try {
             ComponentProperties componentProperties =
-                    _componentConfiguration.getProperties();
+                    this._componentConfiguration.getProperties();
 
             AggregatedProperties aggregatedProperties =
                     (AggregatedProperties) componentProperties.toConfiguration();
@@ -92,11 +93,12 @@ public class ConfigurationImpl implements com.evotek.qlns.common.Configuration {
     }
 
     public void clearCache() {
-        _values.clear();
+        this._values.clear();
     }
 
-    public boolean contains(String key) {
-        Object value = _values.get(key);
+    @Override
+	public boolean contains(String key) {
+        Object value = this._values.get(key);
 
         if (value == null) {
             ComponentProperties componentProperties = getComponentProperties();
@@ -107,7 +109,7 @@ public class ConfigurationImpl implements com.evotek.qlns.common.Configuration {
                 value = _nullValue;
             }
 
-            _values.put(key, value);
+            this._values.put(key, value);
         }
 
         if (value == _nullValue) {
@@ -117,7 +119,8 @@ public class ConfigurationImpl implements com.evotek.qlns.common.Configuration {
         }
     }
     
-    public boolean contains(String key, boolean encrypt) {
+    @Override
+	public boolean contains(String key, boolean encrypt) {
         if(!encrypt){
             return this.contains(key);
         } else {
@@ -125,8 +128,9 @@ public class ConfigurationImpl implements com.evotek.qlns.common.Configuration {
         }
     }
 
-    public String get(String key) {
-        Object value = _values.get(key);
+    @Override
+	public String get(String key) {
+        Object value = this._values.get(key);
 
         if (value == null) {
             ComponentProperties componentProperties = getComponentProperties();
@@ -137,7 +141,7 @@ public class ConfigurationImpl implements com.evotek.qlns.common.Configuration {
                 value = _nullValue;
             }
 
-            _values.put(key, value);
+            this._values.put(key, value);
         } else if (_PRINT_DUPLICATE_CALLS_TO_GET) {
             System.out.println("Duplicate call to get " + key);
         }
@@ -149,10 +153,11 @@ public class ConfigurationImpl implements com.evotek.qlns.common.Configuration {
         }
     }
 
-    public String[] getArray(String key) {
+    @Override
+	public String[] getArray(String key) {
         String cacheKey = _ARRAY_KEY_PREFIX.concat(key);
 
-        Object value = _values.get(cacheKey);
+        Object value = this._values.get(cacheKey);
 
         if (value == null) {
             ComponentProperties componentProperties = getComponentProperties();
@@ -168,14 +173,15 @@ public class ConfigurationImpl implements com.evotek.qlns.common.Configuration {
             return _emptyArray;
         }
     }
-    public String get(String key, boolean encrypt) {
+    @Override
+	public String get(String key, boolean encrypt) {
         if(!encrypt){
             return this.get(key);
         }
         
         key = _encryptor.encrypt(key);
         
-        Object value = _values.get(key);
+        Object value = this._values.get(key);
 
         if (value == null) {
             ComponentProperties componentProperties = getComponentProperties();
@@ -188,7 +194,7 @@ public class ConfigurationImpl implements com.evotek.qlns.common.Configuration {
                 value = _encryptor.decrypt((String) value);
             }
 
-            _values.put(key, value);
+            this._values.put(key, value);
         } else if (_PRINT_DUPLICATE_CALLS_TO_GET) {
             System.out.println("Duplicate call to get " + key);
         }
@@ -200,7 +206,8 @@ public class ConfigurationImpl implements com.evotek.qlns.common.Configuration {
         }
     }
 
-    public String[] getArray(String key, boolean encrypt) {
+    @Override
+	public String[] getArray(String key, boolean encrypt) {
         if(!encrypt){
             return this.getArray(key);
         }
@@ -209,7 +216,7 @@ public class ConfigurationImpl implements com.evotek.qlns.common.Configuration {
         
         String cacheKey = _ARRAY_KEY_PREFIX.concat(key);
 
-        Object value = _values.get(cacheKey);
+        Object value = this._values.get(cacheKey);
 
         if (value == null) {
             ComponentProperties componentProperties = getComponentProperties();
@@ -232,7 +239,8 @@ public class ConfigurationImpl implements com.evotek.qlns.common.Configuration {
         }
     }
     
-    public Properties getProperties() {
+    @Override
+	public Properties getProperties() {
 
         // For some strange reason, componentProperties.getProperties() returns
         // values with spaces after commas. So a property setting of "xyz=1,2,3"
@@ -261,7 +269,8 @@ public class ConfigurationImpl implements com.evotek.qlns.common.Configuration {
         return properties;
     }
 
-    public Properties getProperties(String prefix, boolean removePrefix) {
+    @Override
+	public Properties getProperties(String prefix, boolean removePrefix) {
         Properties properties = getProperties();
 
         return getProperties(properties, prefix, removePrefix);
@@ -292,10 +301,11 @@ public class ConfigurationImpl implements com.evotek.qlns.common.Configuration {
         return subProperties;
     }
 
-    public void removeProperties(Properties properties) {
+    @Override
+	public void removeProperties(Properties properties) {
         try {
             ComponentProperties componentProperties =
-                    _componentConfiguration.getProperties();
+                    this._componentConfiguration.getProperties();
 
             AggregatedProperties aggregatedProperties =
                     (AggregatedProperties) componentProperties.toConfiguration();
@@ -342,12 +352,13 @@ public class ConfigurationImpl implements com.evotek.qlns.common.Configuration {
         }
     }
 
-    public void set(String key, String value) {
+    @Override
+	public void set(String key, String value) {
         ComponentProperties componentProperties = getComponentProperties();
 
         componentProperties.setProperty(key, value);
 
-        _values.put(key, value);
+        this._values.put(key, value);
     }
 
     protected Object fixArrayValue(String cacheKey, String[] array) {
@@ -377,13 +388,13 @@ public class ConfigurationImpl implements com.evotek.qlns.common.Configuration {
             }
         }
 
-        _values.put(cacheKey, value);
+        this._values.put(cacheKey, value);
 
         return value;
     }
 
     protected ComponentProperties getComponentProperties() {
-        return _componentConfiguration.getProperties();
+        return this._componentConfiguration.getProperties();
     }
 
     private String getFileName(ClassLoader classLoader, String name) {
@@ -430,11 +441,11 @@ public class ConfigurationImpl implements com.evotek.qlns.common.Configuration {
         for (int i = sources.size() - 1; i >= 0; i--) {
             String source = sources.get(i);
 
-            if (_printedSources.contains(source)) {
+            if (this._printedSources.contains(source)) {
                 continue;
             }
 
-            _printedSources.add(source);
+            this._printedSources.add(source);
 
             String info = "Loading " + source;
 

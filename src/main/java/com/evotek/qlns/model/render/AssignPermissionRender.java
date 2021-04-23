@@ -27,7 +27,8 @@ public class AssignPermissionRender implements ListitemRenderer<Object> {
         this.groups = groups;
     }
 
-    public void render(Listitem items, Object obj, int index) throws Exception {
+    @Override
+	public void render(Listitem items, Object obj, int index) throws Exception {
         Group group = (Group) obj;
 
         items.appendChild(ComponentUtil.createListcell(StringPool.BLANK,
@@ -35,7 +36,7 @@ public class AssignPermissionRender implements ListitemRenderer<Object> {
         items.appendChild(new Listcell(group.getGroupName()));
         items.appendChild(new Listcell(group.getDescription()));
 
-        items.setSelected(groups.contains(group));
+        items.setSelected(this.groups.contains(group));
 
         items.setValue(group);
     }

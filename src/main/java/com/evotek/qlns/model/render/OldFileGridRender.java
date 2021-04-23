@@ -31,7 +31,8 @@ public class OldFileGridRender<Component> implements RowRenderer<FileEntry>{
         this.deleteFiles = deleteFiles;
     }
     
-    public void render(final Row row, final FileEntry entry, int index)
+    @Override
+	public void render(final Row row, final FileEntry entry, int index)
             throws Exception {
         row.appendChild(new Label(entry.getName()));
 
@@ -43,8 +44,9 @@ public class OldFileGridRender<Component> implements RowRenderer<FileEntry>{
 
         button.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
-            public void onEvent(Event event) throws Exception {
-                deleteFiles.add(entry);
+            @Override
+			public void onEvent(Event event) throws Exception {
+                OldFileGridRender.this.deleteFiles.add(entry);
 
                 row.getParent().removeChild(row);
             }

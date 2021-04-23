@@ -27,7 +27,7 @@ public class RightView implements Serializable {
 
     @Column(name = "category_id", precision = 22, scale = 0)
     public Long getCategoryId() {
-        return categoryId;
+        return this.categoryId;
     }
 
     public void setCategoryId(Long categoryId) {
@@ -36,7 +36,7 @@ public class RightView implements Serializable {
 
     @Column(name = "right_type", precision = 22, scale = 0)
     public Long getRightType() {
-        return rightType;
+        return this.rightType;
     }
 
     public void setRightType(Long rightType) {
@@ -45,7 +45,7 @@ public class RightView implements Serializable {
 
     @Column(name = "user_id", precision = 22, scale = 0)
     public Long getUserId() {
-        return userId;
+        return this.userId;
     }
 
     public void setUserId(Long userId) {
@@ -54,7 +54,7 @@ public class RightView implements Serializable {
 
     @Column(name = "description", length = 1000)
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     public void setDescription(String description) {
@@ -63,7 +63,7 @@ public class RightView implements Serializable {
 
     @Column(name = "user_name", length = 50)
     public String getUserName() {
-        return userName;
+        return this.userName;
     }
 
     public void setUserName(String userName) {
@@ -72,7 +72,7 @@ public class RightView implements Serializable {
 
     @Column(name = "right_name", length = 75)
     public String getRightName() {
-        return rightName;
+        return this.rightName;
     }
 
     public void setRightName(String rightName) {
@@ -82,7 +82,7 @@ public class RightView implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date", length = 7)
     public Date getCreateDate() {
-        return createDate;
+        return this.createDate;
     }
 
     public void setCreateDate(Date createDate) {
@@ -91,7 +91,7 @@ public class RightView implements Serializable {
 
     @Column(name = "status", precision = 22, scale = 0)
     public Long getStatus() {
-        return status;
+        return this.status;
     }
 
     public void setStatus(Long status) {
@@ -101,7 +101,7 @@ public class RightView implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "modified_date", length = 7)
     public Date getModifiedDate() {
-        return modifiedDate;
+        return this.modifiedDate;
     }
 
     public void setModifiedDate(Date modifiedDate) {
@@ -111,7 +111,7 @@ public class RightView implements Serializable {
     @Id
     @Column(name = "right_id", unique = true, nullable = false, precision = 22, scale = 0)
     public Long getRightId() {
-        return rightId;
+        return this.rightId;
     }
 
     public void setRightId(Long rightId) {

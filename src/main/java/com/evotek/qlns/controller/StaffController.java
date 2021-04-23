@@ -161,9 +161,9 @@ public class StaffController extends BasicController<Hlayout>
     public void doAfterCompose(Hlayout comp) throws Exception {
         super.doAfterCompose(comp);
 
-        bodyLayout = (Include) winStaff.getParent();
+        this.bodyLayout = (Include) this.winStaff.getParent();
         
-        bodyLayout.setSclass("bodylayout-min");
+        this.bodyLayout.setSclass("bodylayout-min");
         
         initData();
         
@@ -171,56 +171,56 @@ public class StaffController extends BasicController<Hlayout>
     }
 
     public void initData() {
-        firstAhGroupPage = new Auxheader[]{
-            ahGeneral
+        this.firstAhGroupPage = new Auxheader[]{
+            this.ahGeneral
         };
-        secondAhGroupPage = new Auxheader[]{
-            ahContract, ahInsurance
+        this.secondAhGroupPage = new Auxheader[]{
+            this.ahContract, this.ahInsurance
         };
-        thirdAhGroupPage = new Auxheader[]{
-            ahQualifications, ahIdentification, ahContact
-        };
-
-        firstLhGroup = new Listheader[]{
-            lhDepartmentName, lhJobTitleName, lhWorkDate,
-            lhDateOfBirth, lhPermanentResidence, lhCurrentResidence,
-            lhStatus, lhNote
-        };
-        secondLhGroup = new Listheader[]{
-            lhContractType, lhContractFromDate, lhContractToDate,
-            lhContractNumber, lhTaxCode, lhSalaryBasic, lhInsurancePaidDate,
-            lhInsuranceBookNumber, lhPaidPlace
-        };
-        thirdLhGroup = new Listheader[]{
-            lhLevels, lhMajors, lhCollege, lhIdentityCard,
-            lhGrantDate, lhGrantPlace, lhTelephone, lhEmail
+        this.thirdAhGroupPage = new Auxheader[]{
+            this.ahQualifications, this.ahIdentification, this.ahContact
         };
 
-        listboxResult.setAttribute("page", 1);
+        this.firstLhGroup = new Listheader[]{
+            this.lhDepartmentName, this.lhJobTitleName, this.lhWorkDate,
+            this.lhDateOfBirth, this.lhPermanentResidence, this.lhCurrentResidence,
+            this.lhStatus, this.lhNote
+        };
+        this.secondLhGroup = new Listheader[]{
+            this.lhContractType, this.lhContractFromDate, this.lhContractToDate,
+            this.lhContractNumber, this.lhTaxCode, this.lhSalaryBasic, this.lhInsurancePaidDate,
+            this.lhInsuranceBookNumber, this.lhPaidPlace
+        };
+        this.thirdLhGroup = new Listheader[]{
+            this.lhLevels, this.lhMajors, this.lhCollege, this.lhIdentityCard,
+            this.lhGrantDate, this.lhGrantPlace, this.lhTelephone, this.lhEmail
+        };
 
-        _showHideAh(secondAhGroupPage, false);
-        _showHideAh(thirdAhGroupPage, false);
+        this.listboxResult.setAttribute("page", 1);
 
-        _showHideLh(secondLhGroup, false);
-        _showHideLh(thirdLhGroup, false);
+        _showHideAh(this.secondAhGroupPage, false);
+        _showHideAh(this.thirdAhGroupPage, false);
+
+        _showHideLh(this.secondLhGroup, false);
+        _showHideLh(this.thirdLhGroup, false);
     }
 
     public void onCreate$navbar() {
-        List<Department> roots = departmentService.getDepartmentByParentId(null);
+        List<Department> roots = this.departmentService.getDepartmentByParentId(null);
 
-        paramDept.put(null, roots);
+        this.paramDept.put(null, roots);
         
         for (Department root : roots) {
             if (Validator.isNull(root)) {
                 continue;
             }
 
-            createDeptNav(root, navbar);
+            createDeptNav(root, this.navbar);
         }
     }
     
     private void createDeptNav(Department dept, Component parentNode){
-        List<Department> childs = departmentService.getDepartmentByParentId(
+        List<Department> childs = this.departmentService.getDepartmentByParentId(
                 dept.getDeptId());
         
         if(Validator.isNull(childs)){
@@ -236,17 +236,18 @@ public class StaffController extends BasicController<Hlayout>
             
             navItem.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
-                public void onEvent(Event t) throws Exception {
+                @Override
+				public void onEvent(Event t) throws Exception {
                     navItem.setSelected(true);
                 }
             });
             
-            navItem.addForward(Events.ON_CLICK, winStaff, "onSelectDept", 
+            navItem.addForward(Events.ON_CLICK, this.winStaff, "onSelectDept", 
                     new Object[]{navItem, dept});
             
             parentNode.appendChild(navItem);
         } else {
-            paramDept.put(dept.getDeptId(), childs);
+            this.paramDept.put(dept.getDeptId(), childs);
             
             Nav nav = new Nav(dept.getDeptName());
             
@@ -264,7 +265,7 @@ public class StaffController extends BasicController<Hlayout>
                 createDeptNav(child, nav);
             }
             
-            nav.addForward(Events.ON_OPEN, winStaff, "onSelectDept", 
+            nav.addForward(Events.ON_OPEN, this.winStaff, "onSelectDept", 
                     new Object[]{nav, dept});
             
             parentNode.appendChild(nav);
@@ -272,108 +273,108 @@ public class StaffController extends BasicController<Hlayout>
     }
     
     public void onClick$toggler() {
-        if (navbar.isCollapsed()) {
-            sidebar.setSclass("sidebar");
-            navbar.setCollapsed(false);
-            toggler.setIconSclass("z-icon-angle-double-left");
-            bodyLayout.setSclass("bodylayout-max");
+        if (this.navbar.isCollapsed()) {
+            this.sidebar.setSclass("sidebar");
+            this.navbar.setCollapsed(false);
+            this.toggler.setIconSclass("z-icon-angle-double-left");
+            this.bodyLayout.setSclass("bodylayout-max");
         } else {
-            sidebar.setSclass("sidebar sidebar-min");
-            navbar.setCollapsed(true);
-            toggler.setIconSclass("z-icon-angle-double-right");
-            bodyLayout.setSclass("bodylayout-min");
+            this.sidebar.setSclass("sidebar sidebar-min");
+            this.navbar.setCollapsed(true);
+            this.toggler.setIconSclass("z-icon-angle-double-right");
+            this.bodyLayout.setSclass("bodylayout-min");
         }
         // Force the hlayout contains sidebar to recalculate its size
-        Clients.resize(sidebar.getRoot().query("#main"));
+        Clients.resize(this.sidebar.getRoot().query("#main"));
     }
     //new
     
     //combobox jobtitle
     public void onCreate$cbJobTitle() throws Exception {
-        List<Job> jobs = staffService.getJobTitle();
+        List<Job> jobs = this.staffService.getJobTitle();
 
-        cbJobTitle.setModel(new ListModelList<Job>(jobs));
+        this.cbJobTitle.setModel(new ListModelList<Job>(jobs));
     }
     
     public void onSelect$cbJobTitle() {
-        btnClearJob.setVisible(true);
+        this.btnClearJob.setVisible(true);
     }
     
     public void onClick$btnClearJob() {
-        cbJobTitle.setSelectedIndex(-1);
-        btnClearJob.setVisible(false);
+        this.cbJobTitle.setSelectedIndex(-1);
+        this.btnClearJob.setVisible(false);
     }
     
     //Bandbox documentType
     public void onClick$btnClearDept() {
-        bbDepartment.setValue(StringPool.BLANK);
-        bbDepartment.setAttribute(Constants.ID, null);
+        this.bbDepartment.setValue(StringPool.BLANK);
+        this.bbDepartment.setAttribute(Constants.ID, null);
         
-        btnClearDept.setDisabled(true);
-        btnClearDept.setVisible(false);
+        this.btnClearDept.setDisabled(true);
+        this.btnClearDept.setVisible(false);
     }
     
     public void onOpen$bbDepartment(){
-        if(bbDepartment.isOpen() 
-                && Validator.isNull(icDepartment.getSrc())) {
-            icDepartment.setAttribute("bandbox", bbDepartment);
-            icDepartment.setAttribute("btnclear", btnClearDept);
+        if(this.bbDepartment.isOpen() 
+                && Validator.isNull(this.icDepartment.getSrc())) {
+            this.icDepartment.setAttribute("bandbox", this.bbDepartment);
+            this.icDepartment.setAttribute("btnclear", this.btnClearDept);
             
-            icDepartment.setSrc(Constants.TREE_DEPARTMENT_PAGE);
+            this.icDepartment.setSrc(Constants.TREE_DEPARTMENT_PAGE);
         }
     }
 
     //Bandbox documentType
     
     public void basicSearch() {
-        String keyword = GetterUtil.getString(tbKeyword.getValue());
+        String keyword = GetterUtil.getString(this.tbKeyword.getValue());
 
-        paramMap.put("keyword", keyword);
+        this.paramMap.put("keyword", keyword);
 
-        ListModel model = new StaffListModel(listboxResult.getPageSize(),
-                keyword, isAdvance, false, null, staffService);
+        ListModel model = new StaffListModel(this.listboxResult.getPageSize(),
+                keyword, this.isAdvance, false, null, this.staffService);
         
-        listboxResult.setModel(model);
+        this.listboxResult.setModel(model);
         
-        listboxResult.setItemRenderer(
-                new StaffRender(winStaff, model));
+        this.listboxResult.setItemRenderer(
+                new StaffRender(this.winStaff, model));
 
-        listboxResult.setMultiple(true);
+        this.listboxResult.setMultiple(true);
     }
     
     public void advanceSearch() {
-        String staffName = GetterUtil.getString(tbStaffName.getValue());
-        Long  yearOfBirth = GetterUtil.getLong(lgbYearOfBirth.getValue());
-        Department dept = (Department) bbDepartment.
+        String staffName = GetterUtil.getString(this.tbStaffName.getValue());
+        Long  yearOfBirth = GetterUtil.getLong(this.lgbYearOfBirth.getValue());
+        Department dept = (Department) this.bbDepartment.
                     getAttribute(Constants.OBJECT);
-        String email = GetterUtil.getString(tbEmail.getValue());
-        Job job = cbJobTitle.getSelectedItem()!=null ? (Job) cbJobTitle.getSelectedItem().
+        String email = GetterUtil.getString(this.tbEmail.getValue());
+        Job job = this.cbJobTitle.getSelectedItem()!=null ? (Job) this.cbJobTitle.getSelectedItem().
                     getAttribute("data") : null;
-        String phone = GetterUtil.getString(tbPhone.getValue());
+        String phone = GetterUtil.getString(this.tbPhone.getValue());
         
-        paramMap.put("staffName", staffName);
-        paramMap.put("yearOfBirth", yearOfBirth);
-        paramMap.put("dept", dept);
-        paramMap.put("email", email);
-        paramMap.put("job", job);
-        paramMap.put("phone", phone);
+        this.paramMap.put("staffName", staffName);
+        this.paramMap.put("yearOfBirth", yearOfBirth);
+        this.paramMap.put("dept", dept);
+        this.paramMap.put("email", email);
+        this.paramMap.put("job", job);
+        this.paramMap.put("phone", phone);
         
-        ListModel model = new StaffListModel(listboxResult.getPageSize(),
-                staffName, yearOfBirth, dept, email, job, phone, isAdvance, false, 
-                null, staffService);
+        ListModel model = new StaffListModel(this.listboxResult.getPageSize(),
+                staffName, yearOfBirth, dept, email, job, phone, this.isAdvance, false, 
+                null, this.staffService);
         
-        listboxResult.setModel(model);
+        this.listboxResult.setModel(model);
         
-        listboxResult.setItemRenderer(
-                new StaffRender(winStaff, model));
+        this.listboxResult.setItemRenderer(
+                new StaffRender(this.winStaff, model));
 
-        listboxResult.setMultiple(true);
+        this.listboxResult.setMultiple(true);
     }
     
     public void refreshModel() {
-        navbar.clearSelection();
+        this.navbar.clearSelection();
         
-        if (isAdvance) {
+        if (this.isAdvance) {
             this.advanceSearch();
         } else {
             this.basicSearch();
@@ -381,23 +382,23 @@ public class StaffController extends BasicController<Hlayout>
     }
 
     public void onOK$tbKeyword() {
-        isAdvance = false;
+        this.isAdvance = false;
         
         this.refreshModel();
     }
     
     public void onClick$btnBasicSearch() {
-        isAdvance = false;
+        this.isAdvance = false;
         
         this.refreshModel();
     }
     
     public void onClick$btnEnableAdvSearch() {
-        advanceSearchPopup.open(btnEnableAdvSearch, ZkKeys.OVERLAP_END);
+        this.advanceSearchPopup.open(this.btnEnableAdvSearch, ZkKeys.OVERLAP_END);
         
-        tbStaffName.setFocus(true);
+        this.tbStaffName.setFocus(true);
         
-        isAdvance = true;
+        this.isAdvance = true;
     }
     
     public void onClick$btnAdvSearch(){
@@ -411,7 +412,7 @@ public class StaffController extends BasicController<Hlayout>
     public void onClick$btnAdd() {
         Map map = new HashMap();
 
-        map.put(Constants.PARENT_WINDOW, winStaff);
+        map.put(Constants.PARENT_WINDOW, this.winStaff);
         map.put(Constants.OBJECT, null);
 
         Window win = (Window) Executions.createComponents(
@@ -422,37 +423,37 @@ public class StaffController extends BasicController<Hlayout>
     
     public void onClick$btnPreviousPage() {
         int _page = GetterUtil.getIntegerValue(
-                listboxResult.getAttribute("page"), 1);
+                this.listboxResult.getAttribute("page"), 1);
 
         switch (_page) {
             case 1:
-                _showHideAh(firstAhGroupPage, false);
-                _showHideLh(firstLhGroup, false);
+                _showHideAh(this.firstAhGroupPage, false);
+                _showHideLh(this.firstLhGroup, false);
 
-                _showHideAh(thirdAhGroupPage, true);
-                _showHideLh(thirdLhGroup, true);
+                _showHideAh(this.thirdAhGroupPage, true);
+                _showHideLh(this.thirdLhGroup, true);
 
-                listboxResult.setAttribute("page", 3);
+                this.listboxResult.setAttribute("page", 3);
 
                 break;
             case 2:
-                _showHideAh(secondAhGroupPage, false);
-                _showHideLh(secondLhGroup, false);
+                _showHideAh(this.secondAhGroupPage, false);
+                _showHideLh(this.secondLhGroup, false);
 
-                _showHideAh(firstAhGroupPage, true);
-                _showHideLh(firstLhGroup, true);
+                _showHideAh(this.firstAhGroupPage, true);
+                _showHideLh(this.firstLhGroup, true);
 
-                listboxResult.setAttribute("page", 1);
+                this.listboxResult.setAttribute("page", 1);
 
                 break;
             default:
-                _showHideAh(thirdAhGroupPage, false);
-                _showHideLh(thirdLhGroup, false);
+                _showHideAh(this.thirdAhGroupPage, false);
+                _showHideLh(this.thirdLhGroup, false);
 
-                _showHideAh(secondAhGroupPage, true);
-                _showHideLh(secondLhGroup, true);
+                _showHideAh(this.secondAhGroupPage, true);
+                _showHideLh(this.secondLhGroup, true);
 
-                listboxResult.setAttribute("page", 2);
+                this.listboxResult.setAttribute("page", 2);
 
                 break;
         }
@@ -460,37 +461,37 @@ public class StaffController extends BasicController<Hlayout>
 
     public void onClick$btnNextPage() {
         int _page = GetterUtil.getIntegerValue(
-                listboxResult.getAttribute("page"), 1);
+                this.listboxResult.getAttribute("page"), 1);
 
         switch (_page) {
             case 1:
-                _showHideAh(firstAhGroupPage, false);
-                _showHideLh(firstLhGroup, false);
+                _showHideAh(this.firstAhGroupPage, false);
+                _showHideLh(this.firstLhGroup, false);
 
-                _showHideAh(secondAhGroupPage, true);
-                _showHideLh(secondLhGroup, true);
+                _showHideAh(this.secondAhGroupPage, true);
+                _showHideLh(this.secondLhGroup, true);
 
-                listboxResult.setAttribute("page", 2);
+                this.listboxResult.setAttribute("page", 2);
 
                 break;
             case 2:
-                _showHideAh(secondAhGroupPage, false);
-                _showHideLh(secondLhGroup, false);
+                _showHideAh(this.secondAhGroupPage, false);
+                _showHideLh(this.secondLhGroup, false);
 
-                _showHideAh(thirdAhGroupPage, true);
-                _showHideLh(thirdLhGroup, true);
+                _showHideAh(this.thirdAhGroupPage, true);
+                _showHideLh(this.thirdLhGroup, true);
 
-                listboxResult.setAttribute("page", 3);
+                this.listboxResult.setAttribute("page", 3);
 
                 break;
             default:
-                _showHideAh(thirdAhGroupPage, false);
-                _showHideLh(thirdLhGroup, false);
+                _showHideAh(this.thirdAhGroupPage, false);
+                _showHideLh(this.thirdLhGroup, false);
 
-                _showHideAh(firstAhGroupPage, true);
-                _showHideLh(firstLhGroup, true);
+                _showHideAh(this.firstAhGroupPage, true);
+                _showHideLh(this.firstLhGroup, true);
 
-                listboxResult.setAttribute("page", 1);
+                this.listboxResult.setAttribute("page", 1);
 
                 break;
         }
@@ -499,9 +500,9 @@ public class StaffController extends BasicController<Hlayout>
     public void onClick$btnDeptManager(){
         Map map = new HashMap();
         
-        map.put(Constants.PARENT_WINDOW, winStaff);
+        map.put(Constants.PARENT_WINDOW, this.winStaff);
 
-        Window win = (Window) Executions.createComponents(DEPARTMENT_PAGE, 
+        Window win = (Window) Executions.createComponents(this.DEPARTMENT_PAGE, 
                 null, map);
         
         win.doModal();
@@ -516,10 +517,11 @@ public class StaffController extends BasicController<Hlayout>
                 Messagebox.QUESTION,
                 new EventListener<Event>() {
 
-                    public void onEvent(Event e) throws Exception {
+                    @Override
+					public void onEvent(Event e) throws Exception {
                         if (Messagebox.ON_OK.equals(e.getName())) {
                             try {
-                                staffService.lockStaff(staff);
+                                StaffController.this.staffService.lockStaff(staff);
 
                                 ComponentUtil.createSuccessMessageBox(
                                         LanguageKeys.MESSAGE_LOCK_ITEM_SUCCESS);
@@ -545,10 +547,11 @@ public class StaffController extends BasicController<Hlayout>
                 Messagebox.QUESTION,
                 new EventListener() {
 
-                    public void onEvent(Event e) throws Exception {
+                    @Override
+					public void onEvent(Event e) throws Exception {
                         if (Messagebox.ON_OK.equals(e.getName())) {
                             try {
-                                staffService.unlockStaff(staff);
+                                StaffController.this.staffService.unlockStaff(staff);
 
                                ComponentUtil.createSuccessMessageBox(
                                        LanguageKeys.MESSAGE_UNLOCK_ITEM_SUCCESS);
@@ -574,10 +577,11 @@ public class StaffController extends BasicController<Hlayout>
                 Messagebox.QUESTION,
                 new EventListener() {
 
-                    public void onEvent(Event e) throws Exception {
+                    @Override
+					public void onEvent(Event e) throws Exception {
                         if (Messagebox.ON_OK.equals(e.getName())) {
                             try {
-                                staffService.deleteStaff(staff);
+                                StaffController.this.staffService.deleteStaff(staff);
 
                                  ComponentUtil.createSuccessMessageBox(
                                          LanguageKeys.MESSAGE_DELETE_SUCCESS);
@@ -605,28 +609,28 @@ public class StaffController extends BasicController<Hlayout>
             
             if(!nav.isOpen()){
                 return;
-            } else if (selectedNavitem!=null){
-                selectedNavitem.setSelected(false);
+            } else if (this.selectedNavitem!=null){
+                this.selectedNavitem.setSelected(false);
             }
         } else if(comp instanceof Navitem){
-            selectedNavitem = (Navitem) comp;
+            this.selectedNavitem = (Navitem) comp;
         }
         
         List<Long> deptIds = new ArrayList<Long>();
 
         this.getListDeptChild(dept, deptIds);
         
-        paramMap.put("deptIds", deptIds);
+        this.paramMap.put("deptIds", deptIds);
 
-        ListModel model = new StaffListModel(listboxResult.getPageSize(), 
-                StringPool.BLANK, true, true, deptIds, staffService);
+        ListModel model = new StaffListModel(this.listboxResult.getPageSize(), 
+                StringPool.BLANK, true, true, deptIds, this.staffService);
         
-        listboxResult.setModel(model);
+        this.listboxResult.setModel(model);
         
-        listboxResult.setItemRenderer(
-                new StaffRender(winStaff, model));
+        this.listboxResult.setItemRenderer(
+                new StaffRender(this.winStaff, model));
 
-        listboxResult.setMultiple(true);
+        this.listboxResult.setMultiple(true);
     }
     
     public void onLoadData(Event event) throws Exception {
@@ -634,7 +638,7 @@ public class StaffController extends BasicController<Hlayout>
     }
     
     public void onLoadPage(Event event) throws Exception {
-        Component comp = winStaff.getParent();
+        Component comp = this.winStaff.getParent();
         
         if(comp instanceof Include){
             Include inc = (Include) comp;
@@ -654,7 +658,7 @@ public class StaffController extends BasicController<Hlayout>
 
         Long deptId = deptParent.getDeptId();
         
-        List<Department> childs = paramDept.get(deptId);
+        List<Department> childs = this.paramDept.get(deptId);
 
         if (Validator.isNull(childs)) {
             deptIds.add(deptId);
@@ -687,11 +691,11 @@ public class StaffController extends BasicController<Hlayout>
 
     //get set service
     public StaffService getStaffService() {
-        if (staffService == null) {
-            staffService = (StaffService) SpringUtil.getBean("staffService");
-            setStaffService(staffService);
+        if (this.staffService == null) {
+            this.staffService = (StaffService) SpringUtil.getBean("staffService");
+            setStaffService(this.staffService);
         }
-        return staffService;
+        return this.staffService;
     }
 
     public void setStaffService(StaffService StaffService) {
@@ -699,13 +703,13 @@ public class StaffController extends BasicController<Hlayout>
     }
 
     public DepartmentService getDepartmentService() {
-        if (departmentService == null) {
-            departmentService = (DepartmentService) SpringUtil.getBean("departmentService");
+        if (this.departmentService == null) {
+            this.departmentService = (DepartmentService) SpringUtil.getBean("departmentService");
             
-            setDepartmentService(departmentService);
+            setDepartmentService(this.departmentService);
         }
         
-        return departmentService;
+        return this.departmentService;
     }
 
     public void setDepartmentService(DepartmentService departmentService) {

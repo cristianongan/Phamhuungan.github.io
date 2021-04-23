@@ -87,18 +87,18 @@ public class MainController extends BasicController<Div>
 
     public void initMenu() throws Exception {
         //hien thi ten nguoi dang nhap o goc phai man hinh _ manhnn1
-        mniUsername.setLabel(Labels.getLabel(LanguageKeys.MESSAGE_WELLCOME_USER,
+        this.mniUsername.setLabel(Labels.getLabel(LanguageKeys.MESSAGE_WELLCOME_USER,
                 new String[]{getUser().getUserName()}));
-        mniUsername.setTooltiptext(Labels.getLabel(LanguageKeys.MESSAGE_AVATAR));
+        this.mniUsername.setTooltiptext(Labels.getLabel(LanguageKeys.MESSAGE_AVATAR));
 
-        workspace = getUserWorkspace();
+        this.workspace = getUserWorkspace();
 
-        List<String> roles = workspace.getRoles();
+        List<String> roles = this.workspace.getRoles();
 
         if (PermissionUtil.isAdministrator(roles)) {
-            categorys = mainService.getAllCategory();
+            this.categorys = this.mainService.getAllCategory();
         } else {
-            categorys = mainService.getCategoryByUser(getUser());
+            this.categorys = this.mainService.getCategoryByUser(getUser());
         }
 
         this._doGroup();
@@ -110,7 +110,7 @@ public class MainController extends BasicController<Div>
 
 
     private void _doGroup() throws Exception {
-        for (Category category : categorys) {
+        for (Category category : this.categorys) {
             Long type = category.getType();
 
             if (type.equals(Values.MENU_TYPE_ITEM)) {
@@ -118,26 +118,26 @@ public class MainController extends BasicController<Div>
                 Long parentId = category.getParentId();
 
                 if(Validator.isNull(parentId)){
-                    menus.add(category);
+                    this.menus.add(category);
 
                     continue;
                 }
 
-                TreeSet<Category> childs = menuItems.get(parentId);
+                TreeSet<Category> childs = this.menuItems.get(parentId);
 
                 if (Validator.isNull(childs)) {
                     childs = new TreeSet<Category>();
 
-                    Category menu = mainService.getCategoryById(parentId);
+                    Category menu = this.mainService.getCategoryById(parentId);
 
                     if(Validator.isNotNull(menu)){
-                        menus.add(menu);
+                        this.menus.add(menu);
                     }
                 }
 
                 childs.add(category);
 
-                menuItems.put(parentId, childs);
+                this.menuItems.put(parentId, childs);
             }
         }
     }
@@ -147,11 +147,11 @@ public class MainController extends BasicController<Div>
 //        mainMenu.appendChild(_createMenuItem(LanguageKeys.MENU_MAIN,
 //                PermissionConstants.MENU_ITEM_MAIN_PAGE, _getHomePageSource()));
 
-        for (Category category : menus) {
+        for (Category category : this.menus) {
             if (category.getType().equals(Values.MENU_TYPE_CATEGORY)) {
 //                Nav menu = _createMenu(category);
 
-                TreeSet<Category> items = menuItems.get(category.getCategoryId());
+                TreeSet<Category> items = this.menuItems.get(category.getCategoryId());
 
                 if (Validator.isNotNull(items)) {
 //                    for (Category item : items) {
@@ -159,12 +159,12 @@ public class MainController extends BasicController<Div>
 //
 //                        menu.appendChild(menuitem);
 //                    }
-                    mainMenu.appendChild(_createMenu(category, items));
+                    this.mainMenu.appendChild(_createMenu(category, items));
                 }
 
 //                mainMenu.appendChild(menu);
             } else {
-                mainMenu.appendChild(_createMenuItem(category));
+                this.mainMenu.appendChild(_createMenuItem(category));
             }
         }
     }
@@ -185,7 +185,7 @@ public class MainController extends BasicController<Div>
         item.setId(folderName);
 
         item.addEventListener(Events.ON_CLICK, new MenuSelectedEventListener(
-                bodyLayout, srcPage));
+                this.bodyLayout, srcPage));
 
         return item;
     }
@@ -201,7 +201,7 @@ public class MainController extends BasicController<Div>
         item.setId(folderName);
 
         item.addEventListener(Events.ON_CLICK, new MenuSelectedEventListener(
-                bodyLayout, srcPage, parameters));
+                this.bodyLayout, srcPage, parameters));
 
         return item;
     }
@@ -245,7 +245,7 @@ public class MainController extends BasicController<Div>
 
         boolean defautl = true;
 
-        for (Category category : categorys) {
+        for (Category category : this.categorys) {
             if (category.getType().equals(Values.MENU_TYPE_CATEGORY)) {
                 continue;
             }
@@ -257,8 +257,8 @@ public class MainController extends BasicController<Div>
             rights.add(folderName);
 //            rights.add("home_" + folderName);
 
-            if (workspace.isAllowed(rights)) {
-                bodyLayout.setSrc(getPageSource(category.getFolderName(),
+            if (this.workspace.isAllowed(rights)) {
+                this.bodyLayout.setSrc(getPageSource(category.getFolderName(),
                         category.getViewPage()));
 
                 defautl = false;
@@ -309,12 +309,12 @@ public class MainController extends BasicController<Div>
     public void onClick$userDetail() throws IOException {
         Map<String, Object> parameters = new HashMap<String, Object>();
 
-        parameters.put(Constants.PARENT_WINDOW, mainDiv);
+        parameters.put(Constants.PARENT_WINDOW, this.mainDiv);
         parameters.put(Constants.TITLE, Labels.getLabel(
                 LanguageKeys.USER_INFOMATION));
         parameters.put(Constants.OBJECT, getUser());
 
-        Window win = (Window) Executions.createComponents(USER_DETAIL_PAGE, mainDiv,
+        Window win = (Window) Executions.createComponents(USER_DETAIL_PAGE, this.mainDiv,
                 parameters);
 
         win.doModal();
@@ -322,31 +322,31 @@ public class MainController extends BasicController<Div>
 
     //notification
     public void initNotificaion(){
-        int cteCount = mainService.getContractExpiredCount();// contract expired count
-        int bdCount = mainService.getBirthDayCount();// birthday count
+        int cteCount = this.mainService.getContractExpiredCount();// contract expired count
+        int bdCount = this.mainService.getBirthDayCount();// birthday count
         
-        lbNotiBag.setValue(String.valueOf(cteCount+bdCount));
-        aNotiTotal.setLabel(Labels.getLabel(LanguageKeys.MESSAGE_NOTIFICATION_TOTAL, 
+        this.lbNotiBag.setValue(String.valueOf(cteCount+bdCount));
+        this.aNotiTotal.setLabel(Labels.getLabel(LanguageKeys.MESSAGE_NOTIFICATION_TOTAL, 
                 new Object[]{cteCount+bdCount}));
-        lbContractEx.setValue(StringPool.PLUS+cteCount);
-        lbBirthDay.setValue(StringPool.PLUS+ bdCount);
+        this.lbContractEx.setValue(StringPool.PLUS+cteCount);
+        this.lbBirthDay.setValue(StringPool.PLUS+ bdCount);
         
         if(cteCount+bdCount <= 0){
-            aSeeAll.setVisible(false);
+            this.aSeeAll.setVisible(false);
         } else {
-            aSeeAll.setVisible(true);
+            this.aSeeAll.setVisible(true);
         }
     }
     
     public void initFooter(){
-        lbCurrentYear.setValue(String.valueOf(
+        this.lbCurrentYear.setValue(String.valueOf(
                 Calendar.getInstance().get(Calendar.YEAR)));
     }
     
     public void onClick$aSeeAll() {
         Map<String, Object> params = new HashMap<String, Object>();
 
-        params.put(Constants.PARENT_WINDOW, mainDiv);
+        params.put(Constants.PARENT_WINDOW, this.mainDiv);
 
         Window win = (Window) Executions.createComponents(
                 VIEW_ALL_NOTIFICATION, null, params);

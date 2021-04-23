@@ -59,7 +59,7 @@ public class Department implements Serializable {
     }
 
     public Long getDeptId() {
-        return deptId;
+        return this.deptId;
     }
 
     public void setDeptId(Long deptId) {
@@ -67,7 +67,7 @@ public class Department implements Serializable {
     }
 
     public Long getUserId() {
-        return userId;
+        return this.userId;
     }
 
     public void setUserId(Long userId) {
@@ -75,7 +75,7 @@ public class Department implements Serializable {
     }
 
     public String getUserName() {
-        return userName;
+        return this.userName;
     }
 
     public void setUserName(String userName) {
@@ -83,7 +83,7 @@ public class Department implements Serializable {
     }
 
     public Date getCreateDate() {
-        return createDate;
+        return this.createDate;
     }
 
     public void setCreateDate(Date createDate) {
@@ -91,7 +91,7 @@ public class Department implements Serializable {
     }
 
     public Date getModifiedDate() {
-        return modifiedDate;
+        return this.modifiedDate;
     }
 
     public void setModifiedDate(Date modifiedDate) {
@@ -99,7 +99,7 @@ public class Department implements Serializable {
     }
 
     public String getDeptName() {
-        return deptName;
+        return this.deptName;
     }
 
     public void setDeptName(String deptName) {
@@ -107,7 +107,7 @@ public class Department implements Serializable {
     }
 
     public Long getParentId() {
-        return parentId;
+        return this.parentId;
     }
 
     public void setParentId(Long parentId) {
@@ -115,7 +115,7 @@ public class Department implements Serializable {
     }
 
     public String getIcon() {
-        return icon;
+        return this.icon;
     }
 
     public void setIcon(String icon) {
@@ -123,7 +123,7 @@ public class Department implements Serializable {
     }
 
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     public void setDescription(String description) {
@@ -131,7 +131,7 @@ public class Department implements Serializable {
     }
 
     public Long getOrdinal() {
-        return ordinal;
+        return this.ordinal;
     }
 
     public void setOrdinal(Long ordinal) {
@@ -141,7 +141,7 @@ public class Department implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (deptId != null ? deptId.hashCode() : 0);
+        hash += (this.deptId != null ? this.deptId.hashCode() : 0);
         return hash;
     }
 
@@ -161,7 +161,7 @@ public class Department implements Serializable {
 
     @Override
     public String toString() {
-        return "com.evotek.qlns.model.Department[ deptId=" + deptId + " ]";
+        return "com.evotek.qlns.model.Department[ deptId=" + this.deptId + " ]";
     }
     
 }

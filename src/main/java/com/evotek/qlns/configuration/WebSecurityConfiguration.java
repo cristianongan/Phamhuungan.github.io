@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
@@ -20,15 +21,15 @@ import com.evotek.qlns.policy.impl.UserDetailsServiceImpl;
 @Configuration
 @EnableWebSecurity
 @EnableAutoConfiguration
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Autowired
 	UserDetailsServiceImpl userDetailsService;
 
 	@Bean
-	public BCryptPasswordEncoder passwordEncoder() {
-		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(16);
+	public PasswordEncoder passwordEncoder() {
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(16);
 		
-		return bCryptPasswordEncoder;
+		return passwordEncoder;
 	}
 
 	@Autowired
@@ -36,7 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 		// Sét đặt dịch vụ để tìm kiếm User trong Database.
 		// Và sét đặt PasswordEncoder.
-		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+		auth.userDetailsService(this.userDetailsService).passwordEncoder(passwordEncoder());
 
 	}
 

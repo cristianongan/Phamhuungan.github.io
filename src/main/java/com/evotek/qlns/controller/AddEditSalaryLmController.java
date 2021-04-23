@@ -65,13 +65,13 @@ public class AddEditSalaryLmController extends BasicController<Window>{
     //init data
     public void initData() throws Exception {
         try {
-            winTemp = (Window) arg.get(Constants.PARENT_WINDOW);
+            this.winTemp = (Window) this.arg.get(Constants.PARENT_WINDOW);
 
-            staff = (Staff) arg.get(Constants.OBJECT);
-            salaryLm = (SalaryLandmark) arg.get(Constants.EDIT_OBJECT);
+            this.staff = (Staff) this.arg.get(Constants.OBJECT);
+            this.salaryLm = (SalaryLandmark) this.arg.get(Constants.EDIT_OBJECT);
 
-            if(Validator.isNotNull(salaryLm)){
-                winEditSalaryLm.setTitle((String) arg.get(Constants.TITLE));
+            if(Validator.isNotNull(this.salaryLm)){
+                this.winEditSalaryLm.setTitle((String) this.arg.get(Constants.TITLE));
 
                 this._setEditForm();
             } 
@@ -81,43 +81,43 @@ public class AddEditSalaryLmController extends BasicController<Window>{
     }
     
     private void _setEditForm() {
-        dbFromDate.setValue(salaryLm.getFromDate());
-        dbToDate.setValue(salaryLm.getToDate());
-        lgbSalary.setValue(salaryLm.getSalary());
+        this.dbFromDate.setValue(this.salaryLm.getFromDate());
+        this.dbToDate.setValue(this.salaryLm.getToDate());
+        this.lgbSalary.setValue(this.salaryLm.getSalary());
     }
     
     public void onClick$btnSave() throws Exception {
         boolean update = true;
 
         try {
-            Date fromDate = dbFromDate.getValue();
-            Date toDate = dbToDate.getValue();
-            Long salary = lgbSalary.getValue();
+            Date fromDate = this.dbFromDate.getValue();
+            Date toDate = this.dbToDate.getValue();
+            Long salary = this.lgbSalary.getValue();
             
             if(_validate(salary)){
-                if(Validator.isNull(salaryLm)){
+                if(Validator.isNull(this.salaryLm)){
                     update = false;
                     
-                    salaryLm = new SalaryLandmark();
+                    this.salaryLm = new SalaryLandmark();
                     
-                    salaryLm.setUserId(getUserId());
-                    salaryLm.setUserName(getUserName());
-                    salaryLm.setCreateDate(new Date());
+                    this.salaryLm.setUserId(getUserId());
+                    this.salaryLm.setUserName(getUserName());
+                    this.salaryLm.setCreateDate(new Date());
                 }
                 
-                salaryLm.setFromDate(fromDate);
-                salaryLm.setToDate(toDate);
-                salaryLm.setSalary(salary);
-                salaryLm.setModifiedDate(new Date());
+                this.salaryLm.setFromDate(fromDate);
+                this.salaryLm.setToDate(toDate);
+                this.salaryLm.setSalary(salary);
+                this.salaryLm.setModifiedDate(new Date());
                 
-                staffService.saveOrUpdate(salaryLm);
+                this.staffService.saveOrUpdate(this.salaryLm);
                 
                 ComponentUtil.createSuccessMessageBox(
                         ComponentUtil.getSuccessKey(update));
 
-                winEditSalaryLm.detach();
+                this.winEditSalaryLm.detach();
 
-                Events.sendEvent("onLoadReloadSalaryLm", winTemp, null);
+                Events.sendEvent("onLoadReloadSalaryLm", this.winTemp, null);
             }
         } catch (Exception ex) {
             _log.error(ex.getMessage(), ex);
@@ -129,10 +129,10 @@ public class AddEditSalaryLmController extends BasicController<Window>{
     
     private boolean _validate(Long salary){
         if (Validator.isNull(salary)) {
-            lgbSalary.setErrorMessage(Values.getRequiredInputMsg(
+            this.lgbSalary.setErrorMessage(Values.getRequiredInputMsg(
                     Labels.getLabel(LanguageKeys.SALARY)));
             
-            lgbSalary.setFocus(true);
+            this.lgbSalary.setFocus(true);
             
             return false;
         }
@@ -141,15 +141,15 @@ public class AddEditSalaryLmController extends BasicController<Window>{
     }
     
     public void onClick$btnCancel(){
-        winEditSalaryLm.detach();
+        this.winEditSalaryLm.detach();
     }
     //get set service
     public StaffService getStaffService() {
-        if (staffService == null) {
-            staffService = (StaffService) SpringUtil.getBean("staffService");
-            setStaffService(staffService);
+        if (this.staffService == null) {
+            this.staffService = (StaffService) SpringUtil.getBean("staffService");
+            setStaffService(this.staffService);
         }
-        return staffService;
+        return this.staffService;
     }
 
     public void setStaffService(StaffService StaffService) {

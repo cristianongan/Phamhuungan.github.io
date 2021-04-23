@@ -31,7 +31,6 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.Hibernate;
 import org.zkoss.util.media.Media;
 import org.zkoss.zul.Filedownload;
 

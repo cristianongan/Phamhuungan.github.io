@@ -64,25 +64,25 @@ public class AdminController extends BasicController<Hlayout>
     }
     
     public void init() {
-        parameters = (Map<String, Object>) Sessions.getCurrent().
+        this.parameters = (Map<String, Object>) Sessions.getCurrent().
                 getAttribute(Constants.MAP_PARAMETER);
         
-        if(Validator.isNotNull(parameters)){
-            items = (TreeSet<Category>) parameters.get(Constants.MENU_ITEMS);
+        if(Validator.isNotNull(this.parameters)){
+            this.items = (TreeSet<Category>) this.parameters.get(Constants.MENU_ITEMS);
         }
     }
     
     public void onCreate$navbar() {
-        if(Validator.isNull(items)){
+        if(Validator.isNull(this.items)){
             return;
         }
 
-        for (Category item : items) {
+        for (Category item : this.items) {
             if (Validator.isNull(item)) {
                 continue;
             }
 
-            this.createNav(item, navbar);
+            this.createNav(item, this.navbar);
         }
     }
     
@@ -101,33 +101,34 @@ public class AdminController extends BasicController<Hlayout>
         
         navItem.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
-            public void onEvent(Event t) throws Exception {
+            @Override
+			public void onEvent(Event t) throws Exception {
                 navItem.setSelected(true);
             }
         });
 
         navItem.addEventListener(Events.ON_CLICK, new MenuSelectedEventListener(
-                contentLayout, getPageSource(item.getFolderName(), item.getViewPage())));
+                this.contentLayout, getPageSource(item.getFolderName(), item.getViewPage())));
 
         parentNode.appendChild(navItem);
     }
     
     public void onClick$toggler() {
-        Include include = (Include) winAdmin.getParent();
+        Include include = (Include) this.winAdmin.getParent();
         
-        if (navbar.isCollapsed()) {
-            sidebar.setSclass("sidebar");
-            navbar.setCollapsed(false);
-            toggler.setIconSclass("z-icon-angle-double-left");
+        if (this.navbar.isCollapsed()) {
+            this.sidebar.setSclass("sidebar");
+            this.navbar.setCollapsed(false);
+            this.toggler.setIconSclass("z-icon-angle-double-left");
             include.setSclass("bodylayout-max");
         } else {
-            sidebar.setSclass("sidebar sidebar-min");
-            navbar.setCollapsed(true);
-            toggler.setIconSclass("z-icon-angle-double-right");
+            this.sidebar.setSclass("sidebar sidebar-min");
+            this.navbar.setCollapsed(true);
+            this.toggler.setIconSclass("z-icon-angle-double-right");
             include.setSclass("bodylayout-min");
         }
         // Force the hlayout contains sidebar to recalculate its size
-        Clients.resize(sidebar.getRoot().query("#main"));
+        Clients.resize(this.sidebar.getRoot().query("#main"));
     }
     
     private String getPageSource(String folder, String pageView){

@@ -33,7 +33,7 @@ public class Language implements Serializable {
     }
 
     public int getId() {
-        return id;
+        return this.id;
     }
 
     public void setLanLocale(String lanLocale) {
@@ -41,7 +41,7 @@ public class Language implements Serializable {
     }
 
     public String getLanLocale() {
-        return lanLocale;
+        return this.lanLocale;
     }
 
     public void setLanText(String lanText) {
@@ -49,7 +49,7 @@ public class Language implements Serializable {
     }
 
     public String getLanText() {
-        return lanText;
+        return this.lanText;
     }
 
     @Override
@@ -75,7 +75,8 @@ public class Language implements Serializable {
         return false;
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
         return new ToStringBuilder(this).append("id", getId()).toString();
     }
 }

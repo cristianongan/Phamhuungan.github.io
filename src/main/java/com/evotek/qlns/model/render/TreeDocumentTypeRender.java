@@ -29,14 +29,14 @@ public class TreeDocumentTypeRender implements TreeitemRenderer<DocumentTypeTree
     private DocumentTypeService documentTypeService;
 
     public TreeDocumentTypeRender(Window win, DocumentTypeService _doDocumentTypeService) {
-        winparent = win;
-        documentTypeService = _doDocumentTypeService;
+        this.winparent = win;
+        this.documentTypeService = _doDocumentTypeService;
     }
 
     @Override
     public void render(final Treeitem item, DocumentTypeTreeNode node, int index)
             throws Exception {
-        DocumentType documentType = (DocumentType) node.getData();
+        DocumentType documentType = node.getData();
         //tree cell
         Treerow treeRow = new Treerow();
 
@@ -54,7 +54,7 @@ public class TreeDocumentTypeRender implements TreeitemRenderer<DocumentTypeTree
 
         treeRow.setContext(_createContextMenu(treeRow, documentType));
 
-        treeRow.addForward(Events.ON_DOUBLE_CLICK, winparent, "onEdit", documentType);
+        treeRow.addForward(Events.ON_DOUBLE_CLICK, this.winparent, "onEdit", documentType);
         //cho phep keo doi tuong
 //        if (documentType.getChildDocumentTypes().isEmpty()) {
 //            item.setDraggable(String.valueOf(true));
@@ -109,13 +109,13 @@ public class TreeDocumentTypeRender implements TreeitemRenderer<DocumentTypeTree
 
         popup.setPage(treeRow.getPage());
         
-        popup.appendChild(ComponentUtil.createMenuitem(winparent,
+        popup.appendChild(ComponentUtil.createMenuitem(this.winparent,
                 Labels.getLabel(LanguageKeys.ADD), Events.ON_CLICK, "onAdd",
                 documentType, Constants.Z_ICON_PLUS, 
                 Constants.BLUE));
 
 //        if (documentType.getParentDocumentType() != null) { //neu khong phai la root
-        popup.appendChild(ComponentUtil.createMenuitem(winparent,
+        popup.appendChild(ComponentUtil.createMenuitem(this.winparent,
                 Labels.getLabel(LanguageKeys.EDIT), Events.ON_CLICK,
                 "onEdit", documentType, Constants.Z_ICON_PENCIL, 
                 Constants.BLUE));

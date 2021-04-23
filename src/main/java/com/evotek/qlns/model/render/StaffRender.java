@@ -39,7 +39,8 @@ public class StaffRender implements ListitemRenderer<Staff> {
         this._model = model;
     }
 
-    public void render(Listitem item, Staff staff, int index) throws Exception {
+    @Override
+	public void render(Listitem item, Staff staff, int index) throws Exception {
         item.setAttribute("data", staff);
         
         item.appendChild(ComponentUtil.createListcell(StringPool.BLANK,
@@ -121,18 +122,18 @@ public class StaffRender implements ListitemRenderer<Staff> {
         Long status = staff.getStatus();
         
         if(Values.STATUS_ACTIVE.equals(status)){
-            hlayout.appendChild(ComponentUtil.createButton(_window,
+            hlayout.appendChild(ComponentUtil.createButton(this._window,
                     Labels.getLabel(LanguageKeys.BUTTON_LOCK), ComponentUtil.LOCK_TOOLTIP,
                     Events.ON_CLICK, "onLockStaff", staff, Constants.Z_ICON_LOCK,
                     Constants.ORANGE));
         } else {
-            hlayout.appendChild(ComponentUtil.createButton(_window,
+            hlayout.appendChild(ComponentUtil.createButton(this._window,
                     Labels.getLabel(LanguageKeys.BUTTON_UNLOCK), ComponentUtil.UNLOCK_TOOLTIP,
                     Events.ON_CLICK, "onUnlockStaff", staff, Constants.Z_ICON_UNLOCK,
                     Constants.ORANGE));
 
             //Thêm action "Xóa"
-            hlayout.appendChild(ComponentUtil.createButton(_window,
+            hlayout.appendChild(ComponentUtil.createButton(this._window,
                     Labels.getLabel(LanguageKeys.BUTTON_DELETE), ComponentUtil.DEL_TOOLTIP,
                     Events.ON_CLICK, "onDeleteStaff", staff, Constants.Z_ICON_TRASH_O,
                     Constants.RED));
@@ -153,10 +154,10 @@ public class StaffRender implements ListitemRenderer<Staff> {
             Staff staff, String title, int index) {
         Map<String, Object> parameters = new HashMap<String, Object>();
 
-        parameters.put(Constants.PARENT_WINDOW, _window);
+        parameters.put(Constants.PARENT_WINDOW, this._window);
         parameters.put(Constants.TITLE, title);
         parameters.put(Constants.OBJECT, staff);
-        parameters.put(Constants.MODEL, _model);
+        parameters.put(Constants.MODEL, this._model);
         parameters.put(Constants.INDEX, index);
 
         return parameters;

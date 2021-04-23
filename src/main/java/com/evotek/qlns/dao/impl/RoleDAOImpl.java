@@ -27,15 +27,17 @@ import com.evotek.qlns.util.key.Values;
  *
  * @author linhlh2
  */
-public class RoleDAOImpl extends BasicDAO<Role> implements RoleDAO {
+public class RoleDAOImpl extends AbstractDAO<Role> implements RoleDAO {
 
     private static final Logger _log = LogManager.getLogger(RoleDAOImpl.class);
 
-    public Role getNewRole() {
+    @Override
+	public Role getNewRole() {
         return new Role();
     }
 
-    public Role getRoleById(Long roleId) throws Exception {
+    @Override
+	public Role getRoleById(Long roleId) throws Exception {
         Role role = null;
 
         try {
@@ -52,7 +54,8 @@ public class RoleDAOImpl extends BasicDAO<Role> implements RoleDAO {
         return role;
     }
 
-    public List<Role> getRoleByRN(String roleName) throws Exception {
+    @Override
+	public List<Role> getRoleByRN(String roleName) throws Exception {
         List<Role> roles = new ArrayList<Role>();
 
         try {
@@ -69,7 +72,7 @@ public class RoleDAOImpl extends BasicDAO<Role> implements RoleDAO {
 
             cri.addOrder(Order.asc("roleName"));
 
-            roles = (List<Role>) cri.list();
+            roles = cri.list();
         } catch (Exception e) {
             _log.error(e.getMessage(), e);
         }
@@ -77,7 +80,8 @@ public class RoleDAOImpl extends BasicDAO<Role> implements RoleDAO {
         return roles;
     }
 
-    public List<Role> getRoleByRN(String roleName, Long roleId) throws Exception {
+    @Override
+	public List<Role> getRoleByRN(String roleName, Long roleId) throws Exception {
         List<Role> roles = new ArrayList<Role>();
 
         try {
@@ -91,7 +95,7 @@ public class RoleDAOImpl extends BasicDAO<Role> implements RoleDAO {
                 cri.add(Restrictions.ne("roleId", roleId));
             }
 
-            roles = (List<Role>) cri.list();
+            roles = cri.list();
         } catch (Exception e) {
             _log.error(e.getMessage(), e);
         }
@@ -99,7 +103,8 @@ public class RoleDAOImpl extends BasicDAO<Role> implements RoleDAO {
         return roles;
     }
 
-    public int getCountAllRoles() throws Exception {
+    @Override
+	public int getCountAllRoles() throws Exception {
         int count = 0;
 
         try {
@@ -163,7 +168,8 @@ public class RoleDAOImpl extends BasicDAO<Role> implements RoleDAO {
 //        return roleNames;
 //    }
 
-    public List<Role> getRoles(boolean isAdmin) {
+    @Override
+	public List<Role> getRoles(boolean isAdmin) {
         List<Role> roles = new ArrayList<Role>();
 
         try {
@@ -179,7 +185,7 @@ public class RoleDAOImpl extends BasicDAO<Role> implements RoleDAO {
 
             cri.addOrder(Order.asc("roleName"));
 
-            roles = (List<Role>) cri.list();
+            roles = cri.list();
         } catch (Exception e) {
             _log.error(e.getMessage(), e);
         }
@@ -187,7 +193,8 @@ public class RoleDAOImpl extends BasicDAO<Role> implements RoleDAO {
         return roles;
     }
 
-    public List<Role> getRoles(String roleName, Long status) throws Exception {
+    @Override
+	public List<Role> getRoles(String roleName, Long status) throws Exception {
         List<Role> results = new ArrayList<Role>();
 
         try {
@@ -204,7 +211,7 @@ public class RoleDAOImpl extends BasicDAO<Role> implements RoleDAO {
 
             cri.addOrder(Order.asc("roleName").ignoreCase());
 
-            results = (List<Role>) cri.list();
+            results = cri.list();
         } catch (Exception ex) {
             _log.error(ex.getMessage(), ex);
         }
@@ -213,14 +220,15 @@ public class RoleDAOImpl extends BasicDAO<Role> implements RoleDAO {
     }
     
     //New
-    public List<Role> searchRole(String roleName)
+    @Override
+	public List<Role> searchRole(String roleName)
     {
         List<Role> roles = new ArrayList<Role>();
         try {
             Session session = currentSession();
             Criteria criteria  = session.createCriteria(Role.class);
             criteria.add(LikeCriterionMaker.ilike("roleName", roleName, MatchMode.ANYWHERE));
-            roles = (List<Role>) criteria.list();
+            roles = criteria.list();
         } catch (Exception ex) {
              _log.error(ex.getMessage(), ex);
         }
@@ -230,7 +238,8 @@ public class RoleDAOImpl extends BasicDAO<Role> implements RoleDAO {
         }
     }
 
-    public Role getRoleByName(String roleName) throws Exception {
+    @Override
+	public Role getRoleByName(String roleName) throws Exception {
         try {
             Session session = currentSession();
 
@@ -245,7 +254,7 @@ public class RoleDAOImpl extends BasicDAO<Role> implements RoleDAO {
 
             cri.addOrder(Order.asc("roleName"));
 
-            List<Role> roles = (List<Role>) cri.list();
+            List<Role> roles = cri.list();
 
             if(roles.isEmpty()){
                 return null;

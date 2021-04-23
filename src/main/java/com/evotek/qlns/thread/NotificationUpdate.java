@@ -21,12 +21,12 @@ public class NotificationUpdate{
     private StartUpService startUpService;
 
     public StartUpService getStartUpService() {
-        if (startUpService == null) {
-            startUpService = (StartUpService) SpringUtil.getBean("startUpService");
-            setStartUpService(startUpService);
+        if (this.startUpService == null) {
+            this.startUpService = (StartUpService) SpringUtil.getBean("startUpService");
+            setStartUpService(this.startUpService);
         }
 
-        return startUpService;
+        return this.startUpService;
     }
 
     public void setStartUpService(StartUpService startUpService) {
@@ -40,11 +40,11 @@ public class NotificationUpdate{
         try {
             System.out.println("NotificationUpdate thread is running");
             //set all expired notification to status 0
-            int updated = startUpService.updateNotificationStatus();
+            int updated = this.startUpService.updateNotificationStatus();
 
             _log.info(updated + " notifications have been updated!");
 
-            int inserted = startUpService.insertNotification();
+            int inserted = this.startUpService.insertNotification();
 
             _log.info(inserted + " notifications have been inserted!");
 

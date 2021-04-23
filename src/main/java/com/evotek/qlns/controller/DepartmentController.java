@@ -78,57 +78,60 @@ public class DepartmentController extends BasicController<Window>
     public void doAfterCompose(Window comp) throws Exception {
         super.doAfterCompose(comp);
         
-        winParent = (Hlayout) arg.get(Constants.PARENT_WINDOW);
+        this.winParent = (Hlayout) this.arg.get(Constants.PARENT_WINDOW);
         
         onCreateTree();
         
-        winDept.addEventListener(Events.ON_CLOSE, new EventListener<Event>() {
+        this.winDept.addEventListener(Events.ON_CLOSE, new EventListener<Event>() {
 
-            public void onEvent(Event event) throws Exception {
+            @Override
+			public void onEvent(Event event) throws Exception {
                 
-                if(doReload){
-                    Events.sendEvent("onLoadPage", winParent, null);
+                if(DepartmentController.this.doReload){
+                    Events.sendEvent("onLoadPage", DepartmentController.this.winParent, null);
                 }
             }
         });
     }
 
     public void onCreateTree() {
-        btnDelete.setDisabled(true);
-        btnUp.setDisabled(true);
-        btnDown.setDisabled(true);
+        this.btnDelete.setDisabled(true);
+        this.btnUp.setDisabled(true);
+        this.btnDown.setDisabled(true);
         
         TreeBasicModel treeConfigModel = 
                 new TreeBasicModel(_buildDeptTree(), false);
 
-        tree.setModel(treeConfigModel);
+        this.tree.setModel(treeConfigModel);
         
-        tree.setItemRenderer(new TreeDeptRender(
-                winDept, departmentService)); 
+        this.tree.setItemRenderer(new TreeDeptRender(
+                this.winDept, this.departmentService)); 
         
-        tree.addEventListener(Events.ON_SELECT, new EventListener<Event>() {
+        this.tree.addEventListener(Events.ON_SELECT, new EventListener<Event>() {
 
-            public void onEvent(Event t) throws Exception {
-                boolean disable = tree.getSelectedCount()<0;
+            @Override
+			public void onEvent(Event t) throws Exception {
+                boolean disable = DepartmentController.this.tree.getSelectedCount()<0;
                 
-                btnDelete.setDisabled(disable);
-                btnUp.setDisabled(disable);
-                btnDown.setDisabled(disable);
+                DepartmentController.this.btnDelete.setDisabled(disable);
+                DepartmentController.this.btnUp.setDisabled(disable);
+                DepartmentController.this.btnDown.setDisabled(disable);
             }
         });
         
-        tree.addEventListener(Events.ON_CANCEL, new EventListener<Event>() {
+        this.tree.addEventListener(Events.ON_CANCEL, new EventListener<Event>() {
 
-            public void onEvent(Event t) throws Exception {
-                tree.clearSelection();
+            @Override
+			public void onEvent(Event t) throws Exception {
+                DepartmentController.this.tree.clearSelection();
                 
-                btnDelete.setDisabled(true);
-                btnUp.setDisabled(true);
-                btnDown.setDisabled(true);
+                DepartmentController.this.btnDelete.setDisabled(true);
+                DepartmentController.this.btnUp.setDisabled(true);
+                DepartmentController.this.btnDown.setDisabled(true);
             }
         });
         
-        btnInsert.addForward(Events.ON_CLICK, winDept, "onAdd", null);
+        this.btnInsert.addForward(Events.ON_CLICK, this.winDept, "onAdd", null);
     }
     
     public DepartmentTreeNode _buildDeptTree() {
@@ -140,9 +143,9 @@ public class DepartmentController extends BasicController<Window>
 
         try {
             //Lấy danh sách các menu category
-            List<Department> roots = departmentService.getDepartmentByParentId(null);
+            List<Department> roots = this.departmentService.getDepartmentByParentId(null);
 
-            deptMaps.put(null, roots);
+            this.deptMaps.put(null, roots);
             
             for (Department root : roots) {
                 addChildToParent(root, rootNode);
@@ -156,10 +159,10 @@ public class DepartmentController extends BasicController<Window>
 
     public void addChildToParent(Department parent, DepartmentTreeNode treeNode) {
         List<Department> childs
-                = departmentService.getDepartmentByParentId(parent.getDeptId());
+                = this.departmentService.getDepartmentByParentId(parent.getDeptId());
 
         if (Validator.isNotNull(childs)) {
-            deptMaps.put(parent.getDeptId(), childs);
+            this.deptMaps.put(parent.getDeptId(), childs);
             //Tạo cây con tu parent
             DepartmentTreeNode rootChilds = new DepartmentTreeNode(parent,
                     new DepartmentTreeNode[]{});
@@ -191,7 +194,8 @@ public class DepartmentController extends BasicController<Window>
                     Messagebox.OK | Messagebox.CANCEL,
                     Messagebox.QUESTION,
                     new EventListener() {
-                        public void onEvent(Event e) throws Exception {
+                        @Override
+						public void onEvent(Event e) throws Exception {
                             if (Messagebox.ON_OK.equals(e.getName())) {
                                 try {
                                     List<Long> deptIds = 
@@ -203,9 +207,9 @@ public class DepartmentController extends BasicController<Window>
                                             deptIds);
                                     
                                     //xoa
-                                    departmentService.delete(deptIds);
+                                    DepartmentController.this.departmentService.delete(deptIds);
                                     //update ordinal
-                                    departmentService.updateOrdinal(dept.getParentId(), 
+                                    DepartmentController.this.departmentService.updateOrdinal(dept.getParentId(), 
                                             dept.getOrdinal());
                                     
                                     ComponentUtil.createSuccessMessageBox(
@@ -213,7 +217,7 @@ public class DepartmentController extends BasicController<Window>
                                     //refresh lai cay
                                     onCreateTree();
                                     
-                                    doReload = true;
+                                    DepartmentController.this.doReload = true;
                                     //refresh lai danh muc tai lieu
 //                                    Events.sendEvent("onLoadPage", winParent, null);
                                 } catch (Exception ex) {
@@ -229,14 +233,14 @@ public class DepartmentController extends BasicController<Window>
     }
     
     public void onClick$btnUp(){
-        Treeitem item = tree.getSelectedItem();
+        Treeitem item = this.tree.getSelectedItem();
         
         if (Validator.isNull(item)) {
             Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_SELECT_RECORD),
                     Labels.getLabel(LanguageKeys.ERROR), Messagebox.OK,
                     Messagebox.EXCLAMATION, Messagebox.OK);
         } else {   
-            TreeBasicModel treeModel = (TreeBasicModel) tree.getModel();
+            TreeBasicModel treeModel = (TreeBasicModel) this.tree.getModel();
             
             DepartmentTreeNode treeNode = (DepartmentTreeNode) item.getValue();
             DepartmentTreeNode parentTreeNode = (DepartmentTreeNode) treeNode.getParent();
@@ -258,22 +262,22 @@ public class DepartmentController extends BasicController<Window>
             
 //            this.updateOrdinal(childNodes);
             
-            changedNode.add(parentTreeNode);
+            this.changedNode.add(parentTreeNode);
             
-            btnReset.setDisabled(changedNode.isEmpty());
-            btnSave.setDisabled(changedNode.isEmpty());
+            this.btnReset.setDisabled(this.changedNode.isEmpty());
+            this.btnSave.setDisabled(this.changedNode.isEmpty());
         }
     }
     
     public void onClick$btnDown(){
-        Treeitem item = tree.getSelectedItem();
+        Treeitem item = this.tree.getSelectedItem();
         
         if (Validator.isNull(item)) {
             Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_SELECT_RECORD),
                     Labels.getLabel(LanguageKeys.ERROR), Messagebox.OK,
                     Messagebox.EXCLAMATION, Messagebox.OK);
         } else {
-            TreeBasicModel treeModel = (TreeBasicModel) tree.getModel();
+            TreeBasicModel treeModel = (TreeBasicModel) this.tree.getModel();
             
             DepartmentTreeNode treeNode = (DepartmentTreeNode) item.getValue();
             DepartmentTreeNode parentTreeNode = (DepartmentTreeNode) treeNode.getParent();
@@ -295,15 +299,15 @@ public class DepartmentController extends BasicController<Window>
             
 //            this.updateOrdinal(childNodes);
             
-            changedNode.add(parentTreeNode);
+            this.changedNode.add(parentTreeNode);
             
-            btnReset.setDisabled(changedNode.isEmpty());
-            btnSave.setDisabled(changedNode.isEmpty());
+            this.btnReset.setDisabled(this.changedNode.isEmpty());
+            this.btnSave.setDisabled(this.changedNode.isEmpty());
         }
     }
     
     public void onClick$btnReset(){
-        changedNode.clear();
+        this.changedNode.clear();
         
         onCreateTree();
     }
@@ -314,7 +318,8 @@ public class DepartmentController extends BasicController<Window>
                 Messagebox.OK | Messagebox.CANCEL,
                 Messagebox.QUESTION,
                 new EventListener() {
-                    public void onEvent(Event e) throws Exception {
+                    @Override
+					public void onEvent(Event e) throws Exception {
                         if (Messagebox.ON_OK.equals(e.getName())) {
                             try {
                                 updateOrdinal();
@@ -324,10 +329,10 @@ public class DepartmentController extends BasicController<Window>
                                 //refresh lai danh muc tai lieu
 //                                Events.sendEvent("onLoadPage", winParent, null);
                                 //disable button
-                                btnSave.setDisabled(true);
-                                btnReset.setDisabled(true);
+                                DepartmentController.this.btnSave.setDisabled(true);
+                                DepartmentController.this.btnReset.setDisabled(true);
                                 
-                                doReload = true;
+                                DepartmentController.this.doReload = true;
                             } catch (Exception ex) {
                                 _log.error(ex.getMessage(), ex);
 
@@ -340,7 +345,7 @@ public class DepartmentController extends BasicController<Window>
     }
     
     private void updateOrdinal() {
-        for (DepartmentTreeNode deptTreeNode : changedNode) {
+        for (DepartmentTreeNode deptTreeNode : this.changedNode) {
             List<TreeNode<Department>> childNodes = deptTreeNode.getChildren();
             
             for (TreeNode<Department> treeNode : childNodes) {
@@ -349,15 +354,15 @@ public class DepartmentController extends BasicController<Window>
                 dept.setOrdinal(Long.valueOf(childNodes.indexOf(treeNode)));
             }
             
-            departmentService.saveOrUpdate(deptTreeNode.getData());
+            this.departmentService.saveOrUpdate(deptTreeNode.getData());
         }
 
-        changedNode.clear();
+        this.changedNode.clear();
     }
     
     private List<Long> getDeptGroup(Long rootId, 
             List<Long> deptIds){
-        List<Department> depts = deptMaps.get(rootId);
+        List<Department> depts = this.deptMaps.get(rootId);
         
         if(Validator.isNotNull(depts)){
             for(Department dept: depts){
@@ -381,11 +386,11 @@ public class DepartmentController extends BasicController<Window>
         Map map = new HashMap();
 
         map.put(Constants.TITLE, Labels.getLabel(LanguageKeys.ADD));
-        map.put(Constants.PARENT_WINDOW, winDept);
+        map.put(Constants.PARENT_WINDOW, this.winDept);
         map.put(Constants.SECOND_OBJECT, dept);
 
         Window win = (Window) Executions.createComponents(ADD_EDIT_PAGE, 
-                winDept, map);
+                this.winDept, map);
 
         win.doModal();
     }
@@ -396,17 +401,17 @@ public class DepartmentController extends BasicController<Window>
         Map map = new HashMap();
 
         map.put(Constants.TITLE, Labels.getLabel(LanguageKeys.TITLE_EDIT_DEPARTMENT));
-        map.put(Constants.PARENT_WINDOW, winDept);
+        map.put(Constants.PARENT_WINDOW, this.winDept);
         map.put(Constants.OBJECT, dept);
 
         Window win = (Window) Executions.createComponents(ADD_EDIT_PAGE, 
-                winDept, map);
+                this.winDept, map);
         
         win.doModal();
     }
 
     private Department getSelectedItem(){
-        Treeitem item = tree.getSelectedItem();
+        Treeitem item = this.tree.getSelectedItem();
         
         return item == null ? null:
                 (Department) ((DepartmentTreeNode) item.getValue()).getData();
@@ -415,25 +420,25 @@ public class DepartmentController extends BasicController<Window>
     public void onLoadData(Event event) {
         onCreateTree();
 
-        doReload = true;
+        this.doReload = true;
     }
     
     public void onClick$btnCancel() {
-        winDept.detach();
+        this.winDept.detach();
 
-        if (doReload) {
-            Events.sendEvent("onLoadPage", winParent, null);
+        if (this.doReload) {
+            Events.sendEvent("onLoadPage", this.winParent, null);
         }
     }
     
     public DepartmentService getDepartmentService() {
-        if (departmentService == null) {
-            departmentService = (DepartmentService) SpringUtil.getBean("departmentService");
+        if (this.departmentService == null) {
+            this.departmentService = (DepartmentService) SpringUtil.getBean("departmentService");
             
-            setDepartmentService(departmentService);
+            setDepartmentService(this.departmentService);
         }
         
-        return departmentService;
+        return this.departmentService;
     }
 
     public void setDepartmentService(DepartmentService departmentService) {

@@ -64,13 +64,13 @@ public class AddEditWorkProcessController extends BasicController<Window>{
     //init data
     public void initData() throws Exception {
         try {
-            winTemp = (Window) arg.get(Constants.PARENT_WINDOW);
+            this.winTemp = (Window) this.arg.get(Constants.PARENT_WINDOW);
 
-            staff = (Staff) arg.get(Constants.OBJECT);
-            wp = (WorkProcess) arg.get(Constants.EDIT_OBJECT);
+            this.staff = (Staff) this.arg.get(Constants.OBJECT);
+            this.wp = (WorkProcess) this.arg.get(Constants.EDIT_OBJECT);
 
-            if(Validator.isNotNull(wp)){
-                winEditWp.setTitle((String) arg.get(Constants.TITLE));
+            if(Validator.isNotNull(this.wp)){
+                this.winEditWp.setTitle((String) this.arg.get(Constants.TITLE));
 
                 this._setEditForm();
             } 
@@ -80,59 +80,59 @@ public class AddEditWorkProcessController extends BasicController<Window>{
     }
     
     private void _setEditForm() {
-        dbFromDate.setValue(wp.getFromDate());
-        dbToDate.setValue(wp.getToDate());
-        cbCompany.setValue(wp.getCompany());
-        cbJobTitle.setValue(wp.getJobTitle());
+        this.dbFromDate.setValue(this.wp.getFromDate());
+        this.dbToDate.setValue(this.wp.getToDate());
+        this.cbCompany.setValue(this.wp.getCompany());
+        this.cbJobTitle.setValue(this.wp.getJobTitle());
     }
     
     public void onCreate$cbDepartment() {
-        ListModel model = new SimpleListModel(staffService.getCompanyName());
+        ListModel model = new SimpleListModel(this.staffService.getCompanyName());
         
-        cbCompany.setModel(model);
+        this.cbCompany.setModel(model);
     }
     
     public void onCreate$cbJobTitle() {
-        ListModel model = new SimpleListModel(staffService.getTotalJobTitle());
+        ListModel model = new SimpleListModel(this.staffService.getTotalJobTitle());
         
-        cbJobTitle.setModel(model);
+        this.cbJobTitle.setModel(model);
     }
     
     public void onClick$btnSave() throws Exception {
         boolean update = true;
 
         try {
-            Date fromDate = dbFromDate.getValue();
-            Date toDate = dbToDate.getValue();
-            String company = GetterUtil.getString(cbCompany.getValue());
-            String jobTitle = GetterUtil.getString(cbJobTitle.getValue());
+            Date fromDate = this.dbFromDate.getValue();
+            Date toDate = this.dbToDate.getValue();
+            String company = GetterUtil.getString(this.cbCompany.getValue());
+            String jobTitle = GetterUtil.getString(this.cbJobTitle.getValue());
             
             if(_validate(company)){
-                if(Validator.isNull(wp)){
+                if(Validator.isNull(this.wp)){
                     update = false;
                     
-                    wp = new WorkProcess();
+                    this.wp = new WorkProcess();
                     
-                    wp.setUserId(getUserId());
-                    wp.setUserName(getUserName());
-                    wp.setCreateDate(new Date());
-                    wp.setStaffId(staff.getStaffId());
+                    this.wp.setUserId(getUserId());
+                    this.wp.setUserName(getUserName());
+                    this.wp.setCreateDate(new Date());
+                    this.wp.setStaffId(this.staff.getStaffId());
                 }
                 
-                wp.setFromDate(fromDate);
-                wp.setToDate(toDate);
-                wp.setCompany(company);
-                wp.setJobTitle(jobTitle);
-                wp.setModifiedDate(new Date());
+                this.wp.setFromDate(fromDate);
+                this.wp.setToDate(toDate);
+                this.wp.setCompany(company);
+                this.wp.setJobTitle(jobTitle);
+                this.wp.setModifiedDate(new Date());
                 
-                staffService.saveOrUpdate(wp);
+                this.staffService.saveOrUpdate(this.wp);
                 
                 ComponentUtil.createSuccessMessageBox(
                         ComponentUtil.getSuccessKey(update));
 
-                winEditWp.detach();
+                this.winEditWp.detach();
 
-                Events.sendEvent("onLoadReloadWp", winTemp, null);
+                Events.sendEvent("onLoadReloadWp", this.winTemp, null);
             }
         } catch (Exception ex) {
             _log.error(ex.getMessage(), ex);
@@ -144,10 +144,10 @@ public class AddEditWorkProcessController extends BasicController<Window>{
     
     private boolean _validate(String company){
         if (Validator.isNull(company)) {
-            cbCompany.setErrorMessage(Values.getRequiredInputMsg(
+            this.cbCompany.setErrorMessage(Values.getRequiredInputMsg(
                     Labels.getLabel(LanguageKeys.WORK_AT)));
             
-            cbCompany.setFocus(true);
+            this.cbCompany.setFocus(true);
             
             return false;
         }
@@ -156,15 +156,15 @@ public class AddEditWorkProcessController extends BasicController<Window>{
     }
     
     public void onClick$btnCancel(){
-        winEditWp.detach();
+        this.winEditWp.detach();
     }
     //get set service
     public StaffService getStaffService() {
-        if (staffService == null) {
-            staffService = (StaffService) SpringUtil.getBean("staffService");
-            setStaffService(staffService);
+        if (this.staffService == null) {
+            this.staffService = (StaffService) SpringUtil.getBean("staffService");
+            setStaffService(this.staffService);
         }
-        return staffService;
+        return this.staffService;
     }
 
     public void setStaffService(StaffService StaffService) {

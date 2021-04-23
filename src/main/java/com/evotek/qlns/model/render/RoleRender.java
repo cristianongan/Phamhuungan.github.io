@@ -66,20 +66,20 @@ public class RoleRender<Component> implements ListitemRenderer<Role> {
 
                 if (Values.STATUS_ACTIVE.equals(status)) {
                     //Thêm action "Khóa"
-                    hlayout.appendChild(ComponentUtil.createButton(winTemp,
+                    hlayout.appendChild(ComponentUtil.createButton(this.winTemp,
                             Labels.getLabel(LanguageKeys.BUTTON_LOCK), 
                             ComponentUtil.LOCK_TOOLTIP, Events.ON_CLICK,
                             "onLockRole", role, Constants.Z_ICON_LOCK,
                             Constants.ORANGE));
                 } else {
-                    hlayout.appendChild(ComponentUtil.createButton(winTemp,
+                    hlayout.appendChild(ComponentUtil.createButton(this.winTemp,
                             Labels.getLabel(LanguageKeys.BUTTON_UNLOCK), 
                             ComponentUtil.UNLOCK_TOOLTIP, Events.ON_CLICK,
                             "onUnlockRole", role, Constants.Z_ICON_UNLOCK,
                             Constants.ORANGE));
 
                     //Thêm action "Xóa"
-                    hlayout.appendChild(ComponentUtil.createButton(winTemp,
+                    hlayout.appendChild(ComponentUtil.createButton(this.winTemp,
                             Labels.getLabel(LanguageKeys.BUTTON_DELETE), 
                             ComponentUtil.DEL_TOOLTIP, Events.ON_CLICK,
                             "onDeleteRole", role, Constants.Z_ICON_TRASH_O,
@@ -87,7 +87,7 @@ public class RoleRender<Component> implements ListitemRenderer<Role> {
                 }
             }
 
-            hlayout.appendChild(ComponentUtil.createButton(winTemp,
+            hlayout.appendChild(ComponentUtil.createButton(this.winTemp,
                     Labels.getLabel(LanguageKeys.ASSIGN_RIGHT), 
                     ComponentUtil.ASSIGN_RIGHT_TOOLTIP, Events.ON_CLICK,
                     PERMISSION_PAGE, _createParameterMap(role),
@@ -103,7 +103,7 @@ public class RoleRender<Component> implements ListitemRenderer<Role> {
     private Map<String, Object> _createParameterMap(Role role) {
         Map<String, Object> parameters = new HashMap<String, Object>();
 
-        parameters.put(Constants.PARENT_WINDOW, winTemp);
+        parameters.put(Constants.PARENT_WINDOW, this.winTemp);
         parameters.put(Constants.TITLE, Labels.getLabel(
                 LanguageKeys.TITLE_EDIT_ROLE));
         parameters.put(Constants.EDIT_OBJECT, role);

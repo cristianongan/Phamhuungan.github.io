@@ -52,16 +52,16 @@ public class NotificationController extends BasicController<Window>
     public void doAfterCompose(Window comp) throws Exception {
         super.doAfterCompose(comp);
         
-        parent = (Div) arg.get(Constants.PARENT_WINDOW);
+        this.parent = (Div) this.arg.get(Constants.PARENT_WINDOW);
         
         this.refreshModel();
     }
     
     public void refreshModel(){
-        notifies = startUpService.getNotifies();
+        this.notifies = this.startUpService.getNotifies();
         
-        lbNotify.setModel(new ListModelList<Notification>(notifies));
-        lbNotify.setItemRenderer(new NotificationRender(winNotify));
+        this.lbNotify.setModel(new ListModelList<Notification>(this.notifies));
+        this.lbNotify.setItemRenderer(new NotificationRender(this.winNotify));
     }
     
     public void onDeleteNotify(Event event) {
@@ -72,17 +72,18 @@ public class NotificationController extends BasicController<Window>
                 Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION,
                 Messagebox.OK, new EventListener() {
 
-                    public void onEvent(Event e) throws Exception {
+                    @Override
+					public void onEvent(Event e) throws Exception {
                         if (Messagebox.ON_OK.equals(e.getName())) {
                             try {
-                                startUpService.expired(notify);
+                                NotificationController.this.startUpService.expired(notify);
 
                                 ComponentUtil.createSuccessMessageBox(
                                         LanguageKeys.MESSAGE_DELETE_SUCCESS);
 
                                 refreshModel();
                                 
-                                Events.sendEvent("onUpdateNotification", parent, null);
+                                Events.sendEvent("onUpdateNotification", NotificationController.this.parent, null);
                             } catch (Exception ex) {
                                 _log.error(ex.getMessage(), ex);
 
@@ -95,16 +96,16 @@ public class NotificationController extends BasicController<Window>
     }
     
     public void onClick$btnCancel(){
-        winNotify.detach();
+        this.winNotify.detach();
     }
     //get set service
     public StartUpService getStartUpService() {
-        if (startUpService == null) {
-            startUpService = (StartUpService) SpringUtil.getBean("startUpService");
-            setStartUpService(startUpService);
+        if (this.startUpService == null) {
+            this.startUpService = (StartUpService) SpringUtil.getBean("startUpService");
+            setStartUpService(this.startUpService);
         }
 
-        return startUpService;
+        return this.startUpService;
     }
 
     public void setStartUpService(StartUpService startUpService) {

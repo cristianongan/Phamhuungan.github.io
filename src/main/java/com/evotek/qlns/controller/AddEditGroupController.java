@@ -63,18 +63,18 @@ public class AddEditGroupController extends BasicController<Window>
     //init data
     public void initData() throws Exception {
         try {
-            winTemp = (Window) arg.get(Constants.PARENT_WINDOW);
+            this.winTemp = (Window) this.arg.get(Constants.PARENT_WINDOW);
 
-            category = (Category) arg.get(Constants.OBJECT);
+            this.category = (Category) this.arg.get(Constants.OBJECT);
 
-            if(Validator.isNull(category)){
-                category = new Category();
+            if(Validator.isNull(this.category)){
+                this.category = new Category();
             }
 
-            group = (Group) arg.get(Constants.EDIT_OBJECT);
+            this.group = (Group) this.arg.get(Constants.EDIT_OBJECT);
 
-            if(Validator.isNotNull(group)){
-                winEditGroups.setTitle((String) arg.get(Constants.TITLE));
+            if(Validator.isNotNull(this.group)){
+                this.winEditGroups.setTitle((String) this.arg.get(Constants.TITLE));
 
                 this._setEditForm();
             }
@@ -84,47 +84,47 @@ public class AddEditGroupController extends BasicController<Window>
     }
 
     private void _setEditForm(){
-        tbGroupsName.setValue(group.getGroupName());
-        tbDescription.setValue(group.getDescription());
+        this.tbGroupsName.setValue(this.group.getGroupName());
+        this.tbDescription.setValue(this.group.getDescription());
     }
 
     //even method
     public void onClick$btnCancel(){
-        winEditGroups.detach();
+        this.winEditGroups.detach();
     }
 
     public void onClick$btnSave() throws Exception {
         boolean update = true;
 
         try {
-            String groupName = GetterUtil.getString(tbGroupsName.getValue());
-            String description = GetterUtil.getString(tbDescription.getValue());
+            String groupName = GetterUtil.getString(this.tbGroupsName.getValue());
+            String description = GetterUtil.getString(this.tbDescription.getValue());
 
             if (_validate(groupName, description)) {
-                if(Validator.isNull(group)){
+                if(Validator.isNull(this.group)){
                     update = false;
 
-                    group = new Group();
+                    this.group = new Group();
 
-                    group.setUserId(getUserId());
-                    group.setUserName(getUserName());
-                    group.setCreateDate(new Date());
-                    group.setCategoryId(category.getCategoryId());
-                    group.setStatus(Values.STATUS_ACTIVE);
+                    this.group.setUserId(getUserId());
+                    this.group.setUserName(getUserName());
+                    this.group.setCreateDate(new Date());
+                    this.group.setCategoryId(this.category.getCategoryId());
+                    this.group.setStatus(Values.STATUS_ACTIVE);
                 }
 
-                group.setGroupName(groupName);
-                group.setDescription(description);
-                group.setModifiedDate(new Date());
+                this.group.setGroupName(groupName);
+                this.group.setDescription(description);
+                this.group.setModifiedDate(new Date());
 
-                categoryService.saveOrUpdateGroup(group);
+                this.categoryService.saveOrUpdateGroup(this.group);
 
                 ComponentUtil.createSuccessMessageBox(
                         ComponentUtil.getSuccessKey(update));
 
-                winEditGroups.detach();
+                this.winEditGroups.detach();
 
-                Events.sendEvent("onLoadGroups", winTemp, null);
+                Events.sendEvent("onLoadGroups", this.winTemp, null);
             }
 
         } catch (Exception ex) {
@@ -138,14 +138,14 @@ public class AddEditGroupController extends BasicController<Window>
 
     private boolean _validate(String groupName, String description) {
         if (Validator.isNull(groupName)) {
-            tbGroupsName.setErrorMessage(Values.getRequiredInputMsg(
+            this.tbGroupsName.setErrorMessage(Values.getRequiredInputMsg(
                     Labels.getLabel(LanguageKeys.GROUP_NAME)));
 
             return false;
         }
 
         if (groupName.length() > Values.MEDIUM_LENGTH) {
-            tbGroupsName.setErrorMessage(Values.getMaxLengthInvalidMsg(
+            this.tbGroupsName.setErrorMessage(Values.getMaxLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.GROUP_NAME),
                     Values.MEDIUM_LENGTH));
 
@@ -154,7 +154,7 @@ public class AddEditGroupController extends BasicController<Window>
 
         if (Validator.isNotNull(description)
                 && description.length() > Values.GREATE_LONG_LENGTH) {
-            tbDescription.setErrorMessage(Values.getMaxLengthInvalidMsg(
+            this.tbDescription.setErrorMessage(Values.getMaxLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.DESCRIPTION),
                     Values.GREATE_LONG_LENGTH));
 

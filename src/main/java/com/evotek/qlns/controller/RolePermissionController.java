@@ -80,27 +80,29 @@ public class RolePermissionController extends BasicController<Window> {
     public void initData() throws Exception {
 //        winTemp = (Window) arg.get(Constants.PARENT_WINDOW);
 
-        role = (Role) arg.get(Constants.EDIT_OBJECT);
+        this.role = (Role) this.arg.get(Constants.EDIT_OBJECT);
 
-        groups = role.getGroups();
+        this.groups = this.role.getGroups();
         
-        searchResult.addEventListener(Events.ON_SELECT, new EventListener<Event>() {
-            public void onEvent(Event t) throws Exception {
-                btnSave.setVisible(true);
+        this.searchResult.addEventListener(Events.ON_SELECT, new EventListener<Event>() {
+            @Override
+			public void onEvent(Event t) throws Exception {
+                RolePermissionController.this.btnSave.setVisible(true);
             }
         });
     }
 
     public void onCreate$treeMenu() throws Exception {
         try {
-            treeModel = new TreeBasicModel(_buildCategoryTree());
+            this.treeModel = new TreeBasicModel(_buildCategoryTree());
 
-            treeModel.setMultiple(true);
+            this.treeModel.setMultiple(true);
 
-            treeMenu.setItemRenderer(new TreeitemRenderer<CategoryTreeNode>() {
+            this.treeMenu.setItemRenderer(new TreeitemRenderer<CategoryTreeNode>() {
 
-                public void render(Treeitem item, CategoryTreeNode t, int i) throws Exception {
-                    final Category category = (Category) t.getData();
+                @Override
+				public void render(Treeitem item, CategoryTreeNode t, int i) throws Exception {
+                    final Category category = t.getData();
 
                     //tree cell
                     Treerow dataRow = new Treerow();
@@ -116,24 +118,25 @@ public class RolePermissionController extends BasicController<Window> {
                 }
             });
             
-            searchResult.setItemRenderer(new AssignPermissionRender(groups));
-            searchResult.setModel(new ListModelList<Group>());
-            searchResult.setMultiple(true);
+            this.searchResult.setItemRenderer(new AssignPermissionRender(this.groups));
+            this.searchResult.setModel(new ListModelList<Group>());
+            this.searchResult.setMultiple(true);
             
-            treeMenu.setModel(treeModel);
+            this.treeMenu.setModel(this.treeModel);
             
-            treeMenu.addEventListener(Events.ON_SELECT, new EventListener<Event>() {
-                public void onEvent(Event event) throws Exception {
-                    categorySelected = ((CategoryTreeNode) 
-                            treeMenu.getSelectedItem().getValue()).getData();
+            this.treeMenu.addEventListener(Events.ON_SELECT, new EventListener<Event>() {
+                @Override
+				public void onEvent(Event event) throws Exception {
+                    RolePermissionController.this.categorySelected = ((CategoryTreeNode) 
+                            RolePermissionController.this.treeMenu.getSelectedItem().getValue()).getData();
                     
-                    searchResult.setModel(
+                    RolePermissionController.this.searchResult.setModel(
                             new SimpleModelList<Group>(
-                                    mapGroups.get(categorySelected.getCategoryId())));
+                                    RolePermissionController.this.mapGroups.get(RolePermissionController.this.categorySelected.getCategoryId())));
                     
-                    searchResult.invalidate();
+                    RolePermissionController.this.searchResult.invalidate();
                     
-                    btnSave.setVisible(false);
+                    RolePermissionController.this.btnSave.setVisible(false);
                 }
             });
         } catch (Exception ex) {
@@ -158,13 +161,13 @@ public class RolePermissionController extends BasicController<Window> {
         try{
             Long categoryId = null;
             //Lấy danh sách các menu category
-            List<Category> roots = categoryService.getCategoryByParentId(null);
+            List<Category> roots = this.categoryService.getCategoryByParentId(null);
             
 
             for(Category root: roots){
                 categoryId = root.getCategoryId();
                 //Lấy danh sách các menu item ứng với mỗi menu category
-                List<Category> childs = categoryService.getCategoryByParentId(
+                List<Category> childs = this.categoryService.getCategoryByParentId(
                         categoryId);
                 if (!childs.isEmpty()) {
                     //Tạo cây con với gốc là menu category
@@ -177,7 +180,7 @@ public class RolePermissionController extends BasicController<Window> {
                     for (Category child : childs) {
                         item.add(new CategoryTreeNode(child));
 
-                        mapGroups.put(child.getCategoryId(), roleService.getGroupByCategoryId(
+                        this.mapGroups.put(child.getCategoryId(), this.roleService.getGroupByCategoryId(
                                 child.getCategoryId()));
                     }
 
@@ -187,7 +190,7 @@ public class RolePermissionController extends BasicController<Window> {
                     menu.add(new CategoryTreeNode(root));
                 }
                 
-                mapGroups.put(categoryId, roleService.getGroupByCategoryId(
+                this.mapGroups.put(categoryId, this.roleService.getGroupByCategoryId(
                         categoryId));
             }
         }catch (Exception ex) {
@@ -198,32 +201,32 @@ public class RolePermissionController extends BasicController<Window> {
     }
 
     public void onClick$btnCancel() {
-        winPermission.detach();
+        this.winPermission.detach();
     }
 
     public void onClick$btnSave() {
         try{
-            List<Group> allGroups = mapGroups.get(categorySelected.getCategoryId());
+            List<Group> allGroups = this.mapGroups.get(this.categorySelected.getCategoryId());
 
-            Set<Listitem> listitems = searchResult.getSelectedItems();
+            Set<Listitem> listitems = this.searchResult.getSelectedItems();
 
             for(Listitem item: listitems){
                 if(item instanceof Listitem){
                     Group group = (Group) item.getValue();
 
-                    groups.add(group);
+                    this.groups.add(group);
                     
                     allGroups.remove(group);
                 }
             }
 
-            groups.removeAll(allGroups);
+            this.groups.removeAll(allGroups);
             
-            role.setGroups(groups);
+            this.role.setGroups(this.groups);
 
-            roleService.saveOrUpdateRole(role);
+            this.roleService.saveOrUpdateRole(this.role);
 
-            btnSave.setVisible(false);
+            this.btnSave.setVisible(false);
             
             ComponentUtil.createSuccessMessageBox(LanguageKeys.MESSAGE_UPDATE_SUCCESS);
         }catch (Exception ex) {

@@ -20,15 +20,17 @@ import com.evotek.qlns.model.User;
  *
  * @author linhlh2
  */
-public class GroupDAOImpl extends BasicDAO<Group> implements GroupDAO {
+public class GroupDAOImpl extends AbstractDAO<Group> implements GroupDAO {
 
     private static final Logger _log = LogManager.getLogger(GroupDAOImpl.class);
 
-    public List<Group> getGroupByUser(User user) throws Exception {
+    @Override
+	public List<Group> getGroupByUser(User user) throws Exception {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public List<Group> getGroupByCategoryId(Long categoryId) throws Exception{
+    @Override
+	public List<Group> getGroupByCategoryId(Long categoryId) throws Exception{
         List<Group> groups = new ArrayList<Group>();
 
         try {
@@ -36,7 +38,7 @@ public class GroupDAOImpl extends BasicDAO<Group> implements GroupDAO {
 
             cri.add(Restrictions.eq("categoryId", categoryId));
 
-            groups = (List<Group>) cri.list();
+            groups = cri.list();
         } catch (Exception e) {
             _log.error(e.getMessage(), e);
         }
@@ -44,7 +46,8 @@ public class GroupDAOImpl extends BasicDAO<Group> implements GroupDAO {
         return groups;
     }
 
-    public void deleteByCategoryId(Long categoryId) throws Exception{
+    @Override
+	public void deleteByCategoryId(Long categoryId) throws Exception{
         try {
             List<Group> groups = getGroupByCategoryId(categoryId);
 

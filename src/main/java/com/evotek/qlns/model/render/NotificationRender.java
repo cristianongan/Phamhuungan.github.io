@@ -38,7 +38,8 @@ public class NotificationRender implements ListitemRenderer<Notification>{
         this._window = window;
     }
     
-    public void render(Listitem item, Notification notify, int index) throws Exception {
+    @Override
+	public void render(Listitem item, Notification notify, int index) throws Exception {
         item.setAttribute("data", notify);
         
         Long type = notify.getNotificationType();
@@ -99,7 +100,7 @@ public class NotificationRender implements ListitemRenderer<Notification>{
                             Labels.getLabel(LanguageKeys.TITLE_EDIT_STAFF)),
                     Constants.Z_ICON_LEVEL_UP, Constants.BLUE));
         } else {
-            hlayout.appendChild(ComponentUtil.createButton(_window,
+            hlayout.appendChild(ComponentUtil.createButton(this._window,
                     Labels.getLabel(LanguageKeys.DELETE), ComponentUtil.DEL_TOOLTIP,
                     Events.ON_CLICK, "onDeleteNotify", notify,
                     Constants.Z_ICON_TRASH_O, Constants.RED));
@@ -114,7 +115,7 @@ public class NotificationRender implements ListitemRenderer<Notification>{
             Notification notify, String title) {
         Map<String, Object> parameters = new HashMap<String, Object>();
 
-        parameters.put(Constants.PARENT_WINDOW, _window);
+        parameters.put(Constants.PARENT_WINDOW, this._window);
         parameters.put(Constants.TITLE, title);
         parameters.put(Constants.OBJECT_ID, notify.getClassPk());
 

@@ -64,12 +64,12 @@ public class AddEditRoleController extends BasicController<Window> {
 
     private void initData() throws Exception {
         try {
-            winTemp = (Div) arg.get(Constants.PARENT_WINDOW);
+            this.winTemp = (Div) this.arg.get(Constants.PARENT_WINDOW);
 
-            role = (Role) arg.get(Constants.EDIT_OBJECT);
+            this.role = (Role) this.arg.get(Constants.EDIT_OBJECT);
 
-            if(Validator.isNotNull(role)){
-                winAddRole.setTitle((String) arg.get(Constants.TITLE));
+            if(Validator.isNotNull(this.role)){
+                this.winAddRole.setTitle((String) this.arg.get(Constants.TITLE));
 
                 this._setEditForm();
             }
@@ -79,50 +79,50 @@ public class AddEditRoleController extends BasicController<Window> {
     }
 
     private void _setEditForm(){
-        tbRoleName.setValue(role.getRoleName());
-        tbDescription.setValue(role.getDescription());
+        this.tbRoleName.setValue(this.role.getRoleName());
+        this.tbDescription.setValue(this.role.getDescription());
 
-        chbShareable.setChecked(role.getShareable());
+        this.chbShareable.setChecked(this.role.getShareable());
     }
 
     //event method
     public void onClick$btnCancel(){
-        winAddRole.detach();
+        this.winAddRole.detach();
     }
 
     public void onClick$btnSave() {
         boolean update = true;
 
         try {
-            String roleName = GetterUtil.getString(tbRoleName.getValue());
-            String description = GetterUtil.getString(tbDescription.getValue());
+            String roleName = GetterUtil.getString(this.tbRoleName.getValue());
+            String description = GetterUtil.getString(this.tbDescription.getValue());
 
             if(_validate(roleName, description)){
-                if(Validator.isNull(role)){
+                if(Validator.isNull(this.role)){
                     update = false;
 
-                    role = new Role();
+                    this.role = new Role();
 
-                    role.setUserId(getUserId());
-                    role.setUserName(getUserName());
-                    role.setCreateDate(new Date());
-                    role.setStatus(Values.STATUS_ACTIVE);
-                    role.setImmune(Values.NOT_IMMUNE);
+                    this.role.setUserId(getUserId());
+                    this.role.setUserName(getUserName());
+                    this.role.setCreateDate(new Date());
+                    this.role.setStatus(Values.STATUS_ACTIVE);
+                    this.role.setImmune(Values.NOT_IMMUNE);
                 }
 
-                role.setRoleName(roleName);
-                role.setDescription(description);
-                role.setModifiedDate(new Date());
-                role.setShareable(chbShareable.isChecked());
+                this.role.setRoleName(roleName);
+                this.role.setDescription(description);
+                this.role.setModifiedDate(new Date());
+                this.role.setShareable(this.chbShareable.isChecked());
 
-                roleService.saveOrUpdateRole(role);
+                this.roleService.saveOrUpdateRole(this.role);
 
                 ComponentUtil.createSuccessMessageBox(
                         ComponentUtil.getSuccessKey(update));
 
-                winAddRole.detach();
+                this.winAddRole.detach();
 
-                Events.sendEvent("onLoadRole", winTemp, null);
+                Events.sendEvent("onLoadRole", this.winTemp, null);
             }
 
         } catch (Exception ex) {
@@ -138,28 +138,28 @@ public class AddEditRoleController extends BasicController<Window> {
     private boolean _validate(String roleName, String description)
             throws Exception{
         if(Validator.isNull(roleName)){
-            tbRoleName.setErrorMessage(Values.getRequiredInputMsg(
+            this.tbRoleName.setErrorMessage(Values.getRequiredInputMsg(
                     Labels.getLabel(LanguageKeys.ROLE_NAME)));
 
             return false;
         }
         
         if(!Validator.isCodeString(roleName)){
-            tbRoleName.setErrorMessage(Values.getFormatInvalidMsg(
+            this.tbRoleName.setErrorMessage(Values.getFormatInvalidMsg(
                     Labels.getLabel(LanguageKeys.ROLE_NAME)));
 
             return false;
         }
 
-        if(roleService.isRoleExist(roleName, role)){
-            tbRoleName.setErrorMessage(Values.getDuplicateMsg(
+        if(this.roleService.isRoleExist(roleName, this.role)){
+            this.tbRoleName.setErrorMessage(Values.getDuplicateMsg(
                     Labels.getLabel(LanguageKeys.ROLE_NAME)));
 
             return false;
         }
         
         if(roleName.length() > Values.MEDIUM_LENGTH){
-            tbRoleName.setErrorMessage(Values.getMaxLengthInvalidMsg(
+            this.tbRoleName.setErrorMessage(Values.getMaxLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.ROLE_NAME),
                     Values.MEDIUM_LENGTH));
 
@@ -168,7 +168,7 @@ public class AddEditRoleController extends BasicController<Window> {
 
         if (Validator.isNotNull(description)
                 && description.length() > Values.GREATE_LONG_LENGTH) {
-            tbDescription.setErrorMessage(Values.getMaxLengthInvalidMsg(
+            this.tbDescription.setErrorMessage(Values.getMaxLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.DESCRIPTION),
                     Values.GREATE_LONG_LENGTH));
 

@@ -57,7 +57,7 @@ public class PropsUtil {
     }
 
     private PropsUtil() {
-        _configuration = new ConfigurationImpl(
+        this._configuration = new ConfigurationImpl(
 			PropsUtil.class.getClassLoader(), PropsFiles.CONFIG);
     }
 

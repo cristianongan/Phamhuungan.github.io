@@ -94,6 +94,7 @@ public class UserWorkspace implements Serializable, DisposableBean {
 	 * @return the users WorkSpace
 	 * @deprecated
 	 */
+	@Deprecated
 	public static UserWorkspace getInstance() {
 		return SpringUtil.getBean("userWorkspace", UserWorkspace.class);
 	}
@@ -107,13 +108,13 @@ public class UserWorkspace implements Serializable, DisposableBean {
 		}
 
 		// init data
-		session = Sessions.getCurrent();
+		this.session = Sessions.getCurrent();
 
-		userPrincipal = (UserPrincipalImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		this.userPrincipal = (UserPrincipalImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-		roles = (List<String>) userPrincipal.getRoles();
+		this.roles = (List<String>) this.userPrincipal.getRoles();
 
-		if (!roles.contains(PermissionConstants.ROLE_ADMIN)) {
+		if (!this.roles.contains(PermissionConstants.ROLE_ADMIN)) {
 			getGrantedAuthoritySet();
 		}
 
@@ -174,7 +175,7 @@ public class UserWorkspace implements Serializable, DisposableBean {
 			return true;
 		}
 
-		return grantedAuthoritySet.contains(rightName);
+		return this.grantedAuthoritySet.contains(rightName);
 	}
 
 	public boolean isAllowed(List<String> rightNames) {
@@ -182,11 +183,11 @@ public class UserWorkspace implements Serializable, DisposableBean {
 			return true;
 		}
 
-		return grantedAuthoritySet.containsAll(rightNames);
+		return this.grantedAuthoritySet.containsAll(rightNames);
 	}
 
 	public boolean isAdministrator() {
-		return PermissionUtil.isAdministrator(roles);
+		return PermissionUtil.isAdministrator(this.roles);
 	}
 
 	public Properties getUserLanguageProperty() {
@@ -239,7 +240,7 @@ public class UserWorkspace implements Serializable, DisposableBean {
 		if (isTreeMenu()) {
 			result = 0;
 		} else {
-			result = menuOffset;
+			result = this.menuOffset;
 		}
 
 		return result;
@@ -250,11 +251,11 @@ public class UserWorkspace implements Serializable, DisposableBean {
 	}
 
 	public boolean isTreeMenu() {
-		return treeMenu;
+		return this.treeMenu;
 	}
 
 	public List<String> getRoles() {
-		return roles;
+		return this.roles;
 	}
 
 	public void setRoles(List<String> roles) {
@@ -262,7 +263,7 @@ public class UserWorkspace implements Serializable, DisposableBean {
 	}
 
 	public UserPrincipalImpl getUserPrincipal() {
-		return userPrincipal;
+		return this.userPrincipal;
 	}
 
 	public void setUserPrincipal(UserPrincipalImpl userPrincipal) {
@@ -270,7 +271,7 @@ public class UserWorkspace implements Serializable, DisposableBean {
 	}
 
 	public Session currentSession() {
-		return session;
+		return this.session;
 	}
 
 	public void setSession(Session session) {

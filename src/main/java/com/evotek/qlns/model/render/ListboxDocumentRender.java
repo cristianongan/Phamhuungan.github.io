@@ -41,12 +41,13 @@ public class ListboxDocumentRender implements ListitemRenderer<Document> {
 
     public ListboxDocumentRender(Hlayout window, ListModel model, 
             DocumentService documentService) {
-        _window = window;
-        _model = model;
-        _documentService = documentService;
+        this._window = window;
+        this._model = model;
+        this._documentService = documentService;
     }
 
-    public void render(Listitem item, Document doc, int index) throws Exception {
+    @Override
+	public void render(Listitem item, Document doc, int index) throws Exception {
         item.setAttribute("data", doc);
 
         item.appendChild(ComponentUtil.createListcell(StringPool.BLANK,
@@ -71,7 +72,7 @@ public class ListboxDocumentRender implements ListitemRenderer<Document> {
 
         Div divFile = new Div();
 
-        List<FileEntry> fileEntrys = _documentService.
+        List<FileEntry> fileEntrys = this._documentService.
                 getListFileEntrys(document.getDocumentId());
 
         Component comp = ComponentUtil.createDownloadFileBox(fileEntrys);
@@ -97,7 +98,7 @@ public class ListboxDocumentRender implements ListitemRenderer<Document> {
                 _createParameterMap(document, Labels.getLabel(
                 LanguageKeys.TITLE_EDIT_DOCUMENT), index), Constants.Z_ICON_PENCIL, 
                 Constants.BLUE));
-        hlayout.appendChild(ComponentUtil.createButton(_window,
+        hlayout.appendChild(ComponentUtil.createButton(this._window,
                 Labels.getLabel(LanguageKeys.DELETE), ComponentUtil.DEL_TOOLTIP, 
                 Events.ON_CLICK, "onDelete", document,
                 Constants.Z_ICON_TRASH_O, Constants.RED));
@@ -111,10 +112,10 @@ public class ListboxDocumentRender implements ListitemRenderer<Document> {
             Document document, String title, int index) {
         Map<String, Object> parameters = new HashMap<String, Object>();
 
-        parameters.put(Constants.PARENT_WINDOW, _window);
+        parameters.put(Constants.PARENT_WINDOW, this._window);
         parameters.put(Constants.TITLE, title);
         parameters.put(Constants.OBJECT, document);
-        parameters.put(Constants.MODEL, _model);
+        parameters.put(Constants.MODEL, this._model);
         parameters.put(Constants.INDEX, index);
 
         return parameters;

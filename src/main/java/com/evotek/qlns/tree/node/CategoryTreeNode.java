@@ -49,7 +49,7 @@ public class CategoryTreeNode extends DefaultTreeNode<Category> {
     }
 
     public boolean isOpen() {
-        return open;
+        return this.open;
     }
 
     public void setOpen(boolean open) {

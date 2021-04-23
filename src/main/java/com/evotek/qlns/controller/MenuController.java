@@ -58,13 +58,13 @@ public class MenuController extends BasicController<Div>
     public void doAfterCompose(Div comp) throws Exception {
         super.doAfterCompose(comp);
         
-        parent = (Include) winMenu.getParent();
+        this.parent = (Include) this.winMenu.getParent();
         
         this.onCreateTree();
     }
 
     public void onClick$adminPage(){
-        parent.setSrc("/html/pages/admin/default.zul");
+        this.parent.setSrc("/html/pages/admin/default.zul");
     }
     /**
      * Hàm tạo cây menu
@@ -72,13 +72,13 @@ public class MenuController extends BasicController<Div>
      */
     public void onCreateTree() throws Exception {
         try {
-            treeCategoryModelUtil = new TreeBasicModel(_buildCategoryTree());
+            this.treeCategoryModelUtil = new TreeBasicModel(_buildCategoryTree());
 
-            treeCategoryModelUtil.setMultiple(true);
+            this.treeCategoryModelUtil.setMultiple(true);
 
-            treeMenu.setItemRenderer(new TreeCategoryRender(winMenu));
-            treeMenu.setModel(treeCategoryModelUtil);
-            treeMenu.setCheckmark(true);
+            this.treeMenu.setItemRenderer(new TreeCategoryRender(this.winMenu));
+            this.treeMenu.setModel(this.treeCategoryModelUtil);
+            this.treeMenu.setCheckmark(true);
         } catch (Exception ex) {
             _log.error(ex.getMessage(), ex);
         }
@@ -101,13 +101,13 @@ public class MenuController extends BasicController<Div>
         try{
 
             //Lấy danh sách các menu category
-            List<Category> roots = categoryService.getCategoryByParentId(null);
+            List<Category> roots = this.categoryService.getCategoryByParentId(null);
             
 
             for(Category root: roots){
 
                 //Lấy danh sách các menu item ứng với mỗi menu category
-                List<Category> childs = categoryService.getCategoryByParentId(
+                List<Category> childs = this.categoryService.getCategoryByParentId(
                         root.getCategoryId());
                 if (!childs.isEmpty()) {
                     //Tạo cây con với gốc là menu category
@@ -141,12 +141,12 @@ public class MenuController extends BasicController<Div>
         //Tạo map để set các tham số truyền vào khi mở popup cập nhật/thêm mới
         Map<String, Object> parameters = new HashMap<String, Object>();
 
-        parameters.put(Constants.PARENT_WINDOW, winMenu);
+        parameters.put(Constants.PARENT_WINDOW, this.winMenu);
         parameters.put(Constants.TITLE, Labels.getLabel(LanguageKeys.ADD));
         parameters.put(Constants.ID, 0L);
 
         Window win = (Window) Executions.createComponents(
-                EDIT_PAGE , winMenu, parameters);
+                EDIT_PAGE , this.winMenu, parameters);
 
         win.doModal();
     }
@@ -167,8 +167,8 @@ public class MenuController extends BasicController<Div>
     public List<Long> getSelectedItem() {
         List<Long> categoryIds = new ArrayList<Long>();
 
-        if (treeMenu.getItems() != null) {
-            for (Object item : treeMenu.getItems()) {
+        if (this.treeMenu.getItems() != null) {
+            for (Object item : this.treeMenu.getItems()) {
                 Treeitem treeitem = (Treeitem) item;
 
                 if (treeitem.isSelected()) {
@@ -201,10 +201,11 @@ public class MenuController extends BasicController<Div>
                 Messagebox.QUESTION,
                 new EventListener() {
 
-                    public void onEvent(Event e) throws Exception {
+                    @Override
+					public void onEvent(Event e) throws Exception {
                         if (Messagebox.ON_OK.equals(e.getName())) {
                             try {
-                                categoryService.lockCategory(category);
+                                MenuController.this.categoryService.lockCategory(category);
 
                                 ComponentUtil.createSuccessMessageBox(LanguageKeys.MESSAGE_LOCK_ITEM_SUCCESS);
 
@@ -235,10 +236,11 @@ public class MenuController extends BasicController<Div>
                 Messagebox.QUESTION,
                 new EventListener() {
 
-                    public void onEvent(Event e) throws Exception {
+                    @Override
+					public void onEvent(Event e) throws Exception {
                         if (Messagebox.ON_OK.equals(e.getName())) {
                             try {
-                                categoryService.unlockCategory(category);
+                                MenuController.this.categoryService.unlockCategory(category);
 
                                 ComponentUtil.createSuccessMessageBox(LanguageKeys.MESSAGE_UNLOCK_ITEM_SUCCESS);
 
@@ -269,10 +271,11 @@ public class MenuController extends BasicController<Div>
                 Messagebox.QUESTION,
                 new EventListener() {
 
-                    public void onEvent(Event e) throws Exception {
+                    @Override
+					public void onEvent(Event e) throws Exception {
                         if (Messagebox.ON_OK.equals(e.getName())) {
                             try {
-                                categoryService.deleteCategory(category);
+                                MenuController.this.categoryService.deleteCategory(category);
 
                                 ComponentUtil.createSuccessMessageBox(LanguageKeys.MESSAGE_DELETE_SUCCESS);
 

@@ -35,7 +35,8 @@ public class DownloadFileGridRender <Component> implements
 
 
 
-    public void render(Row row, FileEntry entry, int index) throws Exception {
+    @Override
+	public void render(Row row, FileEntry entry, int index) throws Exception {
         row.appendChild(new Label(entry.getName()));
 
         A rm = new A();
@@ -54,7 +55,7 @@ public class DownloadFileGridRender <Component> implements
 
         rm1.setTooltiptext(Labels.getLabel(LanguageKeys.PREVIEW));
 
-        rm1.addForward(Events.ON_CLICK, win, ZkKeys.ON_PREVIEW_DATA, entry);
+        rm1.addForward(Events.ON_CLICK, this.win, ZkKeys.ON_PREVIEW_DATA, entry);
 
         row.appendChild(rm1);
 

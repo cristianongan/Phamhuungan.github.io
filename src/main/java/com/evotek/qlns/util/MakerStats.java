@@ -24,16 +24,16 @@ public class MakerStats {
     public void add(String caller, int initSize, int finalSize) {
         SizeSample stat = null;
 
-        synchronized (_map) {
-            stat = _map.get(caller);
+        synchronized (this._map) {
+            stat = this._map.get(caller);
 
             if (stat == null) {
                 stat = new SizeSample(caller, initSize);
 
-                _map.put(caller, stat);
+                this._map.put(caller, stat);
             }
 
-            _count++;
+            this._count++;
         }
 
         synchronized (stat) {
@@ -44,9 +44,9 @@ public class MakerStats {
     public void display(PrintStream printer) {
         printer.println("caller,min,max,range,samples,average,initial");
 
-        List<SizeSample> list = new ArrayList<SizeSample>(_map.size());
+        List<SizeSample> list = new ArrayList<SizeSample>(this._map.size());
 
-        list.addAll(_map.values());
+        list.addAll(this._map.values());
 
         list = ListUtil.sort(list);
 
@@ -100,54 +100,55 @@ public class MakerStats {
     private class SizeSample implements Comparable<SizeSample> {
 
         public SizeSample(String caller, int initSize) {
-            _caller = caller;
-            _initSize = initSize;
-            _minSize = Integer.MAX_VALUE;
-            _maxSize = Integer.MIN_VALUE;
+            this._caller = caller;
+            this._initSize = initSize;
+            this._minSize = Integer.MAX_VALUE;
+            this._maxSize = Integer.MIN_VALUE;
         }
 
         public void add(int finalSize) {
-            if (finalSize < _minSize) {
-                _minSize = finalSize;
+            if (finalSize < this._minSize) {
+                this._minSize = finalSize;
             }
 
-            if (finalSize > _maxSize) {
-                _maxSize = finalSize;
+            if (finalSize > this._maxSize) {
+                this._maxSize = finalSize;
             }
 
-            _samplesSize++;
-            _totalSize += finalSize;
+            this._samplesSize++;
+            this._totalSize += finalSize;
         }
 
         public String getCaller() {
-            return _caller;
+            return this._caller;
         }
 
         public int getInitSize() {
-            return _initSize;
+            return this._initSize;
         }
 
         public int getMaxSize() {
-            return _maxSize;
+            return this._maxSize;
         }
 
         public int getMinSize() {
-            return _minSize;
+            return this._minSize;
         }
 
         public int getSamplesSize() {
-            return _samplesSize;
+            return this._samplesSize;
         }
 
         public int getTotalSize() {
-            return _totalSize;
+            return this._totalSize;
         }
 
-        public int compareTo(SizeSample other) {
+        @Override
+		public int compareTo(SizeSample other) {
             int thisAvg = 0;
 
-            if (_samplesSize > 0) {
-                thisAvg = _totalSize / _samplesSize;
+            if (this._samplesSize > 0) {
+                thisAvg = this._totalSize / this._samplesSize;
             }
 
             int otherAvg = 0;

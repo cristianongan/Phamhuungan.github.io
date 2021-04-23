@@ -23,24 +23,28 @@ import com.evotek.qlns.util.Validator;
  *
  * @author MRHOT
  */
-public class DocumentTypeDAOImpl extends BasicDAO<DocumentType>
+public class DocumentTypeDAOImpl extends AbstractDAO<DocumentType>
         implements DocumentTypeDAO {
 
-    public void saveOrUpdate(DocumentType documentType, boolean flush) {
+    @Override
+	public void saveOrUpdate(DocumentType documentType, boolean flush) {
         saveOrUpdate(documentType);
         
         currentSession().flush();
     }
 
-    public void delete(Collection<DocumentType> entities) throws Exception {
+    @Override
+	public void delete(Collection<DocumentType> entities) throws Exception {
         deleteAll(entities);
     }
 
-    public void deleteDocType(DocumentType documentType) {
+    @Override
+	public void deleteDocType(DocumentType documentType) {
         delete(documentType);
     }
 
-    public List<DocumentType> getDocTypeByParentId(Long parentId) {
+    @Override
+	public List<DocumentType> getDocTypeByParentId(Long parentId) {
         List<DocumentType> results = new ArrayList<DocumentType>();
 
         try {
@@ -57,7 +61,7 @@ public class DocumentTypeDAOImpl extends BasicDAO<DocumentType>
 
             cri.addOrder(Order.asc("ordinal"));
 
-            results = (List<DocumentType>) cri.list();
+            results = cri.list();
 
         } catch (Exception e) {
             _log.error(e.getMessage(), e);
@@ -66,7 +70,8 @@ public class DocumentTypeDAOImpl extends BasicDAO<DocumentType>
         return results;
     }
     
-    public List<DocumentType> getAllDocumentType(){
+    @Override
+	public List<DocumentType> getAllDocumentType(){
         List<DocumentType> results = new ArrayList<DocumentType>();
         
         try {
@@ -76,7 +81,7 @@ public class DocumentTypeDAOImpl extends BasicDAO<DocumentType>
             
             cri.addOrder(Order.asc("typeName").ignoreCase());
             
-            results = (List<DocumentType>) cri.list();
+            results = cri.list();
 
         } catch (Exception e) {
             _log.error(e.getMessage(), e);
@@ -85,7 +90,8 @@ public class DocumentTypeDAOImpl extends BasicDAO<DocumentType>
         return results;
     }
 
-    public DocumentType getById(Long documentTypeId) {
+    @Override
+	public DocumentType getById(Long documentTypeId) {
         return (DocumentType) get(DocumentType.class, documentTypeId);
     }
 

@@ -57,7 +57,7 @@ public class TreeBasicModel<T> extends DefaultTreeModel<T>{
         try {
             DefaultTreeNode<T> parent = null;
             // find the parent and index of target
-            parent = dfSearchParent(_root, target);
+            parent = dfSearchParent(this._root, target);
             for (index = 0; index < parent.getChildCount(); index++) {
                 if (parent.getChildAt(index).equals(target)) {
                     break;
@@ -86,7 +86,7 @@ public class TreeBasicModel<T> extends DefaultTreeModel<T>{
 
     public void add(DefaultTreeNode<T> parent,
             DefaultTreeNode<T>[] newNodes) {
-        DefaultTreeNode<T> stn = (DefaultTreeNode<T>) parent;
+        DefaultTreeNode<T> stn = parent;
 
         stn.getChildren().addAll(Arrays.asList(newNodes));
     }

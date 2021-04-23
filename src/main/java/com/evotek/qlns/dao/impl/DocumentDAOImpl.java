@@ -34,15 +34,16 @@ import com.evotek.qlns.util.Validator;
  *
  * @author MRHOT
  */
-public class DocumentDAOImpl extends BasicDAO<Document> implements DocumentDAO {
+public class DocumentDAOImpl extends AbstractDAO<Document> implements DocumentDAO {
 
     private static final Logger _log = LogManager.getLogger(DocumentDAOImpl.class);
 
-    public List<Document> getAll() {
+    @Override
+	public List<Document> getAll() {
         List<Document> documents = new ArrayList<Document>();
         try {
             Criteria cri = currentSession().createCriteria(Document.class);
-            documents = (List<Document>) cri.list();
+            documents = cri.list();
         } catch (Exception ex) {
             _log.error(ex.getMessage(), ex);
         } finally {
@@ -308,7 +309,8 @@ public class DocumentDAOImpl extends BasicDAO<Document> implements DocumentDAO {
         }
     }
 
-    public int getDocumentCountAdv(String documentContent, String documentNumber, Long documentType, String department, Date fromDate, Date toDate) {
+    @Override
+	public int getDocumentCountAdv(String documentContent, String documentNumber, Long documentType, String department, Date fromDate, Date toDate) {
         int result = 0;
 
         try {
@@ -324,7 +326,8 @@ public class DocumentDAOImpl extends BasicDAO<Document> implements DocumentDAO {
         return result;
     }
 
-    public List<Document> getDocumentListAdv(String documentContent, 
+    @Override
+	public List<Document> getDocumentListAdv(String documentContent, 
             String documentNumber, Long documentType, String department, 
             Date fromDate, Date toDate, int firstResult, int maxResult, 
             String orderByColumn, String orderByType) {
@@ -342,7 +345,7 @@ public class DocumentDAOImpl extends BasicDAO<Document> implements DocumentDAO {
 
             q.setResultTransformer(Transformers.aliasToBean(Document.class));
 
-            results = (List<Document>) q.list();
+            results = q.list();
 
         } catch (Exception ex) {
             _log.error(ex.getMessage(), ex);
@@ -351,7 +354,8 @@ public class DocumentDAOImpl extends BasicDAO<Document> implements DocumentDAO {
         return results;
     }
 
-    public int getDocumentCountBasic(String textSearch) {
+    @Override
+	public int getDocumentCountBasic(String textSearch) {
         int result = 0;
 
         try {
@@ -366,7 +370,8 @@ public class DocumentDAOImpl extends BasicDAO<Document> implements DocumentDAO {
         return result;
     }
 
-    public List<Document> getDocumentListBasic(String textSearch, int firstResult, 
+    @Override
+	public List<Document> getDocumentListBasic(String textSearch, int firstResult, 
             int maxResult, String orderByColumn, String orderByType) {
         List<Document> results = new ArrayList<Document>();
 
@@ -380,7 +385,7 @@ public class DocumentDAOImpl extends BasicDAO<Document> implements DocumentDAO {
 
             q.setResultTransformer(Transformers.aliasToBean(Document.class));
 
-            results = (List<Document>) q.list();
+            results = q.list();
 
         } catch (Exception ex) {
             _log.error(ex.getMessage(), ex);
@@ -389,15 +394,18 @@ public class DocumentDAOImpl extends BasicDAO<Document> implements DocumentDAO {
         return results;
     }
 
-    public void delete(Collection<Document> documents){
+    @Override
+	public void delete(Collection<Document> documents){
         deleteAll(documents);
     }
     
-    public void saveOrUpdate(Collection<Document> documents) {
+    @Override
+	public void saveOrUpdate(Collection<Document> documents) {
         saveOrUpdateAll(documents);
     }
 
-    public int getDocumentByIdListCount(List<Long> idList) {
+    @Override
+	public int getDocumentByIdListCount(List<Long> idList) {
         int result = 0;
 
         try {
@@ -412,7 +420,8 @@ public class DocumentDAOImpl extends BasicDAO<Document> implements DocumentDAO {
         return result;
     }
 
-    public List<Document> getDocumentListByIdList(List<Long> idList, int firstResult, 
+    @Override
+	public List<Document> getDocumentListByIdList(List<Long> idList, int firstResult, 
             int maxResult, String orderByColumn, String orderByType) {
         List<Document> results = new ArrayList<Document>();
 
@@ -427,7 +436,7 @@ public class DocumentDAOImpl extends BasicDAO<Document> implements DocumentDAO {
 
             q.setResultTransformer(Transformers.aliasToBean(Document.class));
 
-            results = (List<Document>) q.list();
+            results = q.list();
 
         } catch (Exception ex) {
             _log.error(ex.getMessage(), ex);
@@ -436,7 +445,8 @@ public class DocumentDAOImpl extends BasicDAO<Document> implements DocumentDAO {
         return results;
     }
     
-    public List<Document> getDocumentByI_N_C(Long documentId, String documentNumber, 
+    @Override
+	public List<Document> getDocumentByI_N_C(Long documentId, String documentNumber, 
             String content){
         List<Document> results = new ArrayList<Document>();
 
@@ -452,7 +462,7 @@ public class DocumentDAOImpl extends BasicDAO<Document> implements DocumentDAO {
                 cri.add(Restrictions.ne("documentId", documentId));
             }
 
-            results = (List<Document>) cri.list();
+            results = cri.list();
         } catch (Exception e) {
             _log.error(e.getMessage(), e);
         }
@@ -460,7 +470,8 @@ public class DocumentDAOImpl extends BasicDAO<Document> implements DocumentDAO {
         return results;
     }
     
-    public List<Document> getDocumentByN(String documentNumber){
+    @Override
+	public List<Document> getDocumentByN(String documentNumber){
         List<Document> results = new ArrayList<Document>();
 
         try {
@@ -469,7 +480,7 @@ public class DocumentDAOImpl extends BasicDAO<Document> implements DocumentDAO {
             cri.add(LikeCriterionMaker.ilike("documentNumber", documentNumber, 
                     MatchMode.EXACT));
 
-            results = (List<Document>) cri.list();
+            results = cri.list();
         } catch (Exception e) {
             _log.error(e.getMessage(), e);
         }

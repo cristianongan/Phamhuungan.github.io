@@ -72,66 +72,69 @@ public class DocumentTypeController extends BasicController<Window> {
         
         this.windowDocumentType = comp;
         
-        context = Sessions.getCurrent().getWebApp().getServletContext();
+        this.context = Sessions.getCurrent().getWebApp().getServletContext();
         
-        docTypeMap = documentTypeService.getDocTypeMap(context);
+        this.docTypeMap = this.documentTypeService.getDocTypeMap(this.context);
     }
 
     @Override
     public void doAfterCompose(Window comp) throws Exception {
         super.doAfterCompose(comp);
         
-        winParent = (Hlayout) arg.get(Constants.PARENT_WINDOW);
+        this.winParent = (Hlayout) this.arg.get(Constants.PARENT_WINDOW);
         
         onCreateTree();
         
-        windowDocumentType.addEventListener(Events.ON_CLOSE, new EventListener<Event>() {
+        this.windowDocumentType.addEventListener(Events.ON_CLOSE, new EventListener<Event>() {
 
-            public void onEvent(Event event) throws Exception {
+            @Override
+			public void onEvent(Event event) throws Exception {
                 
-                if(doReload){
-                    Events.sendEvent("onLoadPage", winParent, null);
+                if(DocumentTypeController.this.doReload){
+                    Events.sendEvent("onLoadPage", DocumentTypeController.this.winParent, null);
                 }
             }
         });
     }
 
     public void onCreateTree() {
-        btnDelete.setDisabled(true);
-        btnUp.setDisabled(true);
-        btnDown.setDisabled(true);
+        this.btnDelete.setDisabled(true);
+        this.btnUp.setDisabled(true);
+        this.btnDown.setDisabled(true);
         
         TreeBasicModel treeConfigModel = 
                 new TreeBasicModel(_buildCategoryTree(), false);
 
-        tree.setModel(treeConfigModel);
+        this.tree.setModel(treeConfigModel);
         
-        tree.setItemRenderer(new TreeDocumentTypeRender(
-                windowDocumentType, documentTypeService)); 
+        this.tree.setItemRenderer(new TreeDocumentTypeRender(
+                this.windowDocumentType, this.documentTypeService)); 
         
-        tree.addEventListener(Events.ON_SELECT, new EventListener<Event>() {
+        this.tree.addEventListener(Events.ON_SELECT, new EventListener<Event>() {
 
-            public void onEvent(Event t) throws Exception {
-                boolean disable = tree.getSelectedCount()<0;
+            @Override
+			public void onEvent(Event t) throws Exception {
+                boolean disable = DocumentTypeController.this.tree.getSelectedCount()<0;
                 
-                btnDelete.setDisabled(disable);
-                btnUp.setDisabled(disable);
-                btnDown.setDisabled(disable);
+                DocumentTypeController.this.btnDelete.setDisabled(disable);
+                DocumentTypeController.this.btnUp.setDisabled(disable);
+                DocumentTypeController.this.btnDown.setDisabled(disable);
             }
         });
         
-        tree.addEventListener(Events.ON_CANCEL, new EventListener<Event>() {
+        this.tree.addEventListener(Events.ON_CANCEL, new EventListener<Event>() {
 
-            public void onEvent(Event t) throws Exception {
-                tree.clearSelection();
+            @Override
+			public void onEvent(Event t) throws Exception {
+                DocumentTypeController.this.tree.clearSelection();
                 
-                btnDelete.setDisabled(true);
-                btnUp.setDisabled(true);
-                btnDown.setDisabled(true);
+                DocumentTypeController.this.btnDelete.setDisabled(true);
+                DocumentTypeController.this.btnUp.setDisabled(true);
+                DocumentTypeController.this.btnDown.setDisabled(true);
             }
         });
         
-        btnInsert.addForward(Events.ON_CLICK, windowDocumentType, "onAdd", null);
+        this.btnInsert.addForward(Events.ON_CLICK, this.windowDocumentType, "onAdd", null);
     }
 
     private DocumentTypeTreeNode _buildCategoryTree() {
@@ -143,7 +146,7 @@ public class DocumentTypeController extends BasicController<Window> {
 
         try {
             //Lấy danh sách các menu category
-            List<DocumentType> roots = docTypeMap.get(null);
+            List<DocumentType> roots = this.docTypeMap.get(null);
 
             for (DocumentType root : roots) {
 
@@ -163,7 +166,7 @@ public class DocumentTypeController extends BasicController<Window> {
 
     public void addChildToParent(DocumentType parent, DocumentTypeTreeNode treeNode) {
         List<DocumentType> childs
-                = docTypeMap.get(parent.getDocumentTypeId());
+                = this.docTypeMap.get(parent.getDocumentTypeId());
 
         if (Validator.isNotNull(childs)) {
             //Tạo cây con tu parent
@@ -202,7 +205,8 @@ public class DocumentTypeController extends BasicController<Window> {
                     Messagebox.OK | Messagebox.CANCEL,
                     Messagebox.QUESTION,
                     new EventListener() {
-                        public void onEvent(Event e) throws Exception {
+                        @Override
+						public void onEvent(Event e) throws Exception {
                             if (Messagebox.ON_OK.equals(e.getName())) {
                                 try {
                                     List<Long> docTypeGroupIds = 
@@ -214,15 +218,15 @@ public class DocumentTypeController extends BasicController<Window> {
                                             docTypeGroupIds);
                                     
                                     //xoa
-                                    documentTypeService.delete(docType, 
-                                            docTypeGroupIds, context);
+                                    DocumentTypeController.this.documentTypeService.delete(docType, 
+                                            docTypeGroupIds, DocumentTypeController.this.context);
 
                                     ComponentUtil.createSuccessMessageBox(
                                             LanguageKeys.MESSAGE_DELETE_SUCCESS);
                                     //refresh lai cay
                                     onCreateTree();
                                     
-                                    doReload = true;
+                                    DocumentTypeController.this.doReload = true;
                                     //refresh lai danh muc tai lieu
 //                                    Events.sendEvent("onLoadPage", winParent, null);
                                 } catch (Exception ex) {
@@ -238,14 +242,14 @@ public class DocumentTypeController extends BasicController<Window> {
     }
     
     public void onClick$btnUp(){
-        Treeitem item = tree.getSelectedItem();
+        Treeitem item = this.tree.getSelectedItem();
         
         if (Validator.isNull(item)) {
             Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_SELECT_RECORD),
                     Labels.getLabel(LanguageKeys.ERROR), Messagebox.OK,
                     Messagebox.EXCLAMATION, Messagebox.OK);
         } else {   
-            TreeBasicModel treeModel = (TreeBasicModel) tree.getModel();
+            TreeBasicModel treeModel = (TreeBasicModel) this.tree.getModel();
             
             DocumentTypeTreeNode treeNode = (DocumentTypeTreeNode) item.getValue();
             DocumentTypeTreeNode parentTreeNode = (DocumentTypeTreeNode) treeNode.getParent();
@@ -267,22 +271,22 @@ public class DocumentTypeController extends BasicController<Window> {
             
 //            this.updateOrdinal(childNodes);
             
-            changedTypeNode.add(parentTreeNode);
+            this.changedTypeNode.add(parentTreeNode);
             
-            btnReset.setDisabled(changedTypeNode.isEmpty());
-            btnSave.setDisabled(changedTypeNode.isEmpty());
+            this.btnReset.setDisabled(this.changedTypeNode.isEmpty());
+            this.btnSave.setDisabled(this.changedTypeNode.isEmpty());
         }
     }
     
     public void onClick$btnDown(){
-        Treeitem item = tree.getSelectedItem();
+        Treeitem item = this.tree.getSelectedItem();
         
         if (Validator.isNull(item)) {
             Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_SELECT_RECORD),
                     Labels.getLabel(LanguageKeys.ERROR), Messagebox.OK,
                     Messagebox.EXCLAMATION, Messagebox.OK);
         } else {
-            TreeBasicModel treeModel = (TreeBasicModel) tree.getModel();
+            TreeBasicModel treeModel = (TreeBasicModel) this.tree.getModel();
             
             DocumentTypeTreeNode treeNode = (DocumentTypeTreeNode) item.getValue();
             DocumentTypeTreeNode parentTreeNode = (DocumentTypeTreeNode) treeNode.getParent();
@@ -304,15 +308,15 @@ public class DocumentTypeController extends BasicController<Window> {
             
 //            this.updateOrdinal(childNodes);
             
-            changedTypeNode.add(parentTreeNode);
+            this.changedTypeNode.add(parentTreeNode);
             
-            btnReset.setDisabled(changedTypeNode.isEmpty());
-            btnSave.setDisabled(changedTypeNode.isEmpty());
+            this.btnReset.setDisabled(this.changedTypeNode.isEmpty());
+            this.btnSave.setDisabled(this.changedTypeNode.isEmpty());
         }
     }
     
     private void updateOrdinal() {
-        for (DocumentTypeTreeNode docTreeNode : changedTypeNode) {
+        for (DocumentTypeTreeNode docTreeNode : this.changedTypeNode) {
             List<TreeNode<DocumentType>> childNodes = docTreeNode.getChildren();
             
             for (TreeNode<DocumentType> treeNode : childNodes) {
@@ -321,14 +325,14 @@ public class DocumentTypeController extends BasicController<Window> {
                 docType.setOrdinal(Long.valueOf(childNodes.indexOf(treeNode)));
             }
             
-            documentTypeService.saveOrUpdate(docTreeNode.getData());
+            this.documentTypeService.saveOrUpdate(docTreeNode.getData());
         }
 
-        changedTypeNode.clear();
+        this.changedTypeNode.clear();
     }
     
     public void onClick$btnReset(){
-        changedTypeNode.clear();
+        this.changedTypeNode.clear();
         
         onCreateTree();
     }
@@ -339,7 +343,8 @@ public class DocumentTypeController extends BasicController<Window> {
                 Messagebox.OK | Messagebox.CANCEL,
                 Messagebox.QUESTION,
                 new EventListener() {
-                    public void onEvent(Event e) throws Exception {
+                    @Override
+					public void onEvent(Event e) throws Exception {
                         if (Messagebox.ON_OK.equals(e.getName())) {
                             try {
                                 updateOrdinal();
@@ -349,10 +354,10 @@ public class DocumentTypeController extends BasicController<Window> {
                                 //refresh lai danh muc tai lieu
 //                                Events.sendEvent("onLoadPage", winParent, null);
                                 //disable button
-                                btnSave.setDisabled(true);
-                                btnReset.setDisabled(true);
+                                DocumentTypeController.this.btnSave.setDisabled(true);
+                                DocumentTypeController.this.btnReset.setDisabled(true);
                                 
-                                doReload = true;
+                                DocumentTypeController.this.doReload = true;
                             } catch (Exception ex) {
                                 _log.error(ex.getMessage(), ex);
 
@@ -365,15 +370,15 @@ public class DocumentTypeController extends BasicController<Window> {
     }
     
     public void onClick$btnCancel() {
-        windowDocumentType.detach();
+        this.windowDocumentType.detach();
 
-        if (doReload) {
-            Events.sendEvent("onLoadPage", winParent, null);
+        if (this.doReload) {
+            Events.sendEvent("onLoadPage", this.winParent, null);
         }
     }
     
     private DocumentType getSelectedItem(){
-        Treeitem item = tree.getSelectedItem();
+        Treeitem item = this.tree.getSelectedItem();
         
         return item == null ? null:
                 (DocumentType) ((DocumentTypeTreeNode) item.getValue()).getData();
@@ -381,7 +386,7 @@ public class DocumentTypeController extends BasicController<Window> {
     
     private List<Long> getDocumentTypeGroup(Long rootId, 
             List<Long> docTypeGroupIds){
-        List<DocumentType> docTypes = docTypeMap.get(rootId);
+        List<DocumentType> docTypes = this.docTypeMap.get(rootId);
         
         if(Validator.isNotNull(docTypes)){
             for(DocumentType docType: docTypes){
@@ -406,11 +411,11 @@ public class DocumentTypeController extends BasicController<Window> {
         Map map = new HashMap();
 
         map.put(Constants.TITLE, Labels.getLabel(LanguageKeys.ADD));
-        map.put(Constants.PARENT_WINDOW, windowDocumentType);
+        map.put(Constants.PARENT_WINDOW, this.windowDocumentType);
         map.put(Constants.SECOND_OBJECT, documentType);
 
         Window win = (Window) Executions.createComponents(ADD_EDIT_PAGE, 
-                windowDocumentType, map);
+                this.windowDocumentType, map);
 
         win.doModal();
     }
@@ -421,11 +426,11 @@ public class DocumentTypeController extends BasicController<Window> {
         Map map = new HashMap();
 
         map.put(Constants.TITLE, Labels.getLabel(LanguageKeys.TITLE_EDIT_DOCUMENT_TYPE));
-        map.put(Constants.PARENT_WINDOW, windowDocumentType);
+        map.put(Constants.PARENT_WINDOW, this.windowDocumentType);
         map.put(Constants.OBJECT, documentType);
 
         Window win = (Window) Executions.createComponents(ADD_EDIT_PAGE, 
-                windowDocumentType, map);
+                this.windowDocumentType, map);
         
         win.doModal();
     }
@@ -433,7 +438,7 @@ public class DocumentTypeController extends BasicController<Window> {
     public void onLoadData(Event event) {
         onCreateTree();
 
-        doReload = true;
+        this.doReload = true;
         //refresh lai danh muc tai lieu
 //        Events.sendEvent("onLoadPage", winParent, null);
     }
@@ -441,12 +446,12 @@ public class DocumentTypeController extends BasicController<Window> {
     private transient DocumentTypeService documentTypeService;
 
     public DocumentTypeService getDocumentTypeService() {
-        if (documentTypeService == null) {
-            documentTypeService = (DocumentTypeService)
+        if (this.documentTypeService == null) {
+            this.documentTypeService = (DocumentTypeService)
                     SpringUtil.getBean("documentTypeService");
-            setDocumentTypeService(documentTypeService);
+            setDocumentTypeService(this.documentTypeService);
         }
-        return documentTypeService;
+        return this.documentTypeService;
     }
 
     public void setDocumentTypeService(DocumentTypeService documentTypeService) {

@@ -66,46 +66,48 @@ public class ManagerDocumentListModel extends AbstractModelList<Document> {
         setMultiple(true);
     }
     
-    public void loadToCache(int itemStartNumber, int pageSize) {
+    @Override
+	public void loadToCache(int itemStartNumber, int pageSize) {
         try {
-            if (!_view) {
-                if (_isAdvance) {
-                    _cache = _documentService.getDocumentListAdv(_documentContent,
-                            _documentNumber, _documentType, _department, _fromDate,
-                            _toDate, itemStartNumber, pageSize, _orderByColumn,
-                            _orderByType);
+            if (!this._view) {
+                if (this._isAdvance) {
+                    this._cache = this._documentService.getDocumentListAdv(this._documentContent,
+                            this._documentNumber, this._documentType, this._department, this._fromDate,
+                            this._toDate, itemStartNumber, pageSize, this._orderByColumn,
+                            this._orderByType);
                 } else {
-                    _cache = _documentService.getDocumentListBasic(_keyword,
-                            itemStartNumber, pageSize, _orderByColumn, _orderByType);
+                    this._cache = this._documentService.getDocumentListBasic(this._keyword,
+                            itemStartNumber, pageSize, this._orderByColumn, this._orderByType);
 
                 }
             } else {
-                _cache = _documentService.getDocumentListByIdList(_idList,
-                        itemStartNumber, pageSize, _orderByColumn, _orderByType);
+                this._cache = this._documentService.getDocumentListByIdList(this._idList,
+                        itemStartNumber, pageSize, this._orderByColumn, this._orderByType);
             }
         } catch (Exception ex) {
             _log.error(ex.getMessage(), ex);
         }
     }
 
-    public int getSize() {
-        if (_cachedSize < 0) {
+    @Override
+	public int getSize() {
+        if (this._cachedSize < 0) {
             try {
-                if (!_view) {
-                    if (_isAdvance) {
-                        _cachedSize = _documentService.getDocumentCountAdv(_documentContent,
-                                _documentNumber, _documentType, _department, _fromDate, _toDate);
+                if (!this._view) {
+                    if (this._isAdvance) {
+                        this._cachedSize = this._documentService.getDocumentCountAdv(this._documentContent,
+                                this._documentNumber, this._documentType, this._department, this._fromDate, this._toDate);
                     } else {
-                        _cachedSize = _documentService.getDocumentCountBasic(_keyword);
+                        this._cachedSize = this._documentService.getDocumentCountBasic(this._keyword);
                     }
                 } else {
-                    _cachedSize = _documentService.getDocumentByIdListCount(_idList);
+                    this._cachedSize = this._documentService.getDocumentByIdListCount(this._idList);
                 }
             } catch (Exception ex) {
                 _log.error(ex.getMessage(), ex);
             }
         }
 
-        return _cachedSize;
+        return this._cachedSize;
     }
 }

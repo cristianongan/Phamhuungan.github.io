@@ -8,46 +8,51 @@ package com.evotek.qlns.service.impl;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.evotek.qlns.dao.DepartmentDAO;
 import com.evotek.qlns.model.Department;
 import com.evotek.qlns.service.DepartmentService;
 
 /**
  *
- * @author My PC
+ * @author LinhLH2
  */
-public class DepartmentServiceImpl implements DepartmentService{
-    private transient DepartmentDAO departmentDAO;
+@Service
+@Transactional
+public class DepartmentServiceImpl implements DepartmentService {
+	@Autowired
+	private DepartmentDAO departmentDAO;
 
-    public DepartmentDAO getDepartmentDAO() {
-        return departmentDAO;
-    }
+	@Override
+	public List<Department> getDepartmentByParentId(Long parentId) {
+		return this.departmentDAO.getDepartmentByParentId(parentId);
+	}
 
-    public void setDepartmentDAO(DepartmentDAO departmentDAO) {
-        this.departmentDAO = departmentDAO;
-    }
-    
-    public List<Department> getDepartmentByParentId(Long parentId){
-        return departmentDAO.getDepartmentByParentId(parentId);
-    }
-    
-    public void saveOrUpdate(Department dept){
-        departmentDAO.saveOrUpdate(dept);
-    }
-    
-    public int delete(List<Long> deptIds){
-        return departmentDAO.delete(deptIds);
-    }
-    
-    public void updateOrdinal(Long parentId, Long deletedIndex){
-        departmentDAO.updateOrdinal(parentId, deletedIndex);
-    }
-    
-    public Department getDeparment(Long deptId){
-        return departmentDAO.get(deptId);
-    }
-    
-    public Long getNextOrdinal(Long parentId){
-        return departmentDAO.getNextOrdinal(parentId);
-    }
+	@Override
+	public void saveOrUpdate(Department dept) {
+		this.departmentDAO.saveOrUpdate(dept);
+	}
+
+	@Override
+	public int delete(List<Long> deptIds) {
+		return this.departmentDAO.delete(deptIds);
+	}
+
+	@Override
+	public void updateOrdinal(Long parentId, Long deletedIndex) {
+		this.departmentDAO.updateOrdinal(parentId, deletedIndex);
+	}
+
+	@Override
+	public Department getDeparment(Long deptId) {
+		return this.departmentDAO.get(deptId);
+	}
+
+	@Override
+	public Long getNextOrdinal(Long parentId) {
+		return this.departmentDAO.getNextOrdinal(parentId);
+	}
 }

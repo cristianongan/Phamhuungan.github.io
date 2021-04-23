@@ -36,11 +36,12 @@ import com.evotek.qlns.util.key.Values;
  *
  * @author PC
  */
-public class StaffDAOImpl extends BasicDAO<Staff> implements StaffDAO {
+public class StaffDAOImpl extends AbstractDAO<Staff> implements StaffDAO {
 
     private static final Logger _log = LogManager.getLogger(StaffDAOImpl.class);
 
-    public Staff getStaff(Long staffId) {
+    @Override
+	public Staff getStaff(Long staffId) {
         Staff result = null;
 
         try {
@@ -60,7 +61,8 @@ public class StaffDAOImpl extends BasicDAO<Staff> implements StaffDAO {
         return result;
     }
     
-    public List<Staff> getStaff(String keyword, int firstResult, int maxResult, 
+    @Override
+	public List<Staff> getStaff(String keyword, int firstResult, int maxResult, 
             String orderByColumn, String orderByType) {
         List<Staff> results = new ArrayList<Staff>();
 
@@ -73,7 +75,7 @@ public class StaffDAOImpl extends BasicDAO<Staff> implements StaffDAO {
                 cri.setMaxResults(maxResult);
             }
 
-            results = (List<Staff>) cri.list();
+            results = cri.list();
 
         } catch (Exception ex) {
             _log.error(ex.getMessage(), ex);
@@ -82,7 +84,8 @@ public class StaffDAOImpl extends BasicDAO<Staff> implements StaffDAO {
         return results;
     }
 
-    public int getStaffCount(String keyword) {
+    @Override
+	public int getStaffCount(String keyword) {
         int result = 0;
 
         try {
@@ -98,7 +101,8 @@ public class StaffDAOImpl extends BasicDAO<Staff> implements StaffDAO {
         return result;
     }
     
-    public List<Staff> getStaff(String staffName, Long yearOfBirth, Department dept, 
+    @Override
+	public List<Staff> getStaff(String staffName, Long yearOfBirth, Department dept, 
             String email, Job job, String phone, int firstResult, int maxResult, 
             String orderByColumn, String orderByType){
         List<Staff> results = new ArrayList<Staff>();
@@ -112,7 +116,7 @@ public class StaffDAOImpl extends BasicDAO<Staff> implements StaffDAO {
                 cri.setMaxResults(maxResult);
             }
 
-            results = (List<Staff>) cri.list();
+            results = cri.list();
 
         } catch (Exception ex) {
             _log.error(ex.getMessage(), ex);
@@ -121,7 +125,8 @@ public class StaffDAOImpl extends BasicDAO<Staff> implements StaffDAO {
         return results;
     }
 
-    public int getStaffCount(String staffName, Long yearOfBirth, Department dept, 
+    @Override
+	public int getStaffCount(String staffName, Long yearOfBirth, Department dept, 
             String email, Job job, String phone){
         int result = 0;
 
@@ -139,7 +144,8 @@ public class StaffDAOImpl extends BasicDAO<Staff> implements StaffDAO {
         return result;
     }
     
-    public List<Staff> getStaffByIdList(List<Long> idList, int firstResult, 
+    @Override
+	public List<Staff> getStaffByIdList(List<Long> idList, int firstResult, 
             int maxResult, String orderByColumn, String orderByType){
         List<Staff> results = new ArrayList<Staff>();
 
@@ -152,7 +158,7 @@ public class StaffDAOImpl extends BasicDAO<Staff> implements StaffDAO {
                 cri.setMaxResults(maxResult);
             }
 
-            results = (List<Staff>) cri.list();
+            results = cri.list();
 
         } catch (Exception ex) {
             _log.error(ex.getMessage(), ex);
@@ -161,7 +167,8 @@ public class StaffDAOImpl extends BasicDAO<Staff> implements StaffDAO {
         return results;
     }
 
-    public int getStaffCountByIdList(List<Long> idList){
+    @Override
+	public int getStaffCountByIdList(List<Long> idList){
         int result = 0;
 
         try {
@@ -345,11 +352,13 @@ public class StaffDAOImpl extends BasicDAO<Staff> implements StaffDAO {
         }
     }
 
-    public void deleteAllStaff(List<Staff> staffs) throws Exception {
+    @Override
+	public void deleteAllStaff(List<Staff> staffs) throws Exception {
         deleteAll(staffs);
     }
     
-    public List<Staff> getContractExpiredStaff(){
+    @Override
+	public List<Staff> getContractExpiredStaff(){
         List<Staff> results = new ArrayList<Staff>();
 
         try {
@@ -360,7 +369,7 @@ public class StaffDAOImpl extends BasicDAO<Staff> implements StaffDAO {
                     DateUtil.getDateAfter(StaticUtil.NOTIFY_CONTRACT_EXPIRED_BEFORE_DAY)));
             cri.add(Restrictions.eq("status", Values.STATUS_ACTIVE));
 
-            results = (List<Staff>) cri.list();
+            results = cri.list();
 
         } catch (Exception ex) {
             _log.error(ex.getMessage(), ex);
@@ -369,7 +378,8 @@ public class StaffDAOImpl extends BasicDAO<Staff> implements StaffDAO {
         return results;
     }
     
-    public List<Staff> getBirthDayNearlyStaff(int dayOfYear){
+    @Override
+	public List<Staff> getBirthDayNearlyStaff(int dayOfYear){
         List<Staff> results = new ArrayList<Staff>();
 
         try {
@@ -388,7 +398,7 @@ public class StaffDAOImpl extends BasicDAO<Staff> implements StaffDAO {
                     }));
             cri.add(Restrictions.eq("status", Values.STATUS_ACTIVE));
 
-            results = (List<Staff>) cri.list();
+            results = cri.list();
 
         } catch (Exception ex) {
             _log.error(ex.getMessage(), ex);

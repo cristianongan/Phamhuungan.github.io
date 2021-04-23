@@ -140,15 +140,13 @@ public class CalendarUtil {
                 || (month == 11)) {
 
             return 30;
-        } else {
-            if (((year % 4) == 0)
-                    && ((year % 100) != 0) || ((year % 400) == 0)) {
+        } else if (((year % 4) == 0)
+		        && ((year % 100) != 0) || ((year % 400) == 0)) {
 
-                return 29;
-            } else {
-                return 28;
-            }
-        }
+		    return 29;
+		} else {
+		    return 28;
+		}
     }
 
     public static int getGregorianDay(Calendar cal) {

@@ -23,17 +23,17 @@ public class InitApplicationWorkspace implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        context = sce.getServletContext();
+        this.context = sce.getServletContext();
         
         //init document type map
         WebApplicationContext applicationContext =
             WebApplicationContextUtils
-            .getWebApplicationContext(context);
+            .getWebApplicationContext(this.context);
         
-        documentTypeService = (DocumentTypeService)
+        this.documentTypeService = (DocumentTypeService)
                     applicationContext.getBean("documentTypeService");
         
-        documentTypeService.getDocTypeMap(context);
+        this.documentTypeService.getDocTypeMap(this.context);
     }
 
     @Override

@@ -70,37 +70,37 @@ public class RegisterController extends BasicController<Div>
     }
     
     public void onClick$btnReCaptchaRegister(){
-        cpaRegister.randomValue();
+        this.cpaRegister.randomValue();
     }
     
     public void onOK() {
-        String userName = GetterUtil.getString(tbUserName.getValue());
-        String email = GetterUtil.getString(tbEmail.getValue());
-        String password = GetterUtil.getString(tbPassword.getValue());
-        String confirmPassword = GetterUtil.getString(tbConfirmPassword.getValue());
-        String captcha = captchaRegister.getValue();
+        String userName = GetterUtil.getString(this.tbUserName.getValue());
+        String email = GetterUtil.getString(this.tbEmail.getValue());
+        String password = GetterUtil.getString(this.tbPassword.getValue());
+        String confirmPassword = GetterUtil.getString(this.tbConfirmPassword.getValue());
+        String captcha = this.captchaRegister.getValue();
         
         if(!_validateUserLimited()){
             
         } else if(_validate(userName, email, password, confirmPassword, captcha)){
-            user = new User();
+            this.user = new User();
             
-            user.setCreateDate(new Date());
-            user.setStatus(Values.STATUS_NOT_READY);
-            user.setUserName(userName);
-            user.setModifiedDate(new Date());
-            user.setEmail(email);
+            this.user.setCreateDate(new Date());
+            this.user.setStatus(Values.STATUS_NOT_READY);
+            this.user.setUserName(userName);
+            this.user.setModifiedDate(new Date());
+            this.user.setEmail(email);
             
-            this.saveUser(user);
+            this.saveUser(this.user);
         }
     }
     
     private void saveUser(User user) {
         try {
-            userService.saveOrUpdate(user);
+            this.userService.saveOrUpdate(user);
 
             //set default password
-            userService.createPassword(user);
+            this.userService.createPassword(user);
 
             showResultMsg(Result.SUCCESS);
         } catch (Exception ex) {
@@ -109,7 +109,7 @@ public class RegisterController extends BasicController<Div>
             showResultMsg(Result.ERROR);
         }
         
-        cpaRegister.randomValue();
+        this.cpaRegister.randomValue();
     }
     
     private boolean _validateUserLimited(){
@@ -131,8 +131,8 @@ public class RegisterController extends BasicController<Div>
             return false;
         }
         
-        if(!cpaRegister.getValue().equals(captcha)){
-            captchaRegister.setErrorMessage(
+        if(!this.cpaRegister.getValue().equals(captcha)){
+            this.captchaRegister.setErrorMessage(
                     Labels.getLabel(LanguageKeys.CAPTCHA_NOT_MATCH));
             
 //            cpaRegister.randomValue();
@@ -140,7 +140,7 @@ public class RegisterController extends BasicController<Div>
             return false;
         }
         
-        if(!chkAccept.isChecked()){
+        if(!this.chkAccept.isChecked()){
             ComponentUtil.createErrorMessageBox(
                     LanguageKeys.YOU_MUST_ACCEPT_USER_AGREEMENT);
             
@@ -153,7 +153,7 @@ public class RegisterController extends BasicController<Div>
     private boolean _validateUserName(String userName){
         //Ten dang nhap
         if (Validator.isNull(userName)) {
-            tbUserName.setErrorMessage(Values.getRequiredInputMsg(
+            this.tbUserName.setErrorMessage(Values.getRequiredInputMsg(
                     Labels.getLabel(LanguageKeys.USER_LOGIN_NAME)));
 
             return false;
@@ -161,7 +161,7 @@ public class RegisterController extends BasicController<Div>
 
         //check length tên
         if (userName.length() > Values.SHORT_LENGTH) {
-            tbUserName.setErrorMessage(Values.getMaxLengthInvalidMsg(
+            this.tbUserName.setErrorMessage(Values.getMaxLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.USER_LOGIN_NAME),
                     Values.SHORT_LENGTH));
 
@@ -169,7 +169,7 @@ public class RegisterController extends BasicController<Div>
         }
 
         if (userName.length() < Values.MIN_NAME_LENGTH) {
-            tbUserName.setErrorMessage(Values.getMinLengthInvalidMsg(
+            this.tbUserName.setErrorMessage(Values.getMinLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.USER_LOGIN_NAME),
                     Values.MIN_NAME_LENGTH));
 
@@ -177,15 +177,15 @@ public class RegisterController extends BasicController<Div>
         }
 
         if(!Validator.isVariableName(userName)){
-            tbUserName.setErrorMessage(Values.getFormatInvalidMsg(
+            this.tbUserName.setErrorMessage(Values.getFormatInvalidMsg(
                     Labels.getLabel(LanguageKeys.USER_LOGIN_NAME),
                     Values.USER_NAME_PATTERN));
 
             return false;
         }
 
-        if(userService.isUserNameExits(null, userName)){
-            tbUserName.setErrorMessage(Values.getDuplicateMsg(
+        if(this.userService.isUserNameExits(null, userName)){
+            this.tbUserName.setErrorMessage(Values.getDuplicateMsg(
                     Labels.getLabel(LanguageKeys.USER_LOGIN_NAME)));
 
             return false;
@@ -197,28 +197,28 @@ public class RegisterController extends BasicController<Div>
     private boolean _validateEmail(String email){
         //email
         if (Validator.isNull(email)) {
-            tbEmail.setErrorMessage(Values.getRequiredInputMsg(
+            this.tbEmail.setErrorMessage(Values.getRequiredInputMsg(
                     Labels.getLabel(LanguageKeys.EMAIL)));
 
             return false;
         }
 
         if (email.length() > Values.SHORT_LENGTH) {
-            tbEmail.setErrorMessage(Values.getMaxLengthInvalidMsg(
+            this.tbEmail.setErrorMessage(Values.getMaxLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.EMAIL), Values.SHORT_LENGTH));
 
             return false;
         }
 
         if(!Validator.isEmailAddress(email)){
-            tbEmail.setErrorMessage(Values.getFormatInvalidMsg(
+            this.tbEmail.setErrorMessage(Values.getFormatInvalidMsg(
                     Labels.getLabel(LanguageKeys.EMAIL)));
 
             return false;
         }
 
-        if(userService.isEmailExits(null, email)){
-            tbEmail.setErrorMessage(Values.getDuplicateMsg(
+        if(this.userService.isEmailExits(null, email)){
+            this.tbEmail.setErrorMessage(Values.getDuplicateMsg(
                     Labels.getLabel(LanguageKeys.EMAIL)));
 
             return false;
@@ -229,28 +229,28 @@ public class RegisterController extends BasicController<Div>
 
     private boolean _validatePassword(String password, String confirmPassword) {
         if (Validator.isNull(password)) {
-            tbPassword.setErrorMessage(Values.getRequiredInputMsg(
+            this.tbPassword.setErrorMessage(Values.getRequiredInputMsg(
                     Labels.getLabel(LanguageKeys.PASSWORD)));
 
             return false;
         }
 
         if (!confirmPassword.equals(password)) {
-            tbConfirmPassword.setErrorMessage(Values.getNotSameMsg(
+            this.tbConfirmPassword.setErrorMessage(Values.getNotSameMsg(
                     Labels.getLabel(LanguageKeys.CONFIRM_PASSWORD)));
 
             return false;
         }
 
         if (password.length() < pwdMinlength) {
-            tbPassword.setErrorMessage(Values.getMinLengthInvalidMsg(
+            this.tbPassword.setErrorMessage(Values.getMinLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.PASSWORD), pwdMinlength));
 
             return false;
         }
 
         if (password.length() > pwdMaxlength) {
-            tbPassword.setErrorMessage(Values.getMaxLengthInvalidMsg(
+            this.tbPassword.setErrorMessage(Values.getMaxLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.PASSWORD), pwdMaxlength));
 
             return false;
@@ -267,7 +267,7 @@ public class RegisterController extends BasicController<Div>
                 symbolRange).matcher(password);
 
         if (!matcher.matches()) {
-            tbPassword.setErrorMessage(Values.getPwdNotMatch(
+            this.tbPassword.setErrorMessage(Values.getPwdNotMatch(
                     Labels.getLabel(LanguageKeys.PASSWORD), forceLowerLetter,
                     forceUpperLetter, forceForceDigit, forceForceSymbol,
                     symbolRange));
@@ -318,20 +318,20 @@ public class RegisterController extends BasicController<Div>
         
         switch(result){
             case SUCCESS:
-                htmlSuccess.setContent(Labels.getLabel(
-                        LanguageKeys.REGISTER_SUCCESS, new Object[]{user.getEmail()}));
+                this.htmlSuccess.setContent(Labels.getLabel(
+                        LanguageKeys.REGISTER_SUCCESS, new Object[]{this.user.getEmail()}));
                 
                 Clients.evalJavaScript("showRegisterResult('.register-success')");
                 
                 break;
             case ERROR:
-                htmlError.setContent(Labels.getLabel(LanguageKeys.REGISTER_FAIL));
+                this.htmlError.setContent(Labels.getLabel(LanguageKeys.REGISTER_FAIL));
                 
                 Clients.evalJavaScript("showRegisterResult('.register-fail')");
                 
                 break;
             default:
-                htmlError.setContent(Labels.getLabel(LanguageKeys.REGISTER_LIMITED));
+                this.htmlError.setContent(Labels.getLabel(LanguageKeys.REGISTER_LIMITED));
                 
                 Clients.evalJavaScript("showRegisterResult('.register-fail')");
                 

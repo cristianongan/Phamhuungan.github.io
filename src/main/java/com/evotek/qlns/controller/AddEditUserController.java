@@ -86,28 +86,29 @@ public class AddEditUserController extends BasicController<Window>
 
 
     public void initData() {
-        winParent = (Div) arg.get(Constants.PARENT_WINDOW);
+        this.winParent = (Div) this.arg.get(Constants.PARENT_WINDOW);
 
-        user = (User) arg.get(Constants.OBJECT);
+        this.user = (User) this.arg.get(Constants.OBJECT);
 
-        isManager = GetterUtil.getBooleanValue(arg.get(Constants.SECOND_OBJECT),
+        this.isManager = GetterUtil.getBooleanValue(this.arg.get(Constants.SECOND_OBJECT),
                 false);
 
-        if (Validator.isNotNull(user)) {
-            winUpdateUser.setTitle((String) arg.get(Constants.TITLE));
+        if (Validator.isNotNull(this.user)) {
+            this.winUpdateUser.setTitle((String) this.arg.get(Constants.TITLE));
 
             this._setEditForm();
 
-            tbUserName.setReadonly(true);
+            this.tbUserName.setReadonly(true);
         } else {
             final String staticDomain = StaticUtil.DEFAULT_EMAIL_DOMAIN;
             
-            tbEmail.setValue(staticDomain);
+            this.tbEmail.setValue(staticDomain);
             
-            tbUserName.addEventListener(Events.ON_CHANGING, new EventListener<Event>() {
+            this.tbUserName.addEventListener(Events.ON_CHANGING, new EventListener<Event>() {
 
-                public void onEvent(Event t) throws Exception {
-                    tbEmail.setValue(tbUserName.getValue()+staticDomain);
+                @Override
+				public void onEvent(Event t) throws Exception {
+                    AddEditUserController.this.tbEmail.setValue(AddEditUserController.this.tbUserName.getValue()+staticDomain);
                 }
             });
         }
@@ -117,47 +118,47 @@ public class AddEditUserController extends BasicController<Window>
 
     public void onCreateGender() {
         List<SimpleModel> genders =
-                userService.getGenderType();
-        cbGender.setModel(new ListModelList<SimpleModel>(genders));
+                this.userService.getGenderType();
+        this.cbGender.setModel(new ListModelList<SimpleModel>(genders));
     }
 
     public void onAfterRender$cbGender() {
-        if (Validator.isNotNull(user)
-                && Validator.isNotNull(user.getGender())) {
-                cbGender.setSelectedIndex(user.getGender().intValue());
+        if (Validator.isNotNull(this.user)
+                && Validator.isNotNull(this.user.getGender())) {
+                this.cbGender.setSelectedIndex(this.user.getGender().intValue());
         }
     }
     
     public void onSelect$cbGender() {
-        btnClearGender.setVisible(true);
+        this.btnClearGender.setVisible(true);
     }
     
     public void onClick$btnClearGender() {
-        cbGender.setSelectedIndex(-1);
-        btnClearGender.setVisible(false);
+        this.cbGender.setSelectedIndex(-1);
+        this.btnClearGender.setVisible(false);
     }
     /*
      * Hàm fill dữ liệu vào form khi thực hiện cập nhật
      */
     private void _setEditForm() {
         try {
-            tbUserName.setValue(user.getUserName());
-            tbEmail.setValue(user.getEmail());
-            tbFirstName.setValue(user.getFirstName());
-            tbMiddleName.setValue(user.getMiddleName());
-            tbLastName.setValue(user.getLastName());
-            tbBirthplace.setValue(user.getBirthPlace());
-            tbAddress.setValue(user.getAddress());
-            tbPhone.setValue(user.getPhone());
-            tbMobile.setValue(user.getMobile());
-            dbBirthday.setValue(user.getDateOfBirth());
+            this.tbUserName.setValue(this.user.getUserName());
+            this.tbEmail.setValue(this.user.getEmail());
+            this.tbFirstName.setValue(this.user.getFirstName());
+            this.tbMiddleName.setValue(this.user.getMiddleName());
+            this.tbLastName.setValue(this.user.getLastName());
+            this.tbBirthplace.setValue(this.user.getBirthPlace());
+            this.tbAddress.setValue(this.user.getAddress());
+            this.tbPhone.setValue(this.user.getPhone());
+            this.tbMobile.setValue(this.user.getMobile());
+            this.dbBirthday.setValue(this.user.getDateOfBirth());
         } catch (WrongValueException ex) {
             _log.error(ex.getMessage(), ex);
         }
     }
     //event
     public void onClick$btnCancel() {
-        winUpdateUser.detach();
+        this.winUpdateUser.detach();
     }
 
     public void onClick$btnSave() {
@@ -172,41 +173,41 @@ public class AddEditUserController extends BasicController<Window>
         boolean update = true;
 
         try {
-            String userName = GetterUtil.getString(tbUserName.getValue());
-            String email = GetterUtil.getString(tbEmail.getValue());
-            String firstName = GetterUtil.getString(tbFirstName.getValue());
-            String middleName = GetterUtil.getString(tbMiddleName.getValue());
-            String lastName = GetterUtil.getString(tbLastName.getValue());
-            Long gender = ComponentUtil.getComboboxValue(cbGender);
-            Date birthday = dbBirthday.getValue();
-            String birthPlace = GetterUtil.getString(tbBirthplace.getValue());
-            String address = GetterUtil.getString(tbAddress.getValue());
-            String phone = GetterUtil.getString(tbPhone.getValue());
-            String mobile = GetterUtil.getString(tbMobile.getValue());
+            String userName = GetterUtil.getString(this.tbUserName.getValue());
+            String email = GetterUtil.getString(this.tbEmail.getValue());
+            String firstName = GetterUtil.getString(this.tbFirstName.getValue());
+            String middleName = GetterUtil.getString(this.tbMiddleName.getValue());
+            String lastName = GetterUtil.getString(this.tbLastName.getValue());
+            Long gender = ComponentUtil.getComboboxValue(this.cbGender);
+            Date birthday = this.dbBirthday.getValue();
+            String birthPlace = GetterUtil.getString(this.tbBirthplace.getValue());
+            String address = GetterUtil.getString(this.tbAddress.getValue());
+            String phone = GetterUtil.getString(this.tbPhone.getValue());
+            String mobile = GetterUtil.getString(this.tbMobile.getValue());
 
             if (this._validate(userName, email, firstName, middleName, lastName,
                     birthPlace, address, phone, mobile)) {
-                if (Validator.isNull(user)) {
+                if (Validator.isNull(this.user)) {
                     update = false;
 
-                    user = new User();
+                    this.user = new User();
 
-                    user.setCreateDate(new Date());
-                    user.setStatus(Values.STATUS_NOT_READY);
-                    user.setUserName(userName);
+                    this.user.setCreateDate(new Date());
+                    this.user.setStatus(Values.STATUS_NOT_READY);
+                    this.user.setUserName(userName);
                 }
 
-                user.setModifiedDate(new Date());
-                user.setEmail(email);
-                user.setFirstName(firstName);
-                user.setMiddleName(middleName);
-                user.setLastName(lastName);
-                user.setGender(gender);
-                user.setDateOfBirth(birthday);
-                user.setBirthPlace(birthPlace);
-                user.setAddress(address);
-                user.setPhone(phone);
-                user.setMobile(mobile);                
+                this.user.setModifiedDate(new Date());
+                this.user.setEmail(email);
+                this.user.setFirstName(firstName);
+                this.user.setMiddleName(middleName);
+                this.user.setLastName(lastName);
+                this.user.setGender(gender);
+                this.user.setDateOfBirth(birthday);
+                this.user.setBirthPlace(birthPlace);
+                this.user.setAddress(address);
+                this.user.setPhone(phone);
+                this.user.setMobile(mobile);                
                 
                 this.saveUser(update, _continue);
             }
@@ -217,20 +218,20 @@ public class AddEditUserController extends BasicController<Window>
 
     private void saveUser(boolean update, boolean _continue) {
         try {
-            userService.saveOrUpdate(user);
+            this.userService.saveOrUpdate(this.user);
 
             //set default password
             if(!update){
-                userService.createPassword(user);
+                this.userService.createPassword(this.user);
             }
 
-            winUpdateUser.detach();
+            this.winUpdateUser.detach();
 
             if(_continue){
-                Events.sendEvent(ZkKeys.ON_LOAD_DATA_AND_REOPEN, winParent,
+                Events.sendEvent(ZkKeys.ON_LOAD_DATA_AND_REOPEN, this.winParent,
                     null);
             } else {
-                Events.sendEvent(ZkKeys.ON_LOAD_DATA, winParent,
+                Events.sendEvent(ZkKeys.ON_LOAD_DATA, this.winParent,
                     _createParameterMap(update));
             }
 
@@ -247,9 +248,9 @@ public class AddEditUserController extends BasicController<Window>
     private Map<String, Object> _createParameterMap(boolean update){
         Map<String, Object> parameters = new HashMap<String, Object>();
 
-        parameters.put(Constants.PARENT_WINDOW, winParent);
-        parameters.put(Constants.OBJECT, user);
-        parameters.put(Constants.SECOND_OBJECT, !update||isManager);
+        parameters.put(Constants.PARENT_WINDOW, this.winParent);
+        parameters.put(Constants.OBJECT, this.user);
+        parameters.put(Constants.SECOND_OBJECT, !update||this.isManager);
 
         return parameters;
     }
@@ -258,7 +259,7 @@ public class AddEditUserController extends BasicController<Window>
             String middleName, String lastName, String birthPlace, String address,
             String phone, String mobile){
 
-        Long userId = Validator.isNull(user) ? null : user.getUserId();
+        Long userId = Validator.isNull(this.user) ? null : this.user.getUserId();
 
         if(!_validateUserName(userName, userId)){
 
@@ -271,14 +272,14 @@ public class AddEditUserController extends BasicController<Window>
 
         //Ho
         if (Validator.isNull(firstName)) {
-            tbFirstName.setErrorMessage(Values.getRequiredInputMsg(
+            this.tbFirstName.setErrorMessage(Values.getRequiredInputMsg(
                     Labels.getLabel(LanguageKeys.FIRST_NAME)));
 
             return false;
         }
 
         if (firstName.length() > Values.SHORT_LENGTH) {
-            tbFirstName.setErrorMessage(Values.getMaxLengthInvalidMsg(
+            this.tbFirstName.setErrorMessage(Values.getMaxLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.FIRST_NAME), Values.SHORT_LENGTH));
 
             return false;
@@ -287,7 +288,7 @@ public class AddEditUserController extends BasicController<Window>
         //Ten
         if (Validator.isNotNull(lastName)
                 && lastName.length() > Values.SHORT_LENGTH) {
-            tbLastName.setErrorMessage(Values.getMaxLengthInvalidMsg(
+            this.tbLastName.setErrorMessage(Values.getMaxLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.LAST_NAME),
                     Values.SHORT_LENGTH));
 
@@ -296,7 +297,7 @@ public class AddEditUserController extends BasicController<Window>
         
         if (Validator.isNotNull(middleName)
                 && middleName.length() > Values.SHORT_LENGTH) {
-            tbMiddleName.setErrorMessage(Values.getMaxLengthInvalidMsg(
+            this.tbMiddleName.setErrorMessage(Values.getMaxLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.MIDDLE_NAME),
                     Values.SHORT_LENGTH));
 
@@ -305,7 +306,7 @@ public class AddEditUserController extends BasicController<Window>
         //Noi sinh
         if (Validator.isNotNull(birthPlace)
                 && birthPlace.length() > Values.MEDIUM_LENGTH) {
-            tbBirthplace.setErrorMessage(Values.getMaxLengthInvalidMsg(
+            this.tbBirthplace.setErrorMessage(Values.getMaxLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.PLACE_OF_BIRTH),
                     Values.MEDIUM_LENGTH));
 
@@ -315,7 +316,7 @@ public class AddEditUserController extends BasicController<Window>
         //Dia chi
         if (Validator.isNotNull(address)
                 && address.length() > Values.MEDIUM_LENGTH) {
-            tbAddress.setErrorMessage(Values.getMaxLengthInvalidMsg(
+            this.tbAddress.setErrorMessage(Values.getMaxLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.ADDRESS), Values.MEDIUM_LENGTH));
 
             return false;
@@ -324,7 +325,7 @@ public class AddEditUserController extends BasicController<Window>
         //telephone
         if (Validator.isNotNull(phone)
                 && !Validator.isPhoneNumber(phone)) {
-            tbPhone.setErrorMessage(Values.getFormatInvalidMsg(
+            this.tbPhone.setErrorMessage(Values.getFormatInvalidMsg(
                     Labels.getLabel(LanguageKeys.PHONE)));
 
             return false;
@@ -333,7 +334,7 @@ public class AddEditUserController extends BasicController<Window>
         //cellphone
         if (Validator.isNotNull(mobile)
                 && !Validator.isPhoneNumber(mobile)) {
-            tbPhone.setErrorMessage(Values.getFormatInvalidMsg(
+            this.tbPhone.setErrorMessage(Values.getFormatInvalidMsg(
                     Labels.getLabel(LanguageKeys.MOBILE)));
 
             return false;
@@ -349,7 +350,7 @@ public class AddEditUserController extends BasicController<Window>
     private boolean _validateUserName(String userName, Long userId){
         //Ten dang nhap
         if (Validator.isNull(userName)) {
-            tbUserName.setErrorMessage(Values.getRequiredInputMsg(
+            this.tbUserName.setErrorMessage(Values.getRequiredInputMsg(
                     Labels.getLabel(LanguageKeys.USER_LOGIN_NAME)));
 
             return false;
@@ -357,7 +358,7 @@ public class AddEditUserController extends BasicController<Window>
 
         //check length tên
         if (userName.length() > Values.SHORT_LENGTH) {
-            tbUserName.setErrorMessage(Values.getMaxLengthInvalidMsg(
+            this.tbUserName.setErrorMessage(Values.getMaxLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.USER_LOGIN_NAME),
                     Values.SHORT_LENGTH));
 
@@ -365,7 +366,7 @@ public class AddEditUserController extends BasicController<Window>
         }
 
         if (userName.length() < Values.MIN_NAME_LENGTH) {
-            tbUserName.setErrorMessage(Values.getMinLengthInvalidMsg(
+            this.tbUserName.setErrorMessage(Values.getMinLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.USER_LOGIN_NAME),
                     Values.MIN_NAME_LENGTH));
 
@@ -373,15 +374,15 @@ public class AddEditUserController extends BasicController<Window>
         }
 
         if(!Validator.isVariableName(userName)){
-            tbUserName.setErrorMessage(Values.getFormatInvalidMsg(
+            this.tbUserName.setErrorMessage(Values.getFormatInvalidMsg(
                     Labels.getLabel(LanguageKeys.USER_LOGIN_NAME),
                     Values.USER_NAME_PATTERN));
 
             return false;
         }
 
-        if(userService.isUserNameExits(userId, userName)){
-            tbUserName.setErrorMessage(Values.getDuplicateMsg(
+        if(this.userService.isUserNameExits(userId, userName)){
+            this.tbUserName.setErrorMessage(Values.getDuplicateMsg(
                     Labels.getLabel(LanguageKeys.USER_LOGIN_NAME)));
 
             return false;
@@ -393,28 +394,28 @@ public class AddEditUserController extends BasicController<Window>
     private boolean _validateEmail(String email, Long userId){
         //email
         if (Validator.isNull(email)) {
-            tbEmail.setErrorMessage(Values.getRequiredInputMsg(
+            this.tbEmail.setErrorMessage(Values.getRequiredInputMsg(
                     Labels.getLabel(LanguageKeys.EMAIL)));
 
             return false;
         }
 
         if (email.length() > Values.SHORT_LENGTH) {
-            tbEmail.setErrorMessage(Values.getMaxLengthInvalidMsg(
+            this.tbEmail.setErrorMessage(Values.getMaxLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.EMAIL), Values.SHORT_LENGTH));
 
             return false;
         }
 
         if(!Validator.isEmailAddress(email)){
-            tbEmail.setErrorMessage(Values.getFormatInvalidMsg(
+            this.tbEmail.setErrorMessage(Values.getFormatInvalidMsg(
                     Labels.getLabel(LanguageKeys.EMAIL)));
 
             return false;
         }
 
-        if(userService.isEmailExits(userId, email)){
-            tbEmail.setErrorMessage(Values.getDuplicateMsg(
+        if(this.userService.isEmailExits(userId, email)){
+            this.tbEmail.setErrorMessage(Values.getDuplicateMsg(
                     Labels.getLabel(LanguageKeys.EMAIL)));
 
             return false;

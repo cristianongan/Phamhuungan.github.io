@@ -24,11 +24,12 @@ import com.evotek.qlns.util.Validator;
  *
  * @author My PC
  */
-public class WorkProcessDAOImpl extends BasicDAO<WorkProcess>
+public class WorkProcessDAOImpl extends AbstractDAO<WorkProcess>
         implements WorkProcessDAO{
     private static final Logger _log = LogManager.getLogger(WorkProcessDAOImpl.class);
     
-    public List<WorkProcess> getWorkProcessByStaffId(Long staffId){
+    @Override
+	public List<WorkProcess> getWorkProcessByStaffId(Long staffId){
         List<WorkProcess> results = new ArrayList<WorkProcess>();
 
         try {
@@ -41,7 +42,7 @@ public class WorkProcessDAOImpl extends BasicDAO<WorkProcess>
             cri.addOrder(Order.desc("fromDate"));
             cri.addOrder(Order.desc("toDate"));
             
-            results = (List<WorkProcess>) cri.list();
+            results = cri.list();
         } catch (Exception e) {
             _log.error(e.getMessage(), e);
         }
@@ -49,7 +50,8 @@ public class WorkProcessDAOImpl extends BasicDAO<WorkProcess>
         return results;
     }
     
-    public List<String> getCompanyName(){
+    @Override
+	public List<String> getCompanyName(){
         List<String> results = new ArrayList<String>();
 
         try {
@@ -60,7 +62,7 @@ public class WorkProcessDAOImpl extends BasicDAO<WorkProcess>
 
             cri.addOrder(Order.asc("company"));
             
-            results = (List<String>) cri.list();
+            results = cri.list();
         } catch (Exception e) {
             _log.error(e.getMessage(), e);
         }
@@ -68,7 +70,8 @@ public class WorkProcessDAOImpl extends BasicDAO<WorkProcess>
         return results;
     }
     
-    public List<String> getJobTitle() {
+    @Override
+	public List<String> getJobTitle() {
         List<String> results = new ArrayList<String>();
 
         try {
@@ -79,7 +82,7 @@ public class WorkProcessDAOImpl extends BasicDAO<WorkProcess>
 
             cri.addOrder(Order.asc("jobTitle"));
             
-            results = (List<String>) cri.list();
+            results = cri.list();
         } catch (Exception e) {
             _log.error(e.getMessage(), e);
         }

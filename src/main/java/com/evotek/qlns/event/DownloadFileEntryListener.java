@@ -32,21 +32,22 @@ public class DownloadFileEntryListener implements EventListener<Event>{
         this.entry = entry;
     }
 
-    public void onEvent(Event t) throws Exception {
+    @Override
+	public void onEvent(Event t) throws Exception {
         StringBuilder sb = new StringBuilder();
 
         sb.append(StaticUtil.SYSTEM_STORE_FILE_DIR);
         sb.append(StringPool.SLASH);
         sb.append(StaticUtil.FILE_UPLOAD_DIR);
         sb.append(StringPool.SLASH);
-        sb.append(entry.getFolderId());
+        sb.append(this.entry.getFolderId());
         sb.append(StringPool.SLASH);
-        sb.append(entry.getFileId());
+        sb.append(this.entry.getFileId());
 
         File file = new File(sb.toString());
 
         if (file.exists()) {
-            FileUtil.download(file, entry.getName());
+            FileUtil.download(file, this.entry.getName());
         } else {
             Messagebox.show(Labels.getLabel(
                     LanguageKeys.FILE_NOT_FOUND),

@@ -24,7 +24,7 @@ public class UserLogin implements Serializable {
 
     @Column(name = "success", length = 1)
     public Boolean getSuccess() {
-        return success;
+        return this.success;
     }
 
     public void setSuccess(Boolean success) {
@@ -33,7 +33,7 @@ public class UserLogin implements Serializable {
 
     @Column(name = "user_name", length = 75)
     public String getUserName() {
-        return userName;
+        return this.userName;
     }
 
     public void setUserName(String userName) {
@@ -42,7 +42,7 @@ public class UserLogin implements Serializable {
 
     @Column(name = "ip", length = 75)
     public String getIp() {
-        return ip;
+        return this.ip;
     }
 
     public void setIp(String ip) {
@@ -53,7 +53,7 @@ public class UserLogin implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_login_id", unique = true, nullable = false, precision = 22, scale = 0)
     public Long getUserLoginId() {
-        return userLoginId;
+        return this.userLoginId;
     }
 
     public void setUserLoginId(Long userLoginId) {
@@ -63,7 +63,7 @@ public class UserLogin implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "login_time", length = 7)
     public Date getLoginTime() {
-        return loginTime;
+        return this.loginTime;
     }
 
     public void setLoginTime(Date loginTime) {

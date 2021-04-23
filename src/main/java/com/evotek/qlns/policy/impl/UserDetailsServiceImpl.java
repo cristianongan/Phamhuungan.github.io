@@ -144,7 +144,7 @@ public class UserDetailsServiceImpl implements UserDetailsService, Serializable 
             loginLog.setLoginTime(new Date());
             loginLog.setSuccess(false);
 
-            userService.saveOrUpdate(loginLog);
+            this.userService.saveOrUpdate(loginLog);
         }
     }
 }

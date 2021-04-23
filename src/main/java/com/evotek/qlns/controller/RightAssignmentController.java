@@ -70,12 +70,12 @@ public class RightAssignmentController extends BasicController<Window>
         try {
 //            winTemp = (Window) arg.get(Constants.PARENT_WINDOW);
 
-            category = (Category) arg.get(Constants.OBJECT);
+            this.category = (Category) this.arg.get(Constants.OBJECT);
 
-            categoryId = category.getCategoryId();
+            this.categoryId = this.category.getCategoryId();
 
-            winRight.setTitle(Labels.getLabel(LanguageKeys.TITLE_MANAGER_RIGHT, 
-                    new String[]{Labels.getLabel(category.getLanguageKey())}));
+            this.winRight.setTitle(Labels.getLabel(LanguageKeys.TITLE_MANAGER_RIGHT, 
+                    new String[]{Labels.getLabel(this.category.getLanguageKey())}));
 
             //seach
             this.searchGroups();
@@ -89,20 +89,20 @@ public class RightAssignmentController extends BasicController<Window>
     //event method
     public void onClick$btnAddGroups() {
         Window win = (Window) Executions.createComponents(
-                EDIT_GROUP_PAGE , winRight, _createParameterMap());
+                EDIT_GROUP_PAGE , this.winRight, _createParameterMap());
 
         win.doModal();
     }
 
     public void onClick$btnAddRight() {
         Window win = (Window) Executions.createComponents(
-                EDIT_RIGHT_PAGE , winRight, _createParameterMap());
+                EDIT_RIGHT_PAGE , this.winRight, _createParameterMap());
 
         win.doModal();
     }
 
     public void onClick$btnCancel(){
-        winRight.detach();
+        this.winRight.detach();
     }
 
     public void onLoadGroups(Event event) throws Exception{
@@ -122,10 +122,11 @@ public class RightAssignmentController extends BasicController<Window>
                 Messagebox.QUESTION,
                 new EventListener<Event>() {
 
-                    public void onEvent(Event e) throws Exception {
+                    @Override
+					public void onEvent(Event e) throws Exception {
                         if (Messagebox.ON_OK.equals(e.getName())) {
                             try {
-                                categoryService.lockGroup(group);
+                                RightAssignmentController.this.categoryService.lockGroup(group);
 
                                 ComponentUtil.createSuccessMessageBox(
                                         LanguageKeys.MESSAGE_LOCK_ITEM_SUCCESS);
@@ -151,10 +152,11 @@ public class RightAssignmentController extends BasicController<Window>
                 Messagebox.QUESTION,
                 new EventListener() {
 
-                    public void onEvent(Event e) throws Exception {
+                    @Override
+					public void onEvent(Event e) throws Exception {
                         if (Messagebox.ON_OK.equals(e.getName())) {
                             try {
-                                categoryService.unlockGroup(group);
+                                RightAssignmentController.this.categoryService.unlockGroup(group);
 
                                ComponentUtil.createSuccessMessageBox(
                                        LanguageKeys.MESSAGE_UNLOCK_ITEM_SUCCESS);
@@ -180,10 +182,11 @@ public class RightAssignmentController extends BasicController<Window>
                 Messagebox.QUESTION,
                 new EventListener() {
 
-                    public void onEvent(Event e) throws Exception {
+                    @Override
+					public void onEvent(Event e) throws Exception {
                         if (Messagebox.ON_OK.equals(e.getName())) {
                             try {
-                                categoryService.deleteGroup(group);
+                                RightAssignmentController.this.categoryService.deleteGroup(group);
 
                                  ComponentUtil.createSuccessMessageBox(
                                          LanguageKeys.MESSAGE_DELETE_SUCCESS);
@@ -209,10 +212,11 @@ public class RightAssignmentController extends BasicController<Window>
                 Messagebox.QUESTION,
                 new EventListener<Event>() {
 
-                    public void onEvent(Event e) throws Exception {
+                    @Override
+					public void onEvent(Event e) throws Exception {
                         if (Messagebox.ON_OK.equals(e.getName())) {
                             try {
-                                categoryService.lockRight(right);
+                                RightAssignmentController.this.categoryService.lockRight(right);
 
                                ComponentUtil.createSuccessMessageBox(
                                        LanguageKeys.MESSAGE_LOCK_ITEM_SUCCESS);
@@ -238,10 +242,11 @@ public class RightAssignmentController extends BasicController<Window>
                 Messagebox.QUESTION,
                 new EventListener() {
 
-                    public void onEvent(Event e) throws Exception {
+                    @Override
+					public void onEvent(Event e) throws Exception {
                         if (Messagebox.ON_OK.equals(e.getName())) {
                             try {
-                                categoryService.unlockRight(right);
+                                RightAssignmentController.this.categoryService.unlockRight(right);
 
                                 ComponentUtil.createSuccessMessageBox(
                                         LanguageKeys.MESSAGE_UNLOCK_ITEM_SUCCESS);
@@ -268,10 +273,11 @@ public class RightAssignmentController extends BasicController<Window>
                 Messagebox.QUESTION,
                 new EventListener() {
 
-                    public void onEvent(Event e) throws Exception {
+                    @Override
+					public void onEvent(Event e) throws Exception {
                         if (Messagebox.ON_OK.equals(e.getName())) {
                             try {
-                                categoryService.deleteRight(right);
+                                RightAssignmentController.this.categoryService.deleteRight(right);
 
                                  ComponentUtil.createSuccessMessageBox(
                                          LanguageKeys.MESSAGE_DELETE_SUCCESS);
@@ -292,11 +298,11 @@ public class RightAssignmentController extends BasicController<Window>
     //search data
     public void searchGroups() throws Exception{
         try{
-            List<Group> groups = categoryService.getGroupByCategoryId(
-                    categoryId);
+            List<Group> groups = this.categoryService.getGroupByCategoryId(
+                    this.categoryId);
 
-            groupsSearchResult.setRowRenderer(new GroupRender(winRight));
-            groupsSearchResult.setModel(new ListModelList<Group>(groups));
+            this.groupsSearchResult.setRowRenderer(new GroupRender(this.winRight));
+            this.groupsSearchResult.setModel(new ListModelList<Group>(groups));
 
         }catch(Exception ex){
             _log.error(ex.getMessage(), ex);
@@ -305,11 +311,11 @@ public class RightAssignmentController extends BasicController<Window>
 
     public void searchRight() throws Exception{
         try{
-            List<Right> rights = categoryService.getRightByCategoryId(
-                    categoryId);
+            List<Right> rights = this.categoryService.getRightByCategoryId(
+                    this.categoryId);
 
-            rightSearchResult.setRowRenderer(new RightRender(winRight));
-            rightSearchResult.setModel(new ListModelList<Right>(rights));
+            this.rightSearchResult.setRowRenderer(new RightRender(this.winRight));
+            this.rightSearchResult.setModel(new ListModelList<Right>(rights));
         }catch(Exception ex){
             _log.error(ex.getMessage(), ex);
         }
@@ -318,8 +324,8 @@ public class RightAssignmentController extends BasicController<Window>
     private Map<String, Object> _createParameterMap() {
         Map<String, Object> parameters = new HashMap<String, Object>();
 
-        parameters.put(Constants.PARENT_WINDOW, winRight);
-        parameters.put(Constants.OBJECT, category);
+        parameters.put(Constants.PARENT_WINDOW, this.winRight);
+        parameters.put(Constants.OBJECT, this.category);
 
         return parameters;
     }

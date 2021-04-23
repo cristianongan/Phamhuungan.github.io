@@ -19,13 +19,14 @@ import com.evotek.qlns.model.FileEntry;
  *
  * @author linhlh2
  */
-public class FileEntryDAOImpl extends BasicDAO<FileEntry>
+public class FileEntryDAOImpl extends AbstractDAO<FileEntry>
         implements FileEntryDAO{
 
     private static final Logger _log =
             LogManager.getLogger(FileEntryDAOImpl.class);
 
-    public List<FileEntry> getFileEntryByIds(List<Long> fileIds) {
+    @Override
+	public List<FileEntry> getFileEntryByIds(List<Long> fileIds) {
         List<FileEntry> results = new ArrayList<FileEntry>();
 
         try {
@@ -34,7 +35,7 @@ public class FileEntryDAOImpl extends BasicDAO<FileEntry>
             if (fileIds != null && !fileIds.isEmpty()) {
                 cri.add(Restrictions.in("fileId", fileIds));
 
-                results = (List<FileEntry>) cri.list();
+                results = cri.list();
             }
         } catch (Exception ex) {
             _log.error(ex.getMessage(), ex);
@@ -43,7 +44,8 @@ public class FileEntryDAOImpl extends BasicDAO<FileEntry>
         return results;
     }
 
-    public List<FileEntry> getFileListByDocumentId(Long documentId) {
+    @Override
+	public List<FileEntry> getFileListByDocumentId(Long documentId) {
          List<FileEntry> results = new ArrayList<FileEntry>();
 
         try {
@@ -52,7 +54,7 @@ public class FileEntryDAOImpl extends BasicDAO<FileEntry>
             if (documentId != null) {
                 cri.add(Restrictions.eq("document.documentId", documentId));
 
-                results = (List<FileEntry>) cri.list();
+                results = cri.list();
             }
         } catch (Exception ex) {
             _log.error(ex.getMessage(), ex);

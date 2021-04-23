@@ -32,7 +32,7 @@ public class FileEntry implements Serializable {
 
     @Column(name = "folder_id", precision = 22, scale = 0)
     public Long getFolderId() {
-        return folderId;
+        return this.folderId;
     }
 
     public void setFolderId(Long folderId) {
@@ -41,7 +41,7 @@ public class FileEntry implements Serializable {
 
     @Column(name = "name", length = 255)
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(String name) {
@@ -50,7 +50,7 @@ public class FileEntry implements Serializable {
 
     @Column(name = "user_id", precision = 22, scale = 0)
     public Long getUserId() {
-        return userId;
+        return this.userId;
     }
 
     public void setUserId(Long userId) {
@@ -59,7 +59,7 @@ public class FileEntry implements Serializable {
 
     @Column(name = "description", length = 2000)
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     public void setDescription(String description) {
@@ -68,7 +68,7 @@ public class FileEntry implements Serializable {
 
     @Column(name = "size_", precision = 22, scale = 0)
     public Long getSize() {
-        return size;
+        return this.size;
     }
 
     public void setSize(Long size) {
@@ -77,7 +77,7 @@ public class FileEntry implements Serializable {
 
     @Column(name = "user_name", length = 200)
     public String getUserName() {
-        return userName;
+        return this.userName;
     }
 
     public void setUserName(String userName) {
@@ -88,7 +88,7 @@ public class FileEntry implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "file_id", unique = true, nullable = false, precision = 22, scale = 0)
     public Long getFileId() {
-        return fileId;
+        return this.fileId;
     }
 
     public void setFileId(Long fileId) {
@@ -98,7 +98,7 @@ public class FileEntry implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date", length = 7)
     public Date getCreateDate() {
-        return createDate;
+        return this.createDate;
     }
 
     public void setCreateDate(Date createDate) {
@@ -108,7 +108,7 @@ public class FileEntry implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "modified_date", length = 7)
     public Date getModifiedDate() {
-        return modifiedDate;
+        return this.modifiedDate;
     }
 
     public void setModifiedDate(Date modifiedDate) {
@@ -118,7 +118,7 @@ public class FileEntry implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "document_id")
     public Document getDocument() {
-        return document;
+        return this.document;
     }
 
     public void setDocument(Document document) {

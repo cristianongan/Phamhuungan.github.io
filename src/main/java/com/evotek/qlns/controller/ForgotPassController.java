@@ -51,17 +51,17 @@ public class ForgotPassController extends BasicController<Div>
     }
     
     public void onOK(){
-        String email = GetterUtil.getString(tbEmailRetrive.getValue());
+        String email = GetterUtil.getString(this.tbEmailRetrive.getValue());
         
         if(_validate(email)){
             Clients.evalJavaScript("showRetriveEmailResult('.retrive-success')");
             
-            userService.addVerifyResetPwd(user);
+            this.userService.addVerifyResetPwd(this.user);
         }
     }
     
     public void onVerify(){
-        String verifyCode = GetterUtil.getString(tbVerify.getValue());
+        String verifyCode = GetterUtil.getString(this.tbVerify.getValue());
         
         if(_validateCode(verifyCode)){
             
@@ -71,30 +71,30 @@ public class ForgotPassController extends BasicController<Div>
     private boolean _validate(String email){
         //email
         if (Validator.isNull(email)) {
-            tbEmailRetrive.setErrorMessage(Values.getRequiredInputMsg(
+            this.tbEmailRetrive.setErrorMessage(Values.getRequiredInputMsg(
                     Labels.getLabel(LanguageKeys.EMAIL)));
 
             return false;
         }
 
         if (email.length() > Values.SHORT_LENGTH) {
-            tbEmailRetrive.setErrorMessage(Values.getMaxLengthInvalidMsg(
+            this.tbEmailRetrive.setErrorMessage(Values.getMaxLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.EMAIL), Values.SHORT_LENGTH));
 
             return false;
         }
 
         if(!Validator.isEmailAddress(email)){
-            tbEmailRetrive.setErrorMessage(Values.getFormatInvalidMsg(
+            this.tbEmailRetrive.setErrorMessage(Values.getFormatInvalidMsg(
                     Labels.getLabel(LanguageKeys.EMAIL)));
 
             return false;
         }
         
-        user = userService.getUserByEmail(null, email);
+        this.user = this.userService.getUserByEmail(null, email);
         
-        if(Validator.isNull(user)){
-            tbEmailRetrive.setErrorMessage(Values.getNotExistMsg(
+        if(Validator.isNull(this.user)){
+            this.tbEmailRetrive.setErrorMessage(Values.getNotExistMsg(
                     Labels.getLabel(LanguageKeys.EMAIL)));
 
             return false;
@@ -105,7 +105,7 @@ public class ForgotPassController extends BasicController<Div>
     
     private boolean _validateCode(String verifyCode){
         if (Validator.isNull(verifyCode)) {
-            tbVerify.setErrorMessage(Values.getRequiredInputMsg(
+            this.tbVerify.setErrorMessage(Values.getRequiredInputMsg(
                     Labels.getLabel(LanguageKeys.VERIFY_CODE)));
 
             return false;

@@ -102,7 +102,7 @@ public class UserController extends BasicController<Div>
 
     public void initData() throws Exception {
         try {
-            isAdmin = this.getUserWorkspace().isAdministrator();
+            this.isAdmin = this.getUserWorkspace().isAdministrator();
 
             this.onCreateGender();
 
@@ -116,17 +116,17 @@ public class UserController extends BasicController<Div>
 
     public void onCreateGender() throws Exception {
         List<SimpleModel> genders =
-                userService.getGenderType();
-        cbGender.setModel(new ListModelList<SimpleModel>(genders));
+                this.userService.getGenderType();
+        this.cbGender.setModel(new ListModelList<SimpleModel>(genders));
     }
 
     public void onSelect$cbGender() {
-        btnClearGender.setVisible(true);
+        this.btnClearGender.setVisible(true);
     }
     
     public void onClick$btnClearGender() {
-        cbGender.setSelectedIndex(-1);
-        btnClearGender.setVisible(false);
+        this.cbGender.setSelectedIndex(-1);
+        this.btnClearGender.setVisible(false);
     }
     
     public void onCreateStatus() {
@@ -144,20 +144,20 @@ public class UserController extends BasicController<Div>
         statusList.add(new SimpleModel(Values.STATUS_NOT_READY,
                 Labels.getLabel(LanguageKeys.STATUS_NOT_ACTIVE)));
 
-        cbStatus.setModel(new ListModelList<SimpleModel>(statusList));
+        this.cbStatus.setModel(new ListModelList<SimpleModel>(statusList));
     }
 
     public void onSelect$cbStatus() {
-        btnClearStatus.setVisible(true);
+        this.btnClearStatus.setVisible(true);
     }
     
     public void onClick$btnClearStatus() {
-        cbStatus.setSelectedIndex(-1);
-        btnClearStatus.setVisible(false);
+        this.cbStatus.setSelectedIndex(-1);
+        this.btnClearStatus.setVisible(false);
     }
     
     public void onAfterRender$cbStatus() {
-        cbStatus.setSelectedIndex(Values.FIRST_INDEX);
+        this.cbStatus.setSelectedIndex(Values.FIRST_INDEX);
 
         refreshModel();
     }
@@ -169,48 +169,49 @@ public class UserController extends BasicController<Div>
     public void onClick$btnImport(){
         Window win = (Window) 
                 Executions.createComponents("/html/pages/manager_user/import_users.zul", 
-                        winUser, _createParameterMap(null));
+                        this.winUser, _createParameterMap(null));
 
         win.doModal();
     }
 
     public void onOkWindow() {
-        winUser.addEventListener(Events.ON_OK, new EventListener<Event>() {
-            public void onEvent(Event t) throws Exception {
+        this.winUser.addEventListener(Events.ON_OK, new EventListener<Event>() {
+            @Override
+			public void onEvent(Event t) throws Exception {
                 refreshModel();
             }
         });
     }
     
     public void onOK$tbKeyword() {
-        isAdvance = false;
+        this.isAdvance = false;
         
         this.refreshModel();
     }
     
     public void onClick$btnBasicSearch() {
-        isAdvance = false;
+        this.isAdvance = false;
         
         this.refreshModel();
         
     }
     
     public void onClick$btnEnableAdvSearch() {
-        advanceSearchPopup.open(btnEnableAdvSearch, ZkKeys.OVERLAP_END);
+        this.advanceSearchPopup.open(this.btnEnableAdvSearch, ZkKeys.OVERLAP_END);
         
-        tbUserName.setFocus(true);
+        this.tbUserName.setFocus(true);
         
-        isAdvance = true;
+        this.isAdvance = true;
     }
     
     public void onClick$btnAdvSearch(){
-        isAdvance = true;
+        this.isAdvance = true;
         
         this.refreshModel();
     }
     
     public void onOK$advanceSearchPopup(){
-        isAdvance = true;
+        this.isAdvance = true;
         
         this.refreshModel();
     }
@@ -228,7 +229,7 @@ public class UserController extends BasicController<Div>
     public void refreshModel() {
         this.showHideButton();
 
-        if (isAdvance) {
+        if (this.isAdvance) {
             this.advanceSearch();
         } else {
             this.basicSearch();
@@ -236,95 +237,95 @@ public class UserController extends BasicController<Div>
     }
 
     public void showHideButton() {
-        Long status = ComponentUtil.getComboboxValue(cbStatus);
+        Long status = ComponentUtil.getComboboxValue(this.cbStatus);
 
-        if (btnLock != null) {
-            btnLock.setVisible(isAdvance && Values.STATUS_ACTIVE.equals(status));
+        if (this.btnLock != null) {
+            this.btnLock.setVisible(this.isAdvance && Values.STATUS_ACTIVE.equals(status));
         }
 
-        if (btnUnlock != null) {
-            btnUnlock.setVisible(isAdvance && Values.STATUS_DEACTIVE.equals(status));
+        if (this.btnUnlock != null) {
+            this.btnUnlock.setVisible(this.isAdvance && Values.STATUS_DEACTIVE.equals(status));
         }
 
-        if (btnDel != null) {
-            btnDel.setVisible(isAdvance && Values.STATUS_NOT_READY.equals(status));
+        if (this.btnDel != null) {
+            this.btnDel.setVisible(this.isAdvance && Values.STATUS_NOT_READY.equals(status));
         }
 
-        if (btnActivate != null) {
-            btnActivate.setVisible(isAdvance && Values.STATUS_NOT_READY.equals(status));
+        if (this.btnActivate != null) {
+            this.btnActivate.setVisible(this.isAdvance && Values.STATUS_NOT_READY.equals(status));
         }
     }
 
     public void basicSearch() {
-        String keyword = GetterUtil.getString(tbKeyword.getValue());
+        String keyword = GetterUtil.getString(this.tbKeyword.getValue());
 
-        paramMap.put("keyword", keyword);
+        this.paramMap.put("keyword", keyword);
 
-        searchResultGrid.setItemRenderer(
-                new UserRender(winUser, isAdmin));
+        this.searchResultGrid.setItemRenderer(
+                new UserRender(this.winUser, this.isAdmin));
 
-        searchResultGrid.setModel(new UserListModel(
-                searchResultGrid.getPageSize(), keyword, isAdvance,
-                userService));
+        this.searchResultGrid.setModel(new UserListModel(
+                this.searchResultGrid.getPageSize(), keyword, this.isAdvance,
+                this.userService));
 
-        searchResultGrid.setMultiple(true);
+        this.searchResultGrid.setMultiple(true);
     }
 
     public void advanceSearch() {
-        String userName = GetterUtil.getString(tbUserName.getValue());
-        String email = GetterUtil.getString(tbEmail.getValue());
-        Long gender = ComponentUtil.getComboboxValue(cbGender);
-        String birthplace = GetterUtil.getString(tbBirthPlace.getValue());
-        Date birthdayFrom = dbBirthdayFrom.getValue();
-        Date birthdayTo = dbBirthdayTo.getValue();
-        String phone = GetterUtil.getString(tbPhone.getValue());
-        String mobile = GetterUtil.getString(tbMobile.getValue());
-        String account = GetterUtil.getString(tbAccount.getValue());
-        Long status = ComponentUtil.getComboboxValue(cbStatus);
+        String userName = GetterUtil.getString(this.tbUserName.getValue());
+        String email = GetterUtil.getString(this.tbEmail.getValue());
+        Long gender = ComponentUtil.getComboboxValue(this.cbGender);
+        String birthplace = GetterUtil.getString(this.tbBirthPlace.getValue());
+        Date birthdayFrom = this.dbBirthdayFrom.getValue();
+        Date birthdayTo = this.dbBirthdayTo.getValue();
+        String phone = GetterUtil.getString(this.tbPhone.getValue());
+        String mobile = GetterUtil.getString(this.tbMobile.getValue());
+        String account = GetterUtil.getString(this.tbAccount.getValue());
+        Long status = ComponentUtil.getComboboxValue(this.cbStatus);
         //create param map
 
-        paramMap.put("userName", userName);
-        paramMap.put("email", email);
-        paramMap.put("gender", gender);
-        paramMap.put("birthplace", birthplace);
-        paramMap.put("birthdayFrom", birthdayFrom);
-        paramMap.put("birthdayTo", birthdayTo);
-        paramMap.put("phone", phone);
-        paramMap.put("mobile", mobile);
-        paramMap.put("account", account);
-        paramMap.put("status", status);
+        this.paramMap.put("userName", userName);
+        this.paramMap.put("email", email);
+        this.paramMap.put("gender", gender);
+        this.paramMap.put("birthplace", birthplace);
+        this.paramMap.put("birthdayFrom", birthdayFrom);
+        this.paramMap.put("birthdayTo", birthdayTo);
+        this.paramMap.put("phone", phone);
+        this.paramMap.put("mobile", mobile);
+        this.paramMap.put("account", account);
+        this.paramMap.put("status", status);
 
-        searchResultGrid.setItemRenderer(new UserRender(winUser, isAdmin));
-        searchResultGrid.setModel(new UserListModel(searchResultGrid.getPageSize(),
+        this.searchResultGrid.setItemRenderer(new UserRender(this.winUser, this.isAdmin));
+        this.searchResultGrid.setModel(new UserListModel(this.searchResultGrid.getPageSize(),
                 userName, email, gender, birthplace, birthdayFrom, birthdayTo,
-                phone, mobile, account, status, isAdvance, userService));
+                phone, mobile, account, status, this.isAdvance, this.userService));
     }
 
     public List<User> getListExport() {
         List<User> results = new ArrayList<User>();
 
         try {
-            if (isAdvance) {
-                String userName = GetterUtil.getString(paramMap.get("userName"));
-                String email = GetterUtil.getString(paramMap.get("email"));
-                Long gender = GetterUtil.getLong(paramMap.get("gender"));
-                String birthplace = GetterUtil.getString(paramMap.get("birthplace"));
-                Date birthdayFrom = (Date) paramMap.get("birthdayFrom");
-                Date birthdayTo = (Date) paramMap.get("birthdayTo");
-                String phone = GetterUtil.getString(paramMap.get("phone"));
-                String mobile = GetterUtil.getString(paramMap.get("mobile"));
-                String account = GetterUtil.getString(paramMap.get("account"));
-                Long status = GetterUtil.getLong(paramMap.get("status"));
+            if (this.isAdvance) {
+                String userName = GetterUtil.getString(this.paramMap.get("userName"));
+                String email = GetterUtil.getString(this.paramMap.get("email"));
+                Long gender = GetterUtil.getLong(this.paramMap.get("gender"));
+                String birthplace = GetterUtil.getString(this.paramMap.get("birthplace"));
+                Date birthdayFrom = (Date) this.paramMap.get("birthdayFrom");
+                Date birthdayTo = (Date) this.paramMap.get("birthdayTo");
+                String phone = GetterUtil.getString(this.paramMap.get("phone"));
+                String mobile = GetterUtil.getString(this.paramMap.get("mobile"));
+                String account = GetterUtil.getString(this.paramMap.get("account"));
+                Long status = GetterUtil.getLong(this.paramMap.get("status"));
 
-                results = userService.getUsers(userName, email, gender,
+                results = this.userService.getUsers(userName, email, gender,
                         birthplace, birthdayFrom, birthdayTo, phone, mobile,
                         account, status, QueryUtil.GET_ALL,
                         QueryUtil.GET_ALL, null, null);
 
             } else {
-                String keyword = (String) paramMap.get("keyword");
+                String keyword = (String) this.paramMap.get("keyword");
 
-                results = userService.getUsers(keyword, QueryUtil.GET_ALL,
+                results = this.userService.getUsers(keyword, QueryUtil.GET_ALL,
                         QueryUtil.GET_ALL, null, null);
             }
 
@@ -377,7 +378,8 @@ public class UserController extends BasicController<Div>
                 Messagebox.OK | Messagebox.CANCEL,
                 Messagebox.QUESTION,
                 new EventListener() {
-            public void onEvent(Event e) throws Exception {
+            @Override
+			public void onEvent(Event e) throws Exception {
                 if (Messagebox.ON_OK.equals(e.getName())) {
                     try {
                         if (user.getUserId().equals(getUserId())) {
@@ -387,7 +389,7 @@ public class UserController extends BasicController<Div>
                             return;
                         }
 
-                        userService.lockUser(user);
+                        UserController.this.userService.lockUser(user);
 
                         ComponentUtil.createSuccessMessageBox(
                                 LanguageKeys.MESSAGE_LOCK_ITEM_SUCCESS);
@@ -419,10 +421,11 @@ public class UserController extends BasicController<Div>
                 Messagebox.OK | Messagebox.CANCEL,
                 Messagebox.QUESTION,
                 new EventListener() {
-            public void onEvent(Event e) throws Exception {
+            @Override
+			public void onEvent(Event e) throws Exception {
                 if (Messagebox.ON_OK.equals(e.getName())) {
                     try {
-                        userService.unlockUser(user);
+                        UserController.this.userService.unlockUser(user);
 
                         ComponentUtil.createSuccessMessageBox(
                                 LanguageKeys.MESSAGE_UNLOCK_ITEM_SUCCESS);
@@ -454,11 +457,12 @@ public class UserController extends BasicController<Div>
                 Messagebox.OK | Messagebox.CANCEL,
                 Messagebox.QUESTION,
                 new EventListener() {
-            public void onEvent(Event e) throws Exception {
+            @Override
+			public void onEvent(Event e) throws Exception {
                 if (Messagebox.ON_OK.equals(e.getName())) {
                     try {
                         if (user.getStatus().equals(Values.STATUS_NOT_READY)) {
-                            userService.delete(user);
+                            UserController.this.userService.delete(user);
 
                             ComponentUtil.createSuccessMessageBox(
                                     LanguageKeys.MESSAGE_DELETE_SUCCESS);
@@ -493,10 +497,11 @@ public class UserController extends BasicController<Div>
                     Messagebox.OK | Messagebox.CANCEL,
                     Messagebox.QUESTION,
                     new EventListener() {
-                public void onEvent(Event e) throws Exception {
+                @Override
+				public void onEvent(Event e) throws Exception {
                     if (Messagebox.ON_OK.equals(e.getName())) {
                         try {
-                            userService.resetPassword(users);
+                            UserController.this.userService.resetPassword(users);
 
                             ComponentUtil.createSuccessMessageBox(
                                     LanguageKeys.MESSAGE_UPDATE_SUCCESS);
@@ -525,10 +530,11 @@ public class UserController extends BasicController<Div>
                     Messagebox.OK | Messagebox.CANCEL,
                     Messagebox.QUESTION,
                     new EventListener() {
-                public void onEvent(Event e) throws Exception {
+                @Override
+				public void onEvent(Event e) throws Exception {
                     if (Messagebox.ON_OK.equals(e.getName())) {
                         try {
-                            userService.lockUser(users);
+                            UserController.this.userService.lockUser(users);
 
                             ComponentUtil.createSuccessMessageBox(
                                     LanguageKeys.MESSAGE_LOCK_ITEM_SUCCESS);
@@ -559,10 +565,11 @@ public class UserController extends BasicController<Div>
                     Messagebox.OK | Messagebox.CANCEL,
                     Messagebox.QUESTION,
                     new EventListener() {
-                public void onEvent(Event e) throws Exception {
+                @Override
+				public void onEvent(Event e) throws Exception {
                     if (Messagebox.ON_OK.equals(e.getName())) {
                         try {
-                            userService.unlockUser(users);
+                            UserController.this.userService.unlockUser(users);
 
                             ComponentUtil.createSuccessMessageBox(
                                     LanguageKeys.MESSAGE_UNLOCK_ITEM_SUCCESS);
@@ -593,11 +600,12 @@ public class UserController extends BasicController<Div>
                     Messagebox.OK | Messagebox.CANCEL,
                     Messagebox.QUESTION,
                     new EventListener() {
-                public void onEvent(Event e) throws Exception {
+                @Override
+				public void onEvent(Event e) throws Exception {
                     if (Messagebox.ON_OK.equals(e.getName())) {
                         try {
                             List<String> userNotDel =
-                                    userService.delete(users);
+                                    UserController.this.userService.delete(users);
 
                             if (Validator.isNull(userNotDel)) {
                                 ComponentUtil.createSuccessMessageBox(
@@ -636,10 +644,11 @@ public class UserController extends BasicController<Div>
                     Messagebox.OK | Messagebox.CANCEL,
                     Messagebox.QUESTION,
                     new EventListener() {
-                public void onEvent(Event e) throws Exception {
+                @Override
+				public void onEvent(Event e) throws Exception {
                     if (Messagebox.ON_OK.equals(e.getName())) {
                         try {
-                            userService.activateUser(users);
+                            UserController.this.userService.activateUser(users);
 
                             ComponentUtil.createSuccessMessageBox(
                                     LanguageKeys.MESSAGE_ACTIVATE_SUCCESS);
@@ -660,7 +669,7 @@ public class UserController extends BasicController<Div>
     private List<User> getUserSelected() {
         List<User> users = new ArrayList<User>();
 
-        for (Listitem item : searchResultGrid.getSelectedItems()) {
+        for (Listitem item : this.searchResultGrid.getSelectedItems()) {
             User user = (User) item.getAttribute("data");
 
             if (Validator.isNotNull(user)) {
@@ -672,7 +681,7 @@ public class UserController extends BasicController<Div>
     }
 
     public void onClick$btnAdd() {
-        Window win = (Window) Executions.createComponents(EDIT_PAGE, winUser,
+        Window win = (Window) Executions.createComponents(EDIT_PAGE, this.winUser,
                 _createParameterMap(null));
 
         win.doModal();
@@ -681,7 +690,7 @@ public class UserController extends BasicController<Div>
     private Map<String, Object> _createParameterMap(User user) {
         Map<String, Object> parameters = new HashMap<String, Object>();
 
-        parameters.put(Constants.PARENT_WINDOW, winUser);
+        parameters.put(Constants.PARENT_WINDOW, this.winUser);
         parameters.put(Constants.OBJECT, user);
         parameters.put(Constants.SECOND_OBJECT, true);
 

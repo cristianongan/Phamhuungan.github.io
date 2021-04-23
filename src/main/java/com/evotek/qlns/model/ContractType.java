@@ -69,7 +69,7 @@ public class ContractType implements Serializable {
     }
 
     public Long getContractTypeId() {
-        return contractTypeId;
+        return this.contractTypeId;
     }
 
     public void setContractTypeId(Long contractTypeId) {
@@ -77,7 +77,7 @@ public class ContractType implements Serializable {
     }
 
     public Long getUserId() {
-        return userId;
+        return this.userId;
     }
 
     public void setUserId(Long userId) {
@@ -85,7 +85,7 @@ public class ContractType implements Serializable {
     }
 
     public String getUserName() {
-        return userName;
+        return this.userName;
     }
 
     public void setUserName(String userName) {
@@ -93,7 +93,7 @@ public class ContractType implements Serializable {
     }
 
     public Date getCreateDate() {
-        return createDate;
+        return this.createDate;
     }
 
     public void setCreateDate(Date createDate) {
@@ -101,7 +101,7 @@ public class ContractType implements Serializable {
     }
 
     public Date getModifiedDate() {
-        return modifiedDate;
+        return this.modifiedDate;
     }
 
     public void setModifiedDate(Date modifiedDate) {
@@ -109,7 +109,7 @@ public class ContractType implements Serializable {
     }
 
     public String getContractTypeName() {
-        return contractTypeName;
+        return this.contractTypeName;
     }
 
     public void setContractTypeName(String contractTypeName) {
@@ -117,7 +117,7 @@ public class ContractType implements Serializable {
     }
 
     public Long getMonthDuration() {
-        return monthDuration;
+        return this.monthDuration;
     }
 
     public void setMonthDuration(Long monthDuration) {
@@ -125,7 +125,7 @@ public class ContractType implements Serializable {
     }
 
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     public void setDescription(String description) {
@@ -133,7 +133,7 @@ public class ContractType implements Serializable {
     }
 
     public Set<Staff> getStaffs() {
-        return staffs;
+        return this.staffs;
     }
 
     public void setStaffs(Set<Staff> staffs) {
@@ -143,7 +143,7 @@ public class ContractType implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (contractTypeId != null ? contractTypeId.hashCode() : 0);
+        hash += (this.contractTypeId != null ? this.contractTypeId.hashCode() : 0);
         return hash;
     }
 
@@ -163,7 +163,7 @@ public class ContractType implements Serializable {
 
     @Override
     public String toString() {
-        return "com.evotek.qlns.model.ContractType[ contractTypeId=" + contractTypeId + " ]";
+        return "com.evotek.qlns.model.ContractType[ contractTypeId=" + this.contractTypeId + " ]";
     }
     
 }

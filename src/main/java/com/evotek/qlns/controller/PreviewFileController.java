@@ -50,16 +50,16 @@ public class PreviewFileController extends BasicController<Window>
 
     public void init() throws Exception{
         try {
-            file = (File) arg.get(Constants.OBJECT);
-            format = (String) arg.get(Constants.KEY);
-            ctype = (String) arg.get(Constants.VALUE);
+            this.file = (File) this.arg.get(Constants.OBJECT);
+            this.format = (String) this.arg.get(Constants.KEY);
+            this.ctype = (String) this.arg.get(Constants.VALUE);
 
-            if (Validator.isNotNull(file)) {
+            if (Validator.isNotNull(this.file)) {
 
-                AMedia media = new AMedia(file.getName(), format,
-                        ctype, new FileInputStream(file));
+                AMedia media = new AMedia(this.file.getName(), this.format,
+                        this.ctype, new FileInputStream(this.file));
 
-                viewer.setContent(media);
+                this.viewer.setContent(media);
             }
         } catch (Exception ex) {
             _log.error(ex.getMessage(), ex);

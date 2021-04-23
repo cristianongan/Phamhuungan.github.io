@@ -40,7 +40,7 @@ public class Role implements Serializable {
 
     @Column(name = "user_id", precision = 22, scale = 0)
     public Long getUserId() {
-        return userId;
+        return this.userId;
     }
 
     public void setUserId(Long userId) {
@@ -49,7 +49,7 @@ public class Role implements Serializable {
 
     @Column(name = "description", length = 1000)
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     public void setDescription(String description) {
@@ -58,7 +58,7 @@ public class Role implements Serializable {
 
     @Column(name = "user_name", length = 200)
     public String getUserName() {
-        return userName;
+        return this.userName;
     }
 
     public void setUserName(String userName) {
@@ -67,7 +67,7 @@ public class Role implements Serializable {
 
     @Column(name = "role_name", length = 200)
     public String getRoleName() {
-        return roleName;
+        return this.roleName;
     }
 
     public void setRoleName(String roleName) {
@@ -77,7 +77,7 @@ public class Role implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date", length = 7)
     public Date getCreateDate() {
-        return createDate;
+        return this.createDate;
     }
 
     public void setCreateDate(Date createDate) {
@@ -86,7 +86,7 @@ public class Role implements Serializable {
 
     @Column(name = "status", precision = 22, scale = 0)
     public Long getStatus() {
-        return status;
+        return this.status;
     }
 
     public void setStatus(Long status) {
@@ -96,7 +96,7 @@ public class Role implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "modified_date", length = 7)
     public Date getModifiedDate() {
-        return modifiedDate;
+        return this.modifiedDate;
     }
 
     public void setModifiedDate(Date modifiedDate) {
@@ -107,7 +107,7 @@ public class Role implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "role_id", unique = true, nullable = false, precision = 22, scale = 0)
     public Long getRoleId() {
-        return roleId;
+        return this.roleId;
     }
 
     public void setRoleId(Long roleId) {
@@ -116,7 +116,7 @@ public class Role implements Serializable {
 
     @Column(name = "immune", precision = 22, scale = 0)
     public Long getImmune() {
-        return immune;
+        return this.immune;
     }
 
     public void setImmune(Long immune) {
@@ -125,7 +125,7 @@ public class Role implements Serializable {
 
     @Column(name = "shareable", precision = 1, scale = 0)
     public Boolean getShareable() {
-        return shareable;
+        return this.shareable;
     }
 
     public void setShareable(Boolean shareable) {
@@ -141,7 +141,7 @@ public class Role implements Serializable {
 //    @LazyCollection(LazyCollectionOption.EXTRA)
     @Fetch(FetchMode.SELECT)
     public Set<Group> getGroups() {
-        return groups;
+        return this.groups;
     }
 
     public void setGroups(Set<Group> groups) {
@@ -150,7 +150,7 @@ public class Role implements Serializable {
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "roles")
     public Set<User> getUsers() {
-        return users;
+        return this.users;
     }
 
     public void setUsers(Set<User> users) {

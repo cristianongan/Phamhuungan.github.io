@@ -19,7 +19,8 @@ import com.evotek.qlns.util.key.Constants;
  */
 public class UserRoleRender implements ListitemRenderer<Role> {
 
-    public void render(Listitem items, Role role, int index) throws Exception {
+    @Override
+	public void render(Listitem items, Role role, int index) throws Exception {
         items.setAttribute("data",role);
 
         items.appendChild(ComponentUtil.createListcell(StringPool.BLANK,

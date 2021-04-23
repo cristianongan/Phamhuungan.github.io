@@ -54,17 +54,17 @@ public class TreeDocumentTypeBandPopupController extends BasicController<Tree>
         
         ServletContext context = Sessions.getCurrent().getWebApp().getServletContext();
         
-        docTypeMap = documentTypeService.getDocTypeMap(context);
+        this.docTypeMap = this.documentTypeService.getDocTypeMap(context);
         
         this.init();
     }
     
     public void init(){
-        Include include = (Include) treeDocType.getParent();
+        Include include = (Include) this.treeDocType.getParent();
         
-        bbDocumentType = (Bandbox) include.getAttribute(BANDBOX);
-        btnClear = (A) include.getAttribute(BTN_CLEAR);
-        exclude = (DocumentType) include.getAttribute(EXCLUDE);
+        this.bbDocumentType = (Bandbox) include.getAttribute(BANDBOX);
+        this.btnClear = (A) include.getAttribute(BTN_CLEAR);
+        this.exclude = (DocumentType) include.getAttribute(EXCLUDE);
         
         this.onCreate();
     }
@@ -73,10 +73,10 @@ public class TreeDocumentTypeBandPopupController extends BasicController<Tree>
         TreeBasicModel treeConfigModel = 
                 new TreeBasicModel(_buildCategoryTree(), false);
 
-        treeDocType.setModel(treeConfigModel);
+        this.treeDocType.setModel(treeConfigModel);
         
-        treeDocType.setItemRenderer(new TreeDocumentTypeSearchRender(
-                bbDocumentType, btnClear));
+        this.treeDocType.setItemRenderer(new TreeDocumentTypeSearchRender(
+                this.bbDocumentType, this.btnClear));
     }
 
     public DocumentTypeTreeNode _buildCategoryTree() {
@@ -88,13 +88,13 @@ public class TreeDocumentTypeBandPopupController extends BasicController<Tree>
 
         try {
             //Lấy danh sách các menu category
-            List<DocumentType> roots = docTypeMap.get(null);
+            List<DocumentType> roots = this.docTypeMap.get(null);
 
             for (DocumentType root : roots) {
 
                 if (Validator.isNull(root) 
                         || Validator.isNull(root.getDocumentTypeId()) 
-                        || root.equals(exclude)) {
+                        || root.equals(this.exclude)) {
                     continue;
                 }
                 
@@ -109,7 +109,7 @@ public class TreeDocumentTypeBandPopupController extends BasicController<Tree>
 
     public void addChildToParent(DocumentType parent, DocumentTypeTreeNode treeNode) {
         List<DocumentType> childs
-                = docTypeMap.get(parent.getDocumentTypeId());
+                = this.docTypeMap.get(parent.getDocumentTypeId());
 
         if (Validator.isNotNull(childs)) {
             //Tạo cây con tu parent
@@ -122,7 +122,7 @@ public class TreeDocumentTypeBandPopupController extends BasicController<Tree>
             for (DocumentType child : childs) {
                 if (Validator.isNull(child)
                         || Validator.isNull(child.getDocumentTypeId())
-                        || child.equals(exclude)) {
+                        || child.equals(this.exclude)) {
                     continue;
                 }
                 
@@ -137,12 +137,12 @@ public class TreeDocumentTypeBandPopupController extends BasicController<Tree>
     }
 
     public DocumentTypeService getDocumentTypeService() {
-        if (documentTypeService == null) {
-            documentTypeService = (DocumentTypeService)
+        if (this.documentTypeService == null) {
+            this.documentTypeService = (DocumentTypeService)
                     SpringUtil.getBean("documentTypeService");
-            setDocumentTypeService(documentTypeService);
+            setDocumentTypeService(this.documentTypeService);
         }
-        return documentTypeService;
+        return this.documentTypeService;
     }
 
     public void setDocumentTypeService(DocumentTypeService documentTypeService) {

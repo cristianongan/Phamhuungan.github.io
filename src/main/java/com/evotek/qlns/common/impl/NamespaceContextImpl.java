@@ -95,8 +95,8 @@ public class NamespaceContextImpl implements NamespaceContext{
     }
 
     private void putInCache(String prefix, String uri) {
-        prefix2Uri.put(prefix, uri);
-        uri2Prefix.put(uri, prefix);
+        this.prefix2Uri.put(prefix, uri);
+        this.uri2Prefix.put(uri, prefix);
     }
 
     /**
@@ -107,11 +107,12 @@ public class NamespaceContextImpl implements NamespaceContext{
      *            to search for
      * @return uri
      */
-    public String getNamespaceURI(String prefix) {
+    @Override
+	public String getNamespaceURI(String prefix) {
         if (prefix == null || prefix.equals(XMLConstants.DEFAULT_NS_PREFIX)) {
-            return prefix2Uri.get(DEFAULT_NS);
+            return this.prefix2Uri.get(DEFAULT_NS);
         } else {
-            return prefix2Uri.get(prefix);
+            return this.prefix2Uri.get(prefix);
         }
     }
 
@@ -119,11 +120,13 @@ public class NamespaceContextImpl implements NamespaceContext{
      * This method is not needed in this context, but can be implemented in a
      * similar way.
      */
-    public String getPrefix(String namespaceURI) {
-        return uri2Prefix.get(namespaceURI);
+    @Override
+	public String getPrefix(String namespaceURI) {
+        return this.uri2Prefix.get(namespaceURI);
     }
 
-    public Iterator getPrefixes(String namespaceURI) {
+    @Override
+	public Iterator getPrefixes(String namespaceURI) {
         // Not implemented
         return null;
     }

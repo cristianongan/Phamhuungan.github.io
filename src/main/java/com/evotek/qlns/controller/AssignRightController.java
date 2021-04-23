@@ -63,9 +63,9 @@ public class AssignRightController extends BasicController<Window>
     //init data
     public void initData() throws Exception {
         try {
-            winTemp = (Window) arg.get(Constants.PARENT_WINDOW);
+            this.winTemp = (Window) this.arg.get(Constants.PARENT_WINDOW);
 
-            group = (Group) arg.get(Constants.EDIT_OBJECT);
+            this.group = (Group) this.arg.get(Constants.EDIT_OBJECT);
         } catch (Exception ex) {
             _log.error(ex.getMessage(), ex);
         }
@@ -73,12 +73,12 @@ public class AssignRightController extends BasicController<Window>
 
     public void searchRight() throws Exception{
         try {
-            List<Right> rights = categoryService.
-                    getRightByCategoryId(group.getCategoryId());
+            List<Right> rights = this.categoryService.
+                    getRightByCategoryId(this.group.getCategoryId());
 
-            searchResult.setItemRenderer(new AssignRightRender(group.getRights()));
-            searchResult.setModel(new ListModelList<Right>(rights));
-            searchResult.setMultiple(true);
+            this.searchResult.setItemRenderer(new AssignRightRender(this.group.getRights()));
+            this.searchResult.setModel(new ListModelList<Right>(rights));
+            this.searchResult.setMultiple(true);
         }catch (Exception ex) {
             _log.error(ex.getMessage(), ex);
         }
@@ -89,7 +89,7 @@ public class AssignRightController extends BasicController<Window>
         try {
             Set<Right> newRights = new HashSet<Right>();
 
-            Set<Listitem> listitems = searchResult.getSelectedItems();
+            Set<Listitem> listitems = this.searchResult.getSelectedItems();
 
             for(Listitem item: listitems){
                 Right right = (Right) item.getAttribute("data");
@@ -99,9 +99,9 @@ public class AssignRightController extends BasicController<Window>
                 }
             }
 
-            group.setRights(newRights);
+            this.group.setRights(newRights);
 
-            categoryService.saveOrUpdateGroup(group);
+            this.categoryService.saveOrUpdateGroup(this.group);
 
             //delete old groupRight
 //            categoryService.deleteGroupsRight(groupsRights);
@@ -109,7 +109,7 @@ public class AssignRightController extends BasicController<Window>
             ComponentUtil.createSuccessMessageBox(
                     LanguageKeys.MESSAGE_UPDATE_SUCCESS);
 
-            winAssignRight.detach();
+            this.winAssignRight.detach();
 
 //                Events.sendEvent("onLoadGroups", winTemp, null);
 
@@ -123,7 +123,7 @@ public class AssignRightController extends BasicController<Window>
     }
     
     public void onClick$btnCancel(){
-        winAssignRight.detach();
+        this.winAssignRight.detach();
     }
     //even method
     //get set service

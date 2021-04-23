@@ -21,9 +21,10 @@ public class OnDropListitemListener implements EventListener<DropEvent>{
         this.targetItem = targetItem;
     }
 
-    public void onEvent(DropEvent event) throws Exception {
+    @Override
+	public void onEvent(DropEvent event) throws Exception {
         Component dragged = event.getDragged();
 
-	targetItem.getParent().insertBefore(dragged, targetItem);
+	this.targetItem.getParent().insertBefore(dragged, this.targetItem);
     }
 }

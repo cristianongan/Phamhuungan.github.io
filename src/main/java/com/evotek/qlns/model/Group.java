@@ -39,7 +39,7 @@ public class Group implements Serializable {
 
     @Column(name = "category_id", precision = 22, scale = 0)
     public Long getCategoryId() {
-        return categoryId;
+        return this.categoryId;
     }
 
     public void setCategoryId(Long categoryId) {
@@ -50,7 +50,7 @@ public class Group implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "group_id", unique = true, nullable = false, precision = 22, scale = 0)
     public Long getGroupId() {
-        return groupId;
+        return this.groupId;
     }
 
     public void setGroupId(Long groupId) {
@@ -59,7 +59,7 @@ public class Group implements Serializable {
 
     @Column(name = "user_id", precision = 22, scale = 0)
     public Long getUserId() {
-        return userId;
+        return this.userId;
     }
 
     public void setUserId(Long userId) {
@@ -68,7 +68,7 @@ public class Group implements Serializable {
 
     @Column(name = "description", length = 1000)
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     public void setDescription(String description) {
@@ -77,7 +77,7 @@ public class Group implements Serializable {
 
     @Column(name = "user_name", length = 200)
     public String getUserName() {
-        return userName;
+        return this.userName;
     }
 
     public void setUserName(String userName) {
@@ -86,7 +86,7 @@ public class Group implements Serializable {
 
     @Column(name = "group_name", length = 200)
     public String getGroupName() {
-        return groupName;
+        return this.groupName;
     }
 
     public void setGroupName(String groupName) {
@@ -96,7 +96,7 @@ public class Group implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date", length = 7)
     public Date getCreateDate() {
-        return createDate;
+        return this.createDate;
     }
 
     public void setCreateDate(Date createDate) {
@@ -105,7 +105,7 @@ public class Group implements Serializable {
 
     @Column(name = "status", precision = 22, scale = 0)
     public Long getStatus() {
-        return status;
+        return this.status;
     }
 
     public void setStatus(Long status) {
@@ -115,7 +115,7 @@ public class Group implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "modified_date", length = 7)
     public Date getModifiedDate() {
-        return modifiedDate;
+        return this.modifiedDate;
     }
 
     public void setModifiedDate(Date modifiedDate) {
@@ -131,7 +131,7 @@ public class Group implements Serializable {
 //    @LazyCollection(LazyCollectionOption.EXTRA)
     @Fetch(FetchMode.SELECT)
     public Set<Right> getRights() {
-        return rights;
+        return this.rights;
     }
 
     public void setRights(Set<Right> rights) {
@@ -140,7 +140,7 @@ public class Group implements Serializable {
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "groups")
     public Set<Role> getRoles() {
-        return roles;
+        return this.roles;
     }
 
     public void setRoles(Set<Role> roles) {

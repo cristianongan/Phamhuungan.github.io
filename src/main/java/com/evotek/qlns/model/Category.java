@@ -16,7 +16,9 @@ import javax.persistence.TemporalType;
 @Table(name = "category")
 public class Category implements Serializable, Comparable<Category> {
 
-    private Long userId;
+	private static final long serialVersionUID = -2595220162480903278L;
+	
+	private Long userId;
     private String description;
     private Long status;
     private Date modifiedDate;
@@ -34,7 +36,7 @@ public class Category implements Serializable, Comparable<Category> {
 
     @Column(name = "user_id", precision = 22, scale = 0)
     public Long getUserId() {
-        return userId;
+        return this.userId;
     }
 
     public void setUserId(Long userId) {
@@ -43,7 +45,7 @@ public class Category implements Serializable, Comparable<Category> {
 
     @Column(name = "description", length = 1000)
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     public void setDescription(String description) {
@@ -52,7 +54,7 @@ public class Category implements Serializable, Comparable<Category> {
 
     @Column(name = "status", precision = 22, scale = 0)
     public Long getStatus() {
-        return status;
+        return this.status;
     }
 
     public void setStatus(Long status) {
@@ -62,7 +64,7 @@ public class Category implements Serializable, Comparable<Category> {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "modified_date", length = 7)
     public Date getModifiedDate() {
-        return modifiedDate;
+        return this.modifiedDate;
     }
 
     public void setModifiedDate(Date modifiedDate) {
@@ -71,7 +73,7 @@ public class Category implements Serializable, Comparable<Category> {
 
     @Column(name = "icon", length = 255)
     public String getIcon() {
-        return icon;
+        return this.icon;
     }
 
     public void setIcon(String icon) {
@@ -80,7 +82,7 @@ public class Category implements Serializable, Comparable<Category> {
 
     @Column(name = "folder_name", length = 75)
     public String getFolderName() {
-        return folderName;
+        return this.folderName;
     }
 
     public void setFolderName(String folderName) {
@@ -89,7 +91,7 @@ public class Category implements Serializable, Comparable<Category> {
 
     @Column(name = "language_key", length = 255)
     public String getLanguageKey() {
-        return languageKey;
+        return this.languageKey;
     }
 
     public void setLanguageKey(String languageKey) {
@@ -98,7 +100,7 @@ public class Category implements Serializable, Comparable<Category> {
 
     @Column(name = "view_page", length = 75)
     public String getViewPage() {
-        return viewPage;
+        return this.viewPage;
     }
 
     public void setViewPage(String viewPage) {
@@ -107,7 +109,7 @@ public class Category implements Serializable, Comparable<Category> {
 
     @Column(name = "user_name", length = 200)
     public String getUserName() {
-        return userName;
+        return this.userName;
     }
 
     public void setUserName(String userName) {
@@ -118,7 +120,7 @@ public class Category implements Serializable, Comparable<Category> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "category_id", unique = true, nullable = false, precision = 22, scale = 0)
     public Long getCategoryId() {
-        return categoryId;
+        return this.categoryId;
     }
 
     public void setCategoryId(Long categoryId) {
@@ -128,7 +130,7 @@ public class Category implements Serializable, Comparable<Category> {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date", length = 7)
     public Date getCreateDate() {
-        return createDate;
+        return this.createDate;
     }
 
     public void setCreateDate(Date createDate) {
@@ -137,7 +139,7 @@ public class Category implements Serializable, Comparable<Category> {
 
     @Column(name = "parent_id", precision = 22, scale = 0)
     public Long getParentId() {
-        return parentId;
+        return this.parentId;
     }
 
     public void setParentId(Long parentId) {
@@ -146,7 +148,7 @@ public class Category implements Serializable, Comparable<Category> {
 
     @Column(name = "type", precision = 1, scale = 0)
     public Long getType() {
-        return type;
+        return this.type;
     }
 
     public void setType(Long type) {
@@ -155,7 +157,7 @@ public class Category implements Serializable, Comparable<Category> {
 
     @Column(name = "weight", precision = 4, scale = 2)
     public Double getWeight() {
-        return weight;
+        return this.weight;
     }
 
     public void setWeight(Double weight) {
@@ -164,15 +166,16 @@ public class Category implements Serializable, Comparable<Category> {
 
     @Column(name = "immune", precision = 1, scale = 0)
     public Long getImmune() {
-        return immune;
+        return this.immune;
     }
 
     public void setImmune(Long immune) {
         this.immune = immune;
     }
 
-    public int compareTo(Category o) {
-        if(weight==null) {
+    @Override
+	public int compareTo(Category o) {
+        if(this.weight==null) {
             return -1;
         }
 
@@ -180,8 +183,8 @@ public class Category implements Serializable, Comparable<Category> {
             return 1;
         }
 
-        return weight.compareTo(o.weight)==0 ? categoryId.compareTo(o.categoryId) :
-            weight.compareTo(o.weight);
+        return this.weight.compareTo(o.weight)==0 ? this.categoryId.compareTo(o.categoryId) :
+            this.weight.compareTo(o.weight);
     }
 
     @Override

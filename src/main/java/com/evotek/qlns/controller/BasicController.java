@@ -114,7 +114,7 @@ public class BasicController<T extends Component> extends GenericForwardComposer
         if(this.user!=null){
             return this.user;
         } else {
-            return userWorkspace.getUserPrincipal().getUser();
+            return this.userWorkspace.getUserPrincipal().getUser();
         }
     }
 

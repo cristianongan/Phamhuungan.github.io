@@ -73,9 +73,9 @@ public class AddEditDocumentTypeController extends BasicController<Window>
         
         this.winDocType= comp;
         
-        context = Sessions.getCurrent().getWebApp().getServletContext();
+        this.context = Sessions.getCurrent().getWebApp().getServletContext();
         
-        docTypeMap = documentTypeService.getDocTypeMap(context);
+        this.docTypeMap = this.documentTypeService.getDocTypeMap(this.context);
     }
     
     @Override
@@ -89,23 +89,23 @@ public class AddEditDocumentTypeController extends BasicController<Window>
     //init data
     public void initData() throws Exception {
         try {
-            winTemp = (Window) arg.get(Constants.PARENT_WINDOW);
+            this.winTemp = (Window) this.arg.get(Constants.PARENT_WINDOW);
 
-            docType = (DocumentType) arg.get(Constants.OBJECT);
-            parentDocType = (DocumentType) arg.get(Constants.SECOND_OBJECT);
+            this.docType = (DocumentType) this.arg.get(Constants.OBJECT);
+            this.parentDocType = (DocumentType) this.arg.get(Constants.SECOND_OBJECT);
 
-            if (Validator.isNotNull(parentDocType)) {
-                bbDocumentType.setValue(parentDocType.getTypeName());
-                bbDocumentType.setAttribute(Constants.ID,
-                        parentDocType.getDocumentTypeId());
-                bbDocumentType.setAttribute(Constants.OBJECT,
-                        parentDocType);
+            if (Validator.isNotNull(this.parentDocType)) {
+                this.bbDocumentType.setValue(this.parentDocType.getTypeName());
+                this.bbDocumentType.setAttribute(Constants.ID,
+                        this.parentDocType.getDocumentTypeId());
+                this.bbDocumentType.setAttribute(Constants.OBJECT,
+                        this.parentDocType);
             }
             
-            if(Validator.isNotNull(docType)){
-                winDocType.setTitle((String) arg.get(Constants.TITLE));
+            if(Validator.isNotNull(this.docType)){
+                this.winDocType.setTitle((String) this.arg.get(Constants.TITLE));
 
-                oldParentDocType = docType.getParentDocumentType();
+                this.oldParentDocType = this.docType.getParentDocumentType();
                 
                 this._setEditForm();
             }
@@ -115,16 +115,16 @@ public class AddEditDocumentTypeController extends BasicController<Window>
     }
     
     private void _setEditForm() throws Exception {
-        tbTypeName.setValue(docType.getTypeName());
-        tbDescription.setValue(docType.getDescription());
+        this.tbTypeName.setValue(this.docType.getTypeName());
+        this.tbDescription.setValue(this.docType.getDescription());
         
-        if (Validator.isNotNull(oldParentDocType)) {
-            bbDocumentType.setValue(oldParentDocType.getTypeName());
-            bbDocumentType.setAttribute(Constants.ID,
-                    oldParentDocType.getDocumentTypeId());
-            bbDocumentType.setAttribute(Constants.OBJECT,
-                        oldParentDocType);
-            btnClearDoc.setVisible(true);
+        if (Validator.isNotNull(this.oldParentDocType)) {
+            this.bbDocumentType.setValue(this.oldParentDocType.getTypeName());
+            this.bbDocumentType.setAttribute(Constants.ID,
+                    this.oldParentDocType.getDocumentTypeId());
+            this.bbDocumentType.setAttribute(Constants.OBJECT,
+                        this.oldParentDocType);
+            this.btnClearDoc.setVisible(true);
         }
     }
     
@@ -132,42 +132,42 @@ public class AddEditDocumentTypeController extends BasicController<Window>
         boolean update = true;
         
         try {
-            String typeName = GetterUtil.getString(tbTypeName.getValue());
-            String description = GetterUtil.getString(tbDescription.getValue());
-            parentDocType = (DocumentType) bbDocumentType.getAttribute(Constants.OBJECT);
+            String typeName = GetterUtil.getString(this.tbTypeName.getValue());
+            String description = GetterUtil.getString(this.tbDescription.getValue());
+            this.parentDocType = (DocumentType) this.bbDocumentType.getAttribute(Constants.OBJECT);
             
             if (this._validate(typeName, description)) {
-                if(Validator.isNull(docType)){
+                if(Validator.isNull(this.docType)){
                     update = false;
                     
-                    docType = new DocumentType();
+                    this.docType = new DocumentType();
                     
-                    docType.setUserId(getUserId());
-                    docType.setUserName(getUserName());
-                    docType.setCreateDate(new Date());
-                    docType.setStatus(Values.ENABLE);
-                    docType.setOrdinal(getOrdinal());
+                    this.docType.setUserId(getUserId());
+                    this.docType.setUserName(getUserName());
+                    this.docType.setCreateDate(new Date());
+                    this.docType.setStatus(Values.ENABLE);
+                    this.docType.setOrdinal(getOrdinal());
                 }
                 
-                docType.setTypeName(typeName);
-                docType.setDescription(description);
-                docType.setModifiedDate(new Date());
-                docType.setParentDocumentType(parentDocType);
+                this.docType.setTypeName(typeName);
+                this.docType.setDescription(description);
+                this.docType.setModifiedDate(new Date());
+                this.docType.setParentDocumentType(this.parentDocType);
                 
                 if(!update){
-                    documentTypeService.updateDocTypeMap(context, docType, 
-                            parentDocType);
+                    this.documentTypeService.updateDocTypeMap(this.context, this.docType, 
+                            this.parentDocType);
                 } else {
-                    documentTypeService.updateDocTypeMap(context, docType, 
-                            parentDocType, oldParentDocType);
+                    this.documentTypeService.updateDocTypeMap(this.context, this.docType, 
+                            this.parentDocType, this.oldParentDocType);
                 }
                 
                 ComponentUtil.createSuccessMessageBox(
                         ComponentUtil.getSuccessKey(update));
                 
-                winDocType.detach();
+                this.winDocType.detach();
 
-                Events.sendEvent("onLoadData", winTemp, null);
+                Events.sendEvent("onLoadData", this.winTemp, null);
             }
         } catch (Exception ex) {
             _log.error(ex.getMessage(), ex);
@@ -179,27 +179,27 @@ public class AddEditDocumentTypeController extends BasicController<Window>
 
     public boolean _validate(String typeName, String description) {
         if (Validator.isNull(typeName)) {
-            tbTypeName.setErrorMessage(Values.getRequiredInputMsg(
+            this.tbTypeName.setErrorMessage(Values.getRequiredInputMsg(
                     Labels.getLabel(LanguageKeys.DOCUMENT_TYPE_NAME)));
             
-            tbTypeName.setFocus(true);
+            this.tbTypeName.setFocus(true);
             
             return false;
         }
 
         if (typeName.length() > Values.LONG_LENGTH) {
-            tbTypeName.setErrorMessage(Values.getMaxLengthInvalidMsg(
+            this.tbTypeName.setErrorMessage(Values.getMaxLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.DOCUMENT_TYPE_NAME),
                     Values.LONG_LENGTH));
             
-            tbTypeName.setFocus(true);
+            this.tbTypeName.setFocus(true);
             
             return false;
         }
         
         if (Validator.isNotNull(description)
                 && description.length() > Values.GREATE_LONG_LENGTH) {
-            tbDescription.setErrorMessage(Values.getMaxLengthInvalidMsg(
+            this.tbDescription.setErrorMessage(Values.getMaxLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.DESCRIPTION),
                     Values.GREATE_LONG_LENGTH));
 
@@ -212,10 +212,10 @@ public class AddEditDocumentTypeController extends BasicController<Window>
     private Long getOrdinal(){
         List<DocumentType> docTypes;
         
-        if(Validator.isNull(parentDocType)){
-            docTypes = docTypeMap.get(null);
+        if(Validator.isNull(this.parentDocType)){
+            docTypes = this.docTypeMap.get(null);
         } else {
-            docTypes = docTypeMap.get(parentDocType.getDocumentTypeId());
+            docTypes = this.docTypeMap.get(this.parentDocType.getDocumentTypeId());
         }
         
         if(Validator.isNull(docTypes)){
@@ -228,39 +228,39 @@ public class AddEditDocumentTypeController extends BasicController<Window>
     }
     
     public void onClick$btnCancel() {
-        winDocType.detach();
+        this.winDocType.detach();
     }
 
     //Bandbox documentType
     public void onClick$btnClearDoc() {
-        bbDocumentType.setValue(StringPool.BLANK);
-        bbDocumentType.setAttribute(Constants.ID, null);
+        this.bbDocumentType.setValue(StringPool.BLANK);
+        this.bbDocumentType.setAttribute(Constants.ID, null);
         
-        btnClearDoc.setDisabled(true);
-        btnClearDoc.setVisible(false);
+        this.btnClearDoc.setDisabled(true);
+        this.btnClearDoc.setVisible(false);
     }
     
     public void onOpen$bbDocumentType(){
-        if(bbDocumentType.isOpen() 
-                && Validator.isNull(icDocumentType.getSrc())) {
-            icDocumentType.setAttribute("bandbox", bbDocumentType);
-            icDocumentType.setAttribute("btnclear", btnClearDoc);
+        if(this.bbDocumentType.isOpen() 
+                && Validator.isNull(this.icDocumentType.getSrc())) {
+            this.icDocumentType.setAttribute("bandbox", this.bbDocumentType);
+            this.icDocumentType.setAttribute("btnclear", this.btnClearDoc);
             
-            if(Validator.isNotNull(docType)){
-                icDocumentType.setAttribute("exclude", docType);
+            if(Validator.isNotNull(this.docType)){
+                this.icDocumentType.setAttribute("exclude", this.docType);
             }
             
-            icDocumentType.setSrc(Constants.TREE_DOCUMENT_TYPE_PAGE);
+            this.icDocumentType.setSrc(Constants.TREE_DOCUMENT_TYPE_PAGE);
         }
     }
     //Bandbox documentType
     
     public DocumentTypeService getDocumentTypeService() {
-        if (documentTypeService == null) {
-            documentTypeService = (DocumentTypeService) SpringUtil.getBean("documentTypeService");
-            setDocumentTypeService(documentTypeService);
+        if (this.documentTypeService == null) {
+            this.documentTypeService = (DocumentTypeService) SpringUtil.getBean("documentTypeService");
+            setDocumentTypeService(this.documentTypeService);
         }
-        return documentTypeService;
+        return this.documentTypeService;
     }
 
     public void setDocumentTypeService(DocumentTypeService documentTypeService) {

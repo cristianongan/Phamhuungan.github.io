@@ -27,12 +27,13 @@ public class TreeDocumentTypeViewRender implements TreeitemRenderer<DocumentType
       private Window win;
 
     public TreeDocumentTypeViewRender(Window window) {
-        win = window;
+        this.win = window;
     }
 
 
-    public void render(Treeitem treeItem, DocumentTypeTreeNode t, int i) throws Exception {
-        DocumentType documentType = (DocumentType) t.getData();
+    @Override
+	public void render(Treeitem treeItem, DocumentTypeTreeNode t, int i) throws Exception {
+        DocumentType documentType = t.getData();
 
         Treerow dataRow = new Treerow();
 
@@ -45,7 +46,7 @@ public class TreeDocumentTypeViewRender implements TreeitemRenderer<DocumentType
         treeItem.setValue(t);
         treeItem.setOpen(t.isOpen());
 
-        treeItem.addForward(Events.ON_CLICK, win, ZkKeys.ON_LOAD_DATA, documentType);
+        treeItem.addForward(Events.ON_CLICK, this.win, ZkKeys.ON_LOAD_DATA, documentType);
     }
     
 }

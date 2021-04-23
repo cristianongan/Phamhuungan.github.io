@@ -51,11 +51,11 @@ public class TreeDeptBandPopupController extends BasicController<Tree>
     }
     
     public void init(){
-        Include include = (Include) treeDocType.getParent();
+        Include include = (Include) this.treeDocType.getParent();
         
-        bbDepartment = (Bandbox) include.getAttribute(BANDBOX);
-        btnClear = (A) include.getAttribute(BTN_CLEAR);
-        exclude = (Department) include.getAttribute(EXCLUDE);
+        this.bbDepartment = (Bandbox) include.getAttribute(BANDBOX);
+        this.btnClear = (A) include.getAttribute(BTN_CLEAR);
+        this.exclude = (Department) include.getAttribute(EXCLUDE);
         
         this.onCreate();
     }
@@ -64,10 +64,10 @@ public class TreeDeptBandPopupController extends BasicController<Tree>
         TreeBasicModel treeConfigModel = 
                 new TreeBasicModel(_buildDeptTree(), false);
 
-        treeDocType.setModel(treeConfigModel);
+        this.treeDocType.setModel(treeConfigModel);
         
-        treeDocType.setItemRenderer(new TreeDeptSearchRender(
-                bbDepartment, btnClear));
+        this.treeDocType.setItemRenderer(new TreeDeptSearchRender(
+                this.bbDepartment, this.btnClear));
     }
 
     public DepartmentTreeNode _buildDeptTree() {
@@ -79,13 +79,13 @@ public class TreeDeptBandPopupController extends BasicController<Tree>
 
         try {
             //Lấy danh sách các menu category
-            List<Department> roots = departmentService.getDepartmentByParentId(null);
+            List<Department> roots = this.departmentService.getDepartmentByParentId(null);
 
             for (Department root : roots) {
 
                 if (Validator.isNull(root) 
                         || Validator.isNull(root.getDeptId()) 
-                        || root.equals(exclude)) {
+                        || root.equals(this.exclude)) {
                     continue;
                 }
                 
@@ -100,7 +100,7 @@ public class TreeDeptBandPopupController extends BasicController<Tree>
 
     public void addChildToParent(Department parent, DepartmentTreeNode treeNode) {
         List<Department> childs
-                = departmentService.getDepartmentByParentId(parent.getDeptId());
+                = this.departmentService.getDepartmentByParentId(parent.getDeptId());
 
         if (Validator.isNotNull(childs)) {
             //Tạo cây con tu parent
@@ -113,7 +113,7 @@ public class TreeDeptBandPopupController extends BasicController<Tree>
             for (Department child : childs) {
                 if (Validator.isNull(child)
                         || Validator.isNull(child.getDeptId())
-                        || child.equals(exclude)) {
+                        || child.equals(this.exclude)) {
                     continue;
                 }
                 
@@ -128,13 +128,13 @@ public class TreeDeptBandPopupController extends BasicController<Tree>
     }
 
     public DepartmentService getDepartmentService() {
-        if (departmentService == null) {
-            departmentService = (DepartmentService) SpringUtil.getBean("departmentService");
+        if (this.departmentService == null) {
+            this.departmentService = (DepartmentService) SpringUtil.getBean("departmentService");
             
-            setDepartmentService(departmentService);
+            setDepartmentService(this.departmentService);
         }
         
-        return departmentService;
+        return this.departmentService;
     }
 
     public void setDepartmentService(DepartmentService departmentService) {

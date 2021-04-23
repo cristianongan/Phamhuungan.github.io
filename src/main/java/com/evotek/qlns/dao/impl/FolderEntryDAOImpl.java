@@ -16,13 +16,14 @@ import com.evotek.qlns.model.FolderEntry;
  *
  * @author linhlh2
  */
-public class FolderEntryDAOImpl extends BasicDAO<FolderEntry>
+public class FolderEntryDAOImpl extends AbstractDAO<FolderEntry>
         implements FolderEntryDAO{
 
     private static final Logger _log =
             LogManager.getLogger(FolderEntryDAOImpl.class);
 
-    public FolderEntry getLastedFolderEntry() {
+    @Override
+	public FolderEntry getLastedFolderEntry() {
         FolderEntry folder = null;
         
         try{

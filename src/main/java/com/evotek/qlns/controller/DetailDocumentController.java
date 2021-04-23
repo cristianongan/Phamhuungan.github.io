@@ -50,37 +50,37 @@ public class DetailDocumentController extends BasicController<Component>
     }
 
     public void initData() {
-        winParent = (Window) arg.get(Constants.PARENT_WINDOW);
-        title = (String) arg.get(Constants.TITLE);
-        documentTemp = (Document) arg.get(Constants.OBJECT);
+        this.winParent = (Window) this.arg.get(Constants.PARENT_WINDOW);
+        this.title = (String) this.arg.get(Constants.TITLE);
+        this.documentTemp = (Document) this.arg.get(Constants.OBJECT);
 
-        winDetailDocument.setTitle(title);
+        this.winDetailDocument.setTitle(this.title);
 
-        if (Validator.isNotNull(documentTemp)) {
-            onLoadForm(documentTemp);
+        if (Validator.isNotNull(this.documentTemp)) {
+            onLoadForm(this.documentTemp);
         }
     }
 
     public void onLoadForm(Document document) {
-        lbDocumentNumber.setValue(document.getDocumentNumber() == null ? "" : document.getDocumentNumber());
-        lbDocumentType.setValue(document.getTypeName() == null ? "" : document.getTypeName());
-        lbDepartment.setValue(document.getPromulgationDept() == null ? "" : document.getPromulgationDept());
-        lbDate.setValue(document.getPromulgationDate() == null ? "" : GetterUtil.getDate(document.getPromulgationDate(), DateUtil.SHORT_DATE_PATTERN));
-        lbContent.setValue(document.getContent() == null ? "" : document.getContent());
+        this.lbDocumentNumber.setValue(document.getDocumentNumber() == null ? "" : document.getDocumentNumber());
+        this.lbDocumentType.setValue(document.getTypeName() == null ? "" : document.getTypeName());
+        this.lbDepartment.setValue(document.getPromulgationDept() == null ? "" : document.getPromulgationDept());
+        this.lbDate.setValue(document.getPromulgationDate() == null ? "" : GetterUtil.getDate(document.getPromulgationDate(), DateUtil.SHORT_DATE_PATTERN));
+        this.lbContent.setValue(document.getContent() == null ? "" : document.getContent());
 
-        List<FileEntry> oldFiles = documentService.getListFileEntrys(documentTemp.getDocumentId());
+        List<FileEntry> oldFiles = this.documentService.getListFileEntrys(this.documentTemp.getDocumentId());
 
-        Component comp = ComponentUtil.createDownloadFileGrid(oldFiles, winDetailDocument);
-        divFile.appendChild(comp);
+        Component comp = ComponentUtil.createDownloadFileGrid(oldFiles, this.winDetailDocument);
+        this.divFile.appendChild(comp);
     }
 
     public void onClick$btnClose() {
-        winDetailDocument.detach();
+        this.winDetailDocument.detach();
     }
 
     public void onPreviewFile(Event event) throws FileNotFoundException, IOException {
         FileEntry fileEntry = (FileEntry) event.getData();
-        iFrameDocPreview.setVisible(true);
+        this.iFrameDocPreview.setVisible(true);
         StringBuilder sb = new StringBuilder();
 
         sb.append(StaticUtil.SYSTEM_STORE_FILE_DIR);
@@ -127,17 +127,17 @@ public class DetailDocumentController extends BasicController<Component>
         } else if (fileEntry.getName().endsWith(".wav")) {
             amedia = new AMedia(fileEntry.getName(), "wav", "audio/wav", is);
         }
-        iFrameDocPreview.setContent(amedia);
+        this.iFrameDocPreview.setContent(amedia);
     }
     private transient DocumentTypeService documentTypeService;
     private transient DocumentService documentService;
 
     public DocumentService getDocumentService() {
-        if (documentService == null) {
-            documentService = (DocumentService) SpringUtil.getBean("documentService");
-            setDocumentService(documentService);
+        if (this.documentService == null) {
+            this.documentService = (DocumentService) SpringUtil.getBean("documentService");
+            setDocumentService(this.documentService);
         }
-        return documentService;
+        return this.documentService;
     }
 
     public void setDocumentService(DocumentService documentService) {
@@ -145,11 +145,11 @@ public class DetailDocumentController extends BasicController<Component>
     }
 
     public DocumentTypeService getDocumentTypeService() {
-        if (documentTypeService == null) {
-            documentTypeService = (DocumentTypeService) SpringUtil.getBean("documentTypeService");
-            setDocumentTypeService(documentTypeService);
+        if (this.documentTypeService == null) {
+            this.documentTypeService = (DocumentTypeService) SpringUtil.getBean("documentTypeService");
+            setDocumentTypeService(this.documentTypeService);
         }
-        return documentTypeService;
+        return this.documentTypeService;
     }
 
     public void setDocumentTypeService(DocumentTypeService documentTypeService) {

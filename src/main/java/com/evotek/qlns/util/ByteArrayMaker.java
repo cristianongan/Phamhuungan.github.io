@@ -68,27 +68,29 @@ public class ByteArrayMaker extends ByteArrayOutputStream {
         }
     }
 
-    public byte[] toByteArray() {
+    @Override
+	public byte[] toByteArray() {
         if (collect) {
-            stats.add(_caller, _initSize, count);
+            stats.add(this._caller, this._initSize, this.count);
         }
 
         return super.toByteArray();
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
         return super.toString();
     }
 
     private void _getInfo(Throwable t) {
-        _initSize = buf.length;
+        this._initSize = this.buf.length;
 
         StackTraceElement[] elements = t.getStackTrace();
 
         if (elements.length > 1) {
             StackTraceElement el = elements[1];
 
-            _caller
+            this._caller
                     = el.getClassName() + StringPool.PERIOD + el.getMethodName()
                     + StringPool.COLON + el.getLineNumber();
         }

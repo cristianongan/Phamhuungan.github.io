@@ -46,8 +46,8 @@ public class LoginController extends GenericForwardComposer
 
         String ip = Executions.getCurrent().getRemoteAddr();
 
-        if(!requireCaptcha && Validator.isIPAddress(ip)){
-            requireCaptcha = userService.isIpAdrRequireCaptcha(ip);
+        if(!this.requireCaptcha && Validator.isIPAddress(ip)){
+            this.requireCaptcha = this.userService.isIpAdrRequireCaptcha(ip);
         }
     }
 
@@ -61,25 +61,25 @@ public class LoginController extends GenericForwardComposer
         if(!(auth instanceof AnonymousAuthenticationToken)){
             Executions.sendRedirect("/index.zul");
         } else {
-            container.setVisible(true);
+            this.container.setVisible(true);
 
-            if(!requireCaptcha){
-                divVerify.getParent().removeChild(divVerify);
+            if(!this.requireCaptcha){
+                this.divVerify.getParent().removeChild(this.divVerify);
             } else {
-                cpa.setLength(StaticUtil.LOGIN_POLICY_CAPTCHA_LENGTH);
+                this.cpa.setLength(StaticUtil.LOGIN_POLICY_CAPTCHA_LENGTH);
 
-                divVerify.setVisible(true);
+                this.divVerify.setVisible(true);
             }
         }
     }
 
     public void onClick$btnReCaptcha(){
-        cpa.randomValue();
+        this.cpa.randomValue();
     }
 
     public void onOK(){
-        if(requireCaptcha
-                && (!cpa.getValue().equals(captcha.getValue()))){
+        if(this.requireCaptcha
+                && (!this.cpa.getValue().equals(this.captcha.getValue()))){
             Executions.sendRedirect("/login.zul?login_error=3");
         } else {
             Clients.submitForm("f");

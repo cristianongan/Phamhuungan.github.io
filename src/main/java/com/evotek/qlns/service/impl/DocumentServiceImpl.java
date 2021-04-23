@@ -10,6 +10,9 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.zkoss.util.media.Media;
 
 import com.evotek.qlns.dao.DocumentDAO;
@@ -29,230 +32,226 @@ import com.evotek.qlns.util.key.Constants;
  *
  * @author LinhLH2
  */
+@Service
+@Transactional
 public class DocumentServiceImpl implements DocumentService {
 
-    private transient DocumentDAO documentDAO;
+	private static final Logger _log = LogManager.getLogger(DocumentServiceImpl.class);
 
-    public DocumentDAO getDocumentDAO() {
-        return documentDAO;
-    }
+	@Autowired
+	private DocumentDAO documentDAO;
 
-    public void setDocumentDAO(DocumentDAO documentDAO) {
-        this.documentDAO = documentDAO;
-    }
-    private transient FolderEntryDAO folderEntryDAO;
+	@Autowired
+	private transient FileEntryDAO fileEntryDAO;
 
-    public FolderEntryDAO getFolderEntryDAO() {
-        return folderEntryDAO;
-    }
+	@Autowired
+	private FolderEntryDAO folderEntryDAO;
 
-    public void setFolderEntryDAO(FolderEntryDAO folderEntryDAO) {
-        this.folderEntryDAO = folderEntryDAO;
-    }
-    private transient FileEntryDAO fileEntryDAO;
+	public FileEntry createFileEntry(User users, Media media, Long folderId, Document document) {
+		FileEntry file = new FileEntry();
 
-    public FileEntryDAO getFileEntryDAO() {
-        return fileEntryDAO;
-    }
+		file.setUserId(users.getUserId());
+		file.setUserName(users.getUserName());
+		file.setCreateDate(new Date());
+		file.setModifiedDate(new Date());
+		file.setName(media.getName());
+		file.setFolderId(folderId);
+		file.setDocument(document);
 
-    public void setFileEntryDAO(FileEntryDAO fileEntryDAO) {
-        this.fileEntryDAO = fileEntryDAO;
-    }
-    private static final Logger _log =
-            LogManager.getLogger(DocumentServiceImpl.class);
+		this.fileEntryDAO.saveOrUpdate(file);
 
-    public List<String> getDepartment() {
-        List<Document> documents = documentDAO.getAll();
-        List<String> strList = new ArrayList<String>();
-        for (Document document : documents) {
-            if (document.getPromulgationDept() != null && !document.getPromulgationDept().equals("")) {
-                strList.add(document.getPromulgationDept().toLowerCase());
-            }
-        }
-        return strList;
-    }
+		return file;
+	}
 
-    public int getDocumentCountAdv(String documentContent, String documentNumber, Long documentType, String department, Date fromDate, Date toDate) {
-        return documentDAO.getDocumentCountAdv(documentContent, documentNumber, documentType, department, fromDate, toDate);
-    }
+	public FolderEntry createFolderEntry(User users) {
+		FolderEntry folder = new FolderEntry();
 
-    public List<Document> getDocumentListAdv(String documentContent, String documentNumber, Long documentType, String department, Date fromDate, Date toDate, int firstResult, int maxResult, String orderByColumn, String orderByType) {
-        return documentDAO.getDocumentListAdv(documentContent, documentNumber, documentType, department, fromDate, toDate, firstResult, maxResult, orderByColumn, orderByType);
-    }
+		folder.setUserId(users.getUserId());
+		folder.setUserName(users.getUserName());
+		folder.setCreateDate(new Date());
+		folder.setModifiedDate(new Date());
+		folder.setFileCount(Constants.START_COUNT);
 
-    public int getDocumentCountBasic(String textSearch) {
-        return documentDAO.getDocumentCountBasic(textSearch);
-    }
+		this.folderEntryDAO.saveOrUpdate(folder);
 
-    public List<Document> getDocumentListBasic(String textSearch, int firstResult, int maxResult, String orderByColumn, String orderByType) {
-        return documentDAO.getDocumentListBasic(textSearch, firstResult, maxResult, orderByColumn, orderByType);
-    }
+		return folder;
+	}
 
-    public void delete(Document document) {
-        documentDAO.delete(document);
-    }
+	@Override
+	public void delete(Document document) {
+		this.documentDAO.delete(document);
+	}
 
-    public void deleteAll(List<Document> documents) {
-        documentDAO.delete(documents);
-    }
+	@Override
+	public void deleteAll(List<Document> documents) {
+		this.documentDAO.delete(documents);
+	}
 
-    public List<FileEntry> saveMedia(User user, List<Media> medium, Document document) {
-        List<FileEntry> addFiles = new ArrayList<FileEntry>();
+	@Override
+	public List<String> getDepartment() {
+		List<Document> documents = this.documentDAO.getAll();
+		List<String> strList = new ArrayList<String>();
+		for (Document document : documents) {
+			if (document.getPromulgationDept() != null && !document.getPromulgationDept().equals("")) {
+				strList.add(document.getPromulgationDept().toLowerCase());
+			}
+		}
+		return strList;
+	}
 
-        try {
-            String instanceFolder = StaticUtil.FILE_UPLOAD_DIR;
-            //getLastest folder
-            FolderEntry folderEntry = folderEntryDAO.getLastedFolderEntry();
+	@Override
+	public int getDocumentByIdListCount(List<Long> idList) {
+		return this.documentDAO.getDocumentByIdListCount(idList);
+	}
 
-            //neu ko co folder nao hoac fileCount > 100 thi tao moi folder
-            if (Validator.isNull(folderEntry)
-                    || folderEntry.getFileCount() >= 100) {
-                folderEntry = createFolderEntry(user);
-            }
+	@Override
+	public int getDocumentCountAdv(String documentContent, String documentNumber, Long documentType, String department,
+			Date fromDate, Date toDate) {
+		return this.documentDAO.getDocumentCountAdv(documentContent, documentNumber, documentType, department, fromDate,
+				toDate);
+	}
 
-            Long folderId = folderEntry.getFolderId();
+	@Override
+	public int getDocumentCountBasic(String textSearch) {
+		return this.documentDAO.getDocumentCountBasic(textSearch);
+	}
 
-            if (Validator.isNull(folderId)) {
-                return null;
-            }
+	@Override
+	public List<Document> getDocumentListAdv(String documentContent, String documentNumber, Long documentType,
+			String department, Date fromDate, Date toDate, int firstResult, int maxResult, String orderByColumn,
+			String orderByType) {
+		return this.documentDAO.getDocumentListAdv(documentContent, documentNumber, documentType, department, fromDate,
+				toDate, firstResult, maxResult, orderByColumn, orderByType);
+	}
 
-            String folderPath = FileUtil.getOrCreateFolder(instanceFolder,
-                    String.valueOf(folderId));
+	@Override
+	public List<Document> getDocumentListBasic(String textSearch, int firstResult, int maxResult, String orderByColumn,
+			String orderByType) {
+		return this.documentDAO.getDocumentListBasic(textSearch, firstResult, maxResult, orderByColumn, orderByType);
+	}
 
-            if (Validator.isNull(folderPath)) {
-                folderEntryDAO.rollback();
+	@Override
+	public List<Document> getDocumentListByIdList(List<Long> idList, int firstResult, int maxResult,
+			String orderByColumn, String orderByType) {
+		return this.documentDAO.getDocumentListByIdList(idList, firstResult, maxResult, orderByColumn, orderByType);
+	}
 
-                return addFiles;
-            }
+	@Override
+	public List<FileEntry> getListFileEntrys(Long documentId) {
+		return this.fileEntryDAO.getFileListByDocumentId(documentId);
+	}
 
-            for (Media media : medium) {
-                FileEntry fileEntry = createFileEntry(user, media, folderId, document);
+	@Override
+	public boolean isExisted(String documentNumber) {
+		List<Document> results = new ArrayList<Document>();
 
-                Long fileId = fileEntry.getFileId();
+		try {
+			results = this.documentDAO.getDocumentByN(documentNumber);
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
 
-                if (Validator.isNull(fileId)) {
-                    continue;
-                }
-
-                //ghi file
-                if (FileUtil.write(media, folderPath,
-                        String.valueOf(fileId))) {
-                    addFiles.add(fileEntry);
-
-                    folderEntry.setFileCount(folderEntry.getFileCount() + 1);
-                } else {
-                    fileEntryDAO.delete(fileEntry);
-                }
-            }
-
-            //update lai folder entry
-            folderEntryDAO.saveOrUpdate(folderEntry);
-        } catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
-        }
-
-        return addFiles;
-    }
-
-    public FolderEntry createFolderEntry(User users) {
-        FolderEntry folder = new FolderEntry();
-
-        folder.setUserId(users.getUserId());
-        folder.setUserName(users.getUserName());
-        folder.setCreateDate(new Date());
-        folder.setModifiedDate(new Date());
-        folder.setFileCount(Constants.START_COUNT);
-
-        folderEntryDAO.saveOrUpdate(folder);
-
-        return folder;
-    }
-
-    public FileEntry createFileEntry(User users, Media media, Long folderId, Document document) {
-        FileEntry file = new FileEntry();
-
-
-        file.setUserId(users.getUserId());
-        file.setUserName(users.getUserName());
-        file.setCreateDate(new Date());
-        file.setModifiedDate(new Date());
-        file.setName(media.getName());
-        file.setFolderId(folderId);
-        file.setDocument(document);
-
-        fileEntryDAO.saveOrUpdate(file);
-
-        return file;
-    }
-
-    public List<FileEntry> removeFileEntry(List<FileEntry> deleteFiles) {
-        List<FileEntry> delelteFiles = new ArrayList<FileEntry>();
-
-        try {
-            String instanceFolder = StaticUtil.FILE_UPLOAD_DIR;
-
-            for (FileEntry fileEntry : deleteFiles) {
-                if (FileUtil.remove(instanceFolder,
-                        String.valueOf(fileEntry.getFolderId()),
-                        String.valueOf(fileEntry.getFileId()))) {
-                    fileEntryDAO.delete(fileEntry);
-
-                    delelteFiles.add(fileEntry);
-                }
-            }
-
-        } catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
-        }
-
-        return delelteFiles;
-    }
-
-    public void saveOrUpdate(Document document) {
-        documentDAO.saveOrUpdate(document);
-    }
-
-    public List<FileEntry> getListFileEntrys(Long documentId) {
-        return fileEntryDAO.getFileListByDocumentId(documentId);
-    }
+		return !results.isEmpty();
+	}
 
 //    public List<FileEntry> getListFileEntryById(List<Long> listId) {
 //        return fileEntryDAO.getFileEntryByIds(listId);
 //    }
 
-    public int getDocumentByIdListCount(List<Long> idList) {
-        return documentDAO.getDocumentByIdListCount(idList);
-    }
+	@Override
+	public boolean isExisted(String documentNumber, String content, Long documentId) {
+		List<Document> results = new ArrayList<Document>();
 
-    public List<Document> getDocumentListByIdList(List<Long> idList, 
-            int firstResult, int maxResult, String orderByColumn, String orderByType) {
-        return  documentDAO.getDocumentListByIdList(idList, firstResult, 
-                maxResult, orderByColumn, orderByType);
-    }
-    
-    public boolean isExisted(String documentNumber, String content, 
-            Long documentId){
-        List<Document> results = new ArrayList<Document>();
+		try {
+			results = this.documentDAO.getDocumentByI_N_C(documentId, documentNumber, content);
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
 
-        try {
-            results = documentDAO.getDocumentByI_N_C(documentId, documentNumber, 
-                    content);
-        } catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
-        }
+		return !results.isEmpty();
+	}
 
-        return !results.isEmpty();
-    }
-    
-    public boolean isExisted(String documentNumber){
-        List<Document> results = new ArrayList<Document>();
+	@Override
+	public List<FileEntry> removeFileEntry(List<FileEntry> deleteFiles) {
+		List<FileEntry> delelteFiles = new ArrayList<FileEntry>();
 
-        try {
-            results = documentDAO.getDocumentByN(documentNumber);
-        } catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
-        }
+		try {
+			String instanceFolder = StaticUtil.FILE_UPLOAD_DIR;
 
-        return !results.isEmpty();
-    }
+			for (FileEntry fileEntry : deleteFiles) {
+				if (FileUtil.remove(instanceFolder, String.valueOf(fileEntry.getFolderId()),
+						String.valueOf(fileEntry.getFileId()))) {
+					this.fileEntryDAO.delete(fileEntry);
+
+					delelteFiles.add(fileEntry);
+				}
+			}
+
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+
+		return delelteFiles;
+	}
+
+	@Override
+	public List<FileEntry> saveMedia(User user, List<Media> medium, Document document) {
+		List<FileEntry> addFiles = new ArrayList<FileEntry>();
+
+		try {
+			String instanceFolder = StaticUtil.FILE_UPLOAD_DIR;
+			// getLastest folder
+			FolderEntry folderEntry = this.folderEntryDAO.getLastedFolderEntry();
+
+			// neu ko co folder nao hoac fileCount > 100 thi tao moi folder
+			if (Validator.isNull(folderEntry) || folderEntry.getFileCount() >= 100) {
+				folderEntry = createFolderEntry(user);
+			}
+
+			Long folderId = folderEntry.getFolderId();
+
+			if (Validator.isNull(folderId)) {
+				return null;
+			}
+
+			String folderPath = FileUtil.getOrCreateFolder(instanceFolder, String.valueOf(folderId));
+
+			if (Validator.isNull(folderPath)) {
+				this.folderEntryDAO.rollback();
+
+				return addFiles;
+			}
+
+			for (Media media : medium) {
+				FileEntry fileEntry = createFileEntry(user, media, folderId, document);
+
+				Long fileId = fileEntry.getFileId();
+
+				if (Validator.isNull(fileId)) {
+					continue;
+				}
+
+				// ghi file
+				if (FileUtil.write(media, folderPath, String.valueOf(fileId))) {
+					addFiles.add(fileEntry);
+
+					folderEntry.setFileCount(folderEntry.getFileCount() + 1);
+				} else {
+					this.fileEntryDAO.delete(fileEntry);
+				}
+			}
+
+			// update lai folder entry
+			this.folderEntryDAO.saveOrUpdate(folderEntry);
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+
+		return addFiles;
+	}
+
+	@Override
+	public void saveOrUpdate(Document document) {
+		this.documentDAO.saveOrUpdate(document);
+	}
 }

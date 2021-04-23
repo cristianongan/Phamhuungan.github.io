@@ -7,8 +7,7 @@ package com.evotek.qlns.util;
 
 import java.util.Collection;
 
-import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
-import org.springframework.util.DigestUtils;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.evotek.qlns.model.Role;
 import com.evotek.qlns.util.key.PermissionConstants;
@@ -26,17 +25,14 @@ public class PermissionUtil {
         return PermissionConstants.ROLE_ADMIN.equals(role.getRoleName());
     }
 
-    public static String encodePassword(String password, String userId){
-        String token = DigestUtils.md5DigestAsHex(userId.getBytes());
+    public static String encodePassword(String password){
 
-        return new Md5PasswordEncoder().encodePassword(password, token);
-    }
-
-    public static String encodePassword(String password, Long userId){
-        return encodePassword(password, userId.toString());
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(16);
+        
+        return bCryptPasswordEncoder.encode(password);
     }
     
     public static void main(String[] args) {
-        System.err.println(PermissionUtil.encodePassword("123456a@", "100004"));
+        System.err.println(PermissionUtil.encodePassword("123456a@"));
     }
 }

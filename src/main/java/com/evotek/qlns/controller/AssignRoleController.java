@@ -68,13 +68,13 @@ public class AssignRoleController extends BasicController<Window>
 
     public void initData() {
         try {
-            winParent = (Window) arg.get(Constants.PARENT_WINDOW);
+            this.winParent = (Window) this.arg.get(Constants.PARENT_WINDOW);
 
-            user = (User) arg.get(Constants.OBJECT);
+            this.user = (User) this.arg.get(Constants.OBJECT);
 
-            excludeRoles = (Set<Role>) arg.get(Constants.SECOND_OBJECT);
+            this.excludeRoles = (Set<Role>) this.arg.get(Constants.SECOND_OBJECT);
 
-            isAdmin = this.getUserWorkspace().isAdministrator();
+            this.isAdmin = this.getUserWorkspace().isAdministrator();
 
             this.onSearch();
 
@@ -86,18 +86,18 @@ public class AssignRoleController extends BasicController<Window>
     }
 
     public void onSearch() {
-        List<Role> roles = userService.getRoles(isAdmin);
+        List<Role> roles = this.userService.getRoles(this.isAdmin);
 
-        roles = (List<Role>) CollectionUtil.subtract(roles, excludeRoles);
+        roles = (List<Role>) CollectionUtil.subtract(roles, this.excludeRoles);
         
-        gridRole.setModel(new SimpleListModel<Role>(roles));
-        gridRole.setItemRenderer(new UserRoleRender());
+        this.gridRole.setModel(new SimpleListModel<Role>(roles));
+        this.gridRole.setItemRenderer(new UserRoleRender());
         
-        gridRole.setMultiple(true);
+        this.gridRole.setMultiple(true);
     }
 
     public void onClick$btnCancel() {
-        winAssignRole.detach();
+        this.winAssignRole.detach();
     }
 
     public void onClick$btnAdd() {
@@ -114,19 +114,20 @@ public class AssignRoleController extends BasicController<Window>
                     Messagebox.QUESTION,
                     new EventListener<Event>() {
 
-                        public void onEvent(Event e) throws Exception {
+                        @Override
+						public void onEvent(Event e) throws Exception {
                             if (Messagebox.ON_OK.equals(e.getName())) {
                                 try {
-                                    userService.assignRoleToUser(user, roles,
-                                            isAdmin);
+                                    AssignRoleController.this.userService.assignRoleToUser(AssignRoleController.this.user, roles,
+                                            AssignRoleController.this.isAdmin);
 
                                     ComponentUtil.createSuccessMessageBox(
                                             LanguageKeys.MESSAGE_UPDATE_SUCCESS);
 
-                                    winAssignRole.detach();
+                                    AssignRoleController.this.winAssignRole.detach();
 
                                     Events.sendEvent(ZkKeys.ON_LOAD_DATA,
-                                            winParent, null);
+                                            AssignRoleController.this.winParent, null);
                                 } catch (Exception ex) {
                                     _log.error(ex.getMessage(), ex);
 
@@ -143,7 +144,7 @@ public class AssignRoleController extends BasicController<Window>
     private List<Role> getRoleSelected(){
         List<Role> roles = new ArrayList<Role>();
 
-        for (Listitem item : gridRole.getSelectedItems()) {
+        for (Listitem item : this.gridRole.getSelectedItems()) {
             Role role = (Role) item.getAttribute("data");
 
             if(Validator.isNotNull(role)){

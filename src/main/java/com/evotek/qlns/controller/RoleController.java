@@ -71,7 +71,7 @@ public class RoleController extends BasicController<Div>
 
     public void initData() throws Exception {
         try {
-            parent = (Include) winRole.getParent();
+            this.parent = (Include) this.winRole.getParent();
             
 //            List<SimpleModel> statusList = ComponentUtil.getComboboxStatusValue(
 //                    new String[]{Labels.getLabel(LanguageKeys.STATUS_ACTIVE),
@@ -94,7 +94,7 @@ public class RoleController extends BasicController<Div>
     }
 
     public void onClick$btnCancel(){
-        winRole.detach();
+        this.winRole.detach();
     }
 
     public void onLockRole(Event event) throws Exception {
@@ -106,10 +106,11 @@ public class RoleController extends BasicController<Div>
                 Messagebox.QUESTION,
                 new EventListener<Event>() {
 
-                    public void onEvent(Event e) throws Exception {
+                    @Override
+					public void onEvent(Event e) throws Exception {
                         if (Messagebox.ON_OK.equals(e.getName())) {
                             try {
-                                roleService.lockRole(role);
+                                RoleController.this.roleService.lockRole(role);
 
                                ComponentUtil.createSuccessMessageBox(
                                        LanguageKeys.MESSAGE_LOCK_ITEM_SUCCESS);
@@ -135,10 +136,11 @@ public class RoleController extends BasicController<Div>
                 Messagebox.QUESTION,
                 new EventListener() {
 
-                    public void onEvent(Event e) throws Exception {
+                    @Override
+					public void onEvent(Event e) throws Exception {
                         if (Messagebox.ON_OK.equals(e.getName())) {
                             try {
-                                roleService.unlockRole(role);
+                                RoleController.this.roleService.unlockRole(role);
 
                                 ComponentUtil.createSuccessMessageBox(
                                         LanguageKeys.MESSAGE_UNLOCK_ITEM_SUCCESS);
@@ -164,10 +166,11 @@ public class RoleController extends BasicController<Div>
                 Messagebox.QUESTION,
                 new EventListener() {
 
-                    public void onEvent(Event e) throws Exception {
+                    @Override
+					public void onEvent(Event e) throws Exception {
                         if (Messagebox.ON_OK.equals(e.getName())) {
                             try {
-                                roleService.deleteRole(role);
+                                RoleController.this.roleService.deleteRole(role);
 
                                 ComponentUtil.createSuccessMessageBox(
                                         LanguageKeys.MESSAGE_DELETE_SUCCESS);
@@ -187,11 +190,11 @@ public class RoleController extends BasicController<Div>
     public void onClick$btnAdd() {
         try {
             Map<String, Object> parameters = new HashMap<String, Object>();
-            parameters.put(Constants.PARENT_WINDOW, winRole);
+            parameters.put(Constants.PARENT_WINDOW, this.winRole);
             parameters.put(Constants.ID, 0L);
 
             Window win = (Window) Executions.createComponents(EDIT_PAGE,
-                    winRole, parameters);
+                    this.winRole, parameters);
             win.doModal();
         } catch (Exception ex) {
             _log.error(ex.getMessage(), ex);
@@ -207,8 +210,8 @@ public class RoleController extends BasicController<Div>
         try {
             List<Role> roles = this.getRoles();
 
-            searchResultGrid.setItemRenderer(new RoleRender(winRole));
-            searchResultGrid.setModel(new ListModelList<Role>(roles));
+            this.searchResultGrid.setItemRenderer(new RoleRender(this.winRole));
+            this.searchResultGrid.setModel(new ListModelList<Role>(roles));
         } catch (Exception ex) {
             _log.error(ex.getMessage(), ex);
         }
@@ -225,7 +228,7 @@ public class RoleController extends BasicController<Div>
 //            paramMap.put("roleName", _roleName);
 //            paramMap.put("status", _status);
 
-            _roles = roleService.getRoles(null, null);
+            _roles = this.roleService.getRoles(null, null);
         } catch (Exception ex) {
             _log.error(ex.getMessage(), ex);
         }
@@ -234,7 +237,7 @@ public class RoleController extends BasicController<Div>
     }
 
     public void onClick$adminPage(){
-        parent.setSrc("/html/pages/admin/default.zul");
+        this.parent.setSrc("/html/pages/admin/default.zul");
     }
     //service
     public RoleService getRoleService() {

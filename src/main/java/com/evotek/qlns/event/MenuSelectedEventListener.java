@@ -36,15 +36,16 @@ public class MenuSelectedEventListener implements EventListener<Event>{
         this.parameters = parameters;
     }
 
-    public void onEvent(Event t) throws Exception {
-        this.setSelectedMenu(src, parameters);
+    @Override
+	public void onEvent(Event t) throws Exception {
+        this.setSelectedMenu(this.src, this.parameters);
     }
 
     private void setSelectedMenu(String url, Map<String, Object> parameters) {
         Sessions.getCurrent().setAttribute(Constants.MAP_PARAMETER, parameters);
 
-        bodyLayout.setSrc(url);
+        this.bodyLayout.setSrc(url);
 
-        bodyLayout.invalidate();
+        this.bodyLayout.invalidate();
     }
 }

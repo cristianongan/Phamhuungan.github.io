@@ -33,24 +33,25 @@ public class CheckSelectAllListener implements EventListener<Event>{
         this.slaveChb = slaveChb;
     }
 
-    public void onEvent(Event event) throws Exception {
-        if (slaveChb == null) {
-            for (Checkbox cb : slaveChbs) {
-                cb.setChecked(masterChb.isChecked());
+    @Override
+	public void onEvent(Event event) throws Exception {
+        if (this.slaveChb == null) {
+            for (Checkbox cb : this.slaveChbs) {
+                cb.setChecked(this.masterChb.isChecked());
             }
 
             return;
         }
 
-        if (!slaveChb.isChecked()) {
-            masterChb.setChecked(false);
+        if (!this.slaveChb.isChecked()) {
+            this.masterChb.setChecked(false);
 
             return;
         }
 
         boolean checkAll = true;
 
-        for (Checkbox cb : slaveChbs) {
+        for (Checkbox cb : this.slaveChbs) {
             checkAll = checkAll && cb.isChecked();
 
             if(!checkAll){
@@ -58,6 +59,6 @@ public class CheckSelectAllListener implements EventListener<Event>{
             }
         }
 
-        masterChb.setChecked(checkAll);
+        this.masterChb.setChecked(checkAll);
     }
 }

@@ -38,9 +38,10 @@ import com.evotek.qlns.util.key.Values;
  *
  * @author hungnt1 LinhLH2 fixed
  */
-public class UserDAOImpl extends BasicDAO<User> implements UserDAO {
+public class UserDAOImpl extends AbstractDAO<User> implements UserDAO {
 
-    public List<User> getListUsers() {
+    @Override
+	public List<User> getListUsers() {
         List<User> results = new ArrayList<User>();
 
         try {
@@ -50,7 +51,7 @@ public class UserDAOImpl extends BasicDAO<User> implements UserDAO {
 
             cri.add(Restrictions.eq("status", 1L));
 
-            results = (List<User>) cri.list();
+            results = cri.list();
         } catch (Exception ex) {
             _log.error(ex.getMessage(), ex);
         }
@@ -58,11 +59,13 @@ public class UserDAOImpl extends BasicDAO<User> implements UserDAO {
         return results;
     }
 
-    public User getNewUser() {
+    @Override
+	public User getNewUser() {
         return new User();
     }
 
-    public int getCountAllUsers() throws Exception {
+    @Override
+	public int getCountAllUsers() throws Exception {
         int count = 0;
 
         try {
@@ -82,7 +85,8 @@ public class UserDAOImpl extends BasicDAO<User> implements UserDAO {
         return count;
     }
 
-    public List<User> getAllUsers() throws Exception {
+    @Override
+	public List<User> getAllUsers() throws Exception {
         List<User> users = new ArrayList<User>();
 
         try {
@@ -92,7 +96,7 @@ public class UserDAOImpl extends BasicDAO<User> implements UserDAO {
 
             cri.add(Restrictions.ne("status", QueryUtil.STATUS_DEACTIVE));
 
-            users = (List<User>) cri.list();
+            users = cri.list();
         } catch (Exception e) {
             _log.error(e.getMessage(), e);
         }
@@ -100,7 +104,8 @@ public class UserDAOImpl extends BasicDAO<User> implements UserDAO {
         return users;
     }
 
-    public User getUserById(Long userId) {
+    @Override
+	public User getUserById(Long userId) {
         User user = null;
 
         try {
@@ -116,7 +121,8 @@ public class UserDAOImpl extends BasicDAO<User> implements UserDAO {
         return user;
     }
 
-    public User getUserByUserName(String userName) throws Exception {
+    @Override
+	public User getUserByUserName(String userName) throws Exception {
         User user = null;
 
         try {
@@ -131,7 +137,7 @@ public class UserDAOImpl extends BasicDAO<User> implements UserDAO {
             cri.add(Restrictions.eq("userName", userName).ignoreCase());
             cri.add(Restrictions.ne("status", QueryUtil.STATUS_DEACTIVE));
 
-            List<User> results = (List<User>) cri.list();
+            List<User> results = cri.list();
 
             if (!results.isEmpty()) {
                 user = results.get(0);
@@ -144,7 +150,8 @@ public class UserDAOImpl extends BasicDAO<User> implements UserDAO {
         return user;
     }
 
-    public List<User> getUsersLikeUserName(String value) throws Exception {
+    @Override
+	public List<User> getUsersLikeUserName(String value) throws Exception {
         List<User> users = new ArrayList<User>();
 
         try {
@@ -158,7 +165,7 @@ public class UserDAOImpl extends BasicDAO<User> implements UserDAO {
 
             cri.add(Restrictions.ne("status", QueryUtil.STATUS_DEACTIVE));
 
-            users = (List<User>) cri.list();
+            users = cri.list();
 
         } catch (Exception ex) {
             _log.error(ex.getMessage(), ex);
@@ -167,7 +174,8 @@ public class UserDAOImpl extends BasicDAO<User> implements UserDAO {
         return users;
     }
 
-    public List<User> getUsersLikeLastname(String value) throws Exception {
+    @Override
+	public List<User> getUsersLikeLastname(String value) throws Exception {
         List<User> users = new ArrayList<User>();
 
         try {
@@ -181,7 +189,7 @@ public class UserDAOImpl extends BasicDAO<User> implements UserDAO {
 
             cri.add(Restrictions.ne("status", QueryUtil.STATUS_DEACTIVE));
 
-            users = (List<User>) cri.list();
+            users = cri.list();
 
         } catch (Exception ex) {
             _log.error(ex.getMessage(), ex);
@@ -190,7 +198,8 @@ public class UserDAOImpl extends BasicDAO<User> implements UserDAO {
         return users;
     }
 
-    public List<User> getUsersLikeEmail(String value) throws Exception {
+    @Override
+	public List<User> getUsersLikeEmail(String value) throws Exception {
         List<User> users = new ArrayList<User>();
 
         try {
@@ -204,7 +213,7 @@ public class UserDAOImpl extends BasicDAO<User> implements UserDAO {
 
             cri.add(Restrictions.ne("status", QueryUtil.STATUS_DEACTIVE));
 
-            users = (List<User>) cri.list();
+            users = cri.list();
 
         } catch (Exception ex) {
             _log.error(ex.getMessage(), ex);
@@ -295,7 +304,8 @@ public class UserDAOImpl extends BasicDAO<User> implements UserDAO {
 //        return result;
 //    }
 
-    public List<User> getUsers(String userName, String email, Long gender,
+    @Override
+	public List<User> getUsers(String userName, String email, Long gender,
             String birthPlace, Date birthdayFrom, Date birthdayTo, String phone,
             String mobile, String account, Long status, int firstResult,
             int maxResult, String orderByColumn, String orderByType) {
@@ -311,7 +321,7 @@ public class UserDAOImpl extends BasicDAO<User> implements UserDAO {
                 cri.setMaxResults(maxResult);
             }
 
-            users = (List<User>) cri.list();
+            users = cri.list();
         } catch (Exception ex) {
             _log.error(ex.getMessage(), ex);
         }
@@ -319,7 +329,8 @@ public class UserDAOImpl extends BasicDAO<User> implements UserDAO {
         return users;
     }
 
-    public int getUsersCount(String userName, String email, Long gender,
+    @Override
+	public int getUsersCount(String userName, String email, Long gender,
             String birthPlace, Date birthdayFrom, Date birthdayTo, String phone,
             String mobile, String account, Long status) {
 
@@ -340,7 +351,8 @@ public class UserDAOImpl extends BasicDAO<User> implements UserDAO {
         return result;
     }
 
-    public List<User> getUsers(String keyword, int firstResult, int maxResult,
+    @Override
+	public List<User> getUsers(String keyword, int firstResult, int maxResult,
             String orderByColumn, String orderByType) {
         List<User> users = new ArrayList<User>();
 
@@ -352,7 +364,7 @@ public class UserDAOImpl extends BasicDAO<User> implements UserDAO {
                 cri.setMaxResults(maxResult);
             }
 
-            users = (List<User>) cri.list();
+            users = cri.list();
         } catch (Exception ex) {
             _log.error(ex.getMessage(), ex);
         }
@@ -360,7 +372,8 @@ public class UserDAOImpl extends BasicDAO<User> implements UserDAO {
         return users;
     }
 
-    public int getUsersCount(String keyword) {
+    @Override
+	public int getUsersCount(String keyword) {
         int result = 0;
 
         try {
@@ -742,7 +755,8 @@ public class UserDAOImpl extends BasicDAO<User> implements UserDAO {
         }
     }
 
-    public List<User> getUsersByI_UN(Long userId, String userName) {
+    @Override
+	public List<User> getUsersByI_UN(Long userId, String userName) {
         List<User> results = new ArrayList<User>();
 
         try {
@@ -754,7 +768,7 @@ public class UserDAOImpl extends BasicDAO<User> implements UserDAO {
                 cri.add(Restrictions.ne("userId", userId));
             }
 
-            results = (List<User>) cri.list();
+            results = cri.list();
         } catch (Exception e) {
             _log.error(e.getMessage(), e);
         }
@@ -762,7 +776,8 @@ public class UserDAOImpl extends BasicDAO<User> implements UserDAO {
         return results;
     }
 
-    public List<User> getUsersByI_E(Long userId, String email) {
+    @Override
+	public List<User> getUsersByI_E(Long userId, String email) {
         List<User> results = new ArrayList<User>();
 
         try {
@@ -774,7 +789,7 @@ public class UserDAOImpl extends BasicDAO<User> implements UserDAO {
                 cri.add(Restrictions.ne("userId", userId));
             }
 
-            results = (List<User>) cri.list();
+            results = cri.list();
         } catch (Exception e) {
             _log.error(e.getMessage(), e);
         }
@@ -785,13 +800,14 @@ public class UserDAOImpl extends BasicDAO<User> implements UserDAO {
     private static final Logger _log = LogManager.getLogger(UserDAOImpl.class);
     
 
-    public Map<String, Long> createMapUser() {
+    @Override
+	public Map<String, Long> createMapUser() {
         Map<String, Long> map = new HashMap<String, Long>();
         Session session = null;
         try {
             session = currentSession();
             Criteria criteria = session.createCriteria(User.class);
-            List<User> results = (List<User>) criteria.list();
+            List<User> results = criteria.list();
             for (User user : results) {
                 map.put(user.getUserName().toLowerCase(), user.getUserId());
             }

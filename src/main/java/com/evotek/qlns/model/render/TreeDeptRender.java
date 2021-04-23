@@ -37,7 +37,7 @@ public class TreeDeptRender implements TreeitemRenderer<DepartmentTreeNode>{
     @Override
     public void render(final Treeitem item, DepartmentTreeNode node, int index)
             throws Exception {
-        Department dept = (Department) node.getData();
+        Department dept = node.getData();
         //tree cell
         Treerow treeRow = new Treerow();
 
@@ -52,7 +52,7 @@ public class TreeDeptRender implements TreeitemRenderer<DepartmentTreeNode>{
 
         treeRow.setContext(_createContextMenu(treeRow, dept));
 
-        treeRow.addForward(Events.ON_DOUBLE_CLICK, winparent, "onEdit", dept);
+        treeRow.addForward(Events.ON_DOUBLE_CLICK, this.winparent, "onEdit", dept);
     }
     
     private Menupopup _createContextMenu(final Treerow treeRow,
@@ -62,13 +62,13 @@ public class TreeDeptRender implements TreeitemRenderer<DepartmentTreeNode>{
 
         popup.setPage(treeRow.getPage());
         
-        popup.appendChild(ComponentUtil.createMenuitem(winparent,
+        popup.appendChild(ComponentUtil.createMenuitem(this.winparent,
                 Labels.getLabel(LanguageKeys.ADD), Events.ON_CLICK, "onAdd",
                 dept, Constants.Z_ICON_PLUS, 
                 Constants.BLUE));
 
 //        if (documentType.getParentDocumentType() != null) { //neu khong phai la root
-        popup.appendChild(ComponentUtil.createMenuitem(winparent,
+        popup.appendChild(ComponentUtil.createMenuitem(this.winparent,
                 Labels.getLabel(LanguageKeys.EDIT), Events.ON_CLICK,
                 "onEdit", dept, Constants.Z_ICON_PENCIL, 
                 Constants.BLUE));

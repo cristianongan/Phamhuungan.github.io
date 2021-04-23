@@ -72,24 +72,24 @@ public class AddEditDeptController extends BasicController<Window>
     //init data
     public void initData() throws Exception {
         try {
-            winParent = (Window) arg.get(Constants.PARENT_WINDOW);
+            this.winParent = (Window) this.arg.get(Constants.PARENT_WINDOW);
 
-            dept = (Department) arg.get(Constants.OBJECT);
-            parentDept = (Department) arg.get(Constants.SECOND_OBJECT);
+            this.dept = (Department) this.arg.get(Constants.OBJECT);
+            this.parentDept = (Department) this.arg.get(Constants.SECOND_OBJECT);
 
-            if (Validator.isNotNull(parentDept)) {
-                bbDept.setValue(parentDept.getDeptName());
-                bbDept.setAttribute(Constants.ID,
-                        parentDept.getDeptId());
-                bbDept.setAttribute(Constants.OBJECT,
-                        parentDept);
+            if (Validator.isNotNull(this.parentDept)) {
+                this.bbDept.setValue(this.parentDept.getDeptName());
+                this.bbDept.setAttribute(Constants.ID,
+                        this.parentDept.getDeptId());
+                this.bbDept.setAttribute(Constants.OBJECT,
+                        this.parentDept);
             }
             
-            if(Validator.isNotNull(dept)){
-                winEditDept.setTitle((String) arg.get(Constants.TITLE));
+            if(Validator.isNotNull(this.dept)){
+                this.winEditDept.setTitle((String) this.arg.get(Constants.TITLE));
                 
-                if(Validator.isNotNull(dept.getParentId())){
-                    oldParentDept = departmentService.getDeparment(dept.getParentId());
+                if(Validator.isNotNull(this.dept.getParentId())){
+                    this.oldParentDept = this.departmentService.getDeparment(this.dept.getParentId());
                 }
                 
                 this._setEditForm();
@@ -100,16 +100,16 @@ public class AddEditDeptController extends BasicController<Window>
     }
     
     private void _setEditForm() throws Exception {
-        tbDeptName.setValue(dept.getDeptName());
-        tbDescription.setValue(dept.getDescription());
+        this.tbDeptName.setValue(this.dept.getDeptName());
+        this.tbDescription.setValue(this.dept.getDescription());
         
-        if (Validator.isNotNull(oldParentDept)) {
-            bbDept.setValue(oldParentDept.getDeptName());
-            bbDept.setAttribute(Constants.ID,
-                    oldParentDept.getDeptId());
-            bbDept.setAttribute(Constants.OBJECT,
-                        oldParentDept);
-            btnClearDoc.setVisible(true);
+        if (Validator.isNotNull(this.oldParentDept)) {
+            this.bbDept.setValue(this.oldParentDept.getDeptName());
+            this.bbDept.setAttribute(Constants.ID,
+                    this.oldParentDept.getDeptId());
+            this.bbDept.setAttribute(Constants.OBJECT,
+                        this.oldParentDept);
+            this.btnClearDoc.setVisible(true);
         }
     }
     
@@ -117,35 +117,35 @@ public class AddEditDeptController extends BasicController<Window>
         boolean update = true;
         
         try {
-            String deptName = GetterUtil.getString(tbDeptName.getValue());
-            String description = GetterUtil.getString(tbDescription.getValue());
-            parentDept = (Department) bbDept.getAttribute(Constants.OBJECT);
+            String deptName = GetterUtil.getString(this.tbDeptName.getValue());
+            String description = GetterUtil.getString(this.tbDescription.getValue());
+            this.parentDept = (Department) this.bbDept.getAttribute(Constants.OBJECT);
             
             if (this._validate(deptName, description)) {
-                if(Validator.isNull(dept)){
+                if(Validator.isNull(this.dept)){
                     update = false;
                     
-                    dept = new Department();
+                    this.dept = new Department();
                     
-                    dept.setUserId(getUserId());
-                    dept.setUserName(getUserName());
-                    dept.setCreateDate(new Date());
-                    dept.setOrdinal(getOrdinal());
+                    this.dept.setUserId(getUserId());
+                    this.dept.setUserName(getUserName());
+                    this.dept.setCreateDate(new Date());
+                    this.dept.setOrdinal(getOrdinal());
                 }
                 
-                dept.setDeptName(deptName);
-                dept.setDescription(description);
-                dept.setModifiedDate(new Date());
-                dept.setParentId(Validator.isNull(parentDept)?null:parentDept.getDeptId());
+                this.dept.setDeptName(deptName);
+                this.dept.setDescription(description);
+                this.dept.setModifiedDate(new Date());
+                this.dept.setParentId(Validator.isNull(this.parentDept)?null:this.parentDept.getDeptId());
                 
-                departmentService.saveOrUpdate(dept);
+                this.departmentService.saveOrUpdate(this.dept);
                 
                 ComponentUtil.createSuccessMessageBox(
                         ComponentUtil.getSuccessKey(update));
                 
-                winEditDept.detach();
+                this.winEditDept.detach();
 
-                Events.sendEvent("onLoadData", winParent, null);
+                Events.sendEvent("onLoadData", this.winParent, null);
             }
         } catch (Exception ex) {
             _log.error(ex.getMessage(), ex);
@@ -157,27 +157,27 @@ public class AddEditDeptController extends BasicController<Window>
 
     public boolean _validate(String deptName, String description) {
         if (Validator.isNull(deptName)) {
-            tbDeptName.setErrorMessage(Values.getRequiredInputMsg(
+            this.tbDeptName.setErrorMessage(Values.getRequiredInputMsg(
                     Labels.getLabel(LanguageKeys.DEPARMENT_NAME)));
             
-            tbDeptName.setFocus(true);
+            this.tbDeptName.setFocus(true);
             
             return false;
         }
 
         if (deptName.length() > Values.LONG_LENGTH) {
-            tbDeptName.setErrorMessage(Values.getMaxLengthInvalidMsg(
+            this.tbDeptName.setErrorMessage(Values.getMaxLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.DOCUMENT_TYPE_NAME),
                     Values.LONG_LENGTH));
             
-            tbDeptName.setFocus(true);
+            this.tbDeptName.setFocus(true);
             
             return false;
         }
         
         if (Validator.isNotNull(description)
                 && description.length() > Values.GREATE_LONG_LENGTH) {
-            tbDescription.setErrorMessage(Values.getMaxLengthInvalidMsg(
+            this.tbDescription.setErrorMessage(Values.getMaxLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.DESCRIPTION),
                     Values.GREATE_LONG_LENGTH));
 
@@ -188,49 +188,49 @@ public class AddEditDeptController extends BasicController<Window>
     }
     
     private Long getOrdinal(){        
-        if(Validator.isNull(parentDept)){
-            return departmentService.getNextOrdinal(null);
+        if(Validator.isNull(this.parentDept)){
+            return this.departmentService.getNextOrdinal(null);
         } else {
-            return departmentService.getNextOrdinal(parentDept.getDeptId());
+            return this.departmentService.getNextOrdinal(this.parentDept.getDeptId());
         }
     }
     
     public void onClick$btnCancel() {
-        winEditDept.detach();
+        this.winEditDept.detach();
     }
 
     //Bandbox documentType
     public void onClick$btnClearDoc() {
-        bbDept.setValue(StringPool.BLANK);
-        bbDept.setAttribute(Constants.ID, null);
+        this.bbDept.setValue(StringPool.BLANK);
+        this.bbDept.setAttribute(Constants.ID, null);
         
-        btnClearDoc.setDisabled(true);
-        btnClearDoc.setVisible(false);
+        this.btnClearDoc.setDisabled(true);
+        this.btnClearDoc.setVisible(false);
     }
     
     public void onOpen$bbDept(){
-        if(bbDept.isOpen() 
-                && Validator.isNull(icDepartment.getSrc())) {
-            icDepartment.setAttribute("bandbox", bbDept);
-            icDepartment.setAttribute("btnclear", btnClearDoc);
+        if(this.bbDept.isOpen() 
+                && Validator.isNull(this.icDepartment.getSrc())) {
+            this.icDepartment.setAttribute("bandbox", this.bbDept);
+            this.icDepartment.setAttribute("btnclear", this.btnClearDoc);
             
-            if(Validator.isNotNull(dept)){
-                icDepartment.setAttribute("exclude", dept);
+            if(Validator.isNotNull(this.dept)){
+                this.icDepartment.setAttribute("exclude", this.dept);
             }
             
-            icDepartment.setSrc(Constants.TREE_DEPARTMENT_PAGE);
+            this.icDepartment.setSrc(Constants.TREE_DEPARTMENT_PAGE);
         }
     }
     //Bandbox documentType
     
     public DepartmentService getDepartmentService() {
-        if (departmentService == null) {
-            departmentService = (DepartmentService) SpringUtil.getBean("departmentService");
+        if (this.departmentService == null) {
+            this.departmentService = (DepartmentService) SpringUtil.getBean("departmentService");
             
-            setDepartmentService(departmentService);
+            setDepartmentService(this.departmentService);
         }
         
-        return departmentService;
+        return this.departmentService;
     }
 
     public void setDepartmentService(DepartmentService departmentService) {

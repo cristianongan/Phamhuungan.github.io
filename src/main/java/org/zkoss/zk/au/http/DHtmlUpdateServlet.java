@@ -125,15 +125,16 @@ public class DHtmlUpdateServlet extends HttpServlet {
     }
 
     //Servlet//
-    public void init() throws ServletException {
+    @Override
+	public void init() throws ServletException {
         final ServletConfig config = getServletConfig();
         final ServletContext ctx = getServletContext();
         ctx.setAttribute(ATTR_UPDATE_SERVLET, this);
 
         final WebManager webman = WebManager.getWebManager(ctx);
         String param = config.getInitParameter("compress");
-        _compress = param == null || param.length() == 0 || "true".equals(param);
-        if (!_compress) {
+        this._compress = param == null || param.length() == 0 || "true".equals(param);
+        if (!this._compress) {
             webman.getClassWebResource().setCompress(null); //disable all
         }
         //Copies au extensions defined before DHtmlUpdateServlet is started
@@ -189,13 +190,16 @@ public class DHtmlUpdateServlet extends HttpServlet {
                 addAuExtension("/upload",
                         new AuExtension() {
 
-                            public void init(DHtmlUpdateServlet servlet) {
+                            @Override
+							public void init(DHtmlUpdateServlet servlet) {
                             }
 
-                            public void destroy() {
+                            @Override
+							public void destroy() {
                             }
 
-                            public void service(HttpServletRequest request, HttpServletResponse response, String pi)
+                            @Override
+							public void service(HttpServletRequest request, HttpServletResponse response, String pi)
                                     throws ServletException, IOException {
                                 if (Sessions.getCurrent(false) != null) {
                                     throw new ServletException("Failed to upload. " + msg);
@@ -210,8 +214,9 @@ public class DHtmlUpdateServlet extends HttpServlet {
         }
     }
 
-    public void destroy() {
-        for (AuExtension aue : _aues.values()) {
+    @Override
+	public void destroy() {
+        for (AuExtension aue : this._aues.values()) {
             try {
                 aue.destroy();
             } catch (Throwable ex) {
@@ -224,7 +229,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
      * @since 5.0.0
      */
     public boolean isCompress() {
-        return _compress;
+        return this._compress;
     }
 
     /** Returns the AU extension that is associated the specified prefix.
@@ -296,7 +301,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
             throws ServletException {
         checkAuExtension(prefix, extension);
 
-        if (_aues.get(prefix) == extension) //speed up to avoid sync
+        if (this._aues.get(prefix) == extension) //speed up to avoid sync
         {
             return extension; //nothing changed
         }
@@ -305,9 +310,9 @@ public class DHtmlUpdateServlet extends HttpServlet {
         //To avoid using sync in doGet(), we make a copy here
         final AuExtension old;
         synchronized (this) {
-            final Map<String, AuExtension> ps = new HashMap<String, AuExtension>(_aues);
+            final Map<String, AuExtension> ps = new HashMap<String, AuExtension>(this._aues);
             old = ps.put(prefix, extension);
-            _aues = ps;
+            this._aues = ps;
         }
         if (old != null) {
             try {
@@ -335,14 +340,14 @@ public class DHtmlUpdateServlet extends HttpServlet {
      * @since 5.0.0
      */
     public AuExtension getAuExtension(String prefix) {
-        return _aues.get(prefix);
+        return this._aues.get(prefix);
     }
 
     /** Returns the first AU extension matches the specified path,
      * or null if not found.
      */
     private AuExtension getAuExtensionByPath(String path) {
-        for (Iterator it = _aues.entrySet().iterator(); it.hasNext();) {
+        for (Iterator it = this._aues.entrySet().iterator(); it.hasNext();) {
             final Map.Entry me = (Map.Entry) it.next();
             if (path.startsWith((String) me.getKey())) {
                 return (AuExtension) me.getValue();
@@ -352,7 +357,8 @@ public class DHtmlUpdateServlet extends HttpServlet {
     }
 
     //-- super --//
-    protected long getLastModified(HttpServletRequest request) {
+    @Override
+	protected long getLastModified(HttpServletRequest request) {
         final String pi = Https.getThisPathInfo(request);
         if (pi != null && pi.startsWith(ClassWebResource.PATH_PREFIX)
                 && pi.indexOf('*') < 0 //language independent
@@ -362,11 +368,11 @@ public class DHtmlUpdateServlet extends HttpServlet {
             final String ext = Servlets.getExtension(pi, false);
             if (ext == null
                     || getClassWebResource().getExtendlet(ext) == null) {
-                if (_lastModified == 0) {
-                    _lastModified = new Date().getTime();
+                if (this._lastModified == 0) {
+                    this._lastModified = new Date().getTime();
                 }
                 //Hard to know when it is modified, so cheat it..
-                return _lastModified;
+                return this._lastModified;
             }
         }
         return -1;
@@ -376,7 +382,8 @@ public class DHtmlUpdateServlet extends HttpServlet {
         return WebManager.getWebManager(getServletContext()).getClassWebResource();
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    @Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         final String pi = Https.getThisPathInfo(request);
 //		if (log.finerable()) log.finer("Path info: "+pi);
@@ -479,7 +486,8 @@ public class DHtmlUpdateServlet extends HttpServlet {
         }
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    @Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         doGet(request, response);
     }
@@ -588,7 +596,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
         }
 
         final AuWriter out = AuWriters.newInstance();
-        out.setCompress(_compress);
+        out.setCompress(this._compress);
         out.open(request, response);
         try {
             wappc.getUiEngine().execUpdate(exec, aureqs, out);
@@ -724,15 +732,18 @@ public class DHtmlUpdateServlet extends HttpServlet {
     }
     private static final AuDecoder _audec = new AuDecoder() {
 
-        public String getDesktopId(Object request) {
+        @Override
+		public String getDesktopId(Object request) {
             return ((HttpServletRequest) request).getParameter("dtid");
         }
 
-        public String getFirstCommand(Object request) {
+        @Override
+		public String getFirstCommand(Object request) {
             return ((HttpServletRequest) request).getParameter("cmd.0");
         }
 
-        @SuppressWarnings("unchecked")
+        @Override
+		@SuppressWarnings("unchecked")
         public List<AuRequest> decode(Object request, Desktop desktop) {
             final List<AuRequest> aureqs = new LinkedList<AuRequest>();
             final HttpServletRequest hreq = (HttpServletRequest) request;
@@ -752,7 +763,8 @@ public class DHtmlUpdateServlet extends HttpServlet {
             return aureqs;
         }
 
-        public boolean isIgnorable(Object request, WebApp wapp) {
+        @Override
+		public boolean isIgnorable(Object request, WebApp wapp) {
             final HttpServletRequest hreq = (HttpServletRequest) request;
             for (int j = 0;; ++j) {
                 if (hreq.getParameter("cmd_" + j) == null) {

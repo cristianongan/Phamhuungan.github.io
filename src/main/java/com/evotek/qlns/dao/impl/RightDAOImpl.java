@@ -30,9 +30,10 @@ import com.evotek.qlns.util.Validator;
  *
  * @author linhlh2
  */
-public class RightDAOImpl extends BasicDAO<Right> implements RightDAO{
+public class RightDAOImpl extends AbstractDAO<Right> implements RightDAO{
 
-    public List<Right> getRightsByUser(User user) throws Exception {
+    @Override
+	public List<Right> getRightsByUser(User user) throws Exception {
         List<Right> rights = new ArrayList<Right>();
 
         try {
@@ -49,7 +50,7 @@ public class RightDAOImpl extends BasicDAO<Right> implements RightDAO{
 
             q.setParameter("userId", user.getUserId());
 
-            rights = (List<Right>) q.list();
+            rights = q.list();
         } catch (Exception e) {
             _log.error(e.getMessage(), e);
         }
@@ -57,7 +58,8 @@ public class RightDAOImpl extends BasicDAO<Right> implements RightDAO{
         return rights;
     }
 
-    public List<RightView> getRightViewByUserId(Long userId) throws Exception {
+    @Override
+	public List<RightView> getRightViewByUserId(Long userId) throws Exception {
         List<RightView> rights = new ArrayList<RightView>();
 
         try {
@@ -70,7 +72,7 @@ public class RightDAOImpl extends BasicDAO<Right> implements RightDAO{
 
             cri.addOrder(Order.asc("rightName"));
 
-            rights = (List<RightView>) cri.list();
+            rights = cri.list();
         } catch (Exception e) {
             _log.error(e.getMessage(), e);
         }
@@ -78,11 +80,13 @@ public class RightDAOImpl extends BasicDAO<Right> implements RightDAO{
         return rights;
     }
 
-    public Right getNewRight() {
+    @Override
+	public Right getNewRight() {
         return new Right();
     }
 
-    public List<Right> getAllRights() throws Exception {
+    @Override
+	public List<Right> getAllRights() throws Exception {
         List<Right> rights = new ArrayList<Right>();
 
         try {
@@ -94,7 +98,7 @@ public class RightDAOImpl extends BasicDAO<Right> implements RightDAO{
             
             cri.addOrder(Order.asc("rightName"));
 
-            rights = (List<Right>) cri.list();
+            rights = cri.list();
         } catch (Exception e) {
             _log.error(e.getMessage(), e);
         }
@@ -102,7 +106,8 @@ public class RightDAOImpl extends BasicDAO<Right> implements RightDAO{
         return rights;
     }
 
-    public List<Right> getAllRights(Long type) throws Exception {
+    @Override
+	public List<Right> getAllRights(Long type) throws Exception {
         List<Right> rights = new ArrayList<Right>();
 
         try {
@@ -118,7 +123,7 @@ public class RightDAOImpl extends BasicDAO<Right> implements RightDAO{
 
             cri.add(Restrictions.ne("status", QueryUtil.STATUS_DEACTIVE));
 
-            rights = (List<Right>) cri.list();
+            rights = cri.list();
         } catch (Exception e) {
             _log.error(e.getMessage(), e);
         }
@@ -126,7 +131,8 @@ public class RightDAOImpl extends BasicDAO<Right> implements RightDAO{
         return rights;
     }
 
-    public List<Right> getAllRights(List<Long> types) throws Exception {
+    @Override
+	public List<Right> getAllRights(List<Long> types) throws Exception {
         List<Right> rights = new ArrayList<Right>();
 
         try {
@@ -148,7 +154,7 @@ public class RightDAOImpl extends BasicDAO<Right> implements RightDAO{
             
             cri.addOrder(Order.asc("rightName"));
 
-            rights = (List<Right>) cri.list();
+            rights = cri.list();
         } catch (Exception e) {
             _log.error(e.getMessage(), e);
         }
@@ -156,7 +162,8 @@ public class RightDAOImpl extends BasicDAO<Right> implements RightDAO{
         return rights;
     }
 
-    public Right getRightById(Long rightId) throws Exception {
+    @Override
+	public Right getRightById(Long rightId) throws Exception {
         Right right = null;
 
         try {
@@ -197,7 +204,8 @@ public class RightDAOImpl extends BasicDAO<Right> implements RightDAO{
 //        return rights;
 //    }
 
-    public List<Right> getRightsByRN(String rightName) throws Exception {
+    @Override
+	public List<Right> getRightsByRN(String rightName) throws Exception {
         List<Right> rights = new ArrayList<Right>();
 
         try {
@@ -214,7 +222,7 @@ public class RightDAOImpl extends BasicDAO<Right> implements RightDAO{
 
             cri.addOrder(Order.asc("rightName"));
             
-            rights = (List<Right>) cri.list();
+            rights = cri.list();
         } catch (Exception e) {
             _log.error(e.getMessage(), e);
         }
@@ -222,7 +230,8 @@ public class RightDAOImpl extends BasicDAO<Right> implements RightDAO{
         return rights;
     }
 
-    public List<Right> getRightsByRN_T(String rightName, Long type) throws Exception {
+    @Override
+	public List<Right> getRightsByRN_T(String rightName, Long type) throws Exception {
         List<Right> rights = new ArrayList<Right>();
 
         try {
@@ -244,7 +253,7 @@ public class RightDAOImpl extends BasicDAO<Right> implements RightDAO{
 
             cri.addOrder(Order.asc("rightName"));
             
-            rights = (List<Right>) cri.list();
+            rights = cri.list();
         } catch (Exception e) {
             _log.error(e.getMessage(), e);
         }
@@ -252,7 +261,8 @@ public class RightDAOImpl extends BasicDAO<Right> implements RightDAO{
         return rights;
     }
 
-    public List<Right> getRightsByRN_T(String rightName, List<Long> types) throws Exception {
+    @Override
+	public List<Right> getRightsByRN_T(String rightName, List<Long> types) throws Exception {
         List<Right> rights = new ArrayList<Right>();
 
         try {
@@ -278,7 +288,7 @@ public class RightDAOImpl extends BasicDAO<Right> implements RightDAO{
 
             cri.addOrder(Order.asc("rightName"));
             
-            rights = (List<Right>) cri.list();
+            rights = cri.list();
         } catch (Exception e) {
             _log.error(e.getMessage(), e);
         }
@@ -286,7 +296,8 @@ public class RightDAOImpl extends BasicDAO<Right> implements RightDAO{
         return rights;
     }
 
-    public int getCountAllRights() throws Exception {
+    @Override
+	public int getCountAllRights() throws Exception {
         int count = 0;
 
         try {
@@ -306,7 +317,8 @@ public class RightDAOImpl extends BasicDAO<Right> implements RightDAO{
         return count;
     }
 
-    public List<Right> getRightByCategoryId(Long categoryId) throws Exception{
+    @Override
+	public List<Right> getRightByCategoryId(Long categoryId) throws Exception{
         List<Right> rights = new ArrayList<Right>();
 
         try {
@@ -314,7 +326,7 @@ public class RightDAOImpl extends BasicDAO<Right> implements RightDAO{
 
             cri.add(Restrictions.eq("categoryId", categoryId));
 
-            rights = (List<Right>) cri.list();
+            rights = cri.list();
         } catch (Exception e) {
             _log.error(e.getMessage(), e);
         }
@@ -322,7 +334,8 @@ public class RightDAOImpl extends BasicDAO<Right> implements RightDAO{
         return rights;
     }
 
-    public void deleteByCategoryId(Long categoryId) throws Exception{
+    @Override
+	public void deleteByCategoryId(Long categoryId) throws Exception{
         try {
             List<Right> rights = getRightByCategoryId(categoryId);
 
@@ -334,7 +347,8 @@ public class RightDAOImpl extends BasicDAO<Right> implements RightDAO{
 
     private static final Logger _log = LogManager.getLogger(RightDAOImpl.class);
 
-    public List<Right> getRightByName(String rightName, Long rightId) throws Exception {
+    @Override
+	public List<Right> getRightByName(String rightName, Long rightId) throws Exception {
         List<Right> rights = new ArrayList<Right>();
 
         try {
@@ -346,7 +360,7 @@ public class RightDAOImpl extends BasicDAO<Right> implements RightDAO{
                 cri.add(Restrictions.ne("rightId", rightId));
             }
 
-            rights = (List<Right>) cri.list();
+            rights = cri.list();
         } catch (Exception e) {
             _log.error(e.getMessage(), e);
         }
@@ -354,7 +368,8 @@ public class RightDAOImpl extends BasicDAO<Right> implements RightDAO{
         return rights;
     }
 
-    public Right getRightByCI_RN(Long categoryId, String folderName) {
+    @Override
+	public Right getRightByCI_RN(Long categoryId, String folderName) {
         Right right = null;
 
         try {

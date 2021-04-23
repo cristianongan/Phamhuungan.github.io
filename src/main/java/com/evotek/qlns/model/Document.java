@@ -43,7 +43,7 @@ public class Document implements Serializable, Comparable<Document> {
     private Set<FileEntry> files;
     @Column(name = "document_type_id", precision = 22, scale = 0)
     public Long getDocumentTypeId() {
-        return documentTypeId;
+        return this.documentTypeId;
     }
 
     public void setDocumentTypeId(Long documentTypeId) {
@@ -52,7 +52,7 @@ public class Document implements Serializable, Comparable<Document> {
 
     @Transient
     public String getTypeName() {
-        return typeName;
+        return this.typeName;
     }
 
     public void setTypeName(String typeName) {
@@ -61,7 +61,7 @@ public class Document implements Serializable, Comparable<Document> {
 
     @Column(name = "content")
     public String getContent() {
-        return content;
+        return this.content;
     }
 
     public void setContent(String content) {
@@ -71,7 +71,7 @@ public class Document implements Serializable, Comparable<Document> {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date", length = 7)
     public Date getCreateDate() {
-        return createDate;
+        return this.createDate;
     }
 
     public void setCreateDate(Date createDate) {
@@ -80,7 +80,7 @@ public class Document implements Serializable, Comparable<Document> {
 
     @Column(name = "description")
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     public void setDescription(String description) {
@@ -91,7 +91,7 @@ public class Document implements Serializable, Comparable<Document> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "document_id", unique = true, nullable = false, precision = 22, scale = 0)
     public Long getDocumentId() {
-        return documentId;
+        return this.documentId;
     }
 
     public void setDocumentId(Long documentId) {
@@ -100,7 +100,7 @@ public class Document implements Serializable, Comparable<Document> {
 
     @Column(name = "document_name", length = 1000)
     public String getDocumentName() {
-        return documentName;
+        return this.documentName;
     }
 
     public void setDocumentName(String documentName) {
@@ -109,7 +109,7 @@ public class Document implements Serializable, Comparable<Document> {
 
     @Column(name = "document_number", length = 100)
     public String getDocumentNumber() {
-        return documentNumber;
+        return this.documentNumber;
     }
 
     public void setDocumentNumber(String documentNumber) {
@@ -119,7 +119,7 @@ public class Document implements Serializable, Comparable<Document> {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "modified_date", length = 7)
     public Date getModifiedDate() {
-        return modifiedDate;
+        return this.modifiedDate;
     }
 
     public void setModifiedDate(Date modifiedDate) {
@@ -129,7 +129,7 @@ public class Document implements Serializable, Comparable<Document> {
     @Temporal(TemporalType.DATE)
     @Column(name = "promulgation_date", length = 7)
     public Date getPromulgationDate() {
-        return promulgationDate;
+        return this.promulgationDate;
     }
 
     public void setPromulgationDate(Date promulgationDate) {
@@ -138,7 +138,7 @@ public class Document implements Serializable, Comparable<Document> {
 
     @Column(name = "promulgation_dept", length = 255)
     public String getPromulgationDept() {
-        return promulgationDept;
+        return this.promulgationDept;
     }
 
     public void setPromulgationDept(String promulgationDept) {
@@ -147,7 +147,7 @@ public class Document implements Serializable, Comparable<Document> {
 
     @Column(name = "user_id", precision = 22, scale = 0)
     public Long getUserId() {
-        return userId;
+        return this.userId;
     }
 
     public void setUserId(Long userId) {
@@ -156,7 +156,7 @@ public class Document implements Serializable, Comparable<Document> {
 
     @Column(name = "user_name", length = 200)
     public String getUserName() {
-        return userName;
+        return this.userName;
     }
 
     public void setUserName(String userName) {
@@ -166,15 +166,16 @@ public class Document implements Serializable, Comparable<Document> {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "document")
     @LazyCollection(LazyCollectionOption.EXTRA)
     public Set<FileEntry> getFiles() {
-        return files;
+        return this.files;
     }
 
     public void setFiles(Set<FileEntry> files) {
         this.files = files;
     }
 
-    public int compareTo(Document o) {
-        if (documentId == null) {
+    @Override
+	public int compareTo(Document o) {
+        if (this.documentId == null) {
             return -1;
         }
 
@@ -182,7 +183,7 @@ public class Document implements Serializable, Comparable<Document> {
             return 1;
         }
 
-        return documentId.compareTo(o.documentId);
+        return this.documentId.compareTo(o.documentId);
     }
 
     @Override

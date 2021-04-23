@@ -39,7 +39,8 @@ public class UserRender implements ListitemRenderer<User> {
         this.isAdmin = isAdmin;
     }
 
-    public void render(Listitem items, User user, int index) throws Exception {
+    @Override
+	public void render(Listitem items, User user, int index) throws Exception {
         items.setAttribute("data", user);
 
         items.appendChild(ComponentUtil.createListcell(StringPool.BLANK,
@@ -60,7 +61,7 @@ public class UserRender implements ListitemRenderer<User> {
     }
 
     private Listcell _getAction(User user) {
-        if (!isAdmin) {
+        if (!this.isAdmin) {
             return new Listcell();
         }
 
@@ -79,19 +80,19 @@ public class UserRender implements ListitemRenderer<User> {
         Long status = user.getStatus();
 
         if (Values.STATUS_ACTIVE.equals(status)) {
-            hlayout.appendChild(ComponentUtil.createButton(winParent,
+            hlayout.appendChild(ComponentUtil.createButton(this.winParent,
                     Labels.getLabel(LanguageKeys.BUTTON_LOCK), ComponentUtil.LOCK_TOOLTIP,
                     Events.ON_CLICK, "onLockUser", user,
                     Constants.Z_ICON_LOCK, Constants.ORANGE));
         } else if (Values.STATUS_DEACTIVE.equals(status)) {
-            hlayout.appendChild(ComponentUtil.createButton(winParent,
+            hlayout.appendChild(ComponentUtil.createButton(this.winParent,
                     Labels.getLabel(LanguageKeys.BUTTON_UNLOCK), ComponentUtil.UNLOCK_TOOLTIP,
                     Events.ON_CLICK, "onUnlockUser", user,
                     Constants.Z_ICON_UNLOCK, Constants.ORANGE));
         }
         
         if (Values.STATUS_NOT_READY.equals(status)) {
-            hlayout.appendChild(ComponentUtil.createButton(winParent,
+            hlayout.appendChild(ComponentUtil.createButton(this.winParent,
                     Labels.getLabel(LanguageKeys.BUTTON_DELETE), ComponentUtil.DEL_TOOLTIP, 
                     Events.ON_CLICK, "onDeleteUser", user,
                     Constants.Z_ICON_TRASH_O, Constants.RED));
@@ -112,7 +113,7 @@ public class UserRender implements ListitemRenderer<User> {
             User user) {
         Map<String, Object> parameters = new HashMap<String, Object>();
 
-        parameters.put(Constants.PARENT_WINDOW, winParent);
+        parameters.put(Constants.PARENT_WINDOW, this.winParent);
         parameters.put(Constants.TITLE, Labels.getLabel(
                 LanguageKeys.TITLE_EDIT_USER));
         parameters.put(Constants.OBJECT, user);

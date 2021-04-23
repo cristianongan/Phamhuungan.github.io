@@ -22,12 +22,13 @@ import com.evotek.qlns.util.Validator;
  *
  * @author linhlh2
  */
-public class SalaryLandmarkDAOImpl extends BasicDAO<SalaryLandmark>
+public class SalaryLandmarkDAOImpl extends AbstractDAO<SalaryLandmark>
         implements SalaryLandmarkDAO {
 
     private static final Logger _log = LogManager.getLogger(SalaryLandmarkDAOImpl.class);
 
-    public List<SalaryLandmark> getSalaryLandmarkByStaffId(Long staffId) {
+    @Override
+	public List<SalaryLandmark> getSalaryLandmarkByStaffId(Long staffId) {
         List<SalaryLandmark> results = new ArrayList<SalaryLandmark>();
 
         try {
@@ -40,7 +41,7 @@ public class SalaryLandmarkDAOImpl extends BasicDAO<SalaryLandmark>
             cri.addOrder(Order.desc("fromDate"));
             cri.addOrder(Order.desc("toDate"));
             
-            results = (List<SalaryLandmark>) cri.list();
+            results = cri.list();
         } catch (Exception e) {
             _log.error(e.getMessage(), e);
         }

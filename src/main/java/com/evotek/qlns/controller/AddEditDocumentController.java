@@ -94,32 +94,33 @@ public class AddEditDocumentController extends BasicController<Window>
     public void doAfterCompose(Window comp) throws Exception {
         super.doAfterCompose(comp);
 
-        winParent = (Hlayout) arg.get(Constants.PARENT_WINDOW);
+        this.winParent = (Hlayout) this.arg.get(Constants.PARENT_WINDOW);
         
-        document = (Document) arg.get(Constants.OBJECT);
+        this.document = (Document) this.arg.get(Constants.OBJECT);
         
-        model = (ListModel) arg.get(Constants.MODEL);
+        this.model = (ListModel) this.arg.get(Constants.MODEL);
 
-        index = (Integer) arg.get(Constants.INDEX);
+        this.index = (Integer) this.arg.get(Constants.INDEX);
         
         initData();
     }
 
     public void initData() {
-        if(Validator.isNotNull(document)) {
-            winAddEditDocument.setTitle((String) arg.get(Constants.TITLE));
+        if(Validator.isNotNull(this.document)) {
+            this.winAddEditDocument.setTitle((String) this.arg.get(Constants.TITLE));
             
-            onLoadForm(document);
+            onLoadForm(this.document);
         } else {
-            txtDocumentNumber.addEventListener(Events.ON_CHANGE, new EventListener<Event>() {
+            this.txtDocumentNumber.addEventListener(Events.ON_CHANGE, new EventListener<Event>() {
 
-                public void onEvent(Event event) throws Exception {
-                    if(documentService.isExisted(GetterUtil.getString(
-                            txtDocumentNumber.getValue()))){
+                @Override
+				public void onEvent(Event event) throws Exception {
+                    if(AddEditDocumentController.this.documentService.isExisted(GetterUtil.getString(
+                            AddEditDocumentController.this.txtDocumentNumber.getValue()))){
                         Clients.showNotification(
                                 Labels.getLabel(LanguageKeys.MESSAGE_CHECK_EXISTED_DATA_BEFORE_SAVE, 
                                         new Object[]{Labels.getLabel(LanguageKeys.DOCUMENT_NUMBER)}),
-                                ZkKeys.WARNING, txtDocumentNumber, ZkKeys.END_CENTER,
+                                ZkKeys.WARNING, AddEditDocumentController.this.txtDocumentNumber, ZkKeys.END_CENTER,
                                 0, true);
                     }
                 }
@@ -131,30 +132,30 @@ public class AddEditDocumentController extends BasicController<Window>
     }
 
     public void onLoadForm(Document document) {
-        txtDocumentNumber.setValue(document.getDocumentNumber());
+        this.txtDocumentNumber.setValue(document.getDocumentNumber());
         
         if (Validator.isNotNull(document.getDocumentTypeId())) {
-            bbDocumentType.setValue(document.getTypeName());
-            bbDocumentType.setAttribute(Constants.ID, document.getDocumentTypeId());
-            btnClearDoc.setVisible(true);
+            this.bbDocumentType.setValue(document.getTypeName());
+            this.bbDocumentType.setAttribute(Constants.ID, document.getDocumentTypeId());
+            this.btnClearDoc.setVisible(true);
         }
         
-        cbDepartment.setValue(document.getPromulgationDept());
-        dbDate.setValue(document.getPromulgationDate());
-        txtContent.setValue(document.getContent());
+        this.cbDepartment.setValue(document.getPromulgationDept());
+        this.dbDate.setValue(document.getPromulgationDate());
+        this.txtContent.setValue(document.getContent());
     }
 
     /**
      * Hàm tạo control upload file
      */
     public void onCreateFile() {
-        if (divUpload.getChildren().isEmpty()) {
+        if (this.divUpload.getChildren().isEmpty()) {
             List<FileEntry> oldFiles = new ArrayList<FileEntry>();
 
             Component comp = null;
 
-            if (Validator.isNotNull(document)) {
-                oldFiles = documentService.getListFileEntrys(document.getDocumentId());
+            if (Validator.isNotNull(this.document)) {
+                oldFiles = this.documentService.getListFileEntrys(this.document.getDocumentId());
             }
 
             String config = "true,multiple=true";
@@ -163,71 +164,71 @@ public class AddEditDocumentController extends BasicController<Window>
 
             comp.setAttribute(Constants.ID, oldFiles);
 
-            divUpload.appendChild(comp);
+            this.divUpload.appendChild(comp);
         }
     }
 
     public void onCreate$cbDepartment() {
-        ListModel dictModel = new SimpleListModel(documentService.getDepartment());
-        cbDepartment.setModel(dictModel);
+        ListModel dictModel = new SimpleListModel(this.documentService.getDepartment());
+        this.cbDepartment.setModel(dictModel);
     }
 
     public boolean _validate(String documentNumber, Long documentTypeId, 
             String content) {
-        Long documentId = Validator.isNull(document) ? null : document.getDocumentId();
+        Long documentId = Validator.isNull(this.document) ? null : this.document.getDocumentId();
         
         if (Validator.isNull(documentNumber)) {
-            txtDocumentNumber.setErrorMessage(Values.getRequiredInputMsg(
+            this.txtDocumentNumber.setErrorMessage(Values.getRequiredInputMsg(
                     Labels.getLabel(LanguageKeys.DOCUMENT_NUMBER)));
             
-            txtDocumentNumber.setFocus(true);
+            this.txtDocumentNumber.setFocus(true);
             
             return false;
         }
 
         if (documentNumber.length() > Values.LONG_LENGTH) {
-            txtDocumentNumber.setErrorMessage(Values.getMaxLengthInvalidMsg(
+            this.txtDocumentNumber.setErrorMessage(Values.getMaxLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.DOCUMENT_NUMBER),
                     Values.LONG_LENGTH));
             
-            txtDocumentNumber.setFocus(true);
+            this.txtDocumentNumber.setFocus(true);
             
             return false;
         }
         
         if (Validator.isNull(documentTypeId)) {
-            bbDocumentType.setErrorMessage(Values.getRequiredInputMsg(
+            this.bbDocumentType.setErrorMessage(Values.getRequiredInputMsg(
                     Labels.getLabel(LanguageKeys.DOCUMENT_TYPE)));
             
-            bbDocumentType.setFocus(true);
+            this.bbDocumentType.setFocus(true);
             
             return false;
         }
 
         if(Validator.isNull(content)){
-            txtContent.setErrorMessage(Values.getRequiredInputMsg(
+            this.txtContent.setErrorMessage(Values.getRequiredInputMsg(
                     Labels.getLabel(LanguageKeys.CONTENT)));
             
-            txtContent.setFocus(true);
+            this.txtContent.setFocus(true);
             
             return false;
         }
 
         if (content.length() > Values.GREATE_LONG_LENGTH) {
-            txtContent.setErrorMessage(Values.getMaxLengthInvalidMsg(
+            this.txtContent.setErrorMessage(Values.getMaxLengthInvalidMsg(
                     Labels.getLabel(LanguageKeys.CONTENT),
                     Values.GREATE_LONG_LENGTH));
             
-            txtContent.setFocus(true);
+            this.txtContent.setFocus(true);
             
             return false;
         }
         
-        if(documentService.isExisted(documentNumber, content, documentId)){
-            txtDocumentNumber.setErrorMessage(Values.getDuplicateMsg(
+        if(this.documentService.isExisted(documentNumber, content, documentId)){
+            this.txtDocumentNumber.setErrorMessage(Values.getDuplicateMsg(
                     Labels.getLabel(LanguageKeys.DOCUMENT)));
             
-            txtDocumentNumber.setFocus(true);
+            this.txtDocumentNumber.setFocus(true);
             
             return false;
         }
@@ -244,11 +245,11 @@ public class AddEditDocumentController extends BasicController<Window>
     public List<FileEntry> updateFileEntry(Document document) {
         User users = getUser();
 
-        List<FileEntry> oldFiles = (List<FileEntry>) divUpload.getFirstChild().
+        List<FileEntry> oldFiles = (List<FileEntry>) this.divUpload.getFirstChild().
                 getAttribute(Constants.ID);
 
         //Lay list cac file xoa di trong list file cu
-        List<FileEntry> deleteFiles = (List<FileEntry>) divUpload.getFirstChild().
+        List<FileEntry> deleteFiles = (List<FileEntry>) this.divUpload.getFirstChild().
                 getAttribute(Constants.OBJECT);
 
         List<FileEntry> deletedFiles = new ArrayList<FileEntry>();
@@ -257,16 +258,16 @@ public class AddEditDocumentController extends BasicController<Window>
         //xoa file trong truong hop sua doi tuong
         if (deleteFiles != null
                 && !deleteFiles.isEmpty()) {
-            deletedFiles = documentService.removeFileEntry(deleteFiles);
+            deletedFiles = this.documentService.removeFileEntry(deleteFiles);
 
             oldFiles.removeAll(deletedFiles);
         }
 
-        List<Media> medium = (List<Media>) divUpload.getFirstChild().
+        List<Media> medium = (List<Media>) this.divUpload.getFirstChild().
                 getAttribute(Constants.DATA);
 
         if (medium != null && !medium.isEmpty()) {
-            addedFiles = documentService.saveMedia(users,
+            addedFiles = this.documentService.saveMedia(users,
                     medium, document);
 
             oldFiles.addAll(addedFiles);
@@ -280,40 +281,40 @@ public class AddEditDocumentController extends BasicController<Window>
         
         try {
             String documentNumber = 
-                    GetterUtil.getString(txtDocumentNumber.getValue());
-            Long documentTypeId = ComponentUtil.getBandboxValue(bbDocumentType);
-            Date publishDate = dbDate.getValue();
-            String publisherDept = GetterUtil.getString(cbDepartment.getValue());
-            String content = GetterUtil.getString(txtContent.getValue());
+                    GetterUtil.getString(this.txtDocumentNumber.getValue());
+            Long documentTypeId = ComponentUtil.getBandboxValue(this.bbDocumentType);
+            Date publishDate = this.dbDate.getValue();
+            String publisherDept = GetterUtil.getString(this.cbDepartment.getValue());
+            String content = GetterUtil.getString(this.txtContent.getValue());
             
             if (_validate(documentNumber, documentTypeId, content)) {
-                if(Validator.isNull(document)){
+                if(Validator.isNull(this.document)){
                     update = false;
                     
-                    document = new Document();
+                    this.document = new Document();
                     
-                    document.setUserId(getUserId());
-                    document.setUserName(getUserName());
-                    document.setCreateDate(new Date());
+                    this.document.setUserId(getUserId());
+                    this.document.setUserName(getUserName());
+                    this.document.setCreateDate(new Date());
                 }
                 
-                document.setDocumentNumber(documentNumber);
-                document.setDocumentTypeId(documentTypeId);
-                document.setModifiedDate(new Date());
-                document.setPromulgationDate(publishDate);
-                document.setPromulgationDept(publisherDept);
-                document.setContent(content);
+                this.document.setDocumentNumber(documentNumber);
+                this.document.setDocumentTypeId(documentTypeId);
+                this.document.setModifiedDate(new Date());
+                this.document.setPromulgationDate(publishDate);
+                this.document.setPromulgationDept(publisherDept);
+                this.document.setContent(content);
 
-                documentService.saveOrUpdate(document);
+                this.documentService.saveOrUpdate(this.document);
 
-                updateFileEntry(document);
+                updateFileEntry(this.document);
                 
                 ComponentUtil.createSuccessMessageBox(
                         ComponentUtil.getSuccessKey(update));
                 
-                winAddEditDocument.detach();
+                this.winAddEditDocument.detach();
                 
-                Events.sendEvent("onLoadDataCRUD", winParent, null);
+                Events.sendEvent("onLoadDataCRUD", this.winParent, null);
             }
         } catch (Exception ex) {
             _log.error(ex.getMessage());
@@ -325,16 +326,16 @@ public class AddEditDocumentController extends BasicController<Window>
     }
 
     public void onClick$btnPrevious() throws Exception {
-        if (Validator.isNotNull(document)) {
-            if (index == 0) {
-                index = (model.getSize() - 1);
+        if (Validator.isNotNull(this.document)) {
+            if (this.index == 0) {
+                this.index = (this.model.getSize() - 1);
             } else {
-                index--;
+                this.index--;
             }
 
-            document = (Document) model.getElementAt(index);
+            this.document = (Document) this.model.getElementAt(this.index);
             
-            divUpload.getChildren().clear();
+            this.divUpload.getChildren().clear();
             
             initData();
             
@@ -343,16 +344,16 @@ public class AddEditDocumentController extends BasicController<Window>
     }
     
     public void onClick$btnNext() throws Exception {
-        if (Validator.isNotNull(document)) {
-            if (index == (model.getSize() - 1)) {
-                index = 0;
+        if (Validator.isNotNull(this.document)) {
+            if (this.index == (this.model.getSize() - 1)) {
+                this.index = 0;
             } else {
-                index++;
+                this.index++;
             }
 
-            document = (Document) model.getElementAt(index);
+            this.document = (Document) this.model.getElementAt(this.index);
             
-            divUpload.getChildren().clear();
+            this.divUpload.getChildren().clear();
             
             initData();
             
@@ -361,25 +362,25 @@ public class AddEditDocumentController extends BasicController<Window>
     }
     
     public void onClick$btnCancel() {
-        winAddEditDocument.detach();
+        this.winAddEditDocument.detach();
     }
     
     //Bandbox documentType
     public void onClick$btnClearDoc() {
-        bbDocumentType.setValue(StringPool.BLANK);
-        bbDocumentType.setAttribute(Constants.ID, null);
+        this.bbDocumentType.setValue(StringPool.BLANK);
+        this.bbDocumentType.setAttribute(Constants.ID, null);
         
-        btnClearDoc.setDisabled(true);
-        btnClearDoc.setVisible(false);
+        this.btnClearDoc.setDisabled(true);
+        this.btnClearDoc.setVisible(false);
     }
     
     public void onOpen$bbDocumentType(){
-        if(bbDocumentType.isOpen() 
-                && Validator.isNull(icDocumentType.getSrc())) {
-            icDocumentType.setAttribute("bandbox", bbDocumentType);
-            icDocumentType.setAttribute("btnclear", btnClearDoc);
+        if(this.bbDocumentType.isOpen() 
+                && Validator.isNull(this.icDocumentType.getSrc())) {
+            this.icDocumentType.setAttribute("bandbox", this.bbDocumentType);
+            this.icDocumentType.setAttribute("btnclear", this.btnClearDoc);
             
-            icDocumentType.setSrc(Constants.TREE_DOCUMENT_TYPE_PAGE);
+            this.icDocumentType.setSrc(Constants.TREE_DOCUMENT_TYPE_PAGE);
         }
     }
     //Bandbox documentType
@@ -388,11 +389,11 @@ public class AddEditDocumentController extends BasicController<Window>
     private transient DocumentService documentService;
 
     public DocumentService getDocumentService() {
-        if (documentService == null) {
-            documentService = (DocumentService) SpringUtil.getBean("documentService");
-            setDocumentService(documentService);
+        if (this.documentService == null) {
+            this.documentService = (DocumentService) SpringUtil.getBean("documentService");
+            setDocumentService(this.documentService);
         }
-        return documentService;
+        return this.documentService;
     }
 
     public void setDocumentService(DocumentService documentService) {
@@ -400,11 +401,11 @@ public class AddEditDocumentController extends BasicController<Window>
     }
 
     public DocumentTypeService getDocumentTypeService() {
-        if (documentTypeService == null) {
-            documentTypeService = (DocumentTypeService) SpringUtil.getBean("documentTypeService");
-            setDocumentTypeService(documentTypeService);
+        if (this.documentTypeService == null) {
+            this.documentTypeService = (DocumentTypeService) SpringUtil.getBean("documentTypeService");
+            setDocumentTypeService(this.documentTypeService);
         }
-        return documentTypeService;
+        return this.documentTypeService;
     }
 
     public void setDocumentTypeService(DocumentTypeService documentTypeService) {
