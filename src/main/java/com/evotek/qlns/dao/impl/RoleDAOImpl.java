@@ -7,18 +7,18 @@ package com.evotek.qlns.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
 
 import com.evotek.qlns.dao.RoleDAO;
 import com.evotek.qlns.model.Role;
-import com.evotek.qlns.util.LikeCriterionMaker;
+import com.evotek.qlns.util.CharPool;
 import com.evotek.qlns.util.QueryUtil;
 import com.evotek.qlns.util.Validator;
 import com.evotek.qlns.util.key.Values;
@@ -29,242 +29,255 @@ import com.evotek.qlns.util.key.Values;
  */
 public class RoleDAOImpl extends AbstractDAO<Role> implements RoleDAO {
 
-    private static final Logger _log = LogManager.getLogger(RoleDAOImpl.class);
+	private static final Logger _log = LogManager.getLogger(RoleDAOImpl.class);
 
-    @Override
+	@Override
 	public Role getNewRole() {
-        return new Role();
-    }
+		return new Role();
+	}
 
-    @Override
+	@Override
 	public Role getRoleById(Long roleId) throws Exception {
-        Role role = null;
+		Role role = null;
 
-        try {
-            role = get(Role.class, roleId);
+		try {
+			role = findById(Role.class, roleId);
 
-            if (Validator.isNull(role)
-                    || !QueryUtil.STATUS_ACTIVE.equals(role.getStatus())) {
-                return null;
-            }
-        } catch (Exception e) {
-            _log.error(e.getMessage(), e);
-        }
+			if (Validator.isNull(role) || !QueryUtil.STATUS_ACTIVE.equals(role.getStatus())) {
+				return null;
+			}
+		} catch (Exception e) {
+			_log.error(e.getMessage(), e);
+		}
 
-        return role;
-    }
+		return role;
+	}
 
-    @Override
+	@Override
 	public List<Role> getRoleByRN(String roleName) throws Exception {
-        List<Role> roles = new ArrayList<Role>();
+		List<Role> roles = new ArrayList<Role>();
 
-        try {
-            Session session = currentSession();
+		try {
+			Session session = getCurrentSession();
 
-            Criteria cri = session.createCriteria(Role.class);
+			CriteriaBuilder builder = session.getCriteriaBuilder();
 
-            if (Validator.isNotNull(roleName)) {
-                cri.add(LikeCriterionMaker.ilike("roleName", roleName,
-                        MatchMode.ANYWHERE));
-            }
+			CriteriaQuery<Role> criteria = builder.createQuery(Role.class);
 
-            cri.add(Restrictions.ne("status", QueryUtil.STATUS_DEACTIVE));
+			Root<Role> root = criteria.from(Role.class);
 
-            cri.addOrder(Order.asc("roleName"));
+			List<Predicate> predicates = new ArrayList<Predicate>();
 
-            roles = cri.list();
-        } catch (Exception e) {
-            _log.error(e.getMessage(), e);
-        }
+			if (Validator.isNotNull(roleName)) {
+				predicates.add(builder.like(builder.lower(root.get("roleName")),
+						QueryUtil.getFullStringParam(roleName, true), CharPool.EXCLAMATION));
+			}
 
-        return roles;
-    }
+			predicates.add(builder.notEqual(root.get("status"), QueryUtil.STATUS_DEACTIVE));
 
-    @Override
+			criteria.select(root).where(predicates.toArray(new Predicate[predicates.size()]));
+
+			criteria.orderBy(builder.asc(builder.lower(root.get("roleName"))));
+
+			roles = session.createQuery(criteria).getResultList();
+		} catch (Exception e) {
+			_log.error(e.getMessage(), e);
+		}
+
+		return roles;
+	}
+
+	@Override
 	public List<Role> getRoleByRN(String roleName, Long roleId) throws Exception {
-        List<Role> roles = new ArrayList<Role>();
+		List<Role> roles = new ArrayList<Role>();
 
-        try {
-            Session session = currentSession();
+		try {
+			Session session = getCurrentSession();
 
-            Criteria cri = session.createCriteria(Role.class);
+			CriteriaBuilder builder = session.getCriteriaBuilder();
 
-            cri.add(Restrictions.eq("roleName", roleName));
+			CriteriaQuery<Role> criteria = builder.createQuery(Role.class);
 
-            if(Validator.isNotNull(roleId)){
-                cri.add(Restrictions.ne("roleId", roleId));
-            }
+			Root<Role> root = criteria.from(Role.class);
 
-            roles = cri.list();
-        } catch (Exception e) {
-            _log.error(e.getMessage(), e);
-        }
+			List<Predicate> predicates = new ArrayList<Predicate>();
 
-        return roles;
-    }
+			predicates.add(builder.equal(root.get("roleName"), roleName));
 
-    @Override
+			if (Validator.isNotNull(roleId)) {
+				predicates.add(builder.notEqual(root.get("roleId"), roleId));
+			}
+
+			criteria.select(root).where(predicates.toArray(new Predicate[predicates.size()]));
+
+			criteria.orderBy(builder.asc(builder.lower(root.get("roleName"))));
+
+			roles = session.createQuery(criteria).getResultList();
+		} catch (Exception e) {
+			_log.error(e.getMessage(), e);
+		}
+
+		return roles;
+	}
+
+	@Override
 	public int getCountAllRoles() throws Exception {
-        int count = 0;
+		int result = 0;
 
-        try {
-            Session session = currentSession();
+		try {
+			Session session = getCurrentSession();
 
-            Criteria cri = session.createCriteria(Role.class);
+			CriteriaBuilder builder = session.getCriteriaBuilder();
 
-            cri.add(Restrictions.ne("status", QueryUtil.STATUS_DEACTIVE));
+			CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
 
-            cri.setProjection(Projections.rowCount());
+			Root<Role> root = criteria.from(Role.class);
 
-            count = (Integer) cri.uniqueResult();
-        } catch (Exception e) {
-            _log.error(e.getMessage(), e);
-        }
+			criteria.select(builder.count(root)).where(builder.notEqual(root.get("status"), QueryUtil.STATUS_DEACTIVE));
 
-        return count;
-    }
+			Long count = (Long) session.createQuery(criteria).uniqueResult();
 
-//    public List<String> getRolesNameByUser(User user) throws Exception {
-//        List<String> roleNames = new ArrayList<String>();
-//
-//        try {
-//            Session session = currentSession();
-//
-//            Criteria cri = session.createCriteria(Role.class);
-//
-//            cri.createAlias("user", "ur");
-//
-//            cri.setFetchMode("ur.roles", FetchMode.JOIN);
-//
-//            cri.setProjection(Projections.property("roleName"));
-//
-//            roleNames = (List<String>) cri.list();
-//        } catch (Exception e) {
-//            _log.error(e.getMessage(), e);
-//        }
-//
-//        return roleNames;
-//    }
-//
-//    public List<String> getRolesNameByUserId(Long userId) {
-//        List<String> roleNames = new ArrayList<String>();
-//
-//        try {
-//            Session session = currentSession();
-//
-//            Criteria cri = session.createCriteria(Role.class);
-//
-//            cri.createAlias("userRoles", "ur");
-//
-//            cri.add(Restrictions.eq("ur.user.userId", userId));
-//
-//            cri.setProjection(Projections.property("roleName"));
-//
-//            roleNames = (List<String>) cri.list();
-//        } catch (Exception e) {
-//            _log.error(e.getMessage(), e);
-//        }
-//
-//        return roleNames;
-//    }
+			if (count != null) {
+				result = count.intValue();
+			}
+		} catch (Exception e) {
+			_log.error(e.getMessage(), e);
+		}
 
-    @Override
+		return result;
+	}
+
+	@Override
 	public List<Role> getRoles(boolean isAdmin) {
-        List<Role> roles = new ArrayList<Role>();
+		List<Role> roles = new ArrayList<Role>();
 
-        try {
-            Session session = currentSession();
+		try {
+			Session session = getCurrentSession();
 
-            Criteria cri = session.createCriteria(Role.class);
+			CriteriaBuilder builder = session.getCriteriaBuilder();
 
-            cri.add(Restrictions.ne("status", QueryUtil.STATUS_DEACTIVE));
+			CriteriaQuery<Role> criteria = builder.createQuery(Role.class);
 
-            if(!isAdmin){
-                cri.add(Restrictions.eq("shareable", Values.SHAREABLE));
-            }
+			Root<Role> root = criteria.from(Role.class);
 
-            cri.addOrder(Order.asc("roleName"));
+			List<Predicate> predicates = new ArrayList<Predicate>();
 
-            roles = cri.list();
-        } catch (Exception e) {
-            _log.error(e.getMessage(), e);
-        }
+			predicates.add(builder.notEqual(root.get("status"), QueryUtil.STATUS_DEACTIVE));
 
-        return roles;
-    }
+			if (!isAdmin) {
+				predicates.add(builder.equal(root.get("shareable"), Values.SHAREABLE));
+			}
 
-    @Override
+			criteria.select(root).where(predicates.toArray(new Predicate[predicates.size()]));
+
+			criteria.orderBy(builder.asc(builder.lower(root.get("roleName"))));
+
+			roles = session.createQuery(criteria).getResultList();
+		} catch (Exception e) {
+			_log.error(e.getMessage(), e);
+		}
+
+		return roles;
+	}
+
+	@Override
 	public List<Role> getRoles(String roleName, Long status) throws Exception {
-        List<Role> results = new ArrayList<Role>();
+		List<Role> roles = new ArrayList<Role>();
 
-        try {
-            Criteria cri = currentSession().createCriteria(Role.class);
+		try {
+			Session session = getCurrentSession();
 
-            if(Validator.isNotNull(roleName)){
-                cri.add(LikeCriterionMaker.ilike("roleName", roleName,
-                        MatchMode.ANYWHERE));
-            }
+			CriteriaBuilder builder = session.getCriteriaBuilder();
 
-            if(Validator.isNotNull(status)){
-                cri.add(Restrictions.eq("status", status));
-            }
+			CriteriaQuery<Role> criteria = builder.createQuery(Role.class);
 
-            cri.addOrder(Order.asc("roleName").ignoreCase());
+			Root<Role> root = criteria.from(Role.class);
 
-            results = cri.list();
-        } catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
-        }
+			List<Predicate> predicates = new ArrayList<Predicate>();
 
-        return results;
-    }
-    
-    //New
-    @Override
-	public List<Role> searchRole(String roleName)
-    {
-        List<Role> roles = new ArrayList<Role>();
-        try {
-            Session session = currentSession();
-            Criteria criteria  = session.createCriteria(Role.class);
-            criteria.add(LikeCriterionMaker.ilike("roleName", roleName, MatchMode.ANYWHERE));
-            roles = criteria.list();
-        } catch (Exception ex) {
-             _log.error(ex.getMessage(), ex);
-        }
-        finally
-        {
-            return roles;
-        }
-    }
+			if (Validator.isNotNull(roleName)) {
+				predicates.add(builder.like(builder.lower(root.get("roleName")),
+						QueryUtil.getFullStringParam(roleName, true), CharPool.EXCLAMATION));
+			}
 
-    @Override
+			if (Validator.isNotNull(status)) {
+				predicates.add(builder.equal(root.get("status"), status));
+
+			}
+
+			criteria.select(root).where(predicates.toArray(new Predicate[predicates.size()]));
+
+			criteria.orderBy(builder.asc(builder.lower(root.get("roleName"))));
+
+			roles = session.createQuery(criteria).getResultList();
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+
+		return roles;
+	}
+
+	// New
+	@Override
+	public List<Role> searchRole(String roleName) {
+		List<Role> roles = new ArrayList<Role>();
+
+		try {
+			Session session = getCurrentSession();
+
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+
+			CriteriaQuery<Role> criteria = builder.createQuery(Role.class);
+
+			Root<Role> root = criteria.from(Role.class);
+
+			criteria.select(root).where(builder.like(builder.lower(root.get("roleName")),
+					QueryUtil.getFullStringParam(roleName, true), CharPool.EXCLAMATION));
+
+			roles = session.createQuery(criteria).getResultList();
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+
+		return roles;
+	}
+
+	@Override
 	public Role getRoleByName(String roleName) throws Exception {
-        try {
-            Session session = currentSession();
+		Role result = null;
 
-            Criteria cri = session.createCriteria(Role.class);
+		try {
+			Session session = getCurrentSession();
 
-            if (Validator.isNotNull(roleName)) {
-                cri.add(LikeCriterionMaker.ilike("roleName", roleName,
-                        MatchMode.ANYWHERE));
-            }
+			CriteriaBuilder builder = session.getCriteriaBuilder();
 
-            cri.add(Restrictions.ne("status", QueryUtil.STATUS_DEACTIVE));
+			CriteriaQuery<Role> criteria = builder.createQuery(Role.class);
 
-            cri.addOrder(Order.asc("roleName"));
+			Root<Role> root = criteria.from(Role.class);
 
-            List<Role> roles = cri.list();
+			List<Predicate> predicates = new ArrayList<Predicate>();
 
-            if(roles.isEmpty()){
-                return null;
-            } else {
-                return roles.get(0);
-            }
-        } catch (Exception e) {
-            _log.error(e.getMessage(), e);
-            return null;
-        }
+			if (Validator.isNotNull(roleName)) {
+				predicates.add(builder.like(builder.lower(root.get("roleName")),
+						QueryUtil.getFullStringParam(roleName, true), CharPool.EXCLAMATION));
+			}
 
-    }
+			predicates.add(builder.notEqual(root.get("status"), QueryUtil.STATUS_DEACTIVE));
+
+			criteria.select(root).where(predicates.toArray(new Predicate[predicates.size()]));
+
+			criteria.orderBy(builder.asc(builder.lower(root.get("roleName"))));
+
+			List<Role> roles = session.createQuery(criteria).getResultList();
+
+			if (!roles.isEmpty()) {
+				result = roles.get(0);
+			}
+		} catch (Exception e) {
+			_log.error(e.getMessage(), e);
+
+		}
+
+		return result;
+	}
 }

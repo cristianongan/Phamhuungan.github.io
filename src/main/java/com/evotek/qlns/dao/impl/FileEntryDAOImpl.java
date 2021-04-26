@@ -8,60 +8,78 @@ package com.evotek.qlns.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Root;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Restrictions;
+import org.hibernate.Session;
 
 import com.evotek.qlns.dao.FileEntryDAO;
+import com.evotek.qlns.model.Document;
 import com.evotek.qlns.model.FileEntry;
+
 /**
  *
  * @author linhlh2
  */
-public class FileEntryDAOImpl extends AbstractDAO<FileEntry>
-        implements FileEntryDAO{
+public class FileEntryDAOImpl extends AbstractDAO<FileEntry> implements FileEntryDAO {
 
-    private static final Logger _log =
-            LogManager.getLogger(FileEntryDAOImpl.class);
+	private static final Logger _log = LogManager.getLogger(FileEntryDAOImpl.class);
 
-    @Override
+	@Override
 	public List<FileEntry> getFileEntryByIds(List<Long> fileIds) {
-        List<FileEntry> results = new ArrayList<FileEntry>();
+		List<FileEntry> results = new ArrayList<FileEntry>();
 
-        try {
-            Criteria cri = currentSession().createCriteria(FileEntry.class);
+		try {
+			Session session = getCurrentSession();
 
-            if (fileIds != null && !fileIds.isEmpty()) {
-                cri.add(Restrictions.in("fileId", fileIds));
+			CriteriaBuilder builder = session.getCriteriaBuilder();
 
-                results = cri.list();
-            }
-        } catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
-        }
+			CriteriaQuery<FileEntry> criteria = builder.createQuery(FileEntry.class);
 
-        return results;
-    }
+			Root<FileEntry> root = criteria.from(FileEntry.class);
 
-    @Override
+			if (fileIds != null && !fileIds.isEmpty()) {
+				criteria.select(root).where(root.get("fileId").in(fileIds));
+
+				results = session.createQuery(criteria).getResultList();
+			}
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+
+		return results;
+	}
+
+	@Override
 	public List<FileEntry> getFileListByDocumentId(Long documentId) {
-         List<FileEntry> results = new ArrayList<FileEntry>();
+		List<FileEntry> results = new ArrayList<FileEntry>();
 
-        try {
-            Criteria cri = currentSession().createCriteria(FileEntry.class);
+		try {
+			Session session = getCurrentSession();
 
-            if (documentId != null) {
-                cri.add(Restrictions.eq("document.documentId", documentId));
+			CriteriaBuilder builder = session.getCriteriaBuilder();
 
-                results = cri.list();
-            }
-        } catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
-        }
+			CriteriaQuery<FileEntry> criteria = builder.createQuery(FileEntry.class);
 
-        return results;
-    }
+			Root<FileEntry> root = criteria.from(FileEntry.class);
 
+			Join<FileEntry, Document> documentJoin = root.join("document", JoinType.INNER);
+
+			if (documentId != null) {
+				criteria.select(root).where(builder.equal(documentJoin.get("documentId"), documentId));
+
+				results = session.createQuery(criteria).getResultList();
+			}
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+
+		return results;
+	}
 
 }

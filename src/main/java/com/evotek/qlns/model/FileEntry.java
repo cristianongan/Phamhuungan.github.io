@@ -19,7 +19,9 @@ import javax.persistence.TemporalType;
 @Table(name = "file_entry")
 public class FileEntry implements Serializable {
 
-    private Long folderId;
+	private static final long serialVersionUID = -7216283817240576540L;
+	
+	private Long folderId;
     private String name;
     private Long userId;
     private String description;

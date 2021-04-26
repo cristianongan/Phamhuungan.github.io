@@ -8,21 +8,21 @@ package com.evotek.qlns.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.Criteria;
-import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
 
 import com.evotek.qlns.dao.RightDAO;
 import com.evotek.qlns.model.Right;
 import com.evotek.qlns.model.RightView;
 import com.evotek.qlns.model.User;
-import com.evotek.qlns.util.LikeCriterionMaker;
+import com.evotek.qlns.util.CharPool;
 import com.evotek.qlns.util.QueryUtil;
 import com.evotek.qlns.util.Validator;
 
@@ -30,359 +30,414 @@ import com.evotek.qlns.util.Validator;
  *
  * @author linhlh2
  */
-public class RightDAOImpl extends AbstractDAO<Right> implements RightDAO{
+public class RightDAOImpl extends AbstractDAO<Right> implements RightDAO {
 
-    @Override
-	public List<Right> getRightsByUser(User user) throws Exception {
-        List<Right> rights = new ArrayList<Right>();
+	private static final Logger _log = LogManager.getLogger(RightDAOImpl.class);
 
-        try {
-            Session session = currentSession();
+	@Override
+	public void deleteByCategoryId(Long categoryId) throws Exception {
+		try {
+			List<Right> rights = getRightByCategoryId(categoryId);
 
-            StringBuilder sb = new StringBuilder();
+			deleteAll(rights);
+		} catch (Exception e) {
+			_log.error(e.getMessage(), e);
+		}
+	}
 
-            sb.append(" SELECT distinct r FROM Right r JOIN r.groupsRights ");
-            sb.append(" AS gr JOIN gr.groups.roleGroups AS rg JOIN ");
-            sb.append(" rg.role.userRoles AS ur JOIN ur.user AS u ");
-            sb.append(" WHERE u.userId = :userId AND r.status = 1");
-
-            Query q = session.createQuery(sb.toString());
-
-            q.setParameter("userId", user.getUserId());
-
-            rights = q.list();
-        } catch (Exception e) {
-            _log.error(e.getMessage(), e);
-        }
-
-        return rights;
-    }
-
-    @Override
-	public List<RightView> getRightViewByUserId(Long userId) throws Exception {
-        List<RightView> rights = new ArrayList<RightView>();
-
-        try {
-            Session session = currentSession();
-
-            Criteria cri = session.createCriteria(RightView.class);
-
-            cri.add(Restrictions.ne("status", QueryUtil.STATUS_DEACTIVE));
-            cri.add(Restrictions.eq("userId", userId));
-
-            cri.addOrder(Order.asc("rightName"));
-
-            rights = cri.list();
-        } catch (Exception e) {
-            _log.error(e.getMessage(), e);
-        }
-
-        return rights;
-    }
-
-    @Override
-	public Right getNewRight() {
-        return new Right();
-    }
-
-    @Override
+	@Override
 	public List<Right> getAllRights() throws Exception {
-        List<Right> rights = new ArrayList<Right>();
+		List<Right> rights = new ArrayList<Right>();
 
-        try {
-            Session session = currentSession();
+		try {
+			Session session = getCurrentSession();
 
-            Criteria cri = session.createCriteria(Right.class);
+			CriteriaBuilder builder = session.getCriteriaBuilder();
 
-            cri.add(Restrictions.ne("status", QueryUtil.STATUS_DEACTIVE));
-            
-            cri.addOrder(Order.asc("rightName"));
+			CriteriaQuery<Right> criteria = builder.createQuery(Right.class);
 
-            rights = cri.list();
-        } catch (Exception e) {
-            _log.error(e.getMessage(), e);
-        }
+			Root<Right> root = criteria.from(Right.class);
 
-        return rights;
-    }
+			criteria.select(root).where(builder.notEqual(root.get("status"), QueryUtil.STATUS_DEACTIVE));
 
-    @Override
-	public List<Right> getAllRights(Long type) throws Exception {
-        List<Right> rights = new ArrayList<Right>();
+			criteria.orderBy(builder.asc(root.get("rightName")));
 
-        try {
-            Session session = currentSession();
+			rights = session.createQuery(criteria).getResultList();
+		} catch (Exception e) {
+			_log.error(e.getMessage(), e);
+		}
 
-            Criteria cri = session.createCriteria(Right.class);
+		return rights;
+	}
 
-            if(!type.equals(QueryUtil.ALL)){
-                cri.add(Restrictions.eq("type", type));
-            }
-
-            cri.addOrder(Order.asc("rightName"));
-
-            cri.add(Restrictions.ne("status", QueryUtil.STATUS_DEACTIVE));
-
-            rights = cri.list();
-        } catch (Exception e) {
-            _log.error(e.getMessage(), e);
-        }
-
-        return rights;
-    }
-
-    @Override
+	@Override
 	public List<Right> getAllRights(List<Long> types) throws Exception {
-        List<Right> rights = new ArrayList<Right>();
+		List<Right> rights = new ArrayList<Right>();
 
-        try {
+		try {
 
-            if(types.contains(QueryUtil.ALL)){
-                return getAllRights(QueryUtil.ALL);
-            }
+			if (types.contains(QueryUtil.ALL)) {
+				return getAllRights(QueryUtil.ALL);
+			}
 
-            if(types.size()==1){
-                return getAllRights(types.get(QueryUtil.FIRST_INDEX));
-            }
+			if (types.size() == 1) {
+				return getAllRights(types.get(QueryUtil.FIRST_INDEX));
+			}
 
-            Session session = currentSession();
+			Session session = getCurrentSession();
 
-            Criteria cri = session.createCriteria(Right.class);
+			CriteriaBuilder builder = session.getCriteriaBuilder();
 
-            cri.add(Restrictions.in("type", types));
-            cri.add(Restrictions.ne("status", QueryUtil.STATUS_DEACTIVE));
-            
-            cri.addOrder(Order.asc("rightName"));
+			CriteriaQuery<Right> criteria = builder.createQuery(Right.class);
 
-            rights = cri.list();
-        } catch (Exception e) {
-            _log.error(e.getMessage(), e);
-        }
+			Root<Right> root = criteria.from(Right.class);
 
-        return rights;
-    }
+			criteria.select(root).where(root.get("type").in(types),
+					builder.notEqual(root.get("status"), QueryUtil.STATUS_DEACTIVE));
 
-    @Override
-	public Right getRightById(Long rightId) throws Exception {
-        Right right = null;
+			criteria.orderBy(builder.asc(root.get("rightName")));
 
-        try {
-            right = get(Right.class, rightId);
+			rights = session.createQuery(criteria).getResultList();
+		} catch (Exception e) {
+			_log.error(e.getMessage(), e);
+		}
 
-            if(Validator.isNull(right) ||
-                    !QueryUtil.STATUS_ACTIVE.equals(right.getStatus())){
-                return null;
-            }
-        } catch (Exception e) {
-            _log.error(e.getMessage(), e);
-        }
+		return rights;
+	}
 
-        return right;
-    }
+	@Override
+	public List<Right> getAllRights(Long type) throws Exception {
+		List<Right> rights = new ArrayList<Right>();
 
-//    public List<Right> getRightsByGroupsRight(GroupsRight groupsRight) throws Exception {
-//        List<Right> rights = new ArrayList<Right>();
-//
-//        try {
-//            Session session = currentSession();
-//
-//            Criteria cri = session.createCriteria(Right.class);
-//
-//            cri.createAlias("groupsRights", "gr");
-//
-//            cri.add(Restrictions.eq("gr.groupsRightId",
-//                    groupsRight.getGroupsRightId()));
-//            cri.add(Restrictions.ne("status", QueryUtil.STATUS_DEACTIVE));
-//
-//            cri.addOrder(Order.asc("rightName"));
-//
-//            rights = (List<Right>) cri.list();
-//        } catch (Exception e) {
-//            _log.error(e.getMessage(), e);
-//        }
-//
-//        return rights;
-//    }
+		try {
+			Session session = getCurrentSession();
 
-    @Override
-	public List<Right> getRightsByRN(String rightName) throws Exception {
-        List<Right> rights = new ArrayList<Right>();
+			CriteriaBuilder builder = session.getCriteriaBuilder();
 
-        try {
-            Session session = currentSession();
+			CriteriaQuery<Right> criteria = builder.createQuery(Right.class);
 
-            Criteria cri = session.createCriteria(Right.class);
+			Root<Right> root = criteria.from(Right.class);
 
-            if(Validator.isNotNull(rightName)){
-                cri.add(LikeCriterionMaker.ilike("rightName", rightName,
-                        MatchMode.ANYWHERE));
-            }
+			List<Predicate> predicates = new ArrayList<Predicate>();
 
-            cri.add(Restrictions.ne("status", QueryUtil.STATUS_DEACTIVE));
+			if (!type.equals(QueryUtil.ALL)) {
+				predicates.add(builder.equal(root.get("type"), type));
+			}
 
-            cri.addOrder(Order.asc("rightName"));
-            
-            rights = cri.list();
-        } catch (Exception e) {
-            _log.error(e.getMessage(), e);
-        }
+			predicates.add(builder.notEqual(root.get("status"), QueryUtil.STATUS_DEACTIVE));
 
-        return rights;
-    }
+			criteria.select(root).where(predicates.toArray(new Predicate[predicates.size()]));
 
-    @Override
-	public List<Right> getRightsByRN_T(String rightName, Long type) throws Exception {
-        List<Right> rights = new ArrayList<Right>();
+			criteria.orderBy(builder.asc(root.get("rightName")));
 
-        try {
-            if(type.equals(QueryUtil.ALL)){
-                return getRightsByRN(rightName);
-            }
+			rights = session.createQuery(criteria).getResultList();
+		} catch (Exception e) {
+			_log.error(e.getMessage(), e);
+		}
 
-            Session session = currentSession();
+		return rights;
+	}
 
-            Criteria cri = session.createCriteria(Right.class);
-
-            if(Validator.isNotNull(rightName)){
-                cri.add(LikeCriterionMaker.ilike("rightName", rightName,
-                        MatchMode.ANYWHERE));
-            }
-
-            cri.add(Restrictions.eq("type", type));
-            cri.add(Restrictions.ne("status", QueryUtil.STATUS_DEACTIVE));
-
-            cri.addOrder(Order.asc("rightName"));
-            
-            rights = cri.list();
-        } catch (Exception e) {
-            _log.error(e.getMessage(), e);
-        }
-
-        return rights;
-    }
-
-    @Override
-	public List<Right> getRightsByRN_T(String rightName, List<Long> types) throws Exception {
-        List<Right> rights = new ArrayList<Right>();
-
-        try {
-            if(types.contains(QueryUtil.ALL)){
-                return getRightsByRN(rightName);
-            }
-
-            if(types.size() == 1){
-                return getRightsByRN_T(rightName, types.get(0));
-            }
-
-            Session session = currentSession();
-
-            Criteria cri = session.createCriteria(Right.class);
-
-            if(Validator.isNotNull(rightName)){
-                cri.add(LikeCriterionMaker.ilike("rightName", rightName,
-                        MatchMode.ANYWHERE));
-            }
-
-            cri.add(Restrictions.in("type", types));
-            cri.add(Restrictions.ne("status", QueryUtil.STATUS_DEACTIVE));
-
-            cri.addOrder(Order.asc("rightName"));
-            
-            rights = cri.list();
-        } catch (Exception e) {
-            _log.error(e.getMessage(), e);
-        }
-
-        return rights;
-    }
-
-    @Override
+	@Override
 	public int getCountAllRights() throws Exception {
-        int count = 0;
+		int result = 0;
 
-        try {
-            Session session = currentSession();
+		try {
+			Session session = getCurrentSession();
 
-            Criteria cri = session.createCriteria(Right.class);
+			CriteriaBuilder builder = session.getCriteriaBuilder();
 
-            cri.add(Restrictions.ne("status", QueryUtil.STATUS_DEACTIVE));
+			CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
 
-            cri.setProjection(Projections.rowCount());
+			Root<Right> root = criteria.from(Right.class);
 
-            count = (Integer) cri.uniqueResult();
-        } catch (Exception e) {
-            _log.error(e.getMessage(), e);
-        }
+			criteria.select(builder.count(root)).where(builder.notEqual(root.get("status"), QueryUtil.STATUS_DEACTIVE));
 
-        return count;
-    }
+			Long count = (Long) session.createQuery(criteria).uniqueResult();
 
-    @Override
-	public List<Right> getRightByCategoryId(Long categoryId) throws Exception{
-        List<Right> rights = new ArrayList<Right>();
+			if (count != null) {
+				result = count.intValue();
+			}
+		} catch (Exception e) {
+			_log.error(e.getMessage(), e);
+		}
 
-        try {
-            Criteria cri = currentSession().createCriteria(Right.class);
+		return result;
+	}
 
-            cri.add(Restrictions.eq("categoryId", categoryId));
+	@Override
+	public Right getNewRight() {
+		return new Right();
+	}
 
-            rights = cri.list();
-        } catch (Exception e) {
-            _log.error(e.getMessage(), e);
-        }
+	@Override
+	public List<Right> getRightByCategoryId(Long categoryId) throws Exception {
+		List<Right> rights = new ArrayList<Right>();
 
-        return rights;
-    }
+		try {
+			Session session = getCurrentSession();
 
-    @Override
-	public void deleteByCategoryId(Long categoryId) throws Exception{
-        try {
-            List<Right> rights = getRightByCategoryId(categoryId);
+			CriteriaBuilder builder = session.getCriteriaBuilder();
 
-            deleteAll(rights);
-        } catch (Exception e) {
-            _log.error(e.getMessage(), e);
-        }
-    }
+			CriteriaQuery<Right> criteria = builder.createQuery(Right.class);
 
-    private static final Logger _log = LogManager.getLogger(RightDAOImpl.class);
+			Root<Right> root = criteria.from(Right.class);
 
-    @Override
-	public List<Right> getRightByName(String rightName, Long rightId) throws Exception {
-        List<Right> rights = new ArrayList<Right>();
+			criteria.select(root).where(builder.equal(root.get("categoryId"), categoryId));
 
-        try {
-            Criteria cri = currentSession().createCriteria(Right.class);
+			rights = session.createQuery(criteria).getResultList();
+		} catch (Exception e) {
+			_log.error(e.getMessage(), e);
+		}
 
-            cri.add(Restrictions.eq("rightName", rightName));
+		return rights;
+	}
 
-            if(Validator.isNotNull(rightId)){
-                cri.add(Restrictions.ne("rightId", rightId));
-            }
-
-            rights = cri.list();
-        } catch (Exception e) {
-            _log.error(e.getMessage(), e);
-        }
-
-        return rights;
-    }
-
-    @Override
+	@Override
 	public Right getRightByCI_RN(Long categoryId, String folderName) {
-        Right right = null;
+		Right right = null;
 
-        try {
-            Criteria cri = currentSession().createCriteria(Right.class);
+		try {
+			Session session = getCurrentSession();
 
-            cri.add(Restrictions.eq("categoryId", categoryId));
-            cri.add(Restrictions.eq("rightName", folderName));
+			CriteriaBuilder builder = session.getCriteriaBuilder();
 
-            right = (Right) cri.uniqueResult();
-        } catch (Exception e) {
-            _log.error(e.getMessage(), e);
-        }
+			CriteriaQuery<Right> criteria = builder.createQuery(Right.class);
 
-        return right;
-    }
+			Root<Right> root = criteria.from(Right.class);
+
+			criteria.select(root).where(builder.equal(root.get("categoryId"), categoryId),
+					builder.equal(root.get("rightName"), folderName));
+
+			right = (Right) session.createQuery(criteria).uniqueResult();
+		} catch (Exception e) {
+			_log.error(e.getMessage(), e);
+		}
+
+		return right;
+	}
+
+	@Override
+	public Right getRightById(Long rightId) throws Exception {
+		Right right = null;
+
+		try {
+			right = findById(Right.class, rightId);
+
+			if (Validator.isNull(right) || !QueryUtil.STATUS_ACTIVE.equals(right.getStatus())) {
+				return null;
+			}
+		} catch (Exception e) {
+			_log.error(e.getMessage(), e);
+		}
+
+		return right;
+	}
+
+	@Override
+	public List<Right> getRightByName(String rightName, Long rightId) throws Exception {
+		List<Right> rights = new ArrayList<Right>();
+
+		try {
+			Session session = getCurrentSession();
+
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+
+			CriteriaQuery<Right> criteria = builder.createQuery(Right.class);
+
+			Root<Right> root = criteria.from(Right.class);
+
+			List<Predicate> predicates = new ArrayList<Predicate>();
+
+			predicates.add(builder.equal(root.get("rightName"), rightName));
+
+			if (Validator.isNotNull(rightId)) {
+				predicates.add(builder.notEqual(root.get("rightId"), rightId));
+			}
+
+			criteria.select(root).where(predicates.toArray(new Predicate[predicates.size()]));
+
+			criteria.orderBy(builder.asc(builder.lower(root.get("rightName"))));
+
+			rights = session.createQuery(criteria).getResultList();
+		} catch (Exception e) {
+			_log.error(e.getMessage(), e);
+		}
+
+		return rights;
+	}
+
+	@Override
+	public List<Right> getRightsByRN(String rightName) throws Exception {
+		List<Right> rights = new ArrayList<Right>();
+
+		try {
+			Session session = getCurrentSession();
+
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+
+			CriteriaQuery<Right> criteria = builder.createQuery(Right.class);
+
+			Root<Right> root = criteria.from(Right.class);
+
+			List<Predicate> predicates = new ArrayList<Predicate>();
+
+			if (Validator.isNotNull(rightName)) {
+				predicates.add(builder.like(builder.lower(root.get("rightName")),
+						QueryUtil.getFullStringParam(rightName, true), CharPool.EXCLAMATION));
+
+			}
+
+			predicates.add(builder.notEqual(root.get("status"), QueryUtil.STATUS_DEACTIVE));
+
+			criteria.select(root).where(predicates.toArray(new Predicate[predicates.size()]));
+
+			criteria.orderBy(builder.asc(builder.lower(root.get("rightName"))));
+
+			rights = session.createQuery(criteria).getResultList();
+		} catch (Exception e) {
+			_log.error(e.getMessage(), e);
+		}
+
+		return rights;
+	}
+
+	@Override
+	public List<Right> getRightsByRN_T(String rightName, List<Long> types) throws Exception {
+		List<Right> rights = new ArrayList<Right>();
+
+		try {
+			if (types.contains(QueryUtil.ALL)) {
+				return getRightsByRN(rightName);
+			}
+
+			if (types.size() == 1) {
+				return getRightsByRN_T(rightName, types.get(0));
+			}
+
+			Session session = getCurrentSession();
+
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+
+			CriteriaQuery<Right> criteria = builder.createQuery(Right.class);
+
+			Root<Right> root = criteria.from(Right.class);
+
+			List<Predicate> predicates = new ArrayList<Predicate>();
+
+			if (Validator.isNotNull(rightName)) {
+				predicates.add(builder.like(builder.lower(root.get("rightName")),
+						QueryUtil.getFullStringParam(rightName, true), CharPool.EXCLAMATION));
+
+			}
+
+			predicates.add(root.get("type").in(types));
+
+			predicates.add(builder.notEqual(root.get("status"), QueryUtil.STATUS_DEACTIVE));
+
+			criteria.select(root).where(predicates.toArray(new Predicate[predicates.size()]));
+
+			criteria.orderBy(builder.asc(builder.lower(root.get("rightName"))));
+
+			rights = session.createQuery(criteria).getResultList();
+		} catch (Exception e) {
+			_log.error(e.getMessage(), e);
+		}
+
+		return rights;
+	}
+
+	@Override
+	public List<Right> getRightsByRN_T(String rightName, Long type) throws Exception {
+		List<Right> rights = new ArrayList<Right>();
+
+		try {
+			if (type.equals(QueryUtil.ALL)) {
+				return getRightsByRN(rightName);
+			}
+
+			Session session = getCurrentSession();
+
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+
+			CriteriaQuery<Right> criteria = builder.createQuery(Right.class);
+
+			Root<Right> root = criteria.from(Right.class);
+
+			List<Predicate> predicates = new ArrayList<Predicate>();
+
+			if (Validator.isNotNull(rightName)) {
+				predicates.add(builder.like(builder.lower(root.get("rightName")),
+						QueryUtil.getFullStringParam(rightName, true), CharPool.EXCLAMATION));
+
+			}
+
+			predicates.add(builder.equal(root.get("type"), type));
+
+			predicates.add(builder.notEqual(root.get("status"), QueryUtil.STATUS_DEACTIVE));
+
+			criteria.select(root).where(predicates.toArray(new Predicate[predicates.size()]));
+
+			criteria.orderBy(builder.asc(builder.lower(root.get("rightName"))));
+
+			rights = session.createQuery(criteria).getResultList();
+		} catch (Exception e) {
+			_log.error(e.getMessage(), e);
+		}
+
+		return rights;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Right> getRightsByUser(User user) throws Exception {
+		List<Right> rights = new ArrayList<Right>();
+
+		try {
+			Session session = getCurrentSession();
+
+			StringBuilder sb = new StringBuilder();
+
+			sb.append(" SELECT distinct r FROM Right r JOIN r.groupsRights ");
+			sb.append(" AS gr JOIN gr.groups.roleGroups AS rg JOIN ");
+			sb.append(" rg.role.userRoles AS ur JOIN ur.user AS u ");
+			sb.append(" WHERE u.userId = :userId AND r.status = 1");
+
+			Query q = session.createQuery(sb.toString());
+
+			q.setParameter("userId", user.getUserId());
+
+			rights = (List<Right>) q.getResultList();
+		} catch (Exception e) {
+			_log.error(e.getMessage(), e);
+		}
+
+		return rights;
+	}
+
+	@Override
+	public List<RightView> getRightViewByUserId(Long userId) throws Exception {
+		List<RightView> rights = new ArrayList<RightView>();
+
+		try {
+			Session session = getCurrentSession();
+
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+
+			CriteriaQuery<RightView> criteria = builder.createQuery(RightView.class);
+
+			Root<RightView> root = criteria.from(RightView.class);
+
+			criteria.select(root).where(builder.notEqual(root.get("status"), QueryUtil.STATUS_DEACTIVE),
+					builder.equal(root.get("userId"), userId));
+
+			criteria.orderBy(builder.asc(builder.lower(root.get("rightName"))));
+
+			rights = session.createQuery(criteria).getResultList();
+		} catch (Exception e) {
+			_log.error(e.getMessage(), e);
+		}
+
+		return rights;
+	}
 }

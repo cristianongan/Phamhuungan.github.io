@@ -14,7 +14,9 @@ import javax.persistence.TemporalType;
 @Table(name = "right_view")
 public class RightView implements Serializable {
 
-    private Long categoryId;
+	private static final long serialVersionUID = 2314895873576489861L;
+	
+	private Long categoryId;
     private Long rightType;
     private Long userId;
     private String description;

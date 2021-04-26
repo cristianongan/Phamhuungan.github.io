@@ -8,9 +8,14 @@ package com.evotek.qlns.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Criteria;
+import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
@@ -22,30 +27,36 @@ import com.evotek.qlns.util.Validator;
  *
  * @author linhlh2
  */
-public class SalaryLandmarkDAOImpl extends AbstractDAO<SalaryLandmark>
-        implements SalaryLandmarkDAO {
+public class SalaryLandmarkDAOImpl extends AbstractDAO<SalaryLandmark> implements SalaryLandmarkDAO {
 
-    private static final Logger _log = LogManager.getLogger(SalaryLandmarkDAOImpl.class);
+	private static final Logger _log = LogManager.getLogger(SalaryLandmarkDAOImpl.class);
 
-    @Override
+	@Override
 	public List<SalaryLandmark> getSalaryLandmarkByStaffId(Long staffId) {
-        List<SalaryLandmark> results = new ArrayList<SalaryLandmark>();
+		List<SalaryLandmark> results = new ArrayList<SalaryLandmark>();
 
-        try {
-            Criteria cri = currentSession().createCriteria(SalaryLandmark.class);
+		try {
+			Session session = getCurrentSession();
 
-            if (Validator.isNotNull(staffId)) {
-                cri.add(Restrictions.eq("staffId", staffId));
-            }
+			CriteriaBuilder builder = session.getCriteriaBuilder();
 
-            cri.addOrder(Order.desc("fromDate"));
-            cri.addOrder(Order.desc("toDate"));
-            
-            results = cri.list();
-        } catch (Exception e) {
-            _log.error(e.getMessage(), e);
-        }
+			CriteriaQuery<SalaryLandmark> criteria = builder.createQuery(SalaryLandmark.class);
 
-        return results;
-    }
+			Root<SalaryLandmark> root = criteria.from(SalaryLandmark.class);
+
+			criteria.select(root);
+
+			if (Validator.isNotNull(staffId)) {
+				criteria.where(builder.equal(root.get("staffId"), staffId));
+			}
+
+			criteria.orderBy(builder.desc(root.get("fromDate")), builder.desc(root.get("toDate")));
+
+			results = session.createQuery(criteria).getResultList();
+		} catch (Exception e) {
+			_log.error(e.getMessage(), e);
+		}
+
+		return results;
+	}
 }

@@ -26,5 +26,7 @@ public interface DepartmentDAO {
 
     public Department get(Long deptId);
     
+    public Long getNextOrdinalSql(Long parentId);
+    
     public Long getNextOrdinal(Long parentId);
 }
