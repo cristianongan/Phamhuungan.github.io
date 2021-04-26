@@ -11,29 +11,23 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.Criteria;
-import org.hibernate.Hibernate;
+
 import org.hibernate.Session;
-import org.hibernate.criterion.CriteriaSpecification;
-import org.hibernate.criterion.Disjunction;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
-import org.hibernate.type.IntegerType;
-import org.hibernate.type.LongType;
-import org.hibernate.type.Type;
+import org.hibernate.query.Query;
 
 import com.evotek.qlns.dao.StaffDAO;
 import com.evotek.qlns.model.ContractType;
 import com.evotek.qlns.model.Department;
 import com.evotek.qlns.model.Job;
 import com.evotek.qlns.model.Staff;
+import com.evotek.qlns.util.CharPool;
 import com.evotek.qlns.util.DateUtil;
+import com.evotek.qlns.util.QueryUtil;
 import com.evotek.qlns.util.StaticUtil;
 import com.evotek.qlns.util.StringPool;
 import com.evotek.qlns.util.Validator;
@@ -60,11 +54,9 @@ public class StaffDAOImpl extends AbstractDAO<Staff> implements StaffDAO {
 
 			Root<Staff> root = criteria.from(Staff.class);
 
-			Join<Staff, Department> departmentJoin = root.join("department", JoinType.LEFT);
-
-			Join<Staff, Job> jobJoin = root.join("job", JoinType.LEFT);
-
-			Join<Staff, ContractType> contractTypeJoin = root.join("contractType", JoinType.LEFT);
+			root.fetch("department", JoinType.LEFT);
+			root.fetch("job", JoinType.LEFT);
+			root.fetch("contractType", JoinType.LEFT);
 
 			criteria.select(root).where(builder.equal(root.get("staffId"), staffId));
 
@@ -82,14 +74,41 @@ public class StaffDAOImpl extends AbstractDAO<Staff> implements StaffDAO {
 		List<Staff> results = new ArrayList<Staff>();
 
 		try {
-			Criteria cri = getStaffQuery(keyword, orderByColumn, orderByType);
+			Session session = getCurrentSession();
 
-			if (firstResult >= 0 && maxResult > 0) {
-				cri.setFirstResult(firstResult);
-				cri.setMaxResults(maxResult);
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+
+			CriteriaQuery<Staff> criteria = builder.createQuery(Staff.class);
+
+			Root<Staff> root = criteria.from(Staff.class);
+
+			List<Predicate> predicates = getStaffPredicates(builder, root, keyword);
+
+			criteria.select(root);
+
+			if (Validator.isNotNull(predicates)) {
+				criteria.where(builder.or(predicates.toArray(new Predicate[predicates.size()])));
 			}
 
-			results = cri.list();
+			Query<Staff> q = session.createQuery(criteria);
+
+			if (firstResult >= 0 && maxResult > 0) {
+				q.setFirstResult(firstResult);
+				q.setMaxResults(maxResult);
+			}
+
+			if (Validator.isNotNull(orderByColumn)) {
+				if (StringPool.ASC.equalsIgnoreCase(orderByType)) {
+					criteria.orderBy(builder.asc(root.get(orderByColumn)));
+				} else {
+					criteria.orderBy(builder.desc(root.get(orderByColumn)));
+				}
+
+			} else {
+				criteria.orderBy(builder.asc(root.get("staffName")));
+			}
+
+			results = q.getResultList();
 
 		} catch (Exception ex) {
 			_log.error(ex.getMessage(), ex);
@@ -98,16 +117,151 @@ public class StaffDAOImpl extends AbstractDAO<Staff> implements StaffDAO {
 		return results;
 	}
 
+	private List<Predicate> getStaffPredicates(CriteriaBuilder builder, Root<Staff> root, String keyword)
+			throws Exception {
+		List<Predicate> predicates = new ArrayList<>();
+
+		try {
+			Join<Staff, Department> departmentJoin = root.join("department", JoinType.LEFT);
+
+			Join<Staff, Job> jobJoin = root.join("job", JoinType.LEFT);
+
+			Join<Staff, ContractType> contractTypeJoin = root.join("contractType", JoinType.LEFT);
+
+			if (Validator.isNotNull(keyword)) {
+				predicates.add(builder.like(builder.lower(root.get("staffName")),
+						QueryUtil.getFullStringParam(keyword, true), CharPool.EXCLAMATION));
+				predicates.add(builder.like(builder.lower(departmentJoin.get("deptName")),
+						QueryUtil.getFullStringParam(keyword, true), CharPool.EXCLAMATION));
+				predicates.add(builder.like(builder.lower(jobJoin.get("jobTitle")),
+						QueryUtil.getFullStringParam(keyword, true), CharPool.EXCLAMATION));
+				predicates.add(builder.like(builder.lower(root.get("permanentResidence")),
+						QueryUtil.getFullStringParam(keyword, true), CharPool.EXCLAMATION));
+				predicates.add(builder.like(builder.lower(root.get("currentResidence")),
+						QueryUtil.getFullStringParam(keyword, true), CharPool.EXCLAMATION));
+				predicates.add(builder.like(builder.lower(root.get("note")),
+						QueryUtil.getFullStringParam(keyword, true), CharPool.EXCLAMATION));
+				predicates.add(builder.like(builder.lower(contractTypeJoin.get("contractTypeName")),
+						QueryUtil.getFullStringParam(keyword, true), CharPool.EXCLAMATION));
+				predicates.add(builder.like(builder.lower(root.get("contractNumber")),
+						QueryUtil.getFullStringParam(keyword, true), CharPool.EXCLAMATION));
+				predicates.add(builder.like(builder.lower(root.get("taxCode")),
+						QueryUtil.getFullStringParam(keyword, true), CharPool.EXCLAMATION));
+				predicates.add(builder.like(builder.lower(root.get("insuranceBookNumber")),
+						QueryUtil.getFullStringParam(keyword, true), CharPool.EXCLAMATION));
+				predicates.add(builder.like(builder.lower(root.get("paidPlace")),
+						QueryUtil.getFullStringParam(keyword, true), CharPool.EXCLAMATION));
+				predicates.add(builder.like(builder.lower(root.get("levels")),
+						QueryUtil.getFullStringParam(keyword, true), CharPool.EXCLAMATION));
+				predicates.add(builder.like(builder.lower(root.get("majors")),
+						QueryUtil.getFullStringParam(keyword, true), CharPool.EXCLAMATION));
+				predicates.add(builder.like(builder.lower(root.get("college")),
+						QueryUtil.getFullStringParam(keyword, true), CharPool.EXCLAMATION));
+				predicates.add(builder.like(builder.lower(root.get("identityCard")),
+						QueryUtil.getFullStringParam(keyword, true), CharPool.EXCLAMATION));
+				predicates.add(builder.like(builder.lower(root.get("grantPlace")),
+						QueryUtil.getFullStringParam(keyword, true), CharPool.EXCLAMATION));
+				predicates.add(builder.like(builder.lower(root.get("mobile")),
+						QueryUtil.getFullStringParam(keyword, true), CharPool.EXCLAMATION));
+				predicates.add(builder.like(builder.lower(root.get("email")),
+						QueryUtil.getFullStringParam(keyword, true), CharPool.EXCLAMATION));
+			}
+
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+
+		return predicates;
+	}
+
+	private List<Predicate> getStaffPredicates(CriteriaBuilder builder, Root<Staff> root, String staffName,
+			Long yearOfBirth, Department dept, String email, Job job, String phone, String orderByColumn,
+			String orderByType) throws Exception {
+		List<Predicate> predicates = new ArrayList<>();
+
+		try {
+			Join<Staff, Department> departmentJoin = root.join("department", JoinType.LEFT);
+
+			Join<Staff, Job> jobJoin = root.join("job", JoinType.LEFT);
+
+			Join<Staff, ContractType> contractTypeJoin = root.join("contractType", JoinType.LEFT);
+
+			if (Validator.isNotNull(staffName)) {
+				predicates.add(builder.like(builder.lower(root.get("staffName")),
+						QueryUtil.getFullStringParam(staffName, true), CharPool.EXCLAMATION));
+			}
+
+			if (Validator.isNotNull(yearOfBirth)) {
+				predicates.add(builder.equal(builder.function("year", Long.class, root.get("dateOfBirth")), yearOfBirth));
+			}
+
+			if (Validator.isNotNull(dept) && Validator.isNotNull(dept.getDeptId())) {
+				predicates.add(builder.equal(departmentJoin.get("deptId"), dept.getDeptId()));
+			}
+
+			if (Validator.isNotNull(email)) {
+				predicates.add(builder.like(builder.lower(root.get("email")),
+						QueryUtil.getFullStringParam(email, true), CharPool.EXCLAMATION));
+			}
+
+			if (Validator.isNotNull(job) && Validator.isNotNull(job.getJobId())) {
+				predicates.add(builder.equal(jobJoin.get("jobId"), job.getJobId()));
+			}
+
+			if (Validator.isNotNull(phone)) {
+				Disjunction disjunction = Restrictions.disjunction();
+
+				disjunction.add(LikeCriterionMaker.ilike("mobile", phone, MatchMode.ANYWHERE));
+				disjunction.add(LikeCriterionMaker.ilike("homePhone", phone, MatchMode.ANYWHERE));
+
+				cri.add(disjunction);
+			}
+
+			if (Validator.isNotNull(orderByColumn)) {
+				if (StringPool.ASC.equalsIgnoreCase(orderByType)) {
+					cri.addOrder(Order.asc(orderByColumn));
+				} else {
+					cri.addOrder(Order.desc(orderByColumn));
+				}
+
+			} else {
+				cri.addOrder(Order.asc("staffName"));
+			}
+
+			return cri;
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+
+		return predicates;
+	}
+
 	@Override
 	public int getStaffCount(String keyword) {
 		int result = 0;
 
 		try {
-			Criteria cri = getStaffQuery(keyword, null, null);
+			Session session = getCurrentSession();
 
-			cri.setProjection(Projections.rowCount());
+			CriteriaBuilder builder = session.getCriteriaBuilder();
 
-			result = (Integer) cri.uniqueResult();
+			CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
+
+			Root<Staff> root = criteria.from(Staff.class);
+
+			List<Predicate> predicates = getStaffPredicates(builder, root, keyword);
+
+			criteria.select(builder.count(root));
+
+			if (Validator.isNotNull(predicates)) {
+				criteria.where(builder.or(predicates.toArray(new Predicate[predicates.size()])));
+			}
+
+			Long count = (Long) session.createQuery(criteria).uniqueResult();
+
+			if (count != null) {
+				result = count.intValue();
+			}
 		} catch (Exception ex) {
 			_log.error(ex.getMessage(), ex);
 		}
@@ -121,7 +275,8 @@ public class StaffDAOImpl extends AbstractDAO<Staff> implements StaffDAO {
 		List<Staff> results = new ArrayList<Staff>();
 
 		try {
-			Criteria cri = getStaffQuery(staffName, yearOfBirth, dept, email, job, phone, orderByColumn, orderByType);
+			Criteria cri = getStaffPredicates(staffName, yearOfBirth, dept, email, job, phone, orderByColumn,
+					orderByType);
 
 			if (firstResult >= 0 && maxResult > 0) {
 				cri.setFirstResult(firstResult);
@@ -142,7 +297,7 @@ public class StaffDAOImpl extends AbstractDAO<Staff> implements StaffDAO {
 		int result = 0;
 
 		try {
-			Criteria cri = getStaffQuery(staffName, yearOfBirth, dept, email, job, phone, null, null);
+			Criteria cri = getStaffPredicates(staffName, yearOfBirth, dept, email, job, phone, null, null);
 
 			cri.setProjection(Projections.rowCount());
 
@@ -191,115 +346,6 @@ public class StaffDAOImpl extends AbstractDAO<Staff> implements StaffDAO {
 		}
 
 		return result;
-	}
-
-	private Criteria getStaffQuery(String keyword, String orderByColumn, String orderByType) throws Exception {
-		try {
-			Criteria cri = currentSession().createCriteria(Staff.class);
-
-			cri.createAlias("department", "d", CriteriaSpecification.LEFT_JOIN);
-			cri.createAlias("job", "j", CriteriaSpecification.LEFT_JOIN);
-			cri.createAlias("contractType", "ct", CriteriaSpecification.LEFT_JOIN);
-
-			if (Validator.isNotNull(keyword)) {
-				Disjunction disjunction = Restrictions.disjunction();
-
-				disjunction.add(LikeCriterionMaker.ilike("staffName", keyword, MatchMode.ANYWHERE));
-				disjunction.add(LikeCriterionMaker.ilike("d.deptName", keyword, MatchMode.ANYWHERE));
-				disjunction.add(LikeCriterionMaker.ilike("j.jobTitle", keyword, MatchMode.ANYWHERE));
-				disjunction.add(LikeCriterionMaker.ilike("permanentResidence", keyword, MatchMode.ANYWHERE));
-				disjunction.add(LikeCriterionMaker.ilike("currentResidence", keyword, MatchMode.ANYWHERE));
-				disjunction.add(LikeCriterionMaker.ilike("note", keyword, MatchMode.ANYWHERE));
-				disjunction.add(LikeCriterionMaker.ilike("ct.contractTypeName", keyword, MatchMode.ANYWHERE));
-				disjunction.add(LikeCriterionMaker.ilike("contractNumber", keyword, MatchMode.ANYWHERE));
-				disjunction.add(LikeCriterionMaker.ilike("taxCode", keyword, MatchMode.ANYWHERE));
-				disjunction.add(LikeCriterionMaker.ilike("insuranceBookNumber", keyword, MatchMode.ANYWHERE));
-				disjunction.add(LikeCriterionMaker.ilike("paidPlace", keyword, MatchMode.ANYWHERE));
-				disjunction.add(LikeCriterionMaker.ilike("levels", keyword, MatchMode.ANYWHERE));
-				disjunction.add(LikeCriterionMaker.ilike("majors", keyword, MatchMode.ANYWHERE));
-				disjunction.add(LikeCriterionMaker.ilike("college", keyword, MatchMode.ANYWHERE));
-				disjunction.add(LikeCriterionMaker.ilike("identityCard", keyword, MatchMode.ANYWHERE));
-				disjunction.add(LikeCriterionMaker.ilike("grantPlace", keyword, MatchMode.ANYWHERE));
-				disjunction.add(LikeCriterionMaker.ilike("mobile", keyword, MatchMode.ANYWHERE));
-				disjunction.add(LikeCriterionMaker.ilike("email", keyword, MatchMode.ANYWHERE));
-
-				cri.add(disjunction);
-			}
-
-			if (Validator.isNotNull(orderByColumn)) {
-				if (StringPool.ASC.equalsIgnoreCase(orderByType)) {
-					cri.addOrder(Order.asc(orderByColumn));
-				} else {
-					cri.addOrder(Order.desc(orderByColumn));
-				}
-
-			} else {
-				cri.addOrder(Order.asc("staffName"));
-			}
-
-			return cri;
-		} catch (Exception ex) {
-			_log.error(ex.getMessage(), ex);
-
-			throw ex;
-		}
-	}
-
-	private Criteria getStaffQuery(String staffName, Long yearOfBirth, Department dept, String email, Job job,
-			String phone, String orderByColumn, String orderByType) throws Exception {
-		try {
-			Criteria cri = currentSession().createCriteria(Staff.class, "s");
-
-			cri.createAlias("department", "d", CriteriaSpecification.LEFT_JOIN);
-			cri.createAlias("job", "j", CriteriaSpecification.LEFT_JOIN);
-			cri.createAlias("contractType", "ct", CriteriaSpecification.LEFT_JOIN);
-
-			if (Validator.isNotNull(staffName)) {
-				cri.add(LikeCriterionMaker.ilike("staffName", staffName, MatchMode.ANYWHERE));
-			}
-
-			if (Validator.isNotNull(yearOfBirth)) {
-				cri.add(Restrictions.sqlRestriction(" YEAR(date_of_birth) = ? ", yearOfBirth, LongType.INSTANCE));
-			}
-
-			if (Validator.isNotNull(dept) && Validator.isNotNull(dept.getDeptId())) {
-				cri.add(Restrictions.eq("d.deptId", dept.getDeptId()));
-			}
-
-			if (Validator.isNotNull(staffName)) {
-				cri.add(LikeCriterionMaker.ilike("email", email, MatchMode.ANYWHERE));
-			}
-
-			if (Validator.isNotNull(job) && Validator.isNotNull(job.getJobId())) {
-				cri.add(Restrictions.eq("j.jobId", job.getJobId()));
-			}
-
-			if (Validator.isNotNull(phone)) {
-				Disjunction disjunction = Restrictions.disjunction();
-
-				disjunction.add(LikeCriterionMaker.ilike("mobile", phone, MatchMode.ANYWHERE));
-				disjunction.add(LikeCriterionMaker.ilike("homePhone", phone, MatchMode.ANYWHERE));
-
-				cri.add(disjunction);
-			}
-
-			if (Validator.isNotNull(orderByColumn)) {
-				if (StringPool.ASC.equalsIgnoreCase(orderByType)) {
-					cri.addOrder(Order.asc(orderByColumn));
-				} else {
-					cri.addOrder(Order.desc(orderByColumn));
-				}
-
-			} else {
-				cri.addOrder(Order.asc("staffName"));
-			}
-
-			return cri;
-		} catch (Exception ex) {
-			_log.error(ex.getMessage(), ex);
-
-			throw ex;
-		}
 	}
 
 	private Criteria getStaffByIdListQuery(List<Long> idList, String orderByColumn, String orderByType)
