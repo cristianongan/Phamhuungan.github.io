@@ -20,8 +20,6 @@ public interface DocumentTypeService {
     public void saveOrUpdate(DocumentType documentType);
     
     public void saveOrUpdate(DocumentType documentType, boolean flush);
-    
-    public void refresh(DocumentType documentType);
 
     public List<DocumentType> getDocTypeByParentId(Long parentId);
 

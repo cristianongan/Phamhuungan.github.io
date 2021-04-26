@@ -7,14 +7,16 @@ package com.evotek.qlns.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Restrictions;
+import org.hibernate.Session;
 
 import com.evotek.qlns.dao.GroupDAO;
 import com.evotek.qlns.model.Group;
-import com.evotek.qlns.model.User;
 
 /**
  *
@@ -25,28 +27,6 @@ public class GroupDAOImpl extends AbstractDAO<Group> implements GroupDAO {
     private static final Logger _log = LogManager.getLogger(GroupDAOImpl.class);
 
     @Override
-	public List<Group> getGroupByUser(User user) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-	public List<Group> getGroupByCategoryId(Long categoryId) throws Exception{
-        List<Group> groups = new ArrayList<Group>();
-
-        try {
-            Criteria cri = currentSession().createCriteria(Group.class);
-
-            cri.add(Restrictions.eq("categoryId", categoryId));
-
-            groups = cri.list();
-        } catch (Exception e) {
-            _log.error(e.getMessage(), e);
-        }
-
-        return groups;
-    }
-
-    @Override
 	public void deleteByCategoryId(Long categoryId) throws Exception{
         try {
             List<Group> groups = getGroupByCategoryId(categoryId);
@@ -55,5 +35,28 @@ public class GroupDAOImpl extends AbstractDAO<Group> implements GroupDAO {
         } catch (Exception e) {
             _log.error(e.getMessage(), e);
         }
+    }
+
+    @Override
+	public List<Group> getGroupByCategoryId(Long categoryId) throws Exception{
+        List<Group> groups = new ArrayList<Group>();
+
+        try {
+        	Session session = getCurrentSession();
+
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+
+			CriteriaQuery<Group> criteria = builder.createQuery(Group.class);
+			
+			Root<Group> root = criteria.from(Group.class);
+			
+			criteria.select(root).where(builder.equal(root.get("categoryId"), categoryId));
+
+            groups = session.createQuery(criteria).getResultList();
+        } catch (Exception e) {
+            _log.error(e.getMessage(), e);
+        }
+
+        return groups;
     }
 }

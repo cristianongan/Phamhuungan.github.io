@@ -13,10 +13,7 @@ import com.evotek.qlns.model.DocumentType;
  *
  * @author MRHOT
  */
-public interface DocumentTypeDAO {
-
-    public void refresh(DocumentType documentType);
-    
+public interface DocumentTypeDAO {    
     public void saveOrUpdate(DocumentType documentType);
     
     public void saveOrUpdate(DocumentType documentType, boolean flush);

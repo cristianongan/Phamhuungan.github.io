@@ -9,11 +9,13 @@ package com.evotek.qlns.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.criterion.Order;
 
 import com.evotek.qlns.dao.ContractTypeDAO;
 import com.evotek.qlns.model.ContractType;
@@ -30,13 +32,19 @@ public class ContractTypeDAOImpl extends AbstractDAO<ContractType> implements
         List<ContractType> results = new ArrayList<ContractType>();
 
         try {
-            Session session = currentSession();
+            Session session = getCurrentSession();
+            
+            CriteriaBuilder builder = session.getCriteriaBuilder();
 
-            Criteria cri = session.createCriteria(ContractType.class);
+			CriteriaQuery<ContractType> criteria = builder.createQuery(ContractType.class);
 
-            cri.addOrder(Order.asc("contractTypeName"));
+			Root<ContractType> root = criteria.from(ContractType.class);
 
-            results = cri.list();
+			criteria.select(root);
+			
+			criteria.orderBy(builder.asc(root.get("contractTypeName")));
+
+            results = session.createQuery(criteria).getResultList();
 
         } catch (Exception e) {
             _log.error(e.getMessage(), e);

@@ -5,10 +5,13 @@
 
 package com.evotek.qlns.dao.impl;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Order;
+import org.hibernate.Session;
 
 import com.evotek.qlns.dao.FolderEntryDAO;
 import com.evotek.qlns.model.FolderEntry;
@@ -27,13 +30,19 @@ public class FolderEntryDAOImpl extends AbstractDAO<FolderEntry>
         FolderEntry folder = null;
         
         try{
-            Criteria cri = currentSession().createCriteria(FolderEntry.class);
+        	Session session = getCurrentSession();
 
-            cri.addOrder(Order.desc("folderId"));
+			CriteriaBuilder builder = session.getCriteriaBuilder();
 
-            cri.setMaxResults(1);
-
-            folder = (FolderEntry) cri.uniqueResult();
+			CriteriaQuery<FolderEntry> criteria = builder.createQuery(FolderEntry.class);
+			
+			Root<FolderEntry> root = criteria.from(FolderEntry.class);
+			
+			criteria.select(root);
+			
+			criteria.orderBy(builder.desc(root.get("folderId")));
+			
+			folder = (FolderEntry) session.createQuery(criteria).setMaxResults(1).uniqueResult();
         }catch(Exception ex){
             _log.error(ex.getMessage(), ex);
         }

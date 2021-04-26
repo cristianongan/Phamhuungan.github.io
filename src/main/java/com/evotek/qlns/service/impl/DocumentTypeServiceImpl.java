@@ -53,11 +53,6 @@ public class DocumentTypeServiceImpl implements DocumentTypeService {
 	}
 
 	@Override
-	public void refresh(DocumentType documentType) {
-		this.documentTypeDAO.refresh(documentType);
-	}
-
-	@Override
 	public List<DocumentType> getDocTypeByParentId(Long parentId) {
 		return this.documentTypeDAO.getDocTypeByParentId(parentId);
 	}

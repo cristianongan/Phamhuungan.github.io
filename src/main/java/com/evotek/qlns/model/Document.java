@@ -27,7 +27,9 @@ import org.hibernate.annotations.LazyCollectionOption;
 @Table(name = "document")
 public class Document implements Serializable, Comparable<Document> {
 
-    private Long documentId;
+	private static final long serialVersionUID = -1196841363460803909L;
+	
+	private Long documentId;
     private Long userId;
     private String userName;
     private Date createDate;
