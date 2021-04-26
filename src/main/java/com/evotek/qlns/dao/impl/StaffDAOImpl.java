@@ -18,12 +18,6 @@ import org.apache.logging.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
-import org.hibernate.criterion.CriteriaSpecification;
-import org.hibernate.criterion.Disjunction;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
 import org.hibernate.type.IntegerType;
 import org.hibernate.type.LongType;
 import org.hibernate.type.Type;
@@ -60,11 +54,9 @@ public class StaffDAOImpl extends AbstractDAO<Staff> implements StaffDAO {
 
 			Root<Staff> root = criteria.from(Staff.class);
 
-			Join<Staff, Department> departmentJoin = root.join("department", JoinType.LEFT);
-
-			Join<Staff, Job> jobJoin = root.join("job", JoinType.LEFT);
-
-			Join<Staff, ContractType> contractTypeJoin = root.join("contractType", JoinType.LEFT);
+			root.fetch("department", JoinType.LEFT);
+			root.fetch("job", JoinType.LEFT);
+			root.fetch("contractType", JoinType.LEFT);
 
 			criteria.select(root).where(builder.equal(root.get("staffId"), staffId));
 
