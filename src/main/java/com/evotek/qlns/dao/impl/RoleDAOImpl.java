@@ -43,7 +43,7 @@ public class RoleDAOImpl extends AbstractDAO<Role> implements RoleDAO {
 		try {
 			role = findById(Role.class, roleId);
 
-			if (Validator.isNull(role) || !QueryUtil.STATUS_ACTIVE.equals(role.getStatus())) {
+			if (Validator.isNull(role) || !Values.STATUS_ACTIVE.equals(role.getStatus())) {
 				return null;
 			}
 		} catch (Exception e) {
@@ -73,7 +73,7 @@ public class RoleDAOImpl extends AbstractDAO<Role> implements RoleDAO {
 						QueryUtil.getFullStringParam(roleName, true), CharPool.EXCLAMATION));
 			}
 
-			predicates.add(builder.notEqual(root.get("status"), QueryUtil.STATUS_DEACTIVE));
+			predicates.add(builder.notEqual(root.get("status"), Values.STATUS_DEACTIVE));
 
 			criteria.select(root).where(predicates.toArray(new Predicate[predicates.size()]));
 
@@ -133,7 +133,7 @@ public class RoleDAOImpl extends AbstractDAO<Role> implements RoleDAO {
 
 			Root<Role> root = criteria.from(Role.class);
 
-			criteria.select(builder.count(root)).where(builder.notEqual(root.get("status"), QueryUtil.STATUS_DEACTIVE));
+			criteria.select(builder.count(root)).where(builder.notEqual(root.get("status"), Values.STATUS_DEACTIVE));
 
 			Long count = (Long) session.createQuery(criteria).uniqueResult();
 
@@ -162,7 +162,7 @@ public class RoleDAOImpl extends AbstractDAO<Role> implements RoleDAO {
 
 			List<Predicate> predicates = new ArrayList<Predicate>();
 
-			predicates.add(builder.notEqual(root.get("status"), QueryUtil.STATUS_DEACTIVE));
+			predicates.add(builder.notEqual(root.get("status"), Values.STATUS_DEACTIVE));
 
 			if (!isAdmin) {
 				predicates.add(builder.equal(root.get("shareable"), Values.SHAREABLE));
@@ -262,7 +262,7 @@ public class RoleDAOImpl extends AbstractDAO<Role> implements RoleDAO {
 						QueryUtil.getFullStringParam(roleName, true), CharPool.EXCLAMATION));
 			}
 
-			predicates.add(builder.notEqual(root.get("status"), QueryUtil.STATUS_DEACTIVE));
+			predicates.add(builder.notEqual(root.get("status"), Values.STATUS_DEACTIVE));
 
 			criteria.select(root).where(predicates.toArray(new Predicate[predicates.size()]));
 

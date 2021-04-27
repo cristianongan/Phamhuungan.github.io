@@ -25,6 +25,7 @@ import com.evotek.qlns.model.User;
 import com.evotek.qlns.util.CharPool;
 import com.evotek.qlns.util.QueryUtil;
 import com.evotek.qlns.util.Validator;
+import com.evotek.qlns.util.key.Values;
 
 /**
  *
@@ -58,7 +59,7 @@ public class RightDAOImpl extends AbstractDAO<Right> implements RightDAO {
 
 			Root<Right> root = criteria.from(Right.class);
 
-			criteria.select(root).where(builder.notEqual(root.get("status"), QueryUtil.STATUS_DEACTIVE));
+			criteria.select(root).where(builder.notEqual(root.get("status"), Values.STATUS_DEACTIVE));
 
 			criteria.orderBy(builder.asc(root.get("rightName")));
 
@@ -93,7 +94,7 @@ public class RightDAOImpl extends AbstractDAO<Right> implements RightDAO {
 			Root<Right> root = criteria.from(Right.class);
 
 			criteria.select(root).where(root.get("type").in(types),
-					builder.notEqual(root.get("status"), QueryUtil.STATUS_DEACTIVE));
+					builder.notEqual(root.get("status"), Values.STATUS_DEACTIVE));
 
 			criteria.orderBy(builder.asc(root.get("rightName")));
 
@@ -124,7 +125,7 @@ public class RightDAOImpl extends AbstractDAO<Right> implements RightDAO {
 				predicates.add(builder.equal(root.get("type"), type));
 			}
 
-			predicates.add(builder.notEqual(root.get("status"), QueryUtil.STATUS_DEACTIVE));
+			predicates.add(builder.notEqual(root.get("status"), Values.STATUS_DEACTIVE));
 
 			criteria.select(root).where(predicates.toArray(new Predicate[predicates.size()]));
 
@@ -151,7 +152,7 @@ public class RightDAOImpl extends AbstractDAO<Right> implements RightDAO {
 
 			Root<Right> root = criteria.from(Right.class);
 
-			criteria.select(builder.count(root)).where(builder.notEqual(root.get("status"), QueryUtil.STATUS_DEACTIVE));
+			criteria.select(builder.count(root)).where(builder.notEqual(root.get("status"), Values.STATUS_DEACTIVE));
 
 			Long count = (Long) session.createQuery(criteria).uniqueResult();
 
@@ -224,7 +225,7 @@ public class RightDAOImpl extends AbstractDAO<Right> implements RightDAO {
 		try {
 			right = findById(Right.class, rightId);
 
-			if (Validator.isNull(right) || !QueryUtil.STATUS_ACTIVE.equals(right.getStatus())) {
+			if (Validator.isNull(right) || !Values.STATUS_ACTIVE.equals(right.getStatus())) {
 				return null;
 			}
 		} catch (Exception e) {
@@ -288,7 +289,7 @@ public class RightDAOImpl extends AbstractDAO<Right> implements RightDAO {
 
 			}
 
-			predicates.add(builder.notEqual(root.get("status"), QueryUtil.STATUS_DEACTIVE));
+			predicates.add(builder.notEqual(root.get("status"), Values.STATUS_DEACTIVE));
 
 			criteria.select(root).where(predicates.toArray(new Predicate[predicates.size()]));
 
@@ -333,7 +334,7 @@ public class RightDAOImpl extends AbstractDAO<Right> implements RightDAO {
 
 			predicates.add(root.get("type").in(types));
 
-			predicates.add(builder.notEqual(root.get("status"), QueryUtil.STATUS_DEACTIVE));
+			predicates.add(builder.notEqual(root.get("status"), Values.STATUS_DEACTIVE));
 
 			criteria.select(root).where(predicates.toArray(new Predicate[predicates.size()]));
 
@@ -374,7 +375,7 @@ public class RightDAOImpl extends AbstractDAO<Right> implements RightDAO {
 
 			predicates.add(builder.equal(root.get("type"), type));
 
-			predicates.add(builder.notEqual(root.get("status"), QueryUtil.STATUS_DEACTIVE));
+			predicates.add(builder.notEqual(root.get("status"), Values.STATUS_DEACTIVE));
 
 			criteria.select(root).where(predicates.toArray(new Predicate[predicates.size()]));
 
@@ -428,7 +429,7 @@ public class RightDAOImpl extends AbstractDAO<Right> implements RightDAO {
 
 			Root<RightView> root = criteria.from(RightView.class);
 
-			criteria.select(root).where(builder.notEqual(root.get("status"), QueryUtil.STATUS_DEACTIVE),
+			criteria.select(root).where(builder.notEqual(root.get("status"), Values.STATUS_DEACTIVE),
 					builder.equal(root.get("userId"), userId));
 
 			criteria.orderBy(builder.asc(builder.lower(root.get("rightName"))));

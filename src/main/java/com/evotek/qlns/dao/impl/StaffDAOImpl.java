@@ -19,6 +19,7 @@ import org.apache.logging.log4j.Logger;
 
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.hibernate.type.IntegerType;
 
 import com.evotek.qlns.dao.StaffDAO;
 import com.evotek.qlns.model.ContractType;
@@ -40,6 +41,74 @@ import com.evotek.qlns.util.key.Values;
 public class StaffDAOImpl extends AbstractDAO<Staff> implements StaffDAO {
 
 	private static final Logger _log = LogManager.getLogger(StaffDAOImpl.class);
+
+	@Override
+	public void deleteAllStaff(List<Staff> staffs) throws Exception {
+		deleteAll(staffs);
+	}
+
+	@Override
+	public List<Staff> getBirthDayNearlyStaff(int dayOfYear) {
+		List<Staff> results = new ArrayList<Staff>();
+
+		try {
+			int _day = StaticUtil.NOTIFY_BIRTHDAY_BEFORE_DAY;
+
+			Session session = getCurrentSession();
+			
+			StringBuilder sb = new StringBuilder();
+
+			sb.append("select staff.* from staff where date_of_birth is not null and status = 1 and ");
+			sb.append("((MOD(YEAR(date_of_birth),4)=0 or MOD(YEAR(date_of_birth),400)=0) ");
+			sb.append(" and DAYOFYEAR(date_of_birth)>=? and DAYOFYEAR(date_of_birth)<=?) ");
+			sb.append(" or ((MOD(YEAR(date_of_birth),4)>0 and MOD(YEAR(date_of_birth),400)>0) ");
+			sb.append(" and DAYOFYEAR(date_of_birth)>=? and DAYOFYEAR(date_of_birth)<=?) ");
+			
+			Query<Staff> q = session.createNativeQuery(sb.toString(), Staff.class);
+			
+			q.setParameter(0, dayOfYear + _day - 1, IntegerType.INSTANCE);
+			q.setParameter(1, dayOfYear + _day + 1, IntegerType.INSTANCE);
+			q.setParameter(2, dayOfYear, IntegerType.INSTANCE);
+			q.setParameter(3, dayOfYear + _day, IntegerType.INSTANCE);
+			
+			results = q.list();
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+
+		return results;
+	}
+
+	@Override
+	public List<Staff> getContractExpiredStaff() {
+		List<Staff> results = new ArrayList<Staff>();
+
+		try {
+			Session session = getCurrentSession();
+
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+
+			CriteriaQuery<Staff> criteria = builder.createQuery(Staff.class);
+
+			Root<Staff> root = criteria.from(Staff.class);
+
+			List<Predicate> predicates = new ArrayList<>();
+
+			predicates.add(builder.isNotNull(root.get("contractToDate")));
+			predicates.add(builder.lessThanOrEqualTo(root.get("contractToDate"),
+					DateUtil.getDateAfter(StaticUtil.NOTIFY_CONTRACT_EXPIRED_BEFORE_DAY)));
+			predicates.add(builder.equal(root.get("status"), Values.STATUS_ACTIVE));
+
+			criteria.select(root).where(builder.or(predicates.toArray(new Predicate[predicates.size()])));
+
+			results = session.createQuery(criteria).getResultList();
+
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+
+		return results;
+	}
 
 	@Override
 	public Staff getStaff(Long staffId) {
@@ -117,6 +186,206 @@ public class StaffDAOImpl extends AbstractDAO<Staff> implements StaffDAO {
 		return results;
 	}
 
+	@Override
+	public List<Staff> getStaff(String staffName, Long yearOfBirth, Department dept, String email, Job job,
+			String phone, int firstResult, int maxResult, String orderByColumn, String orderByType) {
+		List<Staff> results = new ArrayList<Staff>();
+
+		try {
+			Session session = getCurrentSession();
+
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+
+			CriteriaQuery<Staff> criteria = builder.createQuery(Staff.class);
+
+			Root<Staff> root = criteria.from(Staff.class);
+
+			List<Predicate> predicates = getStaffPredicates(builder, root, staffName, yearOfBirth, dept, email, job,
+					phone);
+
+			criteria.select(root);
+
+			if (Validator.isNotNull(predicates)) {
+				criteria.where(builder.or(predicates.toArray(new Predicate[predicates.size()])));
+			}
+
+			Query<Staff> q = session.createQuery(criteria);
+
+			if (firstResult >= 0 && maxResult > 0) {
+				q.setFirstResult(firstResult);
+				q.setMaxResults(maxResult);
+			}
+
+			if (Validator.isNotNull(orderByColumn)) {
+				if (StringPool.ASC.equalsIgnoreCase(orderByType)) {
+					criteria.orderBy(builder.asc(root.get(orderByColumn)));
+				} else {
+					criteria.orderBy(builder.desc(root.get(orderByColumn)));
+				}
+
+			} else {
+				criteria.orderBy(builder.asc(root.get("staffName")));
+			}
+
+			results = q.getResultList();
+
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+
+		return results;
+	}
+
+	@Override
+	public List<Staff> getStaffByIdList(List<Long> idList, int firstResult, int maxResult, String orderByColumn,
+			String orderByType) {
+		List<Staff> results = new ArrayList<Staff>();
+
+		try {
+
+			Session session = getCurrentSession();
+
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+
+			CriteriaQuery<Staff> criteria = builder.createQuery(Staff.class);
+
+			Root<Staff> root = criteria.from(Staff.class);
+
+			List<Predicate> predicates = getStaffPredicatesByIdList(builder, root, idList);
+
+			criteria.select(root);
+
+			if (Validator.isNotNull(predicates)) {
+				criteria.where(builder.or(predicates.toArray(new Predicate[predicates.size()])));
+			}
+
+			Query<Staff> q = session.createQuery(criteria);
+
+			if (firstResult >= 0 && maxResult > 0) {
+				q.setFirstResult(firstResult);
+				q.setMaxResults(maxResult);
+			}
+
+			if (Validator.isNotNull(orderByColumn)) {
+				if (StringPool.ASC.equalsIgnoreCase(orderByType)) {
+					criteria.orderBy(builder.asc(root.get(orderByColumn)));
+				} else {
+					criteria.orderBy(builder.desc(root.get(orderByColumn)));
+				}
+
+			} else {
+				criteria.orderBy(builder.asc(root.get("staffName")));
+			}
+
+			results = q.getResultList();
+
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+
+		return results;
+	}
+
+	@Override
+	public int getStaffCount(String keyword) {
+		int result = 0;
+
+		try {
+			Session session = getCurrentSession();
+
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+
+			CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
+
+			Root<Staff> root = criteria.from(Staff.class);
+
+			List<Predicate> predicates = getStaffPredicates(builder, root, keyword);
+
+			criteria.select(builder.count(root));
+
+			if (Validator.isNotNull(predicates)) {
+				criteria.where(builder.or(predicates.toArray(new Predicate[predicates.size()])));
+			}
+
+			Long count = (Long) session.createQuery(criteria).uniqueResult();
+
+			if (count != null) {
+				result = count.intValue();
+			}
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+
+		return result;
+	}
+
+	@Override
+	public int getStaffCount(String staffName, Long yearOfBirth, Department dept, String email, Job job, String phone) {
+		int result = 0;
+
+		try {
+			Session session = getCurrentSession();
+
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+
+			CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
+
+			Root<Staff> root = criteria.from(Staff.class);
+
+			List<Predicate> predicates = getStaffPredicates(builder, root, staffName, yearOfBirth, dept, email, job,
+					phone);
+
+			criteria.select(builder.count(root));
+
+			if (Validator.isNotNull(predicates)) {
+				criteria.where(builder.or(predicates.toArray(new Predicate[predicates.size()])));
+			}
+
+			Long count = (Long) session.createQuery(criteria).uniqueResult();
+
+			if (count != null) {
+				result = count.intValue();
+			}
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+
+		return result;
+	}
+
+	@Override
+	public int getStaffCountByIdList(List<Long> idList) {
+		int result = 0;
+
+		try {
+			Session session = getCurrentSession();
+
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+
+			CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
+
+			Root<Staff> root = criteria.from(Staff.class);
+
+			List<Predicate> predicates = getStaffPredicatesByIdList(builder, root, idList);
+
+			criteria.select(builder.count(root));
+
+			if (Validator.isNotNull(predicates)) {
+				criteria.where(builder.or(predicates.toArray(new Predicate[predicates.size()])));
+			}
+
+			Long count = (Long) session.createQuery(criteria).uniqueResult();
+
+			if (count != null) {
+				result = count.intValue();
+			}
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+
+		return result;
+	}
+
 	private List<Predicate> getStaffPredicates(CriteriaBuilder builder, Root<Staff> root, String keyword)
 			throws Exception {
 		List<Predicate> predicates = new ArrayList<>();
@@ -127,6 +396,10 @@ public class StaffDAOImpl extends AbstractDAO<Staff> implements StaffDAO {
 			Join<Staff, Job> jobJoin = root.join("job", JoinType.LEFT);
 
 			Join<Staff, ContractType> contractTypeJoin = root.join("contractType", JoinType.LEFT);
+
+//			root.fetch("department", JoinType.LEFT);
+//			root.fetch("job", JoinType.LEFT);
+//			root.fetch("contractType", JoinType.LEFT);
 
 			if (Validator.isNotNull(keyword)) {
 				predicates.add(builder.like(builder.lower(root.get("staffName")),
@@ -175,8 +448,7 @@ public class StaffDAOImpl extends AbstractDAO<Staff> implements StaffDAO {
 	}
 
 	private List<Predicate> getStaffPredicates(CriteriaBuilder builder, Root<Staff> root, String staffName,
-			Long yearOfBirth, Department dept, String email, Job job, String phone, String orderByColumn,
-			String orderByType) throws Exception {
+			Long yearOfBirth, Department dept, String email, Job job, String phone) throws Exception {
 		List<Predicate> predicates = new ArrayList<>();
 
 		try {
@@ -184,7 +456,8 @@ public class StaffDAOImpl extends AbstractDAO<Staff> implements StaffDAO {
 
 			Join<Staff, Job> jobJoin = root.join("job", JoinType.LEFT);
 
-			Join<Staff, ContractType> contractTypeJoin = root.join("contractType", JoinType.LEFT);
+			// Join<Staff, ContractType> contractTypeJoin = root.join("contractType",
+			// JoinType.LEFT);
 
 			if (Validator.isNotNull(staffName)) {
 				predicates.add(builder.like(builder.lower(root.get("staffName")),
@@ -192,7 +465,8 @@ public class StaffDAOImpl extends AbstractDAO<Staff> implements StaffDAO {
 			}
 
 			if (Validator.isNotNull(yearOfBirth)) {
-				predicates.add(builder.equal(builder.function("year", Long.class, root.get("dateOfBirth")), yearOfBirth));
+				predicates
+						.add(builder.equal(builder.function("year", Long.class, root.get("dateOfBirth")), yearOfBirth));
 			}
 
 			if (Validator.isNotNull(dept) && Validator.isNotNull(dept.getDeptId())) {
@@ -200,8 +474,8 @@ public class StaffDAOImpl extends AbstractDAO<Staff> implements StaffDAO {
 			}
 
 			if (Validator.isNotNull(email)) {
-				predicates.add(builder.like(builder.lower(root.get("email")),
-						QueryUtil.getFullStringParam(email, true), CharPool.EXCLAMATION));
+				predicates.add(builder.like(builder.lower(root.get("email")), QueryUtil.getFullStringParam(email, true),
+						CharPool.EXCLAMATION));
 			}
 
 			if (Validator.isNotNull(job) && Validator.isNotNull(job.getJobId())) {
@@ -209,26 +483,12 @@ public class StaffDAOImpl extends AbstractDAO<Staff> implements StaffDAO {
 			}
 
 			if (Validator.isNotNull(phone)) {
-				Disjunction disjunction = Restrictions.disjunction();
-
-				disjunction.add(LikeCriterionMaker.ilike("mobile", phone, MatchMode.ANYWHERE));
-				disjunction.add(LikeCriterionMaker.ilike("homePhone", phone, MatchMode.ANYWHERE));
-
-				cri.add(disjunction);
+				predicates.add(builder.or(
+						builder.like(builder.lower(root.get("mobile")), QueryUtil.getFullStringParam(phone, true),
+								CharPool.EXCLAMATION),
+						builder.like(builder.lower(root.get("homePhone")), QueryUtil.getFullStringParam(phone, true),
+								CharPool.EXCLAMATION)));
 			}
-
-			if (Validator.isNotNull(orderByColumn)) {
-				if (StringPool.ASC.equalsIgnoreCase(orderByType)) {
-					cri.addOrder(Order.asc(orderByColumn));
-				} else {
-					cri.addOrder(Order.desc(orderByColumn));
-				}
-
-			} else {
-				cri.addOrder(Order.asc("staffName"));
-			}
-
-			return cri;
 		} catch (Exception ex) {
 			_log.error(ex.getMessage(), ex);
 		}
@@ -236,209 +496,21 @@ public class StaffDAOImpl extends AbstractDAO<Staff> implements StaffDAO {
 		return predicates;
 	}
 
-	@Override
-	public int getStaffCount(String keyword) {
-		int result = 0;
-
-		try {
-			Session session = getCurrentSession();
-
-			CriteriaBuilder builder = session.getCriteriaBuilder();
-
-			CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
-
-			Root<Staff> root = criteria.from(Staff.class);
-
-			List<Predicate> predicates = getStaffPredicates(builder, root, keyword);
-
-			criteria.select(builder.count(root));
-
-			if (Validator.isNotNull(predicates)) {
-				criteria.where(builder.or(predicates.toArray(new Predicate[predicates.size()])));
-			}
-
-			Long count = (Long) session.createQuery(criteria).uniqueResult();
-
-			if (count != null) {
-				result = count.intValue();
-			}
-		} catch (Exception ex) {
-			_log.error(ex.getMessage(), ex);
-		}
-
-		return result;
-	}
-
-	@Override
-	public List<Staff> getStaff(String staffName, Long yearOfBirth, Department dept, String email, Job job,
-			String phone, int firstResult, int maxResult, String orderByColumn, String orderByType) {
-		List<Staff> results = new ArrayList<Staff>();
-
-		try {
-			Criteria cri = getStaffPredicates(staffName, yearOfBirth, dept, email, job, phone, orderByColumn,
-					orderByType);
-
-			if (firstResult >= 0 && maxResult > 0) {
-				cri.setFirstResult(firstResult);
-				cri.setMaxResults(maxResult);
-			}
-
-			results = cri.list();
-
-		} catch (Exception ex) {
-			_log.error(ex.getMessage(), ex);
-		}
-
-		return results;
-	}
-
-	@Override
-	public int getStaffCount(String staffName, Long yearOfBirth, Department dept, String email, Job job, String phone) {
-		int result = 0;
-
-		try {
-			Criteria cri = getStaffPredicates(staffName, yearOfBirth, dept, email, job, phone, null, null);
-
-			cri.setProjection(Projections.rowCount());
-
-			result = (Integer) cri.uniqueResult();
-		} catch (Exception ex) {
-			_log.error(ex.getMessage(), ex);
-		}
-
-		return result;
-	}
-
-	@Override
-	public List<Staff> getStaffByIdList(List<Long> idList, int firstResult, int maxResult, String orderByColumn,
-			String orderByType) {
-		List<Staff> results = new ArrayList<Staff>();
-
-		try {
-			Criteria cri = getStaffByIdListQuery(idList, orderByColumn, orderByType);
-
-			if (firstResult >= 0 && maxResult > 0) {
-				cri.setFirstResult(firstResult);
-				cri.setMaxResults(maxResult);
-			}
-
-			results = cri.list();
-
-		} catch (Exception ex) {
-			_log.error(ex.getMessage(), ex);
-		}
-
-		return results;
-	}
-
-	@Override
-	public int getStaffCountByIdList(List<Long> idList) {
-		int result = 0;
-
-		try {
-			Criteria cri = getStaffByIdListQuery(idList, null, null);
-
-			cri.setProjection(Projections.rowCount());
-
-			result = (Integer) cri.uniqueResult();
-		} catch (Exception ex) {
-			_log.error(ex.getMessage(), ex);
-		}
-
-		return result;
-	}
-
-	private Criteria getStaffByIdListQuery(List<Long> idList, String orderByColumn, String orderByType)
+	private List<Predicate> getStaffPredicatesByIdList(CriteriaBuilder builder, Root<Staff> root, List<Long> idList)
 			throws Exception {
-		try {
-			Criteria cri = currentSession().createCriteria(Staff.class);
+		List<Predicate> predicates = new ArrayList<>();
 
-			cri.createAlias("department", "d", CriteriaSpecification.LEFT_JOIN);
-			cri.createAlias("job", "j", CriteriaSpecification.LEFT_JOIN);
-			cri.createAlias("contractType", "ct", CriteriaSpecification.LEFT_JOIN);
+		try {
+			Join<Staff, Department> departmentJoin = root.join("department", JoinType.LEFT);
 
 			if (Validator.isNotNull(idList)) {
-				cri.add(Restrictions.in("d.deptId", idList));
+				predicates.add(departmentJoin.get("deptId").in(idList));
 			}
-
-			if (Validator.isNotNull(orderByColumn)) {
-				if (StringPool.ASC.equalsIgnoreCase(orderByType)) {
-					cri.addOrder(Order.asc(orderByColumn));
-				} else {
-					cri.addOrder(Order.desc(orderByColumn));
-				}
-
-			} else {
-				cri.addOrder(Order.asc("staffName"));
-			}
-
-			return cri;
-		} catch (Exception ex) {
-			_log.error(ex.getMessage(), ex);
-
-			throw ex;
-		}
-	}
-
-	@Override
-	public void deleteAllStaff(List<Staff> staffs) throws Exception {
-		deleteAll(staffs);
-	}
-
-	@Override
-	public List<Staff> getContractExpiredStaff() {
-		List<Staff> results = new ArrayList<Staff>();
-
-		try {
-			Criteria cri = currentSession().createCriteria(Staff.class);
-
-			cri.add(Restrictions.isNotNull("contractToDate"));
-			cri.add(Restrictions.le("contractToDate",
-					DateUtil.getDateAfter(StaticUtil.NOTIFY_CONTRACT_EXPIRED_BEFORE_DAY)));
-			cri.add(Restrictions.eq("status", Values.STATUS_ACTIVE));
-
-			results = cri.list();
-
 		} catch (Exception ex) {
 			_log.error(ex.getMessage(), ex);
 		}
 
-		return results;
+		return predicates;
 	}
 
-	@Override
-	public List<Staff> getBirthDayNearlyStaff(int dayOfYear) {
-		List<Staff> results = new ArrayList<Staff>();
-
-		try {
-			int _day = StaticUtil.NOTIFY_BIRTHDAY_BEFORE_DAY;
-
-			Criteria cri = currentSession().createCriteria(Staff.class);
-
-			cri.add(Restrictions.isNotNull("dateOfBirth"));
-			cri.add(Restrictions.sqlRestriction(_buildBirthDayNearlyQuery(),
-					new Object[] { dayOfYear + _day - 1, dayOfYear + _day + 1, dayOfYear, dayOfYear + _day },
-					new Type[] { IntegerType.INSTANCE, IntegerType.INSTANCE, IntegerType.INSTANCE,
-							IntegerType.INSTANCE }));
-			cri.add(Restrictions.eq("status", Values.STATUS_ACTIVE));
-
-			results = cri.list();
-
-		} catch (Exception ex) {
-			_log.error(ex.getMessage(), ex);
-		}
-
-		return results;
-	}
-
-	private String _buildBirthDayNearlyQuery() {
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("((MOD(YEAR(date_of_birth),4)=0 or MOD(YEAR(date_of_birth),400)=0)");
-		sb.append(" and DAYOFYEAR(date_of_birth)>=? and DAYOFYEAR(date_of_birth)<=?)");
-		sb.append(" or ((MOD(YEAR(date_of_birth),4)>0 and MOD(YEAR(date_of_birth),400)>0)");
-		sb.append(" and DAYOFYEAR(date_of_birth)>=? and DAYOFYEAR(date_of_birth)<=?)");
-
-		return sb.toString();
-	}
 }
