@@ -44,7 +44,7 @@ public class CategoryDAOImpl extends AbstractDAO<Category> implements CategoryDA
 
 			Root<Category> root = criteria.from(Category.class);
 
-			criteria.select(root).where(builder.notEqual(root.get("status"), QueryUtil.STATUS_DEACTIVE));
+			criteria.select(root).where(builder.notEqual(root.get("status"), Values.STATUS_DEACTIVE));
 
 			List<Order> orderList = new ArrayList<>();
 
@@ -143,7 +143,7 @@ public class CategoryDAOImpl extends AbstractDAO<Category> implements CategoryDA
 			Root<Category> root = criteria.from(Category.class);
 
 			criteria.select(root).where(builder.equal(root.get("type"), Values.MENU_TYPE_ITEM),
-					builder.notEqual(root.get("status"), QueryUtil.STATUS_DEACTIVE));
+					builder.notEqual(root.get("status"), Values.STATUS_DEACTIVE));
 
 			List<Order> orderList = new ArrayList<>();
 

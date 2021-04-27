@@ -12,8 +12,6 @@ import java.lang.reflect.Field;
  */
 public class QueryUtil {
 
-	public static final Long STATUS_DEACTIVE = 0L;
-	public static final Long STATUS_ACTIVE = 1L;
 	public static final Long ALL = -1L;
 	public static final int FIRST_INDEX = 0;
 	public static final int GET_ALL = -1;
