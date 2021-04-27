@@ -9,12 +9,13 @@ package com.evotek.qlns.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
+import org.hibernate.Session;
 
 import com.evotek.qlns.dao.WorkProcessDAO;
 import com.evotek.qlns.model.WorkProcess;
@@ -29,40 +30,23 @@ public class WorkProcessDAOImpl extends AbstractDAO<WorkProcess>
     private static final Logger _log = LogManager.getLogger(WorkProcessDAOImpl.class);
     
     @Override
-	public List<WorkProcess> getWorkProcessByStaffId(Long staffId){
-        List<WorkProcess> results = new ArrayList<WorkProcess>();
-
-        try {
-            Criteria cri = currentSession().createCriteria(WorkProcess.class);
-
-            if (Validator.isNotNull(staffId)) {
-                cri.add(Restrictions.eq("staffId", staffId));
-            }
-
-            cri.addOrder(Order.desc("fromDate"));
-            cri.addOrder(Order.desc("toDate"));
-            
-            results = cri.list();
-        } catch (Exception e) {
-            _log.error(e.getMessage(), e);
-        }
-
-        return results;
-    }
-    
-    @Override
 	public List<String> getCompanyName(){
         List<String> results = new ArrayList<String>();
 
         try {
-            Criteria cri = currentSession().createCriteria(WorkProcess.class);
+        	Session session = getCurrentSession();
 
-            cri.setProjection(Projections.distinct(
-                    Projections.property("company")));
+			CriteriaBuilder builder = session.getCriteriaBuilder();
 
-            cri.addOrder(Order.asc("company"));
+			CriteriaQuery<String> criteria = builder.createQuery(String.class);
+
+			Root<WorkProcess> root = criteria.from(WorkProcess.class);
+			
+			criteria.distinct(true).select(root.get("company"));
+			
+			criteria.orderBy(builder.asc(root.get("company")));
             
-            results = cri.list();
+            results = session.createQuery(criteria).getResultList();
         } catch (Exception e) {
             _log.error(e.getMessage(), e);
         }
@@ -75,14 +59,49 @@ public class WorkProcessDAOImpl extends AbstractDAO<WorkProcess>
         List<String> results = new ArrayList<String>();
 
         try {
-            Criteria cri = currentSession().createCriteria(WorkProcess.class);
+        	Session session = getCurrentSession();
 
-            cri.setProjection(Projections.distinct(
-                    Projections.property("jobTitle")));
+			CriteriaBuilder builder = session.getCriteriaBuilder();
 
-            cri.addOrder(Order.asc("jobTitle"));
+			CriteriaQuery<String> criteria = builder.createQuery(String.class);
+
+			Root<WorkProcess> root = criteria.from(WorkProcess.class);
+			
+			criteria.distinct(true).select(root.get("jobTitle"));
+			
+			criteria.orderBy(builder.asc(root.get("jobTitle")));
             
-            results = cri.list();
+            results = session.createQuery(criteria).getResultList();
+        } catch (Exception e) {
+            _log.error(e.getMessage(), e);
+        }
+
+        return results;
+    }
+    
+    @Override
+	public List<WorkProcess> getWorkProcessByStaffId(Long staffId){
+        List<WorkProcess> results = new ArrayList<WorkProcess>();
+
+        try {
+        	Session session = getCurrentSession();
+
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+
+			CriteriaQuery<WorkProcess> criteria = builder.createQuery(WorkProcess.class);
+
+			Root<WorkProcess> root = criteria.from(WorkProcess.class);
+        	
+			criteria.select(root);
+
+            if (Validator.isNotNull(staffId)) {
+            	criteria.where(builder.equal(root.get("staffId"), staffId));
+            	
+            }
+
+            criteria.orderBy(builder.desc(root.get("fromDate")), builder.desc(root.get("toDate")));
+            
+            results = session.createQuery(criteria).getResultList();
         } catch (Exception e) {
             _log.error(e.getMessage(), e);
         }

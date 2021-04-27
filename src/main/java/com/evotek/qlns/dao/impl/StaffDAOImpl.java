@@ -403,41 +403,41 @@ public class StaffDAOImpl extends AbstractDAO<Staff> implements StaffDAO {
 
 			if (Validator.isNotNull(keyword)) {
 				predicates.add(builder.like(builder.lower(root.get("staffName")),
-						QueryUtil.getFullStringParam(keyword, true), CharPool.EXCLAMATION));
+						QueryUtil.getFullStringParam(keyword, true), CharPool.BACK_SLASH));
 				predicates.add(builder.like(builder.lower(departmentJoin.get("deptName")),
-						QueryUtil.getFullStringParam(keyword, true), CharPool.EXCLAMATION));
+						QueryUtil.getFullStringParam(keyword, true), CharPool.BACK_SLASH));
 				predicates.add(builder.like(builder.lower(jobJoin.get("jobTitle")),
-						QueryUtil.getFullStringParam(keyword, true), CharPool.EXCLAMATION));
+						QueryUtil.getFullStringParam(keyword, true), CharPool.BACK_SLASH));
 				predicates.add(builder.like(builder.lower(root.get("permanentResidence")),
-						QueryUtil.getFullStringParam(keyword, true), CharPool.EXCLAMATION));
+						QueryUtil.getFullStringParam(keyword, true), CharPool.BACK_SLASH));
 				predicates.add(builder.like(builder.lower(root.get("currentResidence")),
-						QueryUtil.getFullStringParam(keyword, true), CharPool.EXCLAMATION));
+						QueryUtil.getFullStringParam(keyword, true), CharPool.BACK_SLASH));
 				predicates.add(builder.like(builder.lower(root.get("note")),
-						QueryUtil.getFullStringParam(keyword, true), CharPool.EXCLAMATION));
+						QueryUtil.getFullStringParam(keyword, true), CharPool.BACK_SLASH));
 				predicates.add(builder.like(builder.lower(contractTypeJoin.get("contractTypeName")),
-						QueryUtil.getFullStringParam(keyword, true), CharPool.EXCLAMATION));
+						QueryUtil.getFullStringParam(keyword, true), CharPool.BACK_SLASH));
 				predicates.add(builder.like(builder.lower(root.get("contractNumber")),
-						QueryUtil.getFullStringParam(keyword, true), CharPool.EXCLAMATION));
+						QueryUtil.getFullStringParam(keyword, true), CharPool.BACK_SLASH));
 				predicates.add(builder.like(builder.lower(root.get("taxCode")),
-						QueryUtil.getFullStringParam(keyword, true), CharPool.EXCLAMATION));
+						QueryUtil.getFullStringParam(keyword, true), CharPool.BACK_SLASH));
 				predicates.add(builder.like(builder.lower(root.get("insuranceBookNumber")),
-						QueryUtil.getFullStringParam(keyword, true), CharPool.EXCLAMATION));
+						QueryUtil.getFullStringParam(keyword, true), CharPool.BACK_SLASH));
 				predicates.add(builder.like(builder.lower(root.get("paidPlace")),
-						QueryUtil.getFullStringParam(keyword, true), CharPool.EXCLAMATION));
+						QueryUtil.getFullStringParam(keyword, true), CharPool.BACK_SLASH));
 				predicates.add(builder.like(builder.lower(root.get("levels")),
-						QueryUtil.getFullStringParam(keyword, true), CharPool.EXCLAMATION));
+						QueryUtil.getFullStringParam(keyword, true), CharPool.BACK_SLASH));
 				predicates.add(builder.like(builder.lower(root.get("majors")),
-						QueryUtil.getFullStringParam(keyword, true), CharPool.EXCLAMATION));
+						QueryUtil.getFullStringParam(keyword, true), CharPool.BACK_SLASH));
 				predicates.add(builder.like(builder.lower(root.get("college")),
-						QueryUtil.getFullStringParam(keyword, true), CharPool.EXCLAMATION));
+						QueryUtil.getFullStringParam(keyword, true), CharPool.BACK_SLASH));
 				predicates.add(builder.like(builder.lower(root.get("identityCard")),
-						QueryUtil.getFullStringParam(keyword, true), CharPool.EXCLAMATION));
+						QueryUtil.getFullStringParam(keyword, true), CharPool.BACK_SLASH));
 				predicates.add(builder.like(builder.lower(root.get("grantPlace")),
-						QueryUtil.getFullStringParam(keyword, true), CharPool.EXCLAMATION));
+						QueryUtil.getFullStringParam(keyword, true), CharPool.BACK_SLASH));
 				predicates.add(builder.like(builder.lower(root.get("mobile")),
-						QueryUtil.getFullStringParam(keyword, true), CharPool.EXCLAMATION));
+						QueryUtil.getFullStringParam(keyword, true), CharPool.BACK_SLASH));
 				predicates.add(builder.like(builder.lower(root.get("email")),
-						QueryUtil.getFullStringParam(keyword, true), CharPool.EXCLAMATION));
+						QueryUtil.getFullStringParam(keyword, true), CharPool.BACK_SLASH));
 			}
 
 		} catch (Exception ex) {
@@ -461,7 +461,7 @@ public class StaffDAOImpl extends AbstractDAO<Staff> implements StaffDAO {
 
 			if (Validator.isNotNull(staffName)) {
 				predicates.add(builder.like(builder.lower(root.get("staffName")),
-						QueryUtil.getFullStringParam(staffName, true), CharPool.EXCLAMATION));
+						QueryUtil.getFullStringParam(staffName, true), CharPool.BACK_SLASH));
 			}
 
 			if (Validator.isNotNull(yearOfBirth)) {
@@ -475,7 +475,7 @@ public class StaffDAOImpl extends AbstractDAO<Staff> implements StaffDAO {
 
 			if (Validator.isNotNull(email)) {
 				predicates.add(builder.like(builder.lower(root.get("email")), QueryUtil.getFullStringParam(email, true),
-						CharPool.EXCLAMATION));
+						CharPool.BACK_SLASH));
 			}
 
 			if (Validator.isNotNull(job) && Validator.isNotNull(job.getJobId())) {
@@ -485,9 +485,9 @@ public class StaffDAOImpl extends AbstractDAO<Staff> implements StaffDAO {
 			if (Validator.isNotNull(phone)) {
 				predicates.add(builder.or(
 						builder.like(builder.lower(root.get("mobile")), QueryUtil.getFullStringParam(phone, true),
-								CharPool.EXCLAMATION),
+								CharPool.BACK_SLASH),
 						builder.like(builder.lower(root.get("homePhone")), QueryUtil.getFullStringParam(phone, true),
-								CharPool.EXCLAMATION)));
+								CharPool.BACK_SLASH)));
 			}
 		} catch (Exception ex) {
 			_log.error(ex.getMessage(), ex);

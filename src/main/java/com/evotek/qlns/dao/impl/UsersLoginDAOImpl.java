@@ -7,64 +7,81 @@ package com.evotek.qlns.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.Criteria;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Projections;
+import org.hibernate.Session;
 
 import com.evotek.qlns.dao.UsersLoginDAO;
 import com.evotek.qlns.model.UserLogin;
-import com.evotek.qlns.util.LikeCriterionMaker;
+import com.evotek.qlns.util.CharPool;
+import com.evotek.qlns.util.QueryUtil;
 
 /**
  *
  * @author linhlh2
  */
-public class UsersLoginDAOImpl extends AbstractDAO<UserLogin>
-        implements UsersLoginDAO {
+public class UsersLoginDAOImpl extends AbstractDAO<UserLogin> implements UsersLoginDAO {
 
-    @Override
+	private static final Logger _log = LogManager.getLogger(UsersLoginDAOImpl.class);
+
+	@Override
 	public int countByIp(String ip) {
-        int count = 0;
+		int result = 0;
 
-        try {
-            Criteria cri = currentSession().createCriteria(UserLogin.class);
+		try {
+			Session session = getCurrentSession();
 
-            cri.add(LikeCriterionMaker.ilike("ip", ip, MatchMode.EXACT));
+			CriteriaBuilder builder = session.getCriteriaBuilder();
 
-            cri.setProjection(Projections.rowCount());
+			CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
 
-            count = (Integer) cri.uniqueResult();
-        } catch (Exception e) {
-            _log.error(e.getMessage(), e);
-        }
+			Root<UserLogin> root = criteria.from(UserLogin.class);
 
-        return count;
-    }
+			criteria.select(builder.count(root)).where(builder.like(builder.lower(root.get("ip")),
+					QueryUtil.getFullStringParam(ip, true), CharPool.BACK_SLASH));
 
-    @Override
-	public List<UserLogin> getUsersLogin(String ip){
-        List<UserLogin> results = new ArrayList<UserLogin>();
+			Long count = (Long) session.createQuery(criteria).uniqueResult();
 
-        try {
-            Criteria cri = currentSession().createCriteria(UserLogin.class);
+			if (count != null) {
+				result = count.intValue();
+			}
+		} catch (Exception e) {
+			_log.error(e.getMessage(), e);
+		}
 
-            cri.add(LikeCriterionMaker.ilike("ip", ip, MatchMode.EXACT));
+		return result;
+	}
 
-            results = cri.list();
-        } catch (Exception e) {
-            _log.error(e.getMessage(), e);
-        }
+	@Override
+	public void delete(List<UserLogin> userLogins) {
+		deleteAll(userLogins);
+	}
 
-        return results;
-    }
+	@Override
+	public List<UserLogin> getUsersLogin(String ip) {
+		List<UserLogin> results = new ArrayList<UserLogin>();
 
-    @Override
-	public void delete(List<UserLogin> userLogins){
-        deleteAll(userLogins);
-    }
+		try {
+			Session session = getCurrentSession();
 
-    private static final Logger _log =
-            LogManager.getLogger(UsersLoginDAOImpl.class);
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+
+			CriteriaQuery<UserLogin> criteria = builder.createQuery(UserLogin.class);
+
+			Root<UserLogin> root = criteria.from(UserLogin.class);
+
+			criteria.select(root).where(builder.like(builder.lower(root.get("ip")),
+					QueryUtil.getFullStringParam(ip, true), CharPool.BACK_SLASH));
+
+			results = session.createQuery(criteria).getResultList();
+		} catch (Exception e) {
+			_log.error(e.getMessage(), e);
+		}
+
+		return results;
+	}
 }

@@ -285,7 +285,7 @@ public class RightDAOImpl extends AbstractDAO<Right> implements RightDAO {
 
 			if (Validator.isNotNull(rightName)) {
 				predicates.add(builder.like(builder.lower(root.get("rightName")),
-						QueryUtil.getFullStringParam(rightName, true), CharPool.EXCLAMATION));
+						QueryUtil.getFullStringParam(rightName, true), CharPool.BACK_SLASH));
 
 			}
 
@@ -328,7 +328,7 @@ public class RightDAOImpl extends AbstractDAO<Right> implements RightDAO {
 
 			if (Validator.isNotNull(rightName)) {
 				predicates.add(builder.like(builder.lower(root.get("rightName")),
-						QueryUtil.getFullStringParam(rightName, true), CharPool.EXCLAMATION));
+						QueryUtil.getFullStringParam(rightName, true), CharPool.BACK_SLASH));
 
 			}
 
@@ -369,7 +369,7 @@ public class RightDAOImpl extends AbstractDAO<Right> implements RightDAO {
 
 			if (Validator.isNotNull(rightName)) {
 				predicates.add(builder.like(builder.lower(root.get("rightName")),
-						QueryUtil.getFullStringParam(rightName, true), CharPool.EXCLAMATION));
+						QueryUtil.getFullStringParam(rightName, true), CharPool.BACK_SLASH));
 
 			}
 

@@ -70,7 +70,7 @@ public class RoleDAOImpl extends AbstractDAO<Role> implements RoleDAO {
 
 			if (Validator.isNotNull(roleName)) {
 				predicates.add(builder.like(builder.lower(root.get("roleName")),
-						QueryUtil.getFullStringParam(roleName, true), CharPool.EXCLAMATION));
+						QueryUtil.getFullStringParam(roleName, true), CharPool.BACK_SLASH));
 			}
 
 			predicates.add(builder.notEqual(root.get("status"), Values.STATUS_DEACTIVE));
@@ -197,7 +197,7 @@ public class RoleDAOImpl extends AbstractDAO<Role> implements RoleDAO {
 
 			if (Validator.isNotNull(roleName)) {
 				predicates.add(builder.like(builder.lower(root.get("roleName")),
-						QueryUtil.getFullStringParam(roleName, true), CharPool.EXCLAMATION));
+						QueryUtil.getFullStringParam(roleName, true), CharPool.BACK_SLASH));
 			}
 
 			if (Validator.isNotNull(status)) {
@@ -232,7 +232,7 @@ public class RoleDAOImpl extends AbstractDAO<Role> implements RoleDAO {
 			Root<Role> root = criteria.from(Role.class);
 
 			criteria.select(root).where(builder.like(builder.lower(root.get("roleName")),
-					QueryUtil.getFullStringParam(roleName, true), CharPool.EXCLAMATION));
+					QueryUtil.getFullStringParam(roleName, true), CharPool.BACK_SLASH));
 
 			roles = session.createQuery(criteria).getResultList();
 		} catch (Exception ex) {
@@ -259,7 +259,7 @@ public class RoleDAOImpl extends AbstractDAO<Role> implements RoleDAO {
 
 			if (Validator.isNotNull(roleName)) {
 				predicates.add(builder.like(builder.lower(root.get("roleName")),
-						QueryUtil.getFullStringParam(roleName, true), CharPool.EXCLAMATION));
+						QueryUtil.getFullStringParam(roleName, true), CharPool.BACK_SLASH));
 			}
 
 			predicates.add(builder.notEqual(root.get("status"), Values.STATUS_DEACTIVE));

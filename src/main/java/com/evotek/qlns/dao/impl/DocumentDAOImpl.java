@@ -234,10 +234,10 @@ public class DocumentDAOImpl extends AbstractDAO<Document> implements DocumentDA
 			List<Predicate> predicates = new ArrayList<Predicate>();
 
 			predicates.add(builder.like(builder.lower(root.get("documentNumber")),
-					QueryUtil.getFullStringParam(documentNumber, true), CharPool.EXCLAMATION));
+					QueryUtil.getFullStringParam(documentNumber, true), CharPool.BACK_SLASH));
 
 			predicates.add(builder.like(builder.lower(root.get("content")), QueryUtil.getFullStringParam(content, true),
-					CharPool.EXCLAMATION));
+					CharPool.BACK_SLASH));
 
 			if (Validator.isNotNull(documentId)) {
 				predicates.add(builder.notEqual(root.get("documentId"), documentId));
@@ -357,7 +357,7 @@ public class DocumentDAOImpl extends AbstractDAO<Document> implements DocumentDA
 			Root<Document> root = criteria.from(Document.class);
 
 			Predicate documentNumberPre = builder.like(builder.lower(root.get("documentNumber")),
-					QueryUtil.getFullStringParam(documentNumber, true), CharPool.EXCLAMATION);
+					QueryUtil.getFullStringParam(documentNumber, true), CharPool.BACK_SLASH);
 
 			criteria.select(root).where(documentNumberPre);
 

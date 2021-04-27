@@ -2,9 +2,7 @@ package com.evotek.qlns.dao.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -15,9 +13,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
-import org.hibernate.type.DateType;
-import org.hibernate.type.LongType;
-import org.hibernate.type.StringType;
 
 import com.evotek.qlns.dao.UserDAO;
 import com.evotek.qlns.model.User;
@@ -33,8 +28,10 @@ import com.evotek.qlns.util.key.Values;
  */
 public class UserDAOImpl extends AbstractDAO<User> implements UserDAO {
 
+	private static final Logger _log = LogManager.getLogger(UserDAOImpl.class);
+
 	@Override
-	public List<User> getListUsers() {
+	public List<User> getAllUsers() throws Exception {
 		List<User> results = new ArrayList<User>();
 
 		try {
@@ -46,19 +43,14 @@ public class UserDAOImpl extends AbstractDAO<User> implements UserDAO {
 
 			Root<User> root = criteria.from(User.class);
 
-			criteria.select(root).where(builder.equal(root.get("status"), Values.STATUS_ACTIVE));
+			criteria.select(root).where(builder.notEqual(root.get("status"), Values.STATUS_DEACTIVE));
 
 			results = session.createQuery(criteria).getResultList();
-		} catch (Exception ex) {
-			_log.error(ex.getMessage(), ex);
+		} catch (Exception e) {
+			_log.error(e.getMessage(), e);
 		}
 
 		return results;
-	}
-
-	@Override
-	public User getNewUser() {
-		return new User();
 	}
 
 	@Override
@@ -89,7 +81,7 @@ public class UserDAOImpl extends AbstractDAO<User> implements UserDAO {
 	}
 
 	@Override
-	public List<User> getAllUsers() throws Exception {
+	public List<User> getListUsers() {
 		List<User> results = new ArrayList<User>();
 
 		try {
@@ -101,14 +93,19 @@ public class UserDAOImpl extends AbstractDAO<User> implements UserDAO {
 
 			Root<User> root = criteria.from(User.class);
 
-			criteria.select(root).where(builder.notEqual(root.get("status"), Values.STATUS_DEACTIVE));
+			criteria.select(root).where(builder.equal(root.get("status"), Values.STATUS_ACTIVE));
 
 			results = session.createQuery(criteria).getResultList();
-		} catch (Exception e) {
-			_log.error(e.getMessage(), e);
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
 		}
 
 		return results;
+	}
+
+	@Override
+	public User getNewUser() {
+		return new User();
 	}
 
 	@Override
@@ -163,7 +160,8 @@ public class UserDAOImpl extends AbstractDAO<User> implements UserDAO {
 	}
 
 	@Override
-	public List<User> getUsersLikeUserName(String value) throws Exception {
+	public List<User> getUsers(String keyword, int firstResult, int maxResult, String orderByColumn,
+			String orderByType) {
 		List<User> results = new ArrayList<User>();
 
 		try {
@@ -175,18 +173,33 @@ public class UserDAOImpl extends AbstractDAO<User> implements UserDAO {
 
 			Root<User> root = criteria.from(User.class);
 
-			List<Predicate> predicates = new ArrayList<>();
+			Predicate predicate = getUsersPredicate(builder, root, keyword);
 
-			if (Validator.isNotNull(value)) {
-				predicates.add(builder.like(builder.lower(root.get("userName")),
-						QueryUtil.getFullStringParam(value, true), CharPool.EXCLAMATION));
+			criteria.select(root);
+
+			if (Validator.isNotNull(predicate)) {
+				criteria.where(predicate);
 			}
 
-			predicates.add(builder.notEqual(root.get("status"), Values.STATUS_DEACTIVE));
+			Query<User> q = session.createQuery(criteria);
 
-			criteria.select(root).where(builder.or(predicates.toArray(new Predicate[predicates.size()])));
+			if (firstResult >= 0 && maxResult > 0) {
+				q.setFirstResult(firstResult);
+				q.setMaxResults(maxResult);
+			}
 
-			results = session.createQuery(criteria).getResultList();
+			if (Validator.isNotNull(orderByColumn)) {
+				if (StringPool.ASC.equalsIgnoreCase(orderByType)) {
+					criteria.orderBy(builder.asc(root.get(orderByColumn)));
+				} else {
+					criteria.orderBy(builder.desc(root.get(orderByColumn)));
+				}
+
+			} else {
+				criteria.orderBy(builder.asc(root.get("modifiedDate")));
+			}
+
+			results = q.getResultList();
 
 		} catch (Exception ex) {
 			_log.error(ex.getMessage(), ex);
@@ -196,7 +209,9 @@ public class UserDAOImpl extends AbstractDAO<User> implements UserDAO {
 	}
 
 	@Override
-	public List<User> getUsersLikeLastname(String value) throws Exception {
+	public List<User> getUsers(String userName, String email, Long gender, String birthPlace, Date birthdayFrom,
+			Date birthdayTo, String phone, String mobile, String account, Long status, int firstResult, int maxResult,
+			String orderByColumn, String orderByType) {
 		List<User> results = new ArrayList<User>();
 
 		try {
@@ -208,52 +223,34 @@ public class UserDAOImpl extends AbstractDAO<User> implements UserDAO {
 
 			Root<User> root = criteria.from(User.class);
 
-			List<Predicate> predicates = new ArrayList<>();
+			List<Predicate> predicates = getUsersPredicate(builder, root, userName, email, gender, birthPlace,
+					birthdayFrom, birthdayTo, phone, mobile, account, status);
 
-			if (Validator.isNotNull(value)) {
-				predicates.add(builder.like(builder.lower(root.get("lastName")),
-						QueryUtil.getFullStringParam(value, true), CharPool.EXCLAMATION));
+			criteria.select(root);
+
+			if (Validator.isNotNull(predicates)) {
+				criteria.where(builder.and(predicates.toArray(new Predicate[predicates.size()])));
 			}
 
-			predicates.add(builder.notEqual(root.get("status"), Values.STATUS_DEACTIVE));
+			Query<User> q = session.createQuery(criteria);
 
-			criteria.select(root).where(builder.or(predicates.toArray(new Predicate[predicates.size()])));
-
-			results = session.createQuery(criteria).getResultList();
-
-		} catch (Exception ex) {
-			_log.error(ex.getMessage(), ex);
-		}
-
-		return results;
-	}
-
-	@Override
-	public List<User> getUsersLikeEmail(String value) throws Exception {
-		List<User> results = new ArrayList<User>();
-
-		try {
-			Session session = getCurrentSession();
-
-			CriteriaBuilder builder = session.getCriteriaBuilder();
-
-			CriteriaQuery<User> criteria = builder.createQuery(User.class);
-
-			Root<User> root = criteria.from(User.class);
-
-			List<Predicate> predicates = new ArrayList<>();
-
-			if (Validator.isNotNull(value)) {
-				predicates.add(builder.like(builder.lower(root.get("email")), QueryUtil.getFullStringParam(value, true),
-						CharPool.EXCLAMATION));
+			if (firstResult >= 0 && maxResult > 0) {
+				q.setFirstResult(firstResult);
+				q.setMaxResults(maxResult);
 			}
 
-			predicates.add(builder.notEqual(root.get("status"), Values.STATUS_DEACTIVE));
+			if (Validator.isNotNull(orderByColumn)) {
+				if (StringPool.ASC.equalsIgnoreCase(orderByType)) {
+					criteria.orderBy(builder.asc(root.get(orderByColumn)));
+				} else {
+					criteria.orderBy(builder.desc(root.get(orderByColumn)));
+				}
 
-			criteria.select(root).where(builder.or(predicates.toArray(new Predicate[predicates.size()])));
+			} else {
+				criteria.orderBy(builder.asc(root.get("modifiedDate")));
+			}
 
-			results = session.createQuery(criteria).getResultList();
-
+			results = q.getResultList();
 		} catch (Exception ex) {
 			_log.error(ex.getMessage(), ex);
 		}
@@ -344,51 +341,7 @@ public class UserDAOImpl extends AbstractDAO<User> implements UserDAO {
 //    }
 
 	@Override
-	public List<User> getUsers(String userName, String email, Long gender, String birthPlace, Date birthdayFrom,
-			Date birthdayTo, String phone, String mobile, String account, Long status, int firstResult, int maxResult,
-			String orderByColumn, String orderByType) {
-		List<User> users = new ArrayList<User>();
-
-		try {
-			Criteria cri = getUsersCriteria(userName, email, gender, birthPlace, birthdayFrom, birthdayTo, phone,
-					mobile, account, status, orderByColumn, orderByType);
-
-			if (firstResult >= 0 && maxResult > 0) {
-				cri.setFirstResult(firstResult);
-				cri.setMaxResults(maxResult);
-			}
-
-			users = cri.list();
-		} catch (Exception ex) {
-			_log.error(ex.getMessage(), ex);
-		}
-
-		return users;
-	}
-
-	@Override
-	public int getUsersCount(String userName, String email, Long gender, String birthPlace, Date birthdayFrom,
-			Date birthdayTo, String phone, String mobile, String account, Long status) {
-
-		int result = 0;
-
-		try {
-			Criteria cri = getUsersCriteria(userName, email, gender, birthPlace, birthdayFrom, birthdayTo, phone,
-					mobile, account, status, null, null);
-
-			cri.setProjection(Projections.rowCount());
-
-			result = ((Integer) cri.uniqueResult()).intValue();
-		} catch (Exception ex) {
-			_log.error(ex.getMessage(), ex);
-		}
-
-		return result;
-	}
-
-	@Override
-	public List<User> getUsers(String keyword, int firstResult, int maxResult, String orderByColumn,
-			String orderByType) {
+	public List<User> getUsersByI_E(Long userId, String email) {
 		List<User> results = new ArrayList<User>();
 
 		try {
@@ -400,36 +353,54 @@ public class UserDAOImpl extends AbstractDAO<User> implements UserDAO {
 
 			Root<User> root = criteria.from(User.class);
 
-			Predicate predicate = getUsersPredicate(builder, root, keyword);
+			List<Predicate> predicates = new ArrayList<>();
 
-			criteria.select(root);
+			predicates.add(builder.like(builder.lower(root.get("email")), QueryUtil.getStringParam(email, true),
+					CharPool.BACK_SLASH));
 
-			if (Validator.isNotNull(predicate)) {
-				criteria.where(predicate);
+			if (Validator.isNotNull(userId)) {
+				predicates.add(builder.notEqual(root.get("userId"), userId));
 			}
 
-			Query<User> q = session.createQuery(criteria);
+			criteria.select(root).where(builder.or(predicates.toArray(new Predicate[predicates.size()])));
 
-			if (firstResult >= 0 && maxResult > 0) {
-				q.setFirstResult(firstResult);
-				q.setMaxResults(maxResult);
+			results = session.createQuery(criteria).getResultList();
+
+			results = session.createQuery(criteria).getResultList();
+		} catch (Exception e) {
+			_log.error(e.getMessage(), e);
+		}
+
+		return results;
+	}
+
+	@Override
+	public List<User> getUsersByI_UN(Long userId, String userName) {
+		List<User> results = new ArrayList<User>();
+
+		try {
+			Session session = getCurrentSession();
+
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+
+			CriteriaQuery<User> criteria = builder.createQuery(User.class);
+
+			Root<User> root = criteria.from(User.class);
+
+			List<Predicate> predicates = new ArrayList<>();
+
+			predicates.add(builder.like(builder.lower(root.get("userName")), QueryUtil.getStringParam(userName, true),
+					CharPool.BACK_SLASH));
+
+			if (Validator.isNotNull(userId)) {
+				predicates.add(builder.notEqual(root.get("userId"), userId));
 			}
 
-			if (Validator.isNotNull(orderByColumn)) {
-				if (StringPool.ASC.equalsIgnoreCase(orderByType)) {
-					criteria.orderBy(builder.asc(root.get(orderByColumn)));
-				} else {
-					criteria.orderBy(builder.desc(root.get(orderByColumn)));
-				}
+			criteria.select(root).where(builder.or(predicates.toArray(new Predicate[predicates.size()])));
 
-			} else {
-				criteria.orderBy(builder.asc(root.get("modifiedDate")));
-			}
-
-			results = q.getResultList();
-
-		} catch (Exception ex) {
-			_log.error(ex.getMessage(), ex);
+			results = session.createQuery(criteria).getResultList();
+		} catch (Exception e) {
+			_log.error(e.getMessage(), e);
 		}
 
 		return results;
@@ -468,6 +439,141 @@ public class UserDAOImpl extends AbstractDAO<User> implements UserDAO {
 		return result;
 	}
 
+	@Override
+	public int getUsersCount(String userName, String email, Long gender, String birthPlace, Date birthdayFrom,
+			Date birthdayTo, String phone, String mobile, String account, Long status) {
+
+		int result = 0;
+
+		try {
+			Session session = getCurrentSession();
+
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+
+			CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
+
+			Root<User> root = criteria.from(User.class);
+
+			List<Predicate> predicates = getUsersPredicate(builder, root, userName, email, gender, birthPlace,
+					birthdayFrom, birthdayTo, phone, mobile, account, status);
+
+			criteria.select(builder.count(root));
+
+			if (Validator.isNotNull(predicates)) {
+				criteria.where(builder.and(predicates.toArray(new Predicate[predicates.size()])));
+			}
+
+			Long count = (Long) session.createQuery(criteria).uniqueResult();
+
+			if (count != null) {
+				result = count.intValue();
+			}
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+
+		return result;
+	}
+
+	@Override
+	public List<User> getUsersLikeEmail(String value) throws Exception {
+		List<User> results = new ArrayList<User>();
+
+		try {
+			Session session = getCurrentSession();
+
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+
+			CriteriaQuery<User> criteria = builder.createQuery(User.class);
+
+			Root<User> root = criteria.from(User.class);
+
+			List<Predicate> predicates = new ArrayList<>();
+
+			if (Validator.isNotNull(value)) {
+				predicates.add(builder.like(builder.lower(root.get("email")), QueryUtil.getFullStringParam(value, true),
+						CharPool.BACK_SLASH));
+			}
+
+			predicates.add(builder.notEqual(root.get("status"), Values.STATUS_DEACTIVE));
+
+			criteria.select(root).where(builder.or(predicates.toArray(new Predicate[predicates.size()])));
+
+			results = session.createQuery(criteria).getResultList();
+
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+
+		return results;
+	}
+
+	@Override
+	public List<User> getUsersLikeLastname(String value) throws Exception {
+		List<User> results = new ArrayList<User>();
+
+		try {
+			Session session = getCurrentSession();
+
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+
+			CriteriaQuery<User> criteria = builder.createQuery(User.class);
+
+			Root<User> root = criteria.from(User.class);
+
+			List<Predicate> predicates = new ArrayList<>();
+
+			if (Validator.isNotNull(value)) {
+				predicates.add(builder.like(builder.lower(root.get("lastName")),
+						QueryUtil.getFullStringParam(value, true), CharPool.BACK_SLASH));
+			}
+
+			predicates.add(builder.notEqual(root.get("status"), Values.STATUS_DEACTIVE));
+
+			criteria.select(root).where(builder.or(predicates.toArray(new Predicate[predicates.size()])));
+
+			results = session.createQuery(criteria).getResultList();
+
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+
+		return results;
+	}
+
+	@Override
+	public List<User> getUsersLikeUserName(String value) throws Exception {
+		List<User> results = new ArrayList<User>();
+
+		try {
+			Session session = getCurrentSession();
+
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+
+			CriteriaQuery<User> criteria = builder.createQuery(User.class);
+
+			Root<User> root = criteria.from(User.class);
+
+			List<Predicate> predicates = new ArrayList<>();
+
+			if (Validator.isNotNull(value)) {
+				predicates.add(builder.like(builder.lower(root.get("userName")),
+						QueryUtil.getFullStringParam(value, true), CharPool.BACK_SLASH));
+			}
+
+			predicates.add(builder.notEqual(root.get("status"), Values.STATUS_DEACTIVE));
+
+			criteria.select(root).where(builder.or(predicates.toArray(new Predicate[predicates.size()])));
+
+			results = session.createQuery(criteria).getResultList();
+
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+
+		return results;
+	}
+
 	private Predicate getUsersPredicate(CriteriaBuilder builder, Root<User> root, String keyword) throws Exception {
 		Predicate totalPre = null;
 
@@ -476,23 +582,23 @@ public class UserDAOImpl extends AbstractDAO<User> implements UserDAO {
 
 			if (Validator.isNotNull(keyword)) {
 				predicates.add(builder.like(builder.lower(root.get("firstName")),
-						QueryUtil.getFullStringParam(keyword, true), CharPool.EXCLAMATION));
+						QueryUtil.getFullStringParam(keyword, true), CharPool.BACK_SLASH));
 				predicates.add(builder.like(builder.lower(root.get("middleName")),
-						QueryUtil.getFullStringParam(keyword, true), CharPool.EXCLAMATION));
+						QueryUtil.getFullStringParam(keyword, true), CharPool.BACK_SLASH));
 				predicates.add(builder.like(builder.lower(root.get("lastName")),
-						QueryUtil.getFullStringParam(keyword, true), CharPool.EXCLAMATION));
+						QueryUtil.getFullStringParam(keyword, true), CharPool.BACK_SLASH));
 				predicates.add(builder.like(builder.lower(root.get("email")),
-						QueryUtil.getFullStringParam(keyword, true), CharPool.EXCLAMATION));
+						QueryUtil.getFullStringParam(keyword, true), CharPool.BACK_SLASH));
 				predicates.add(builder.like(builder.lower(root.get("birthPlace")),
-						QueryUtil.getFullStringParam(keyword, true), CharPool.EXCLAMATION));
+						QueryUtil.getFullStringParam(keyword, true), CharPool.BACK_SLASH));
 				predicates.add(builder.like(builder.lower(root.get("phone")),
-						QueryUtil.getFullStringParam(keyword, true), CharPool.EXCLAMATION));
+						QueryUtil.getFullStringParam(keyword, true), CharPool.BACK_SLASH));
 				predicates.add(builder.like(builder.lower(root.get("mobile")),
-						QueryUtil.getFullStringParam(keyword, true), CharPool.EXCLAMATION));
+						QueryUtil.getFullStringParam(keyword, true), CharPool.BACK_SLASH));
 				predicates.add(builder.like(builder.lower(root.get("userName")),
-						QueryUtil.getFullStringParam(keyword, true), CharPool.EXCLAMATION));
+						QueryUtil.getFullStringParam(keyword, true), CharPool.BACK_SLASH));
 				predicates.add(builder.like(builder.lower(root.get("address")),
-						QueryUtil.getFullStringParam(keyword, true), CharPool.EXCLAMATION));
+						QueryUtil.getFullStringParam(keyword, true), CharPool.BACK_SLASH));
 			}
 
 			if (!predicates.isEmpty()) {
@@ -513,77 +619,69 @@ public class UserDAOImpl extends AbstractDAO<User> implements UserDAO {
 	private List<Predicate> getUsersPredicate(CriteriaBuilder builder, Root<User> root, String userName, String email,
 			Long gender, String birthPlace, Date birthdayFrom, Date birthdayTo, String phone, String mobile,
 			String account, Long status) throws Exception {
+		List<Predicate> predicates = new ArrayList<>();
+
 		try {
-			List<Predicate> predicates = new ArrayList<>();
-
 			if (Validator.isNotNull(userName)) {
-				predicates.add(null);
-				Disjunction disjunction = Restrictions.disjunction();
+				Predicate userNamePre = builder.or(
+						builder.like(builder.lower(root.get("firstName")), QueryUtil.getFullStringParam(userName, true),
+								CharPool.BACK_SLASH),
+						builder.like(builder.lower(root.get("middleName")),
+								QueryUtil.getFullStringParam(userName, true), CharPool.BACK_SLASH),
+						builder.like(builder.lower(root.get("lastName")), QueryUtil.getFullStringParam(userName, true),
+								CharPool.BACK_SLASH));
 
-				disjunction.add(LikeCriterionMaker.ilike("firstName", userName, MatchMode.ANYWHERE));
-				disjunction.add(LikeCriterionMaker.ilike("middleName", userName, MatchMode.ANYWHERE));
-				disjunction.add(LikeCriterionMaker.ilike("lastName", userName, MatchMode.ANYWHERE));
-
-				conjunction.add(disjunction);
+				predicates.add(userNamePre);
 			}
 
 			if (Validator.isNotNull(email)) {
-				conjunction.add(LikeCriterionMaker.ilike("email", email, MatchMode.ANYWHERE));
+				predicates.add(builder.like(builder.lower(root.get("email")), QueryUtil.getFullStringParam(email, true),
+						CharPool.BACK_SLASH));
 			}
 
 			if (Validator.isNotNull(gender)) {
-				conjunction.add(Restrictions.eq("gender", gender));
+				predicates.add(builder.equal(root.get("gender"), gender));
 			}
 
 			if (Validator.isNotNull(birthPlace)) {
-				conjunction.add(LikeCriterionMaker.ilike("birthPlace", birthPlace, MatchMode.ANYWHERE));
+				predicates.add(builder.like(builder.lower(root.get("birthPlace")),
+						QueryUtil.getFullStringParam(birthPlace, true), CharPool.BACK_SLASH));
 			}
 
 			if (Validator.isNotNull(birthdayFrom)) {
-				conjunction.add(Restrictions.ge("dateOfBirth", birthdayFrom));
+				predicates.add(builder.greaterThanOrEqualTo(root.get("dateOfBirth"), birthdayFrom));
 			}
 
 			if (Validator.isNotNull(birthdayTo)) {
-				conjunction.add(Restrictions.le("dateOfBirth", birthdayTo));
+				predicates.add(builder.lessThanOrEqualTo(root.get("dateOfBirth"), birthdayTo));
 			}
 
 			if (Validator.isNotNull(phone)) {
-				conjunction.add(LikeCriterionMaker.ilike("phone", phone, MatchMode.ANYWHERE));
+				predicates.add(builder.like(builder.lower(root.get("phone")), QueryUtil.getFullStringParam(phone, true),
+						CharPool.BACK_SLASH));
 			}
 
 			if (Validator.isNotNull(mobile)) {
-				conjunction.add(LikeCriterionMaker.ilike("mobile", mobile, MatchMode.ANYWHERE));
+				predicates.add(builder.like(builder.lower(root.get("mobile")),
+						QueryUtil.getFullStringParam(mobile, true), CharPool.BACK_SLASH));
 			}
 
 			if (Validator.isNotNull(account)) {
-				conjunction.add(LikeCriterionMaker.ilike("account", account, MatchMode.ANYWHERE));
+				predicates.add(builder.like(builder.lower(root.get("account")),
+						QueryUtil.getFullStringParam(account, true), CharPool.BACK_SLASH));
 			}
 
 			if (Validator.isNotNull(status)) {
-				conjunction.add(Restrictions.eq("status", status));
+				predicates.add(builder.equal(root.get("status"), status));
 			} else {
-				conjunction.add(Restrictions.ne("status", Values.STATUS_DEACTIVE));
+				predicates.add(builder.notEqual(root.get("status"), Values.STATUS_DEACTIVE));
 			}
 
-			cri.add(conjunction);
-
-			if (Validator.isNotNull(orderByColumn)) {
-				if (StringPool.ASC.equalsIgnoreCase(orderByType)) {
-					cri.addOrder(Order.asc(orderByColumn));
-				} else {
-					cri.addOrder(Order.desc(orderByColumn));
-				}
-
-			} else {
-				cri.addOrder(Order.desc("modifiedDate"));
-			}
-
-			return cri;
 		} catch (Exception ex) {
 			_log.error(ex.getMessage(), ex);
-
-			throw ex;
 		}
+
+		return predicates;
 	}
 
 //	public SQLQuery getUsersQuery(String userName, String email, Long gender, String birthPlace, Date birthdayFrom,
@@ -806,65 +904,4 @@ public class UserDAOImpl extends AbstractDAO<User> implements UserDAO {
 //		}
 //	}
 
-	@Override
-	public List<User> getUsersByI_UN(Long userId, String userName) {
-		List<User> results = new ArrayList<User>();
-
-		try {
-			Criteria cri = currentSession().createCriteria(User.class);
-
-			cri.add(LikeCriterionMaker.ilike("userName", userName, MatchMode.EXACT));
-
-			if (Validator.isNotNull(userId)) {
-				cri.add(Restrictions.ne("userId", userId));
-			}
-
-			results = cri.list();
-		} catch (Exception e) {
-			_log.error(e.getMessage(), e);
-		}
-
-		return results;
-	}
-
-	@Override
-	public List<User> getUsersByI_E(Long userId, String email) {
-		List<User> results = new ArrayList<User>();
-
-		try {
-			Criteria cri = currentSession().createCriteria(User.class);
-
-			cri.add(LikeCriterionMaker.ilike("email", email, MatchMode.EXACT));
-
-			if (Validator.isNotNull(userId)) {
-				cri.add(Restrictions.ne("userId", userId));
-			}
-
-			results = cri.list();
-		} catch (Exception e) {
-			_log.error(e.getMessage(), e);
-		}
-
-		return results;
-	}
-
-	private static final Logger _log = LogManager.getLogger(UserDAOImpl.class);
-
-	@Override
-	public Map<String, Long> createMapUser() {
-		Map<String, Long> map = new HashMap<String, Long>();
-		Session session = null;
-		try {
-			session = currentSession();
-			Criteria criteria = session.createCriteria(User.class);
-			List<User> results = criteria.list();
-			for (User user : results) {
-				map.put(user.getUserName().toLowerCase(), user.getUserId());
-			}
-		} catch (Exception ex) {
-			_log.error(ex.getMessage(), ex);
-		} finally {
-			return map;
-		}
-	}
 }
