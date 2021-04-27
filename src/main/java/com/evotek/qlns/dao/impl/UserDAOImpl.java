@@ -244,8 +244,8 @@ public class UserDAOImpl extends AbstractDAO<User> implements UserDAO {
 			List<Predicate> predicates = new ArrayList<>();
 
 			if (Validator.isNotNull(value)) {
-				predicates.add(builder.like(builder.lower(root.get("email")), QueryUtil.getFullStringParam(value, true),
-						CharPool.EXCLAMATION));
+				predicates.add(builder.like(builder.lower(root.get("email")),
+						QueryUtil.getFullStringParam(value, true), CharPool.EXCLAMATION));
 			}
 
 			predicates.add(builder.notEqual(root.get("status"), Values.STATUS_DEACTIVE));
@@ -399,15 +399,15 @@ public class UserDAOImpl extends AbstractDAO<User> implements UserDAO {
 			CriteriaQuery<User> criteria = builder.createQuery(User.class);
 
 			Root<User> root = criteria.from(User.class);
-
+			
 			Predicate predicate = getUsersPredicate(builder, root, keyword);
-
+			
 			criteria.select(root);
 
 			if (Validator.isNotNull(predicate)) {
 				criteria.where(predicate);
 			}
-
+			
 			Query<User> q = session.createQuery(criteria);
 
 			if (firstResult >= 0 && maxResult > 0) {
@@ -425,7 +425,7 @@ public class UserDAOImpl extends AbstractDAO<User> implements UserDAO {
 			} else {
 				criteria.orderBy(builder.asc(root.get("modifiedDate")));
 			}
-
+			
 			results = q.getResultList();
 
 		} catch (Exception ex) {
@@ -440,27 +440,11 @@ public class UserDAOImpl extends AbstractDAO<User> implements UserDAO {
 		int result = 0;
 
 		try {
-			Session session = getCurrentSession();
+			Criteria cri = getUsersCriteria(keyword, null, null);
 
-			CriteriaBuilder builder = session.getCriteriaBuilder();
+			cri.setProjection(Projections.rowCount());
 
-			CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
-
-			Root<User> root = criteria.from(User.class);
-
-			Predicate predicate = getUsersPredicate(builder, root, keyword);
-
-			criteria.select(builder.count(root));
-
-			if (Validator.isNotNull(predicate)) {
-				criteria.where(predicate);
-			}
-
-			Long count = (Long) session.createQuery(criteria).uniqueResult();
-
-			if (count != null) {
-				result = count.intValue();
-			}
+			result = (Integer) cri.uniqueResult();
 		} catch (Exception ex) {
 			_log.error(ex.getMessage(), ex);
 		}
@@ -468,12 +452,13 @@ public class UserDAOImpl extends AbstractDAO<User> implements UserDAO {
 		return result;
 	}
 
-	private Predicate getUsersPredicate(CriteriaBuilder builder, Root<User> root, String keyword) throws Exception {
+	private Predicate getUsersPredicate(CriteriaBuilder builder, Root<User> root, String keyword)
+			throws Exception {
 		Predicate totalPre = null;
-
+		
 		try {
 			List<Predicate> predicates = new ArrayList<>();
-
+			
 			if (Validator.isNotNull(keyword)) {
 				predicates.add(builder.like(builder.lower(root.get("firstName")),
 						QueryUtil.getFullStringParam(keyword, true), CharPool.EXCLAMATION));
@@ -494,30 +479,32 @@ public class UserDAOImpl extends AbstractDAO<User> implements UserDAO {
 				predicates.add(builder.like(builder.lower(root.get("address")),
 						QueryUtil.getFullStringParam(keyword, true), CharPool.EXCLAMATION));
 			}
-
+			
 			if (!predicates.isEmpty()) {
 				Predicate keywordPre = builder.or(predicates.toArray(new Predicate[predicates.size()]));
-
+				
 				totalPre = builder.and(keywordPre, builder.notEqual(root.get("status"), Values.STATUS_DEACTIVE));
 			} else {
 				totalPre = builder.notEqual(root.get("status"), Values.STATUS_DEACTIVE);
 			}
-
+			
+			
 		} catch (Exception ex) {
 			_log.error(ex.getMessage(), ex);
 		}
-
+		
 		return totalPre;
 	}
 
-	private List<Predicate> getUsersPredicate(CriteriaBuilder builder, Root<User> root, String userName, String email,
-			Long gender, String birthPlace, Date birthdayFrom, Date birthdayTo, String phone, String mobile,
-			String account, Long status) throws Exception {
+	private Criteria getUsersCriteria(String userName, String email, Long gender, String birthPlace, Date birthdayFrom,
+			Date birthdayTo, String phone, String mobile, String account, Long status, String orderByColumn,
+			String orderByType) throws Exception {
 		try {
-			List<Predicate> predicates = new ArrayList<>();
+			Criteria cri = currentSession().createCriteria(User.class);
+
+			Conjunction conjunction = Restrictions.conjunction();
 
 			if (Validator.isNotNull(userName)) {
-				predicates.add(null);
 				Disjunction disjunction = Restrictions.disjunction();
 
 				disjunction.add(LikeCriterionMaker.ilike("firstName", userName, MatchMode.ANYWHERE));
