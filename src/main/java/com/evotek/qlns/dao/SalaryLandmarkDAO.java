@@ -16,10 +16,10 @@ import com.evotek.qlns.model.SalaryLandmark;
  */
 public interface SalaryLandmarkDAO {
 
-    public List<SalaryLandmark> getSalaryLandmarkByStaffId(Long staffId);
+	public void delete(SalaryLandmark salaryLm);
 
-    public void delete(SalaryLandmark salaryLm);
+	public List<SalaryLandmark> getSalaryLandmarkByStaffId(Long staffId);
 
-    public void saveOrUpdate(SalaryLandmark salaryLm);
-    
+	public void saveOrUpdate(SalaryLandmark salaryLm);
+
 }

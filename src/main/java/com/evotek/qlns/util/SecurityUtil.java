@@ -25,130 +25,124 @@ import com.evotek.qlns.policy.impl.UserPrincipalImpl;
  * @author linhlh2
  */
 public class SecurityUtil {
-    public static Authentication getAuthentication() {
-        return SecurityContextHolder.getContext().getAuthentication();
-    }
+	public static Authentication getAuthentication() {
+		return SecurityContextHolder.getContext().getAuthentication();
+	}
 
-    public static Collection<? extends GrantedAuthority> getGrantedAuthorities(){
-        return getAuthentication().getAuthorities();
-    }
+	public static Collection<? extends GrantedAuthority> getGrantedAuthorities() {
+		return getAuthentication().getAuthorities();
+	}
 
-    public static UserPrincipalImpl getUserPrincipalImpl(){
-        return (UserPrincipalImpl) getAuthentication().getPrincipal();
-    }
+	public static ServletContext getServletContext() {
+		return Sessions.getCurrent().getWebApp().getServletContext();
+	}
 
-    public static boolean isAllGranted(String authorities) {
-        if (null == authorities || "".equals(authorities)) {
-            return false;
-        }
+	public static UserPrincipalImpl getUserPrincipalImpl() {
+		return (UserPrincipalImpl) getAuthentication().getPrincipal();
+	}
 
-        if(PermissionUtil.isAdministrator(getUserPrincipalImpl().getRoles())){
-            return true;
-        }
+	public static boolean isAllGranted(String authorities) {
+		if (null == authorities || "".equals(authorities)) {
+			return false;
+		}
 
-        final Collection<? extends GrantedAuthority> granted =
-                getGrantedAuthorities();
+		if (PermissionUtil.isAdministrator(getUserPrincipalImpl().getRoles())) {
+			return true;
+		}
 
-        boolean isAllGranted = granted.containsAll(parseAuthorities(authorities));
+		final Collection<? extends GrantedAuthority> granted = getGrantedAuthorities();
 
-        return isAllGranted;
-    }
+		boolean isAllGranted = granted.containsAll(parseAuthorities(authorities));
 
-    public static boolean isNoneGranted(String authorities) {
-        if (null == authorities || "".equals(authorities)) {
-            return false;
-        }
+		return isAllGranted;
+	}
 
-        if(PermissionUtil.isAdministrator(getUserPrincipalImpl().getRoles())){
-            return false;
-        }
+	public static boolean isAnyGranted(String authorities) {
+		if (null == authorities || "".equals(authorities)) {
+			return false;
+		}
 
-        final Collection<? extends GrantedAuthority> granted =
-                getGrantedAuthorities();
+		if (PermissionUtil.isAdministrator(getUserPrincipalImpl().getRoles())) {
+			return true;
+		}
 
-        final Set grantedCopy = retainAll(granted, parseAuthorities(authorities));
+		final Collection<? extends GrantedAuthority> granted = getGrantedAuthorities();
 
-        return grantedCopy.isEmpty();
-    }
+		final Set grantedCopy = retainAll(granted, parseAuthorities(authorities));
 
-    public static boolean isAnyGranted(String authorities) {
-        if (null == authorities || "".equals(authorities)) {
-            return false;
-        }
+		return !grantedCopy.isEmpty();
+	}
 
-        if(PermissionUtil.isAdministrator(getUserPrincipalImpl().getRoles())){
-            return true;
-        }
+	public static boolean isNoneGranted(String authorities) {
+		if (null == authorities || "".equals(authorities)) {
+			return false;
+		}
 
-        final Collection<? extends GrantedAuthority> granted =
-                getGrantedAuthorities();
+		if (PermissionUtil.isAdministrator(getUserPrincipalImpl().getRoles())) {
+			return false;
+		}
 
-        final Set grantedCopy = retainAll(granted, parseAuthorities(authorities));
+		final Collection<? extends GrantedAuthority> granted = getGrantedAuthorities();
 
-        return !grantedCopy.isEmpty();
-    }
+		final Set grantedCopy = retainAll(granted, parseAuthorities(authorities));
 
-    private static Collection<GrantedAuthority> parseAuthorities(
-            String authorizationsString) {
-        final ArrayList<GrantedAuthority> required = new ArrayList<GrantedAuthority>();
+		return grantedCopy.isEmpty();
+	}
 
-        final String[] rights = authorizationsString.split(",");
+	private static Collection<GrantedAuthority> parseAuthorities(String authorizationsString) {
+		final ArrayList<GrantedAuthority> required = new ArrayList<GrantedAuthority>();
 
-        for (int i = 0; i < rights.length; i++) {
-            String right = rights[i].trim();
+		final String[] rights = authorizationsString.split(",");
 
-            required.add(new SimpleGrantedAuthority(right));
-        }
+		for (int i = 0; i < rights.length; i++) {
+			String right = rights[i].trim();
 
-        return required;
-    }
+			required.add(new SimpleGrantedAuthority(right));
+		}
 
-    private static Set retainAll(final Collection<? extends GrantedAuthority> granted,
-            final Collection<? extends GrantedAuthority> required) {
-        Set<String> grantedRoles = toRoles(granted);
-        Set<String> requiredRoles = toRoles(required);
+		return required;
+	}
 
-        grantedRoles.retainAll(requiredRoles);
+	private static Set retainAll(final Collection<? extends GrantedAuthority> granted,
+			final Collection<? extends GrantedAuthority> required) {
+		Set<String> grantedRoles = toRoles(granted);
+		Set<String> requiredRoles = toRoles(required);
 
-        return toAuthorities(grantedRoles, granted);
-    }
+		grantedRoles.retainAll(requiredRoles);
 
-    private static Set<String> toRoles(Collection<? extends GrantedAuthority> authorities) {
-        final Set<String> target = new HashSet<String>();
+		return toAuthorities(grantedRoles, granted);
+	}
 
-        for (GrantedAuthority au : authorities) {
+	private static Set<GrantedAuthority> toAuthorities(Set<String> grantedRights,
+			Collection<? extends GrantedAuthority> granted) {
+		Set<GrantedAuthority> target = new HashSet<GrantedAuthority>();
 
-            if (null == au.getAuthority()) {
-                throw new IllegalArgumentException(
-                        "Cannot process GrantedAuthority objects which return "
-                        + "null from getAuthority() - attempting to process "
-                        + au.toString());
-            }
+		for (String right : grantedRights) {
+			for (GrantedAuthority authority : granted) {
 
-            target.add(au.getAuthority());
-        }
+				if (authority.getAuthority().equals(right)) {
+					target.add(authority);
+					break;
+				}
+			}
+		}
 
-        return target;
-    }
+		return target;
+	}
 
-    private static Set<GrantedAuthority> toAuthorities(Set<String> grantedRights,
-            Collection<? extends GrantedAuthority> granted) {
-        Set<GrantedAuthority> target = new HashSet<GrantedAuthority>();
+	private static Set<String> toRoles(Collection<? extends GrantedAuthority> authorities) {
+		final Set<String> target = new HashSet<String>();
 
-        for (String right : grantedRights) {
-            for (GrantedAuthority authority : granted) {
+		for (GrantedAuthority au : authorities) {
 
-                if (authority.getAuthority().equals(right)) {
-                    target.add(authority);
-                    break;
-                }
-            }
-        }
+			if (null == au.getAuthority()) {
+				throw new IllegalArgumentException("Cannot process GrantedAuthority objects which return "
+						+ "null from getAuthority() - attempting to process " + au.toString());
+			}
 
-        return target;
-    }
+			target.add(au.getAuthority());
+		}
 
-    public static ServletContext getServletContext(){
-        return Sessions.getCurrent().getWebApp().getServletContext();
-    }
+		return target;
+	}
 }

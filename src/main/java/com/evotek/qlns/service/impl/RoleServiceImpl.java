@@ -30,37 +30,10 @@ public class RoleServiceImpl implements RoleService {
 	private static final Logger _log = LogManager.getLogger(RoleServiceImpl.class);
 
 	@Autowired
-	private RoleDAO roleDAO;
-
-	@Autowired
 	private GroupDAO groupDAO;
 
-	@Override
-	public List<Role> getRoles(String roleName, Long status) throws Exception {
-		return this.roleDAO.getRoles(roleName, status);
-	}
-
-	@Override
-	public void lockRole(Role role) throws Exception {
-		try {
-			role.setStatus(Values.STATUS_DEACTIVE);
-
-			this.roleDAO.saveOrUpdate(role);
-		} catch (Exception ex) {
-			_log.error(ex.getMessage(), ex);
-		}
-	}
-
-	@Override
-	public void unlockRole(Role role) throws Exception {
-		try {
-			role.setStatus(Values.STATUS_ACTIVE);
-
-			this.roleDAO.saveOrUpdate(role);
-		} catch (Exception ex) {
-			_log.error(ex.getMessage(), ex);
-		}
-	}
+	@Autowired
+	private RoleDAO roleDAO;
 
 	@Override
 	public void deleteRole(Role role) throws Exception {
@@ -81,6 +54,11 @@ public class RoleServiceImpl implements RoleService {
 	}
 
 	@Override
+	public List<Role> getRoles(String roleName, Long status) throws Exception {
+		return this.roleDAO.getRoles(roleName, status);
+	}
+
+	@Override
 	public boolean isRoleExist(String roleName, Role role) throws Exception {
 		Long roleId = null;
 
@@ -94,8 +72,30 @@ public class RoleServiceImpl implements RoleService {
 	}
 
 	@Override
+	public void lockRole(Role role) throws Exception {
+		try {
+			role.setStatus(Values.STATUS_DEACTIVE);
+
+			this.roleDAO.saveOrUpdate(role);
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+	}
+
+	@Override
 	public void saveOrUpdateRole(Role role) throws Exception {
 		this.roleDAO.saveOrUpdate(role);
+	}
+
+	@Override
+	public void unlockRole(Role role) throws Exception {
+		try {
+			role.setStatus(Values.STATUS_ACTIVE);
+
+			this.roleDAO.saveOrUpdate(role);
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
 	}
 
 }

@@ -25,135 +25,134 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "notification")
 public class Notification implements Serializable {
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "notification_id")
-    private Long notificationId;
-    @Column(name = "notification_type")
-    private Long notificationType;
-    @Column(name = "create_date")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createDate;
-    @Column(name = "expired_date")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date expiredDate;
-    @Column(name = "event_date")
-    @Temporal(TemporalType.DATE)
-    private Date eventDate;
-    @Column(name = "message")
-    private String message;
-    @Column(name = "status")
-    private Long status;
-    @Column(name = "class_name")
-    private String className;
-    @Column(name = "class_pk")
-    private Long classPk;
+	private static final long serialVersionUID = 1L;
+	@Column(name = "class_name")
+	private String className;
+	@Column(name = "class_pk")
+	private Long classPk;
+	@Column(name = "create_date")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date createDate;
+	@Column(name = "event_date")
+	@Temporal(TemporalType.DATE)
+	private Date eventDate;
+	@Column(name = "expired_date")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date expiredDate;
+	@Column(name = "message")
+	private String message;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "notification_id")
+	private Long notificationId;
+	@Column(name = "notification_type")
+	private Long notificationType;
+	@Column(name = "status")
+	private Long status;
 
-    public Notification() {
-    }
+	public Notification() {
+	}
 
-    public Notification(Long notificationId) {
-        this.notificationId = notificationId;
-    }
+	public Notification(Long notificationId) {
+		this.notificationId = notificationId;
+	}
 
-    public Long getNotificationId() {
-        return this.notificationId;
-    }
+	@Override
+	public boolean equals(Object object) {
+		// TODO: Warning - this method won't work in the case the id fields are not set
+		if (!(object instanceof Notification)) {
+			return false;
+		}
+		Notification other = (Notification) object;
+		if ((this.notificationId == null && other.notificationId != null)
+				|| (this.notificationId != null && !this.notificationId.equals(other.notificationId))) {
+			return false;
+		}
+		return true;
+	}
 
-    public void setNotificationId(Long notificationId) {
-        this.notificationId = notificationId;
-    }
+	public String getClassName() {
+		return this.className;
+	}
 
-    public Long getNotificationType() {
-        return this.notificationType;
-    }
+	public Long getClassPk() {
+		return this.classPk;
+	}
 
-    public void setNotificationType(Long notificationType) {
-        this.notificationType = notificationType;
-    }
+	public Date getCreateDate() {
+		return this.createDate;
+	}
 
-    public Date getCreateDate() {
-        return this.createDate;
-    }
+	public Date getEventDate() {
+		return this.eventDate;
+	}
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
+	public Date getExpiredDate() {
+		return this.expiredDate;
+	}
 
-    public Date getExpiredDate() {
-        return this.expiredDate;
-    }
+	public String getMessage() {
+		return this.message;
+	}
 
-    public void setExpiredDate(Date expiredDate) {
-        this.expiredDate = expiredDate;
-    }
+	public Long getNotificationId() {
+		return this.notificationId;
+	}
 
-    public Date getEventDate() {
-        return this.eventDate;
-    }
+	public Long getNotificationType() {
+		return this.notificationType;
+	}
 
-    public void setEventDate(Date eventDate) {
-        this.eventDate = eventDate;
-    }
+	public Long getStatus() {
+		return this.status;
+	}
 
-    public String getMessage() {
-        return this.message;
-    }
+	@Override
+	public int hashCode() {
+		int hash = 0;
+		hash += (this.notificationId != null ? this.notificationId.hashCode() : 0);
+		return hash;
+	}
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
+	public void setClassName(String className) {
+		this.className = className;
+	}
 
-    public Long getStatus() {
-        return this.status;
-    }
+	public void setClassPk(Long classPk) {
+		this.classPk = classPk;
+	}
 
-    public void setStatus(Long status) {
-        this.status = status;
-    }
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
 
-    public String getClassName() {
-        return this.className;
-    }
+	public void setEventDate(Date eventDate) {
+		this.eventDate = eventDate;
+	}
 
-    public void setClassName(String className) {
-        this.className = className;
-    }
+	public void setExpiredDate(Date expiredDate) {
+		this.expiredDate = expiredDate;
+	}
 
-    public Long getClassPk() {
-        return this.classPk;
-    }
+	public void setMessage(String message) {
+		this.message = message;
+	}
 
-    public void setClassPk(Long classPk) {
-        this.classPk = classPk;
-    }
+	public void setNotificationId(Long notificationId) {
+		this.notificationId = notificationId;
+	}
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (this.notificationId != null ? this.notificationId.hashCode() : 0);
-        return hash;
-    }
+	public void setNotificationType(Long notificationType) {
+		this.notificationType = notificationType;
+	}
 
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Notification)) {
-            return false;
-        }
-        Notification other = (Notification) object;
-        if ((this.notificationId == null && other.notificationId != null) 
-                || (this.notificationId != null 
-                && !this.notificationId.equals(other.notificationId))) {
-            return false;
-        }
-        return true;
-    }
+	public void setStatus(Long status) {
+		this.status = status;
+	}
 
-    @Override
-    public String toString() {
-        return "com.evotek.qlns.model.Notification[ notificationId=" + this.notificationId + " ]";
-    }
-    
+	@Override
+	public String toString() {
+		return "com.evotek.qlns.model.Notification[ notificationId=" + this.notificationId + " ]";
+	}
+
 }

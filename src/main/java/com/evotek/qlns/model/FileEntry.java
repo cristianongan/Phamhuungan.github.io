@@ -20,145 +20,142 @@ import javax.persistence.TemporalType;
 public class FileEntry implements Serializable {
 
 	private static final long serialVersionUID = -7216283817240576540L;
-	
+
+	private Date createDate;
+	private String description;
+	private Document document;
+	private Long fileId;
 	private Long folderId;
-    private String name;
-    private Long userId;
-    private String description;
-    private Long size;
-    private String userName;
-    private Long fileId;
-    private Date createDate;
-    private Date modifiedDate;
-    private Document document;
+	private Date modifiedDate;
+	private String name;
+	private Long size;
+	private Long userId;
+	private String userName;
 
-    @Column(name = "folder_id", precision = 22, scale = 0)
-    public Long getFolderId() {
-        return this.folderId;
-    }
+	public FileEntry() {
+	}
 
-    public void setFolderId(Long folderId) {
-        this.folderId = folderId;
-    }
+	public FileEntry(Long fileId) {
+		this.fileId = fileId;
+	}
 
-    @Column(name = "name", length = 255)
-    public String getName() {
-        return this.name;
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+		final FileEntry other = (FileEntry) obj;
 
-    @Column(name = "user_id", precision = 22, scale = 0)
-    public Long getUserId() {
-        return this.userId;
-    }
+		if (this.fileId != other.fileId && (this.fileId == null || !this.fileId.equals(other.fileId))) {
+			return false;
+		}
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
+		return true;
+	}
 
-    @Column(name = "description", length = 2000)
-    public String getDescription() {
-        return this.description;
-    }
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "create_date", length = 7)
+	public Date getCreateDate() {
+		return this.createDate;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	@Column(name = "description", length = 2000)
+	public String getDescription() {
+		return this.description;
+	}
 
-    @Column(name = "size_", precision = 22, scale = 0)
-    public Long getSize() {
-        return this.size;
-    }
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "document_id")
+	public Document getDocument() {
+		return this.document;
+	}
 
-    public void setSize(Long size) {
-        this.size = size;
-    }
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "file_id", unique = true, nullable = false, precision = 22, scale = 0)
+	public Long getFileId() {
+		return this.fileId;
+	}
 
-    @Column(name = "user_name", length = 200)
-    public String getUserName() {
-        return this.userName;
-    }
+	@Column(name = "folder_id", precision = 22, scale = 0)
+	public Long getFolderId() {
+		return this.folderId;
+	}
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "file_id", unique = true, nullable = false, precision = 22, scale = 0)
-    public Long getFileId() {
-        return this.fileId;
-    }
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "modified_date", length = 7)
+	public Date getModifiedDate() {
+		return this.modifiedDate;
+	}
 
-    public void setFileId(Long fileId) {
-        this.fileId = fileId;
-    }
+	@Column(name = "name", length = 255)
+	public String getName() {
+		return this.name;
+	}
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "create_date", length = 7)
-    public Date getCreateDate() {
-        return this.createDate;
-    }
+	@Column(name = "size_", precision = 22, scale = 0)
+	public Long getSize() {
+		return this.size;
+	}
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
+	@Column(name = "user_id", precision = 22, scale = 0)
+	public Long getUserId() {
+		return this.userId;
+	}
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "modified_date", length = 7)
-    public Date getModifiedDate() {
-        return this.modifiedDate;
-    }
+	@Column(name = "user_name", length = 200)
+	public String getUserName() {
+		return this.userName;
+	}
 
-    public void setModifiedDate(Date modifiedDate) {
-        this.modifiedDate = modifiedDate;
-    }
+	@Override
+	public int hashCode() {
+		int hash = 5;
+		return hash;
+	}
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "document_id")
-    public Document getDocument() {
-        return this.document;
-    }
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
 
-    public void setDocument(Document document) {
-        this.document = document;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public FileEntry() {
-    }
+	public void setDocument(Document document) {
+		this.document = document;
+	}
 
-    public FileEntry(Long fileId) {
-        this.fileId = fileId;
-    }
+	public void setFileId(Long fileId) {
+		this.fileId = fileId;
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
+	public void setFolderId(Long folderId) {
+		this.folderId = folderId;
+	}
 
-        final FileEntry other = (FileEntry) obj;
+	public void setModifiedDate(Date modifiedDate) {
+		this.modifiedDate = modifiedDate;
+	}
 
-        if (this.fileId != other.fileId
-                && (this.fileId == null
-                || !this.fileId.equals(other.fileId))) {
-            return false;
-        }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-        return true;
-    }
+	public void setSize(Long size) {
+		this.size = size;
+	}
 
-    @Override
-    public int hashCode() {
-        int hash = 5;
-        return hash;
-    }
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
 
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
 
 }

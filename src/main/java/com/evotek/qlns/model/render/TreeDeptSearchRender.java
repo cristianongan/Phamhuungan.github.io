@@ -24,50 +24,47 @@ import com.evotek.qlns.util.key.Constants;
  *
  * @author My PC
  */
-public class TreeDeptSearchRender implements
-        TreeitemRenderer<DepartmentTreeNode> {
+public class TreeDeptSearchRender implements TreeitemRenderer<DepartmentTreeNode> {
 
-    private Bandbox bbTemp;
-    private A btnClear;
+	private Bandbox bbTemp;
+	private A btnClear;
 
-    public TreeDeptSearchRender(Bandbox bandbox, A btnClear) {
-        this.bbTemp = bandbox;
-        this.btnClear = btnClear;
-    }
+	public TreeDeptSearchRender(Bandbox bandbox, A btnClear) {
+		this.bbTemp = bandbox;
+		this.btnClear = btnClear;
+	}
 
-    @Override
+	@Override
 	public void render(Treeitem treeItem, DepartmentTreeNode t, int i) throws Exception {
-        Department dept = t.getData();
+		Department dept = t.getData();
 
-        Treerow dataRow = new Treerow();
+		Treerow dataRow = new Treerow();
 
-        dataRow.appendChild(ComponentUtil.createTreeCell(dept.getDeptName()));
+		dataRow.appendChild(ComponentUtil.createTreeCell(dept.getDeptName()));
 
-        treeItem.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+		treeItem.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
-            @Override
-            public void onEvent(Event t) throws Exception {
-                DepartmentTreeNode clickedNodeValue = ((Treeitem) t.getTarget()).getValue();
+			@Override
+			public void onEvent(Event t) throws Exception {
+				DepartmentTreeNode clickedNodeValue = ((Treeitem) t.getTarget()).getValue();
 
-                TreeDeptSearchRender.this.bbTemp.setValue(clickedNodeValue.getData().getDeptName());
-                
-                TreeDeptSearchRender.this.bbTemp.setAttribute(Constants.OBJECT,
-                        clickedNodeValue.getData());
-                TreeDeptSearchRender.this.bbTemp.setAttribute(Constants.ID,
-                        clickedNodeValue.getData().getDeptId());
-               
-                TreeDeptSearchRender.this.bbTemp.close();
-                
-                TreeDeptSearchRender.this.btnClear.setVisible(true);
-                TreeDeptSearchRender.this.btnClear.setDisabled(false);
-            }
-        });
+				TreeDeptSearchRender.this.bbTemp.setValue(clickedNodeValue.getData().getDeptName());
 
-        treeItem.appendChild(dataRow);
+				TreeDeptSearchRender.this.bbTemp.setAttribute(Constants.OBJECT, clickedNodeValue.getData());
+				TreeDeptSearchRender.this.bbTemp.setAttribute(Constants.ID, clickedNodeValue.getData().getDeptId());
 
-        treeItem.setAttribute(Constants.DATA, dept);
-        treeItem.setValue(t);
-        treeItem.setOpen(t.isOpen());
-    }
-    
+				TreeDeptSearchRender.this.bbTemp.close();
+
+				TreeDeptSearchRender.this.btnClear.setVisible(true);
+				TreeDeptSearchRender.this.btnClear.setDisabled(false);
+			}
+		});
+
+		treeItem.appendChild(dataRow);
+
+		treeItem.setAttribute(Constants.DATA, dept);
+		treeItem.setValue(t);
+		treeItem.setOpen(t.isOpen());
+	}
+
 }

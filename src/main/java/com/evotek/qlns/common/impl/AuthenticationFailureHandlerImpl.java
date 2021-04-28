@@ -19,19 +19,19 @@ import org.springframework.security.web.authentication.session.SessionAuthentica
  *
  * @author linhlh2
  */
-public class AuthenticationFailureHandlerImpl extends SimpleUrlAuthenticationFailureHandler{
+public class AuthenticationFailureHandlerImpl extends SimpleUrlAuthenticationFailureHandler {
 
-    @Override
-    public void onAuthenticationFailure(HttpServletRequest request,
-            HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
+	@Override
+	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
+			AuthenticationException exception) throws IOException, ServletException {
 
-        if(exception instanceof SessionAuthenticationException){
-            setDefaultFailureUrl("/login.zul?login_error=2");
-        } else {
-            setDefaultFailureUrl("/login.zul?login_error=1");
-        }
+		if (exception instanceof SessionAuthenticationException) {
+			setDefaultFailureUrl("/login.zul?login_error=2");
+		} else {
+			setDefaultFailureUrl("/login.zul?login_error=1");
+		}
 
-        super.onAuthenticationFailure(request, response, exception);
-    }
+		super.onAuthenticationFailure(request, response, exception);
+	}
 
 }

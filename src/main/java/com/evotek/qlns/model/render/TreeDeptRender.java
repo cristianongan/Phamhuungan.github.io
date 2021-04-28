@@ -25,54 +25,47 @@ import com.evotek.qlns.util.key.LanguageKeys;
  *
  * @author linhlh2
  */
-public class TreeDeptRender implements TreeitemRenderer<DepartmentTreeNode>{
-    private Window winparent;
-    private DepartmentService departmentService;
+public class TreeDeptRender implements TreeitemRenderer<DepartmentTreeNode> {
+	private DepartmentService departmentService;
+	private Window winparent;
 
-    public TreeDeptRender(Window winparent, DepartmentService departmentService) {
-        this.winparent = winparent;
-        this.departmentService = departmentService;
-    }
-    
-    @Override
-    public void render(final Treeitem item, DepartmentTreeNode node, int index)
-            throws Exception {
-        Department dept = node.getData();
-        //tree cell
-        Treerow treeRow = new Treerow();
+	public TreeDeptRender(Window winparent, DepartmentService departmentService) {
+		this.winparent = winparent;
+		this.departmentService = departmentService;
+	}
 
-        item.appendChild(treeRow);
+	private Menupopup _createContextMenu(final Treerow treeRow, Department dept) {
+		// context menu
+		Menupopup popup = new Menupopup();
 
-        item.setValue(node);
-        item.setOpen(node.isOpen());
-        item.setAttribute(Constants.DATA, dept);
-        //name
-        treeRow.appendChild(ComponentUtil.createTreeCell(
-                dept.getDeptName()));
+		popup.setPage(treeRow.getPage());
 
-        treeRow.setContext(_createContextMenu(treeRow, dept));
-
-        treeRow.addForward(Events.ON_DOUBLE_CLICK, this.winparent, "onEdit", dept);
-    }
-    
-    private Menupopup _createContextMenu(final Treerow treeRow,
-            Department dept) {
-        //context menu
-        Menupopup popup = new Menupopup();
-
-        popup.setPage(treeRow.getPage());
-        
-        popup.appendChild(ComponentUtil.createMenuitem(this.winparent,
-                Labels.getLabel(LanguageKeys.ADD), Events.ON_CLICK, "onAdd",
-                dept, Constants.Z_ICON_PLUS, 
-                Constants.BLUE));
+		popup.appendChild(ComponentUtil.createMenuitem(this.winparent, Labels.getLabel(LanguageKeys.ADD),
+				Events.ON_CLICK, "onAdd", dept, Constants.Z_ICON_PLUS, Constants.BLUE));
 
 //        if (documentType.getParentDocumentType() != null) { //neu khong phai la root
-        popup.appendChild(ComponentUtil.createMenuitem(this.winparent,
-                Labels.getLabel(LanguageKeys.EDIT), Events.ON_CLICK,
-                "onEdit", dept, Constants.Z_ICON_PENCIL, 
-                Constants.BLUE));
+		popup.appendChild(ComponentUtil.createMenuitem(this.winparent, Labels.getLabel(LanguageKeys.EDIT),
+				Events.ON_CLICK, "onEdit", dept, Constants.Z_ICON_PENCIL, Constants.BLUE));
 
-        return popup;
-    }
+		return popup;
+	}
+
+	@Override
+	public void render(final Treeitem item, DepartmentTreeNode node, int index) throws Exception {
+		Department dept = node.getData();
+		// tree cell
+		Treerow treeRow = new Treerow();
+
+		item.appendChild(treeRow);
+
+		item.setValue(node);
+		item.setOpen(node.isOpen());
+		item.setAttribute(Constants.DATA, dept);
+		// name
+		treeRow.appendChild(ComponentUtil.createTreeCell(dept.getDeptName()));
+
+		treeRow.setContext(_createContextMenu(treeRow, dept));
+
+		treeRow.addForward(Events.ON_DOUBLE_CLICK, this.winparent, "onEdit", dept);
+	}
 }

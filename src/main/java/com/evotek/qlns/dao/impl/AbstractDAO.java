@@ -32,7 +32,7 @@ public abstract class AbstractDAO<T extends Serializable> implements Operations<
 	public void deleteAll(Collection<T> entities) {
 		Preconditions.checkNotNull(entities);
 
-		for (T entity: entities) {
+		for (T entity : entities) {
 			delete(entity);
 		}
 	}
@@ -55,7 +55,7 @@ public abstract class AbstractDAO<T extends Serializable> implements Operations<
 	public T findById(Class<T> entityClass, Serializable id) {
 		return getCurrentSession().get(entityClass, id);
 	}
-	
+
 	public Session getCurrentSession() {
 		return this.sessionFactory.getCurrentSession();
 	}
@@ -63,7 +63,7 @@ public abstract class AbstractDAO<T extends Serializable> implements Operations<
 	@Override
 	public void refresh(T entity) {
 		Preconditions.checkNotNull(entity);
-		
+
 		getCurrentSession().refresh(entity);
 	}
 
@@ -80,7 +80,7 @@ public abstract class AbstractDAO<T extends Serializable> implements Operations<
 			session.close();
 		}
 	}
-	
+
 	@Override
 	public void save(final T entity) {
 		Preconditions.checkNotNull(entity);
@@ -94,16 +94,16 @@ public abstract class AbstractDAO<T extends Serializable> implements Operations<
 
 		getCurrentSession().saveOrUpdate(entity);
 	}
-	
+
 	@Override
 	public void saveOrUpdateAll(Collection<T> entities) {
 		Preconditions.checkNotNull(entities);
 
-		for (T entity: entities) {
+		for (T entity : entities) {
 			saveOrUpdate(entity);
 		}
 	}
-	
+
 	@Override
 	public T update(final T entity) {
 		Preconditions.checkNotNull(entity);

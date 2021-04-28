@@ -26,39 +26,39 @@ import com.evotek.qlns.model.Group;
 @Repository
 public class GroupDAOImpl extends AbstractDAO<Group> implements GroupDAO {
 
-    private static final Logger _log = LogManager.getLogger(GroupDAOImpl.class);
+	private static final Logger _log = LogManager.getLogger(GroupDAOImpl.class);
 
-    @Override
-	public void deleteByCategoryId(Long categoryId) throws Exception{
-        try {
-            List<Group> groups = getGroupByCategoryId(categoryId);
+	@Override
+	public void deleteByCategoryId(Long categoryId) throws Exception {
+		try {
+			List<Group> groups = getGroupByCategoryId(categoryId);
 
-            deleteAll(groups);
-        } catch (Exception e) {
-            _log.error(e.getMessage(), e);
-        }
-    }
+			deleteAll(groups);
+		} catch (Exception e) {
+			_log.error(e.getMessage(), e);
+		}
+	}
 
-    @Override
-	public List<Group> getGroupByCategoryId(Long categoryId) throws Exception{
-        List<Group> groups = new ArrayList<Group>();
+	@Override
+	public List<Group> getGroupByCategoryId(Long categoryId) throws Exception {
+		List<Group> groups = new ArrayList<Group>();
 
-        try {
-        	Session session = getCurrentSession();
+		try {
+			Session session = getCurrentSession();
 
 			CriteriaBuilder builder = session.getCriteriaBuilder();
 
 			CriteriaQuery<Group> criteria = builder.createQuery(Group.class);
-			
+
 			Root<Group> root = criteria.from(Group.class);
-			
+
 			criteria.select(root).where(builder.equal(root.get("categoryId"), categoryId));
 
-            groups = session.createQuery(criteria).getResultList();
-        } catch (Exception e) {
-            _log.error(e.getMessage(), e);
-        }
+			groups = session.createQuery(criteria).getResultList();
+		} catch (Exception e) {
+			_log.error(e.getMessage(), e);
+		}
 
-        return groups;
-    }
+		return groups;
+	}
 }

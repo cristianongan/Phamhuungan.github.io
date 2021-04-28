@@ -10,7 +10,8 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.zkoss.spring.SpringUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Event;
@@ -47,726 +48,650 @@ import com.evotek.qlns.util.key.ZkKeys;
 
 /**
  *
- * @author hungnt81
+ * @author LinhLH
  */
-public class UserController extends BasicController<Div>
-        implements Serializable {
+@Controller
+public class UserController extends BasicController<Div> implements Serializable {
 
-    private Div winUser;
-    
-    private Textbox tbUserName;
-    private Textbox tbEmail;
-    private Textbox tbBirthPlace;
-    private Datebox dbBirthdayFrom;
-    private Datebox dbBirthdayTo;
-    private Textbox tbPhone;
-    private Textbox tbMobile;
-    private Textbox tbAccount;
-    private Textbox tbKeyword;
-    
-    private Combobox cbGender;
-    private Combobox cbStatus;
-    
-    private Button btnLock;
-    private Button btnUnlock;
-    private Button btnDel;
-    private Button btnActivate;
-    
-    private Listbox searchResultGrid;
-    
-    private Button btnEnableAdvSearch;
-    
-    private Popup advanceSearchPopup;
-    
-    private A btnClearGender;
-    private A btnClearStatus;
-    
-    private Map<String, Object> paramMap = new HashMap<String, Object>();
-    
-    private boolean isAdmin = false;
-    private boolean isAdvance = false;
+	private static final long serialVersionUID = 7543542864782444825L;
 
-    @Override
-    public void doBeforeComposeChildren(Div win) throws Exception {
-        super.doBeforeComposeChildren(win);
+	private static final Logger _log = LogManager.getLogger(UserController.class);
 
-        this.winUser = win;
-    }
+	private static final String EDIT_PAGE = "/html/pages/manager_user/edit.zul";
+	private static final String EXPORT_USER = "export_user";
 
-    @Override
-    public void doAfterCompose(Div win) throws Exception {
-        super.doAfterCompose(win);
-        //init data
-        this.initData();
-    }
+	@Autowired
+	private UserService userService;
 
-    public void initData() throws Exception {
-        try {
-            this.isAdmin = this.getUserWorkspace().isAdministrator();
+	private Popup advanceSearchPopup;
+	private Button btnActivate;
+	private A btnClearGender;
+	private A btnClearStatus;
+	private Button btnDel;
+	private Button btnEnableAdvSearch;
+	private Button btnLock;
 
-            this.onCreateGender();
+	private Button btnUnlock;
+	private Combobox cbGender;
 
-            this.onCreateStatus();
+	private Combobox cbStatus;
+	private Datebox dbBirthdayFrom;
+	private Datebox dbBirthdayTo;
+	private boolean isAdmin = false;
 
-            this.onOkWindow();
-        } catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
-        }
-    }
+	private boolean isAdvance = false;
 
-    public void onCreateGender() throws Exception {
-        List<SimpleModel> genders =
-                this.userService.getGenderType();
-        this.cbGender.setModel(new ListModelList<SimpleModel>(genders));
-    }
+	private Map<String, Object> paramMap = new HashMap<String, Object>();
 
-    public void onSelect$cbGender() {
-        this.btnClearGender.setVisible(true);
-    }
-    
-    public void onClick$btnClearGender() {
-        this.cbGender.setSelectedIndex(-1);
-        this.btnClearGender.setVisible(false);
-    }
-    
-    public void onCreateStatus() {
-        List<SimpleModel> statusList = new ArrayList<SimpleModel>();
+	private Listbox searchResultGrid;
+
+	private Textbox tbAccount;
+	private Textbox tbBirthPlace;
+
+	private Textbox tbEmail;
+
+	private Textbox tbKeyword;
+	private Textbox tbMobile;
+
+	private Textbox tbPhone;
+
+	private Textbox tbUserName;
+
+	private Div winUser;
+
+	private Map<String, Object> _createParameterMap(User user) {
+		Map<String, Object> parameters = new HashMap<String, Object>();
+
+		parameters.put(Constants.PARENT_WINDOW, this.winUser);
+		parameters.put(Constants.OBJECT, user);
+		parameters.put(Constants.SECOND_OBJECT, true);
+
+		return parameters;
+	}
+
+	public void advanceSearch() {
+		String userName = GetterUtil.getString(this.tbUserName.getValue());
+		String email = GetterUtil.getString(this.tbEmail.getValue());
+		Long gender = ComponentUtil.getComboboxValue(this.cbGender);
+		String birthplace = GetterUtil.getString(this.tbBirthPlace.getValue());
+		Date birthdayFrom = this.dbBirthdayFrom.getValue();
+		Date birthdayTo = this.dbBirthdayTo.getValue();
+		String phone = GetterUtil.getString(this.tbPhone.getValue());
+		String mobile = GetterUtil.getString(this.tbMobile.getValue());
+		String account = GetterUtil.getString(this.tbAccount.getValue());
+		Long status = ComponentUtil.getComboboxValue(this.cbStatus);
+		// create param map
+
+		this.paramMap.put("userName", userName);
+		this.paramMap.put("email", email);
+		this.paramMap.put("gender", gender);
+		this.paramMap.put("birthplace", birthplace);
+		this.paramMap.put("birthdayFrom", birthdayFrom);
+		this.paramMap.put("birthdayTo", birthdayTo);
+		this.paramMap.put("phone", phone);
+		this.paramMap.put("mobile", mobile);
+		this.paramMap.put("account", account);
+		this.paramMap.put("status", status);
+
+		this.searchResultGrid.setItemRenderer(new UserRender(this.winUser, this.isAdmin));
+		this.searchResultGrid
+				.setModel(new UserListModel(this.searchResultGrid.getPageSize(), userName, email, gender, birthplace,
+						birthdayFrom, birthdayTo, phone, mobile, account, status, this.isAdvance, this.userService));
+	}
+
+	public void basicSearch() {
+		String keyword = GetterUtil.getString(this.tbKeyword.getValue());
+
+		this.paramMap.put("keyword", keyword);
+
+		this.searchResultGrid.setItemRenderer(new UserRender(this.winUser, this.isAdmin));
+
+		this.searchResultGrid.setModel(
+				new UserListModel(this.searchResultGrid.getPageSize(), keyword, this.isAdvance, this.userService));
+
+		this.searchResultGrid.setMultiple(true);
+	}
+
+	@Override
+	public void doAfterCompose(Div win) throws Exception {
+		super.doAfterCompose(win);
+		// init data
+		this.initData();
+	}
+
+	@Override
+	public void doBeforeComposeChildren(Div win) throws Exception {
+		super.doBeforeComposeChildren(win);
+
+		this.winUser = win;
+	}
+
+	public Map<Integer, String[]> getConvertMap() {
+		Map<Integer, String[]> convertMap = new HashMap<Integer, String[]>();
+
+		String[] genderArray = new String[] { Labels.getLabel(LanguageKeys.MALE),
+				Labels.getLabel(LanguageKeys.FEMALE) };
+
+		String[] statusArray = new String[] { Labels.getLabel(LanguageKeys.STATUS_ACTIVE),
+				Labels.getLabel(LanguageKeys.STATUS_LOCK) };
+
+		convertMap.put(2, genderArray);
+		convertMap.put(4, statusArray);
+
+		return convertMap;
+	}
+
+	// export
+	public List<Object[]> getHeaderInfors() {
+		List<Object[]> headerInfors = new ArrayList<Object[]>();
+
+		headerInfors.add(new Object[] { Labels.getLabel(LanguageKeys.ORDINAL), 2000 });
+		headerInfors.add(new Object[] { Labels.getLabel(LanguageKeys.ACCOUNT), 8000 });
+		headerInfors.add(new Object[] { Labels.getLabel(LanguageKeys.EMAIL), 8000 });
+		headerInfors.add(new Object[] { Labels.getLabel(LanguageKeys.GENDER), 8000 });
+		headerInfors.add(new Object[] { Labels.getLabel(LanguageKeys.FULL_NAME), 6000 });
+		headerInfors.add(new Object[] { Labels.getLabel(LanguageKeys.STATUS), 6000 });
+		//
+
+		return headerInfors;
+	}
+
+	public List<User> getListExport() {
+		List<User> results = new ArrayList<User>();
+
+		try {
+			if (this.isAdvance) {
+				String userName = GetterUtil.getString(this.paramMap.get("userName"));
+				String email = GetterUtil.getString(this.paramMap.get("email"));
+				Long gender = GetterUtil.getLong(this.paramMap.get("gender"));
+				String birthplace = GetterUtil.getString(this.paramMap.get("birthplace"));
+				Date birthdayFrom = (Date) this.paramMap.get("birthdayFrom");
+				Date birthdayTo = (Date) this.paramMap.get("birthdayTo");
+				String phone = GetterUtil.getString(this.paramMap.get("phone"));
+				String mobile = GetterUtil.getString(this.paramMap.get("mobile"));
+				String account = GetterUtil.getString(this.paramMap.get("account"));
+				Long status = GetterUtil.getLong(this.paramMap.get("status"));
+
+				results = this.userService.getUsers(userName, email, gender, birthplace, birthdayFrom, birthdayTo,
+						phone, mobile, account, status, QueryUtil.GET_ALL, QueryUtil.GET_ALL, null, null);
+
+			} else {
+				String keyword = (String) this.paramMap.get("keyword");
+
+				results = this.userService.getUsers(keyword, QueryUtil.GET_ALL, QueryUtil.GET_ALL, null, null);
+			}
+
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+
+		return results;
+	}
+
+	public List<String> getProperties() {
+		List<String> properties = new ArrayList<String>();
+
+		properties.add("userName");
+		properties.add("email");
+		properties.add("gender");
+		properties.add("fullName");
+		properties.add("status");
+
+		return properties;
+	}
+
+	private List<User> getUserSelected() {
+		List<User> users = new ArrayList<User>();
+
+		for (Listitem item : this.searchResultGrid.getSelectedItems()) {
+			User user = (User) item.getAttribute("data");
+
+			if (Validator.isNotNull(user)) {
+				users.add(user);
+			}
+		}
+
+		return users;
+	}
+
+	public void initData() throws Exception {
+		try {
+			this.isAdmin = this.getUserWorkspace().isAdministrator();
+
+			this.onCreateGender();
+
+			this.onCreateStatus();
+
+			this.onOkWindow();
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+	}
+
+	public void onAfterRender$cbStatus() {
+		this.cbStatus.setSelectedIndex(Values.FIRST_INDEX);
+
+		refreshModel();
+	}
+
+	public void onClick$btnActivate() {
+		final List<User> users = this.getUserSelected();
+
+		if (Validator.isNull(users)) {
+			Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_SELECT_RECORD), Labels.getLabel(LanguageKeys.ERROR),
+					Messagebox.OK, Messagebox.EXCLAMATION);
+		} else {
+			Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_ACTIVATE),
+					Labels.getLabel(LanguageKeys.MESSAGE_INFOR_ACTIVATE), Messagebox.OK | Messagebox.CANCEL,
+					Messagebox.QUESTION, new EventListener() {
+						@Override
+						public void onEvent(Event e) throws Exception {
+							if (Messagebox.ON_OK.equals(e.getName())) {
+								try {
+									UserController.this.userService.activateUser(users);
+
+									ComponentUtil.createSuccessMessageBox(LanguageKeys.MESSAGE_ACTIVATE_SUCCESS);
+
+									refreshModel();
+								} catch (Exception ex) {
+									_log.error(ex.getMessage(), ex);
+
+									Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_ACTIVATE_FAIL));
+								}
+							}
+						}
+					});
+		}
+	}
+
+	public void onClick$btnAdd() {
+		Window win = (Window) Executions.createComponents(EDIT_PAGE, this.winUser, _createParameterMap(null));
+
+		win.doModal();
+	}
+
+	public void onClick$btnAdvanceSearch() {
+		this.refreshModel();
+	}
+
+	public void onClick$btnAdvSearch() {
+		this.isAdvance = true;
+
+		this.refreshModel();
+	}
+
+	public void onClick$btnBasicSearch() {
+		this.isAdvance = false;
+
+		this.refreshModel();
+
+	}
+
+	public void onClick$btnClearGender() {
+		this.cbGender.setSelectedIndex(-1);
+		this.btnClearGender.setVisible(false);
+	}
+
+	public void onClick$btnClearStatus() {
+		this.cbStatus.setSelectedIndex(-1);
+		this.btnClearStatus.setVisible(false);
+	}
+
+	public void onClick$btnDel() {
+		final List<User> users = this.getUserSelected();
+
+		if (Validator.isNull(users)) {
+			Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_SELECT_RECORD), Labels.getLabel(LanguageKeys.ERROR),
+					Messagebox.OK, Messagebox.EXCLAMATION);
+		} else {
+			Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_DELETE),
+					Labels.getLabel(LanguageKeys.MESSAGE_INFOR_DELETE), Messagebox.OK | Messagebox.CANCEL,
+					Messagebox.QUESTION, new EventListener() {
+						@Override
+						public void onEvent(Event e) throws Exception {
+							if (Messagebox.ON_OK.equals(e.getName())) {
+								try {
+									List<String> userNotDel = UserController.this.userService.delete(users);
+
+									if (Validator.isNull(userNotDel)) {
+										ComponentUtil.createSuccessMessageBox(LanguageKeys.MESSAGE_DELETE_SUCCESS);
+									} else {
+										Messagebox.show(Values.getInUseMsg(Labels.getLabel(LanguageKeys.ACCOUNT,
+												StringUtils.join(userNotDel, StringPool.COMMA))));
+									}
+
+									refreshModel();
+
+								} catch (Exception ex) {
+									_log.error(ex.getMessage(), ex);
+
+									Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_DELETE_FAIL));
+								}
+							}
+						}
+					});
+		}
+	}
+
+	public void onClick$btnEnableAdvSearch() {
+		this.advanceSearchPopup.open(this.btnEnableAdvSearch, ZkKeys.OVERLAP_END);
+
+		this.tbUserName.setFocus(true);
+
+		this.isAdvance = true;
+	}
+
+	public void onClick$btnExport() throws Exception {
+		try {
+			List<Object[]> headerInfors = getHeaderInfors();
+			List<String> properties = getProperties();
+
+			List<User> datas = getListExport();
+
+			if (!datas.isEmpty()) {
+				String title = Labels.getLabel(LanguageKeys.LIST_USER).toUpperCase();
+
+				ExcelUtil excelUtil = new ExcelUtil<User>(getConvertMap());
+
+				excelUtil.toSingleSheetXlsx(EXPORT_USER, title, headerInfors, properties, datas);
+			} else {
+				Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_NO_RECORD_EXPORT),
+						Labels.getLabel(LanguageKeys.ERROR), Messagebox.OK, Messagebox.ERROR);
+			}
+
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+	}
+
+	public void onClick$btnImport() {
+		Window win = (Window) Executions.createComponents("/html/pages/manager_user/import_users.zul", this.winUser,
+				_createParameterMap(null));
+
+		win.doModal();
+	}
+
+	public void onClick$btnLock() {
+		final List<User> users = this.getUserSelected();
+
+		if (Validator.isNull(users)) {
+			Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_SELECT_RECORD), Labels.getLabel(LanguageKeys.ERROR),
+					Messagebox.OK, Messagebox.EXCLAMATION);
+		} else {
+			Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_LOCK),
+					Labels.getLabel(LanguageKeys.MESSAGE_INFOR_LOCK), Messagebox.OK | Messagebox.CANCEL,
+					Messagebox.QUESTION, new EventListener() {
+						@Override
+						public void onEvent(Event e) throws Exception {
+							if (Messagebox.ON_OK.equals(e.getName())) {
+								try {
+									UserController.this.userService.lockUser(users);
+
+									ComponentUtil.createSuccessMessageBox(LanguageKeys.MESSAGE_LOCK_ITEM_SUCCESS);
+
+									refreshModel();
+								} catch (Exception ex) {
+									_log.error(ex.getMessage(), ex);
+
+									Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_LOCK_ITEM_FAIL));
+								}
+							}
+						}
+					});
+		}
+	}
+
+	public void onClick$btnResetPwd() {
+		final List<User> users = this.getUserSelected();
+
+		if (Validator.isNull(users)) {
+			Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_SELECT_RECORD), Labels.getLabel(LanguageKeys.ERROR),
+					Messagebox.OK, Messagebox.EXCLAMATION);
+		} else {
+			Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_RESET),
+					Labels.getLabel(LanguageKeys.MESSAGE_INFOR_RESET), Messagebox.OK | Messagebox.CANCEL,
+					Messagebox.QUESTION, new EventListener() {
+						@Override
+						public void onEvent(Event e) throws Exception {
+							if (Messagebox.ON_OK.equals(e.getName())) {
+								try {
+									UserController.this.userService.resetPassword(users);
+
+									ComponentUtil.createSuccessMessageBox(LanguageKeys.MESSAGE_UPDATE_SUCCESS);
+								} catch (Exception ex) {
+									_log.error(ex.getMessage(), ex);
+
+									Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_UPDATE_FAIL));
+								}
+							}
+						}
+					});
+		}
+	}
+
+	public void onClick$btnUnlock() {
+		final List<User> users = this.getUserSelected();
+
+		if (Validator.isNull(users)) {
+			Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_SELECT_RECORD), Labels.getLabel(LanguageKeys.ERROR),
+					Messagebox.OK, Messagebox.EXCLAMATION);
+		} else {
+			Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_UNLOCK),
+					Labels.getLabel(LanguageKeys.MESSAGE_INFOR_UNLOCK), Messagebox.OK | Messagebox.CANCEL,
+					Messagebox.QUESTION, new EventListener() {
+						@Override
+						public void onEvent(Event e) throws Exception {
+							if (Messagebox.ON_OK.equals(e.getName())) {
+								try {
+									UserController.this.userService.unlockUser(users);
+
+									ComponentUtil.createSuccessMessageBox(LanguageKeys.MESSAGE_UNLOCK_ITEM_SUCCESS);
+
+									refreshModel();
+								} catch (Exception ex) {
+									_log.error(ex.getMessage(), ex);
+
+									Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_UNLOCK_ITEM_FAIL));
+								}
+							}
+						}
+					});
+		}
+	}
+
+	public void onCreateGender() throws Exception {
+		List<SimpleModel> genders = this.userService.getGenderType();
+		this.cbGender.setModel(new ListModelList<SimpleModel>(genders));
+	}
+
+	public void onCreateStatus() {
+		List<SimpleModel> statusList = new ArrayList<SimpleModel>();
 
 //        statusList.add(new SimpleModel(Values.DEFAULT_OPTION_VALUE_INT,
 //                Labels.getLabel(LanguageKeys.OPTION)));
 
-        statusList.add(new SimpleModel(Values.STATUS_ACTIVE,
-                Labels.getLabel(LanguageKeys.STATUS_ACTIVE)));
+		statusList.add(new SimpleModel(Values.STATUS_ACTIVE, Labels.getLabel(LanguageKeys.STATUS_ACTIVE)));
 
-        statusList.add(new SimpleModel(Values.STATUS_DEACTIVE,
-                Labels.getLabel(LanguageKeys.STATUS_LOCK)));
+		statusList.add(new SimpleModel(Values.STATUS_DEACTIVE, Labels.getLabel(LanguageKeys.STATUS_LOCK)));
 
-        statusList.add(new SimpleModel(Values.STATUS_NOT_READY,
-                Labels.getLabel(LanguageKeys.STATUS_NOT_ACTIVE)));
+		statusList.add(new SimpleModel(Values.STATUS_NOT_READY, Labels.getLabel(LanguageKeys.STATUS_NOT_ACTIVE)));
 
-        this.cbStatus.setModel(new ListModelList<SimpleModel>(statusList));
-    }
+		this.cbStatus.setModel(new ListModelList<SimpleModel>(statusList));
+	}
 
-    public void onSelect$cbStatus() {
-        this.btnClearStatus.setVisible(true);
-    }
-    
-    public void onClick$btnClearStatus() {
-        this.cbStatus.setSelectedIndex(-1);
-        this.btnClearStatus.setVisible(false);
-    }
-    
-    public void onAfterRender$cbStatus() {
-        this.cbStatus.setSelectedIndex(Values.FIRST_INDEX);
+	/**
+	 * Hàm xóa SysInstance khi click chọn nút "Xóa". SysInstance chỉ có thể xóa sau
+	 * khi Khóa (status=0)
+	 *
+	 * @param event
+	 * @throws Exception
+	 */
+	public void onDeleteUser(Event event) throws Exception {
+		final User user = (User) event.getData();
 
-        refreshModel();
-    }
+		Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_DELETE),
+				Labels.getLabel(LanguageKeys.MESSAGE_INFOR_DELETE), Messagebox.OK | Messagebox.CANCEL,
+				Messagebox.QUESTION, new EventListener() {
+					@Override
+					public void onEvent(Event e) throws Exception {
+						if (Messagebox.ON_OK.equals(e.getName())) {
+							try {
+								if (user.getStatus().equals(Values.STATUS_NOT_READY)) {
+									UserController.this.userService.delete(user);
 
-    public void onClick$btnAdvanceSearch() {
-        this.refreshModel();
-    }
+									ComponentUtil.createSuccessMessageBox(LanguageKeys.MESSAGE_DELETE_SUCCESS);
 
-    public void onClick$btnImport(){
-        Window win = (Window) 
-                Executions.createComponents("/html/pages/manager_user/import_users.zul", 
-                        this.winUser, _createParameterMap(null));
+									refreshModel();
+								} else {
+									Messagebox.show(Values.getInUseMsg(Labels.getLabel(LanguageKeys.USER)));
+								}
 
-        win.doModal();
-    }
+							} catch (Exception ex) {
+								_log.error(ex.getMessage(), ex);
 
-    public void onOkWindow() {
-        this.winUser.addEventListener(Events.ON_OK, new EventListener<Event>() {
-            @Override
+								Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_DELETE_FAIL));
+							}
+						}
+					}
+				});
+	}
+
+	public void onLoadData(Event event) throws Exception {
+		this.refreshModel();
+	}
+
+	public void onLoadDataAndReOpen(Event event) throws Exception {
+		this.refreshModel();
+
+		onClick$btnAdd();
+	}
+
+	/**
+	 * Hàm xử lý sự kiện khi click vào nút "Khóa". Hàm sẽ chuyển Users về trạng thái
+	 * khóa(không hoạt động), status=0
+	 *
+	 * @param event
+	 * @throws Exception
+	 */
+	public void onLockUser(Event event) throws Exception {
+		final User user = (User) event.getData();
+
+		Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_LOCK),
+				Labels.getLabel(LanguageKeys.MESSAGE_INFOR_LOCK), Messagebox.OK | Messagebox.CANCEL,
+				Messagebox.QUESTION, new EventListener() {
+					@Override
+					public void onEvent(Event e) throws Exception {
+						if (Messagebox.ON_OK.equals(e.getName())) {
+							try {
+								if (user.getUserId().equals(getUserId())) {
+									ComponentUtil.createErrorMessageBox(LanguageKeys.MESSAGE_CANNOT_LOCK_YOURSELF);
+
+									return;
+								}
+
+								UserController.this.userService.lockUser(user);
+
+								ComponentUtil.createSuccessMessageBox(LanguageKeys.MESSAGE_LOCK_ITEM_SUCCESS);
+
+								refreshModel();
+							} catch (Exception ex) {
+								_log.error(ex.getMessage(), ex);
+
+								Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_LOCK_ITEM_FAIL));
+							}
+						}
+					}
+				});
+	}
+
+	public void onOK$advanceSearchPopup() {
+		this.isAdvance = true;
+
+		this.refreshModel();
+	}
+
+	public void onOK$tbKeyword() {
+		this.isAdvance = false;
+
+		this.refreshModel();
+	}
+
+	public void onOkWindow() {
+		this.winUser.addEventListener(Events.ON_OK, new EventListener<Event>() {
+			@Override
 			public void onEvent(Event t) throws Exception {
-                refreshModel();
-            }
-        });
-    }
-    
-    public void onOK$tbKeyword() {
-        this.isAdvance = false;
-        
-        this.refreshModel();
-    }
-    
-    public void onClick$btnBasicSearch() {
-        this.isAdvance = false;
-        
-        this.refreshModel();
-        
-    }
-    
-    public void onClick$btnEnableAdvSearch() {
-        this.advanceSearchPopup.open(this.btnEnableAdvSearch, ZkKeys.OVERLAP_END);
-        
-        this.tbUserName.setFocus(true);
-        
-        this.isAdvance = true;
-    }
-    
-    public void onClick$btnAdvSearch(){
-        this.isAdvance = true;
-        
-        this.refreshModel();
-    }
-    
-    public void onOK$advanceSearchPopup(){
-        this.isAdvance = true;
-        
-        this.refreshModel();
-    }
-    
-    public void onLoadData(Event event) throws Exception {
-        this.refreshModel();
-    }
-
-    public void onLoadDataAndReOpen(Event event) throws Exception {
-        this.refreshModel();
-
-        onClick$btnAdd();
-    }
-
-    public void refreshModel() {
-        this.showHideButton();
-
-        if (this.isAdvance) {
-            this.advanceSearch();
-        } else {
-            this.basicSearch();
-        }
-    }
-
-    public void showHideButton() {
-        Long status = ComponentUtil.getComboboxValue(this.cbStatus);
-
-        if (this.btnLock != null) {
-            this.btnLock.setVisible(this.isAdvance && Values.STATUS_ACTIVE.equals(status));
-        }
-
-        if (this.btnUnlock != null) {
-            this.btnUnlock.setVisible(this.isAdvance && Values.STATUS_DEACTIVE.equals(status));
-        }
-
-        if (this.btnDel != null) {
-            this.btnDel.setVisible(this.isAdvance && Values.STATUS_NOT_READY.equals(status));
-        }
-
-        if (this.btnActivate != null) {
-            this.btnActivate.setVisible(this.isAdvance && Values.STATUS_NOT_READY.equals(status));
-        }
-    }
-
-    public void basicSearch() {
-        String keyword = GetterUtil.getString(this.tbKeyword.getValue());
-
-        this.paramMap.put("keyword", keyword);
-
-        this.searchResultGrid.setItemRenderer(
-                new UserRender(this.winUser, this.isAdmin));
-
-        this.searchResultGrid.setModel(new UserListModel(
-                this.searchResultGrid.getPageSize(), keyword, this.isAdvance,
-                this.userService));
-
-        this.searchResultGrid.setMultiple(true);
-    }
-
-    public void advanceSearch() {
-        String userName = GetterUtil.getString(this.tbUserName.getValue());
-        String email = GetterUtil.getString(this.tbEmail.getValue());
-        Long gender = ComponentUtil.getComboboxValue(this.cbGender);
-        String birthplace = GetterUtil.getString(this.tbBirthPlace.getValue());
-        Date birthdayFrom = this.dbBirthdayFrom.getValue();
-        Date birthdayTo = this.dbBirthdayTo.getValue();
-        String phone = GetterUtil.getString(this.tbPhone.getValue());
-        String mobile = GetterUtil.getString(this.tbMobile.getValue());
-        String account = GetterUtil.getString(this.tbAccount.getValue());
-        Long status = ComponentUtil.getComboboxValue(this.cbStatus);
-        //create param map
-
-        this.paramMap.put("userName", userName);
-        this.paramMap.put("email", email);
-        this.paramMap.put("gender", gender);
-        this.paramMap.put("birthplace", birthplace);
-        this.paramMap.put("birthdayFrom", birthdayFrom);
-        this.paramMap.put("birthdayTo", birthdayTo);
-        this.paramMap.put("phone", phone);
-        this.paramMap.put("mobile", mobile);
-        this.paramMap.put("account", account);
-        this.paramMap.put("status", status);
-
-        this.searchResultGrid.setItemRenderer(new UserRender(this.winUser, this.isAdmin));
-        this.searchResultGrid.setModel(new UserListModel(this.searchResultGrid.getPageSize(),
-                userName, email, gender, birthplace, birthdayFrom, birthdayTo,
-                phone, mobile, account, status, this.isAdvance, this.userService));
-    }
-
-    public List<User> getListExport() {
-        List<User> results = new ArrayList<User>();
-
-        try {
-            if (this.isAdvance) {
-                String userName = GetterUtil.getString(this.paramMap.get("userName"));
-                String email = GetterUtil.getString(this.paramMap.get("email"));
-                Long gender = GetterUtil.getLong(this.paramMap.get("gender"));
-                String birthplace = GetterUtil.getString(this.paramMap.get("birthplace"));
-                Date birthdayFrom = (Date) this.paramMap.get("birthdayFrom");
-                Date birthdayTo = (Date) this.paramMap.get("birthdayTo");
-                String phone = GetterUtil.getString(this.paramMap.get("phone"));
-                String mobile = GetterUtil.getString(this.paramMap.get("mobile"));
-                String account = GetterUtil.getString(this.paramMap.get("account"));
-                Long status = GetterUtil.getLong(this.paramMap.get("status"));
-
-                results = this.userService.getUsers(userName, email, gender,
-                        birthplace, birthdayFrom, birthdayTo, phone, mobile,
-                        account, status, QueryUtil.GET_ALL,
-                        QueryUtil.GET_ALL, null, null);
-
-            } else {
-                String keyword = (String) this.paramMap.get("keyword");
-
-                results = this.userService.getUsers(keyword, QueryUtil.GET_ALL,
-                        QueryUtil.GET_ALL, null, null);
-            }
-
-        } catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
-        }
-
-        return results;
-    }
-
-    public void onClick$btnExport() throws Exception {
-        try {
-            List<Object[]> headerInfors = getHeaderInfors();
-            List<String> properties = getProperties();
-
-            List<User> datas = getListExport();
-
-            if (!datas.isEmpty()) {
-                String title = Labels.getLabel(LanguageKeys.LIST_USER).
-                        toUpperCase();
-
-                ExcelUtil excelUtil =
-                        new ExcelUtil<User>(getConvertMap());
-
-                excelUtil.toSingleSheetXlsx(EXPORT_USER,
-                        title, headerInfors, properties, datas);
-            } else {
-                Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_NO_RECORD_EXPORT),
-                        Labels.getLabel(LanguageKeys.ERROR), Messagebox.OK,
-                        Messagebox.ERROR);
-            }
-
-        } catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
-        }
-    }
-
-    /**
-     * Hàm xử lý sự kiện khi click vào nút "Khóa". Hàm sẽ chuyển Users về trạng
-     * thái khóa(không hoạt động), status=0
-     *
-     * @param event
-     * @throws Exception
-     */
-    public void onLockUser(Event event) throws Exception {
-        final User user = (User) event.getData();
-
-        Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_LOCK),
-                Labels.getLabel(LanguageKeys.MESSAGE_INFOR_LOCK),
-                Messagebox.OK | Messagebox.CANCEL,
-                Messagebox.QUESTION,
-                new EventListener() {
-            @Override
-			public void onEvent(Event e) throws Exception {
-                if (Messagebox.ON_OK.equals(e.getName())) {
-                    try {
-                        if (user.getUserId().equals(getUserId())) {
-                            ComponentUtil.createErrorMessageBox(
-                                    LanguageKeys.MESSAGE_CANNOT_LOCK_YOURSELF);
-
-                            return;
-                        }
-
-                        UserController.this.userService.lockUser(user);
-
-                        ComponentUtil.createSuccessMessageBox(
-                                LanguageKeys.MESSAGE_LOCK_ITEM_SUCCESS);
-
-                        refreshModel();
-                    } catch (Exception ex) {
-                        _log.error(ex.getMessage(), ex);
-
-                        Messagebox.show(Labels.getLabel(
-                                LanguageKeys.MESSAGE_LOCK_ITEM_FAIL));
-                    }
-                }
-            }
-        });
-    }
-
-    /**
-     * Hàm xử lý sự kiện khi click vào nút "Mở khóa". Hàm sẽ chuyển Users về
-     * trạng thái mở khóa (hoạt động), status=1
-     *
-     * @param event
-     * @throws Exception
-     */
-    public void onUnlockUser(Event event) throws Exception {
-        final User user = (User) event.getData();
-
-        Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_UNLOCK),
-                Labels.getLabel(LanguageKeys.MESSAGE_INFOR_UNLOCK),
-                Messagebox.OK | Messagebox.CANCEL,
-                Messagebox.QUESTION,
-                new EventListener() {
-            @Override
-			public void onEvent(Event e) throws Exception {
-                if (Messagebox.ON_OK.equals(e.getName())) {
-                    try {
-                        UserController.this.userService.unlockUser(user);
-
-                        ComponentUtil.createSuccessMessageBox(
-                                LanguageKeys.MESSAGE_UNLOCK_ITEM_SUCCESS);
-
-                        refreshModel();
-                    } catch (Exception ex) {
-                        _log.error(ex.getMessage(), ex);
-
-                        Messagebox.show(Labels.getLabel(
-                                LanguageKeys.MESSAGE_UNLOCK_ITEM_FAIL));
-                    }
-                }
-            }
-        });
-    }
-
-    /**
-     * Hàm xóa SysInstance khi click chọn nút "Xóa". SysInstance chỉ có thể xóa
-     * sau khi Khóa (status=0)
-     *
-     * @param event
-     * @throws Exception
-     */
-    public void onDeleteUser(Event event) throws Exception {
-        final User user = (User) event.getData();
-
-        Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_DELETE),
-                Labels.getLabel(LanguageKeys.MESSAGE_INFOR_DELETE),
-                Messagebox.OK | Messagebox.CANCEL,
-                Messagebox.QUESTION,
-                new EventListener() {
-            @Override
-			public void onEvent(Event e) throws Exception {
-                if (Messagebox.ON_OK.equals(e.getName())) {
-                    try {
-                        if (user.getStatus().equals(Values.STATUS_NOT_READY)) {
-                            UserController.this.userService.delete(user);
-
-                            ComponentUtil.createSuccessMessageBox(
-                                    LanguageKeys.MESSAGE_DELETE_SUCCESS);
-
-                            refreshModel();
-                        } else {
-                            Messagebox.show(Values.getInUseMsg(
-                                    Labels.getLabel(LanguageKeys.USER)));
-                        }
-
-                    } catch (Exception ex) {
-                        _log.error(ex.getMessage(), ex);
-
-                        Messagebox.show(Labels.getLabel(
-                                LanguageKeys.MESSAGE_DELETE_FAIL));
-                    }
-                }
-            }
-        });
-    }
-
-    public void onClick$btnResetPwd() {
-        final List<User> users = this.getUserSelected();
-
-        if (Validator.isNull(users)) {
-            Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_SELECT_RECORD),
-                    Labels.getLabel(LanguageKeys.ERROR), Messagebox.OK,
-                    Messagebox.EXCLAMATION);
-        } else {
-            Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_RESET),
-                    Labels.getLabel(LanguageKeys.MESSAGE_INFOR_RESET),
-                    Messagebox.OK | Messagebox.CANCEL,
-                    Messagebox.QUESTION,
-                    new EventListener() {
-                @Override
-				public void onEvent(Event e) throws Exception {
-                    if (Messagebox.ON_OK.equals(e.getName())) {
-                        try {
-                            UserController.this.userService.resetPassword(users);
-
-                            ComponentUtil.createSuccessMessageBox(
-                                    LanguageKeys.MESSAGE_UPDATE_SUCCESS);
-                        } catch (Exception ex) {
-                            _log.error(ex.getMessage(), ex);
-
-                            Messagebox.show(Labels.getLabel(
-                                    LanguageKeys.MESSAGE_UPDATE_FAIL));
-                        }
-                    }
-                }
-            });
-        }
-    }
-
-    public void onClick$btnLock() {
-        final List<User> users = this.getUserSelected();
-
-        if (Validator.isNull(users)) {
-            Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_SELECT_RECORD),
-                    Labels.getLabel(LanguageKeys.ERROR), Messagebox.OK,
-                    Messagebox.EXCLAMATION);
-        } else {
-            Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_LOCK),
-                    Labels.getLabel(LanguageKeys.MESSAGE_INFOR_LOCK),
-                    Messagebox.OK | Messagebox.CANCEL,
-                    Messagebox.QUESTION,
-                    new EventListener() {
-                @Override
-				public void onEvent(Event e) throws Exception {
-                    if (Messagebox.ON_OK.equals(e.getName())) {
-                        try {
-                            UserController.this.userService.lockUser(users);
-
-                            ComponentUtil.createSuccessMessageBox(
-                                    LanguageKeys.MESSAGE_LOCK_ITEM_SUCCESS);
-
-                            refreshModel();
-                        } catch (Exception ex) {
-                            _log.error(ex.getMessage(), ex);
-
-                            Messagebox.show(Labels.getLabel(
-                                    LanguageKeys.MESSAGE_LOCK_ITEM_FAIL));
-                        }
-                    }
-                }
-            });
-        }
-    }
-
-    public void onClick$btnUnlock() {
-        final List<User> users = this.getUserSelected();
-
-        if (Validator.isNull(users)) {
-            Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_SELECT_RECORD),
-                    Labels.getLabel(LanguageKeys.ERROR), Messagebox.OK,
-                    Messagebox.EXCLAMATION);
-        } else {
-            Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_UNLOCK),
-                    Labels.getLabel(LanguageKeys.MESSAGE_INFOR_UNLOCK),
-                    Messagebox.OK | Messagebox.CANCEL,
-                    Messagebox.QUESTION,
-                    new EventListener() {
-                @Override
-				public void onEvent(Event e) throws Exception {
-                    if (Messagebox.ON_OK.equals(e.getName())) {
-                        try {
-                            UserController.this.userService.unlockUser(users);
-
-                            ComponentUtil.createSuccessMessageBox(
-                                    LanguageKeys.MESSAGE_UNLOCK_ITEM_SUCCESS);
-
-                            refreshModel();
-                        } catch (Exception ex) {
-                            _log.error(ex.getMessage(), ex);
-
-                            Messagebox.show(Labels.getLabel(
-                                    LanguageKeys.MESSAGE_UNLOCK_ITEM_FAIL));
-                        }
-                    }
-                }
-            });
-        }
-    }
-
-    public void onClick$btnDel() {
-        final List<User> users = this.getUserSelected();
-
-        if (Validator.isNull(users)) {
-            Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_SELECT_RECORD),
-                    Labels.getLabel(LanguageKeys.ERROR), Messagebox.OK,
-                    Messagebox.EXCLAMATION);
-        } else {
-            Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_DELETE),
-                    Labels.getLabel(LanguageKeys.MESSAGE_INFOR_DELETE),
-                    Messagebox.OK | Messagebox.CANCEL,
-                    Messagebox.QUESTION,
-                    new EventListener() {
-                @Override
-				public void onEvent(Event e) throws Exception {
-                    if (Messagebox.ON_OK.equals(e.getName())) {
-                        try {
-                            List<String> userNotDel =
-                                    UserController.this.userService.delete(users);
-
-                            if (Validator.isNull(userNotDel)) {
-                                ComponentUtil.createSuccessMessageBox(
-                                        LanguageKeys.MESSAGE_DELETE_SUCCESS);
-                            } else {
-                                Messagebox.show(Values.getInUseMsg(
-                                        Labels.getLabel(
-                                        LanguageKeys.ACCOUNT,
-                                        StringUtils.join(userNotDel, StringPool.COMMA))));
-                            }
-
-                            refreshModel();
-
-                        } catch (Exception ex) {
-                            _log.error(ex.getMessage(), ex);
-
-                            Messagebox.show(Labels.getLabel(
-                                    LanguageKeys.MESSAGE_DELETE_FAIL));
-                        }
-                    }
-                }
-            });
-        }
-    }
-
-    public void onClick$btnActivate() {
-        final List<User> users = this.getUserSelected();
-
-        if (Validator.isNull(users)) {
-            Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_SELECT_RECORD),
-                    Labels.getLabel(LanguageKeys.ERROR), Messagebox.OK,
-                    Messagebox.EXCLAMATION);
-        } else {
-            Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_ACTIVATE),
-                    Labels.getLabel(LanguageKeys.MESSAGE_INFOR_ACTIVATE),
-                    Messagebox.OK | Messagebox.CANCEL,
-                    Messagebox.QUESTION,
-                    new EventListener() {
-                @Override
-				public void onEvent(Event e) throws Exception {
-                    if (Messagebox.ON_OK.equals(e.getName())) {
-                        try {
-                            UserController.this.userService.activateUser(users);
-
-                            ComponentUtil.createSuccessMessageBox(
-                                    LanguageKeys.MESSAGE_ACTIVATE_SUCCESS);
-
-                            refreshModel();
-                        } catch (Exception ex) {
-                            _log.error(ex.getMessage(), ex);
-
-                            Messagebox.show(Labels.getLabel(
-                                    LanguageKeys.MESSAGE_ACTIVATE_FAIL));
-                        }
-                    }
-                }
-            });
-        }
-    }
-
-    private List<User> getUserSelected() {
-        List<User> users = new ArrayList<User>();
-
-        for (Listitem item : this.searchResultGrid.getSelectedItems()) {
-            User user = (User) item.getAttribute("data");
-
-            if (Validator.isNotNull(user)) {
-                users.add(user);
-            }
-        }
-
-        return users;
-    }
-
-    public void onClick$btnAdd() {
-        Window win = (Window) Executions.createComponents(EDIT_PAGE, this.winUser,
-                _createParameterMap(null));
-
-        win.doModal();
-    }
-
-    private Map<String, Object> _createParameterMap(User user) {
-        Map<String, Object> parameters = new HashMap<String, Object>();
-
-        parameters.put(Constants.PARENT_WINDOW, this.winUser);
-        parameters.put(Constants.OBJECT, user);
-        parameters.put(Constants.SECOND_OBJECT, true);
-
-        return parameters;
-    }
-
-    //export
-    public List<Object[]> getHeaderInfors() {
-        List<Object[]> headerInfors = new ArrayList<Object[]>();
-
-        headerInfors.add(new Object[]{
-            Labels.getLabel(LanguageKeys.ORDINAL), 2000});
-        headerInfors.add(new Object[]{
-            Labels.getLabel(LanguageKeys.ACCOUNT), 8000});
-        headerInfors.add(new Object[]{
-            Labels.getLabel(LanguageKeys.EMAIL), 8000});
-        headerInfors.add(new Object[]{
-            Labels.getLabel(LanguageKeys.GENDER), 8000});
-        headerInfors.add(new Object[]{
-            Labels.getLabel(LanguageKeys.FULL_NAME), 6000});
-        headerInfors.add(new Object[]{
-            Labels.getLabel(LanguageKeys.STATUS), 6000});
-        //
-
-        return headerInfors;
-    }
-
-    public List<String> getProperties() {
-        List<String> properties = new ArrayList<String>();
-
-        properties.add("userName");
-        properties.add("email");
-        properties.add("gender");
-        properties.add("fullName");
-        properties.add("status");
-
-        return properties;
-    }
-
-    public Map<Integer, String[]> getConvertMap() {
-        Map<Integer, String[]> convertMap = new HashMap<Integer, String[]>();
-
-        String[] genderArray = new String[]{
-            Labels.getLabel(LanguageKeys.MALE),
-            Labels.getLabel(LanguageKeys.FEMALE)
-        };
-        
-        String[] statusArray = new String[]{
-            Labels.getLabel(LanguageKeys.STATUS_ACTIVE),
-            Labels.getLabel(LanguageKeys.STATUS_LOCK)
-        };
-
-        convertMap.put(2, genderArray);
-        convertMap.put(4, statusArray);
-
-        return convertMap;
-    }
-
-    //get set service
-    public UserService getUserService() {
-        if (this.userService == null) {
-            this.userService = (UserService) SpringUtil.getBean("userService");
-            setUserService(this.userService);
-        }
-        return this.userService;
-    }
-
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
-
-    private transient UserService userService;
-
-    private static final String EXPORT_USER = "export_user";
-    private static final String EDIT_PAGE =
-            "/html/pages/manager_user/edit.zul";
-    private static final Logger _log =
-            LogManager.getLogger(UserController.class);
+				refreshModel();
+			}
+		});
+	}
+
+	public void onSelect$cbGender() {
+		this.btnClearGender.setVisible(true);
+	}
+
+	public void onSelect$cbStatus() {
+		this.btnClearStatus.setVisible(true);
+	}
+
+	/**
+	 * Hàm xử lý sự kiện khi click vào nút "Mở khóa". Hàm sẽ chuyển Users về trạng
+	 * thái mở khóa (hoạt động), status=1
+	 *
+	 * @param event
+	 * @throws Exception
+	 */
+	public void onUnlockUser(Event event) throws Exception {
+		final User user = (User) event.getData();
+
+		Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_UNLOCK),
+				Labels.getLabel(LanguageKeys.MESSAGE_INFOR_UNLOCK), Messagebox.OK | Messagebox.CANCEL,
+				Messagebox.QUESTION, new EventListener() {
+					@Override
+					public void onEvent(Event e) throws Exception {
+						if (Messagebox.ON_OK.equals(e.getName())) {
+							try {
+								UserController.this.userService.unlockUser(user);
+
+								ComponentUtil.createSuccessMessageBox(LanguageKeys.MESSAGE_UNLOCK_ITEM_SUCCESS);
+
+								refreshModel();
+							} catch (Exception ex) {
+								_log.error(ex.getMessage(), ex);
+
+								Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_UNLOCK_ITEM_FAIL));
+							}
+						}
+					}
+				});
+	}
+
+	public void refreshModel() {
+		this.showHideButton();
+
+		if (this.isAdvance) {
+			this.advanceSearch();
+		} else {
+			this.basicSearch();
+		}
+	}
+
+	public void showHideButton() {
+		Long status = ComponentUtil.getComboboxValue(this.cbStatus);
+
+		if (this.btnLock != null) {
+			this.btnLock.setVisible(this.isAdvance && Values.STATUS_ACTIVE.equals(status));
+		}
+
+		if (this.btnUnlock != null) {
+			this.btnUnlock.setVisible(this.isAdvance && Values.STATUS_DEACTIVE.equals(status));
+		}
+
+		if (this.btnDel != null) {
+			this.btnDel.setVisible(this.isAdvance && Values.STATUS_NOT_READY.equals(status));
+		}
+
+		if (this.btnActivate != null) {
+			this.btnActivate.setVisible(this.isAdvance && Values.STATUS_NOT_READY.equals(status));
+		}
+	}
 }

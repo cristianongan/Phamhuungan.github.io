@@ -25,159 +25,155 @@ import org.hibernate.annotations.FetchMode;
 @Table(name = "group_")
 public class Group implements Serializable {
 
-    private Long categoryId;
-    private Long groupId;
-    private Long userId;
-    private String description;
-    private String userName;
-    private String groupName;
-    private Date createDate;
-    private Long status;
-    private Date modifiedDate;
-    private Set<Role> roles = new HashSet<Role>(0);
-    private Set<Right> rights = new HashSet<Right>(0);
+	private Long categoryId;
+	private Date createDate;
+	private String description;
+	private Long groupId;
+	private String groupName;
+	private Date modifiedDate;
+	private Set<Right> rights = new HashSet<Right>(0);
+	private Set<Role> roles = new HashSet<Role>(0);
+	private Long status;
+	private Long userId;
+	private String userName;
 
-    @Column(name = "category_id", precision = 22, scale = 0)
-    public Long getCategoryId() {
-        return this.categoryId;
-    }
+	public Group() {
+	}
 
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
-    }
+	public Group(Long groupsId) {
+		this.groupId = groupsId;
+	}
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "group_id", unique = true, nullable = false, precision = 22, scale = 0)
-    public Long getGroupId() {
-        return this.groupId;
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
 
-    public void setGroupId(Long groupId) {
-        this.groupId = groupId;
-    }
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
 
-    @Column(name = "user_id", precision = 22, scale = 0)
-    public Long getUserId() {
-        return this.userId;
-    }
+		final Group other = (Group) obj;
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
+		if (this.groupId != other.groupId && (this.groupId == null || !this.groupId.equals(other.groupId))) {
+			return false;
+		}
 
-    @Column(name = "description", length = 1000)
-    public String getDescription() {
-        return this.description;
-    }
+		return true;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	@Column(name = "category_id", precision = 22, scale = 0)
+	public Long getCategoryId() {
+		return this.categoryId;
+	}
 
-    @Column(name = "user_name", length = 200)
-    public String getUserName() {
-        return this.userName;
-    }
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "create_date", length = 7)
+	public Date getCreateDate() {
+		return this.createDate;
+	}
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
+	@Column(name = "description", length = 1000)
+	public String getDescription() {
+		return this.description;
+	}
 
-    @Column(name = "group_name", length = 200)
-    public String getGroupName() {
-        return this.groupName;
-    }
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "group_id", unique = true, nullable = false, precision = 22, scale = 0)
+	public Long getGroupId() {
+		return this.groupId;
+	}
 
-    public void setGroupName(String groupName) {
-        this.groupName = groupName;
-    }
+	@Column(name = "group_name", length = 200)
+	public String getGroupName() {
+		return this.groupName;
+	}
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "create_date", length = 7)
-    public Date getCreateDate() {
-        return this.createDate;
-    }
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "modified_date", length = 7)
+	public Date getModifiedDate() {
+		return this.modifiedDate;
+	}
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
-    @Column(name = "status", precision = 22, scale = 0)
-    public Long getStatus() {
-        return this.status;
-    }
-
-    public void setStatus(Long status) {
-        this.status = status;
-    }
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "modified_date", length = 7)
-    public Date getModifiedDate() {
-        return this.modifiedDate;
-    }
-
-    public void setModifiedDate(Date modifiedDate) {
-        this.modifiedDate = modifiedDate;
-    }
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "group_right", joinColumns = {
-        @JoinColumn(name = "group_id", nullable = false, updatable = false)
-    }, inverseJoinColumns = {
-        @JoinColumn(name = "right_id", nullable = false, updatable = false)
-    })
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "group_right", joinColumns = {
+			@JoinColumn(name = "group_id", nullable = false, updatable = false) }, inverseJoinColumns = {
+					@JoinColumn(name = "right_id", nullable = false, updatable = false) })
 //    @LazyCollection(LazyCollectionOption.EXTRA)
-    @Fetch(FetchMode.SELECT)
-    public Set<Right> getRights() {
-        return this.rights;
-    }
+	@Fetch(FetchMode.SELECT)
+	public Set<Right> getRights() {
+		return this.rights;
+	}
 
-    public void setRights(Set<Right> rights) {
-        this.rights = rights;
-    }
+	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "groups")
+	public Set<Role> getRoles() {
+		return this.roles;
+	}
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "groups")
-    public Set<Role> getRoles() {
-        return this.roles;
-    }
+	@Column(name = "status", precision = 22, scale = 0)
+	public Long getStatus() {
+		return this.status;
+	}
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
+	@Column(name = "user_id", precision = 22, scale = 0)
+	public Long getUserId() {
+		return this.userId;
+	}
 
-    public Group() {
-    }
+	@Column(name = "user_name", length = 200)
+	public String getUserName() {
+		return this.userName;
+	}
 
-    public Group(Long groupsId) {
-        this.groupId = groupsId;
-    }
+	@Override
+	public int hashCode() {
+		int hash = 7;
+		return hash;
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        
-        final Group other = (Group) obj;
-        
-        if (this.groupId != other.groupId
-                && (this.groupId == null
-                || !this.groupId.equals(other.groupId))) {
-            return false;
-        }
-        
-        return true;
-    }
+	public void setCategoryId(Long categoryId) {
+		this.categoryId = categoryId;
+	}
 
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        return hash;
-    }
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public void setGroupId(Long groupId) {
+		this.groupId = groupId;
+	}
+
+	public void setGroupName(String groupName) {
+		this.groupName = groupName;
+	}
+
+	public void setModifiedDate(Date modifiedDate) {
+		this.modifiedDate = modifiedDate;
+	}
+
+	public void setRights(Set<Right> rights) {
+		this.rights = rights;
+	}
+
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
+	}
+
+	public void setStatus(Long status) {
+		this.status = status;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
 }

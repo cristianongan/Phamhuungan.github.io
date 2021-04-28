@@ -28,91 +28,77 @@ import com.evotek.qlns.util.key.Values;
  */
 public class RoleRender<Component> implements ListitemRenderer<Role> {
 
-    private Div winTemp;
+	private static final String EDIT_PAGE = "/html/pages/manager_role/edit.zul";
 
-    public RoleRender(Div winTemp) {
-        this.winTemp = winTemp;
-    }
+	private static final String PERMISSION_PAGE = "/html/pages/manager_role/permission.zul";
 
-    @Override
-    public void render(Listitem items, final Role role, int index)
-            throws Exception {
-        items.appendChild(ComponentUtil.createListcell(
-                Integer.toString(index + 1), Constants.STYLE_TEXT_ALIGN_CENTER));
-        items.appendChild(new Listcell(role.getRoleName()));
-        items.appendChild(new Listcell(Values.getLockStatus(role.getStatus())));
-        items.appendChild(new Listcell(role.getDescription()));
-        items.appendChild(_getAction(role));
-    }
+	private Div winTemp;
 
-    private Listcell _getAction(Role role) {
-        Listcell action = new Listcell();
+	public RoleRender(Div winTemp) {
+		this.winTemp = winTemp;
+	}
 
-        if (!PermissionUtil.isAdministrator(role)) {
-            Hlayout hlayout = new Hlayout();
-        
-            hlayout.setSpacing("0");
+	private Map<String, Object> _createParameterMap(Role role) {
+		Map<String, Object> parameters = new HashMap<String, Object>();
 
-            Long immune = role.getImmune();
+		parameters.put(Constants.PARENT_WINDOW, this.winTemp);
+		parameters.put(Constants.TITLE, Labels.getLabel(LanguageKeys.TITLE_EDIT_ROLE));
+		parameters.put(Constants.EDIT_OBJECT, role);
 
-            if (Values.NOT_IMMUNE.equals(immune)) {
-                hlayout.appendChild(ComponentUtil.createButton(null,
-                        Labels.getLabel(LanguageKeys.EDIT), 
-                        ComponentUtil.EDIT_TOOLTIP, Events.ON_CLICK, 
-                        EDIT_PAGE, _createParameterMap(role), 
-                        Constants.Z_ICON_PENCIL, Constants.BLUE));
+		return parameters;
+	}
 
-                Long status = role.getStatus();
+	private Listcell _getAction(Role role) {
+		Listcell action = new Listcell();
 
-                if (Values.STATUS_ACTIVE.equals(status)) {
-                    //Thêm action "Khóa"
-                    hlayout.appendChild(ComponentUtil.createButton(this.winTemp,
-                            Labels.getLabel(LanguageKeys.BUTTON_LOCK), 
-                            ComponentUtil.LOCK_TOOLTIP, Events.ON_CLICK,
-                            "onLockRole", role, Constants.Z_ICON_LOCK,
-                            Constants.ORANGE));
-                } else {
-                    hlayout.appendChild(ComponentUtil.createButton(this.winTemp,
-                            Labels.getLabel(LanguageKeys.BUTTON_UNLOCK), 
-                            ComponentUtil.UNLOCK_TOOLTIP, Events.ON_CLICK,
-                            "onUnlockRole", role, Constants.Z_ICON_UNLOCK,
-                            Constants.ORANGE));
+		if (!PermissionUtil.isAdministrator(role)) {
+			Hlayout hlayout = new Hlayout();
 
-                    //Thêm action "Xóa"
-                    hlayout.appendChild(ComponentUtil.createButton(this.winTemp,
-                            Labels.getLabel(LanguageKeys.BUTTON_DELETE), 
-                            ComponentUtil.DEL_TOOLTIP, Events.ON_CLICK,
-                            "onDeleteRole", role, Constants.Z_ICON_TRASH_O,
-                            Constants.RED));
-                }
-            }
+			hlayout.setSpacing("0");
 
-            hlayout.appendChild(ComponentUtil.createButton(this.winTemp,
-                    Labels.getLabel(LanguageKeys.ASSIGN_RIGHT), 
-                    ComponentUtil.ASSIGN_RIGHT_TOOLTIP, Events.ON_CLICK,
-                    PERMISSION_PAGE, _createParameterMap(role),
-                    Constants.Z_ICON_SHARE, Constants.PURPLE));
+			Long immune = role.getImmune();
 
-            action.appendChild(hlayout);
+			if (Values.NOT_IMMUNE.equals(immune)) {
+				hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.EDIT),
+						ComponentUtil.EDIT_TOOLTIP, Events.ON_CLICK, EDIT_PAGE, _createParameterMap(role),
+						Constants.Z_ICON_PENCIL, Constants.BLUE));
 
-        }
+				Long status = role.getStatus();
 
-        return action;
-    }
+				if (Values.STATUS_ACTIVE.equals(status)) {
+					// Thêm action "Khóa"
+					hlayout.appendChild(ComponentUtil.createButton(this.winTemp,
+							Labels.getLabel(LanguageKeys.BUTTON_LOCK), ComponentUtil.LOCK_TOOLTIP, Events.ON_CLICK,
+							"onLockRole", role, Constants.Z_ICON_LOCK, Constants.ORANGE));
+				} else {
+					hlayout.appendChild(ComponentUtil.createButton(this.winTemp,
+							Labels.getLabel(LanguageKeys.BUTTON_UNLOCK), ComponentUtil.UNLOCK_TOOLTIP, Events.ON_CLICK,
+							"onUnlockRole", role, Constants.Z_ICON_UNLOCK, Constants.ORANGE));
 
-    private Map<String, Object> _createParameterMap(Role role) {
-        Map<String, Object> parameters = new HashMap<String, Object>();
+					// Thêm action "Xóa"
+					hlayout.appendChild(ComponentUtil.createButton(this.winTemp,
+							Labels.getLabel(LanguageKeys.BUTTON_DELETE), ComponentUtil.DEL_TOOLTIP, Events.ON_CLICK,
+							"onDeleteRole", role, Constants.Z_ICON_TRASH_O, Constants.RED));
+				}
+			}
 
-        parameters.put(Constants.PARENT_WINDOW, this.winTemp);
-        parameters.put(Constants.TITLE, Labels.getLabel(
-                LanguageKeys.TITLE_EDIT_ROLE));
-        parameters.put(Constants.EDIT_OBJECT, role);
+			hlayout.appendChild(ComponentUtil.createButton(this.winTemp, Labels.getLabel(LanguageKeys.ASSIGN_RIGHT),
+					ComponentUtil.ASSIGN_RIGHT_TOOLTIP, Events.ON_CLICK, PERMISSION_PAGE, _createParameterMap(role),
+					Constants.Z_ICON_SHARE, Constants.PURPLE));
 
-        return parameters;
-    }
+			action.appendChild(hlayout);
 
-    private static final String EDIT_PAGE =
-            "/html/pages/manager_role/edit.zul";
-    private static final String PERMISSION_PAGE =
-            "/html/pages/manager_role/permission.zul";
+		}
+
+		return action;
+	}
+
+	@Override
+	public void render(Listitem items, final Role role, int index) throws Exception {
+		items.appendChild(ComponentUtil.createListcell(Integer.toString(index + 1), Constants.STYLE_TEXT_ALIGN_CENTER));
+		items.appendChild(new Listcell(role.getRoleName()));
+		items.appendChild(new Listcell(Values.getLockStatus(role.getStatus())));
+		items.appendChild(new Listcell(role.getDescription()));
+		items.appendChild(_getAction(role));
+	}
 }

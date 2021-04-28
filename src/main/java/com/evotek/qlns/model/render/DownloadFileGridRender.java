@@ -24,42 +24,38 @@ import com.evotek.qlns.util.key.ZkKeys;
  *
  * @author linhlh2
  */
-public class DownloadFileGridRender <Component> implements
-        RowRenderer<FileEntry>{
+public class DownloadFileGridRender<Component> implements RowRenderer<FileEntry> {
 
-    private Window win;
+	private Window win;
 
-    public DownloadFileGridRender(Window win) {
-        this.win = win;
-    }
+	public DownloadFileGridRender(Window win) {
+		this.win = win;
+	}
 
-
-
-    @Override
+	@Override
 	public void render(Row row, FileEntry entry, int index) throws Exception {
-        row.appendChild(new Label(entry.getName()));
+		row.appendChild(new Label(entry.getName()));
 
-        A rm = new A();
+		A rm = new A();
 
-        rm.setImage(ComponentUtil.DOWNLOAD_ICON);
+		rm.setImage(ComponentUtil.DOWNLOAD_ICON);
 
-        rm.setTooltiptext(Labels.getLabel(LanguageKeys.DOWNLOAD));
+		rm.setTooltiptext(Labels.getLabel(LanguageKeys.DOWNLOAD));
 
-        rm.addEventListener(Events.ON_CLICK,
-                new DownloadFileEntryListener(entry));
+		rm.addEventListener(Events.ON_CLICK, new DownloadFileEntryListener(entry));
 
-        row.appendChild(rm);
+		row.appendChild(rm);
 
-        A rm1 = new A();
-        rm1.setImage(ComponentUtil.RESOURCE_ICON);
+		A rm1 = new A();
+		rm1.setImage(ComponentUtil.RESOURCE_ICON);
 
-        rm1.setTooltiptext(Labels.getLabel(LanguageKeys.PREVIEW));
+		rm1.setTooltiptext(Labels.getLabel(LanguageKeys.PREVIEW));
 
-        rm1.addForward(Events.ON_CLICK, this.win, ZkKeys.ON_PREVIEW_DATA, entry);
+		rm1.addForward(Events.ON_CLICK, this.win, ZkKeys.ON_PREVIEW_DATA, entry);
 
-        row.appendChild(rm1);
+		row.appendChild(rm1);
 
-        row.setStyle(Constants.STYLE_NO_PADDING);
-    }
+		row.setStyle(Constants.STYLE_NO_PADDING);
+	}
 
 }

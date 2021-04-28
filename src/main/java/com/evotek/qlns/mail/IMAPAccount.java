@@ -6,8 +6,8 @@ package com.evotek.qlns.mail;
  */
 public class IMAPAccount extends Account {
 
-    protected IMAPAccount(String protocol, boolean secure, int port) {
-        super(protocol, secure, port);
-    }
+	protected IMAPAccount(String protocol, boolean secure, int port) {
+		super(protocol, secure, port);
+	}
 
 }

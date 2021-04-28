@@ -16,10 +16,10 @@ import com.evotek.qlns.model.ContractType;
  */
 public interface ContractTypeDAO {
 
-    public List<ContractType> getContract();
+	public void delete(ContractType ct);
 
-    public void delete(ContractType ct);
+	public List<ContractType> getContract();
 
-    public void saveOrUpdate(ContractType ct);
-    
+	public void saveOrUpdate(ContractType ct);
+
 }

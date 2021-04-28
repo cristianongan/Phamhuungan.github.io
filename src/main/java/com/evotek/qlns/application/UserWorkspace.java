@@ -58,32 +58,9 @@ import com.evotek.qlns.util.key.PermissionConstants;
 
 public class UserWorkspace implements Serializable, DisposableBean {
 
-	private static final long serialVersionUID = -3936210543827830197L;
-
 	private static final Logger _log = LogManager.getLogger(UserWorkspace.class);
 
-	private String userLanguage;
-	private String browserType;
-	/**
-	 * Indicates that as mainMenu the TreeMenu is used, otherwise BarMenu.
-	 *
-	 * true = init.
-	 */
-	private boolean treeMenu = true;
-	/**
-	 * difference in the height between TreeMenu and BarMenu.
-	 */
-	private final int menuOffset = 32;
-	/**
-	 * Not used yet.
-	 */
-	private Set<String> grantedAuthoritySet = null;
-
-	private List<String> roles = new ArrayList<String>();
-
-	private UserPrincipalImpl userPrincipal;
-
-	private Session session;
+	private static final long serialVersionUID = -3936210543827830197L;
 
 	private static Authentication getAuthentication() {
 		return SecurityContextHolder.getContext().getAuthentication();
@@ -99,6 +76,31 @@ public class UserWorkspace implements Serializable, DisposableBean {
 	public static UserWorkspace getInstance() {
 		return SpringUtil.getBean("userWorkspace", UserWorkspace.class);
 	}
+
+	private String browserType;
+	/**
+	 * Not used yet.
+	 */
+	private Set<String> grantedAuthoritySet = null;
+	/**
+	 * difference in the height between TreeMenu and BarMenu.
+	 */
+	private final int menuOffset = 32;
+
+	private List<String> roles = new ArrayList<String>();
+
+	private Session session;
+
+	/**
+	 * Indicates that as mainMenu the TreeMenu is used, otherwise BarMenu.
+	 *
+	 * true = init.
+	 */
+	private boolean treeMenu = true;
+
+	private String userLanguage;
+
+	private UserPrincipalImpl userPrincipal;
 
 	/**
 	 * Default Constructor
@@ -123,6 +125,21 @@ public class UserWorkspace implements Serializable, DisposableBean {
 		Window.setDefaultActionOnShow("");
 	}
 
+	public Session currentSession() {
+		return this.session;
+	}
+
+	@Override
+	public void destroy() {
+		this.grantedAuthoritySet = null;
+
+		SecurityContextHolder.clearContext();
+
+		if (_log.isDebugEnabled()) {
+			_log.debug("destroy Workspace [" + this + "]");
+		}
+	}
+
 	/**
 	 * Logout with the spring-security logout action-URL.<br>
 	 * Therefore we make a sendRedirect() to the logout uri we <br>
@@ -139,6 +156,10 @@ public class UserWorkspace implements Serializable, DisposableBean {
 		// Sessions.getCurrent().invalidate();
 
 		Executions.sendRedirect("/j_spring_logout");
+	}
+
+	public String getBrowserType() {
+		return this.browserType;
 	}
 
 	/**
@@ -163,6 +184,56 @@ public class UserWorkspace implements Serializable, DisposableBean {
 		return this.grantedAuthoritySet;
 	}
 
+	public int getMenuOffset() {
+
+		int result = 0;
+
+		if (isTreeMenu()) {
+			result = 0;
+		} else {
+			result = this.menuOffset;
+		}
+
+		return result;
+	}
+
+	public List<String> getRoles() {
+		return this.roles;
+	}
+
+	public String getUserLanguage() {
+		return this.userLanguage;
+	}
+
+	public Properties getUserLanguageProperty() {
+
+		// // TODO only for testing. we must get the language from
+		// // the users table filed
+		// userLanguageProperty =
+		// ApplicationWorkspace.getInstance().getPropEnglish();
+		// userLanguageProperty =
+		// ApplicationWorkspace.getInstance().getPropGerman();
+		//
+		// return userLanguageProperty;
+		return null;
+	}
+
+	public UserPrincipalImpl getUserPrincipal() {
+		return this.userPrincipal;
+	}
+
+	public boolean isAdministrator() {
+		return PermissionUtil.isAdministrator(this.roles);
+	}
+
+	public boolean isAllowed(List<String> rightNames) {
+		if (isAdministrator()) {
+			return true;
+		}
+
+		return this.grantedAuthoritySet.containsAll(rightNames);
+	}
+
 	/**
 	 * Checks if a right is in the <b>granted rights</b> that the logged in user
 	 * have. <br>
@@ -179,40 +250,24 @@ public class UserWorkspace implements Serializable, DisposableBean {
 		return this.grantedAuthoritySet.contains(rightName);
 	}
 
-	public boolean isAllowed(List<String> rightNames) {
-		if (isAdministrator()) {
-			return true;
-		}
-
-		return this.grantedAuthoritySet.containsAll(rightNames);
+	public boolean isTreeMenu() {
+		return this.treeMenu;
 	}
 
-	public boolean isAdministrator() {
-		return PermissionUtil.isAdministrator(this.roles);
+	public void setBrowserType(String browserType) {
+		this.browserType = browserType;
 	}
 
-	public Properties getUserLanguageProperty() {
-
-		// // TODO only for testing. we must get the language from
-		// // the users table filed
-		// userLanguageProperty =
-		// ApplicationWorkspace.getInstance().getPropEnglish();
-		// userLanguageProperty =
-		// ApplicationWorkspace.getInstance().getPropGerman();
-		//
-		// return userLanguageProperty;
-		return null;
+	public void setRoles(List<String> roles) {
+		this.roles = roles;
 	}
 
-	@Override
-	public void destroy() {
-		this.grantedAuthoritySet = null;
+	public void setSession(Session session) {
+		this.session = session;
+	}
 
-		SecurityContextHolder.clearContext();
-
-		if (_log.isDebugEnabled()) {
-			_log.debug("destroy Workspace [" + this + "]");
-		}
+	public void setTreeMenu(boolean treeMenu) {
+		this.treeMenu = treeMenu;
 	}
 
 	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
@@ -222,61 +277,8 @@ public class UserWorkspace implements Serializable, DisposableBean {
 		this.userLanguage = userLanguage;
 	}
 
-	public String getUserLanguage() {
-		return this.userLanguage;
-	}
-
-	public void setBrowserType(String browserType) {
-		this.browserType = browserType;
-	}
-
-	public String getBrowserType() {
-		return this.browserType;
-	}
-
-	public int getMenuOffset() {
-
-		int result = 0;
-
-		if (isTreeMenu()) {
-			result = 0;
-		} else {
-			result = this.menuOffset;
-		}
-
-		return result;
-	}
-
-	public void setTreeMenu(boolean treeMenu) {
-		this.treeMenu = treeMenu;
-	}
-
-	public boolean isTreeMenu() {
-		return this.treeMenu;
-	}
-
-	public List<String> getRoles() {
-		return this.roles;
-	}
-
-	public void setRoles(List<String> roles) {
-		this.roles = roles;
-	}
-
-	public UserPrincipalImpl getUserPrincipal() {
-		return this.userPrincipal;
-	}
-
 	public void setUserPrincipal(UserPrincipalImpl userPrincipal) {
 		this.userPrincipal = userPrincipal;
-	}
-
-	public Session currentSession() {
-		return this.session;
-	}
-
-	public void setSession(Session session) {
-		this.session = session;
 	}
 
 }

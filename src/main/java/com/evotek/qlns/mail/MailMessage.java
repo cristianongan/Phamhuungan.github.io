@@ -12,167 +12,175 @@ import javax.mail.internet.InternetAddress;
  */
 public class MailMessage implements Serializable {
 
-    public MailMessage() {
-    }
+	private List<File> _attachments = new ArrayList<File>();
 
-    public MailMessage(
-            InternetAddress from, String subject, String body,
-            boolean htmlFormat) {
+	private InternetAddress[] _bcc;
 
-        this(from, null, subject, body, htmlFormat);
-    }
+	private String _body;
 
-    public MailMessage(
-            InternetAddress from, InternetAddress to, String subject, String body,
-            boolean htmlFormat) {
+	private InternetAddress[] _bulkAddresses;
 
-        this._from = from;
+	private InternetAddress[] _cc;
 
-        if (to != null) {
-            this._to = new InternetAddress[]{to};
-        } else {
-            this._to = new InternetAddress[0];
-        }
+	private InternetAddress _from;
 
-        this._subject = subject;
-        this._body = body;
-        this._htmlFormat = htmlFormat;
-    }
+	private boolean _htmlFormat;
 
-    public void addAttachment(File attachment) {
-        if (attachment != null) {
-            this._attachments.add(attachment);
-        }
-    }
+	private String _inReplyTo;
 
-    public File[] getAttachments() {
-        return this._attachments.toArray(new File[this._attachments.size()]);
-    }
+	private String _messageId;
 
-    public InternetAddress[] getBCC() {
-        return this._bcc;
-    }
+	private InternetAddress[] _replyTo;
 
-    public String getBody() {
-        return this._body;
-    }
+	private SMTPAccount _smtpAccount;
 
-    public InternetAddress[] getBulkAddresses() {
-        return this._bulkAddresses;
-    }
+	private String _subject;
 
-    public InternetAddress[] getCC() {
-        return this._cc;
-    }
+	private InternetAddress[] _to;
 
-    public InternetAddress getFrom() {
-        return this._from;
-    }
+	public MailMessage() {
+	}
 
-    public boolean getHTMLFormat() {
-        return this._htmlFormat;
-    }
+	public MailMessage(InternetAddress from, InternetAddress to, String subject, String body, boolean htmlFormat) {
 
-    public String getInReplyTo() {
-        return this._inReplyTo;
-    }
+		this._from = from;
 
-    public String getMessageId() {
-        return this._messageId;
-    }
+		if (to != null) {
+			this._to = new InternetAddress[] { to };
+		} else {
+			this._to = new InternetAddress[0];
+		}
 
-    public InternetAddress[] getReplyTo() {
-        return this._replyTo;
-    }
+		this._subject = subject;
+		this._body = body;
+		this._htmlFormat = htmlFormat;
+	}
 
-    public SMTPAccount getSMTPAccount() {
-        return this._smtpAccount;
-    }
+	public MailMessage(InternetAddress from, String subject, String body, boolean htmlFormat) {
 
-    public String getSubject() {
-        return this._subject;
-    }
+		this(from, null, subject, body, htmlFormat);
+	}
 
-    public InternetAddress[] getTo() {
-        return this._to;
-    }
+	public void addAttachment(File attachment) {
+		if (attachment != null) {
+			this._attachments.add(attachment);
+		}
+	}
 
-    public boolean isHTMLFormat() {
-        return this._htmlFormat;
-    }
+	public File[] getAttachments() {
+		return this._attachments.toArray(new File[this._attachments.size()]);
+	}
 
-    public void setBCC(InternetAddress bcc) {
-        this._bcc = new InternetAddress[]{bcc};
-    }
+	public InternetAddress[] getBCC() {
+		return this._bcc;
+	}
 
-    public void setBCC(InternetAddress[] bcc) {
-        this._bcc = bcc;
-    }
+	public String getBody() {
+		return this._body;
+	}
 
-    public void setBody(String body) {
-        this._body = body;
-    }
+	public InternetAddress[] getBulkAddresses() {
+		return this._bulkAddresses;
+	}
 
-    public void setBulkAddresses(InternetAddress[] bulkAddresses) {
-        this._bulkAddresses = bulkAddresses;
-    }
+	public InternetAddress[] getCC() {
+		return this._cc;
+	}
 
-    public void setCC(InternetAddress cc) {
-        this._cc = new InternetAddress[]{cc};
-    }
+	public InternetAddress getFrom() {
+		return this._from;
+	}
 
-    public void setCC(InternetAddress[] cc) {
-        this._cc = cc;
-    }
+	public boolean getHTMLFormat() {
+		return this._htmlFormat;
+	}
 
-    public void setFrom(InternetAddress from) {
-        this._from = from;
-    }
+	public String getInReplyTo() {
+		return this._inReplyTo;
+	}
 
-    public void setHTMLFormat(boolean htmlFormat) {
-        this._htmlFormat = htmlFormat;
-    }
+	public String getMessageId() {
+		return this._messageId;
+	}
 
-    public void setInReplyTo(String inReplyTo) {
-        this._inReplyTo = inReplyTo;
-    }
+	public InternetAddress[] getReplyTo() {
+		return this._replyTo;
+	}
 
-    public void setMessageId(String messageId) {
-        this._messageId = messageId;
-    }
+	public SMTPAccount getSMTPAccount() {
+		return this._smtpAccount;
+	}
 
-    public void setReplyTo(InternetAddress[] replyTo) {
-        this._replyTo = replyTo;
-    }
+	public String getSubject() {
+		return this._subject;
+	}
 
-    public void setSMTPAccount(SMTPAccount account) {
-        this._smtpAccount = account;
-    }
+	public InternetAddress[] getTo() {
+		return this._to;
+	}
 
-    public void setSubject(String subject) {
-        this._subject = subject;
-    }
+	public boolean isHTMLFormat() {
+		return this._htmlFormat;
+	}
 
-    public void setTo(InternetAddress to) {
-        this._to = new InternetAddress[]{to};
-    }
+	public void setBCC(InternetAddress bcc) {
+		this._bcc = new InternetAddress[] { bcc };
+	}
 
-    public void setTo(InternetAddress[] to) {
-        this._to = to;
-    }
+	public void setBCC(InternetAddress[] bcc) {
+		this._bcc = bcc;
+	}
 
-    private InternetAddress _from;
-    private InternetAddress[] _to;
-    private InternetAddress[] _cc;
-    private InternetAddress[] _bcc;
-    private InternetAddress[] _bulkAddresses;
-    private String _subject;
-    private String _body;
-    private boolean _htmlFormat;
-    private InternetAddress[] _replyTo;
-    private String _messageId;
-    private String _inReplyTo;
-    private List<File> _attachments = new ArrayList<File>();
-    private SMTPAccount _smtpAccount;
+	public void setBody(String body) {
+		this._body = body;
+	}
+
+	public void setBulkAddresses(InternetAddress[] bulkAddresses) {
+		this._bulkAddresses = bulkAddresses;
+	}
+
+	public void setCC(InternetAddress cc) {
+		this._cc = new InternetAddress[] { cc };
+	}
+
+	public void setCC(InternetAddress[] cc) {
+		this._cc = cc;
+	}
+
+	public void setFrom(InternetAddress from) {
+		this._from = from;
+	}
+
+	public void setHTMLFormat(boolean htmlFormat) {
+		this._htmlFormat = htmlFormat;
+	}
+
+	public void setInReplyTo(String inReplyTo) {
+		this._inReplyTo = inReplyTo;
+	}
+
+	public void setMessageId(String messageId) {
+		this._messageId = messageId;
+	}
+
+	public void setReplyTo(InternetAddress[] replyTo) {
+		this._replyTo = replyTo;
+	}
+
+	public void setSMTPAccount(SMTPAccount account) {
+		this._smtpAccount = account;
+	}
+
+	public void setSubject(String subject) {
+		this._subject = subject;
+	}
+
+	public void setTo(InternetAddress to) {
+		this._to = new InternetAddress[] { to };
+	}
+
+	public void setTo(InternetAddress[] to) {
+		this._to = to;
+	}
 
 }

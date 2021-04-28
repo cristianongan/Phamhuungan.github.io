@@ -10,48 +10,47 @@ package com.evotek.qlns.util.key;
  * @author linhlh2
  */
 public class PermissionConstants {
-    //right type
-    public static final Long TYPE_PAGE = 0L;
+	public static final String CLASS = "Class";
 
-    public static final Long TYPE_MENU_CATEGORY = 1L;
+	public static final String COMPONENT = "Component";
 
-    public static final Long TYPE_MENU_ITEM = 2L;
+	// Other
+	public static final Long IS_ADMIN = 1L;
 
-    public static final Long TYPE_METHOD_EVENT = 3L;
+	public static final String MENU_CATEGORY = "Menu Category";
 
-    public static final Long TYPE_CLASS = 4L;
+	public static final String MENU_ITEM = "Menu Item";
 
-    public static final Long TYPE_TAB = 5L;
+	// //Right name
+	public static final String MENU_ITEM_MAIN_PAGE = "menuItemMainPage";
 
-    public static final Long TYPE_COMPONENT = 6L;
+	public static final String METHOD_EVENT = "Method/Event";
 
-    //right type name
-    public static final String PAGE = "Page";
+	// right type name
+	public static final String PAGE = "Page";
 
-    public static final String MENU_CATEGORY = "Menu Category";
+	// Page view
+	public static final String PAGE_MAIN_PAGE = "home";
 
-    public static final String MENU_ITEM = "Menu Item";
+	// Role name
+	public static final String ROLE_ADMIN = "Administrator";
 
-    public static final String METHOD_EVENT = "Method/Event";
+	public static final String ROLE_USERS = "Users";
 
-    public static final String CLASS = "Class";
+	public static final String TAB = "Tab";
 
-    public static final String TAB = "Tab";
+	public static final Long TYPE_CLASS = 4L;
 
-    public static final String COMPONENT = "Component";
+	public static final Long TYPE_COMPONENT = 6L;
 
-    //Role name
-    public static final String ROLE_ADMIN = "Administrator";
+	public static final Long TYPE_MENU_CATEGORY = 1L;
 
-    public static final String ROLE_USERS = "Users";
+	public static final Long TYPE_MENU_ITEM = 2L;
 
-//    //Right name
-    public static final String MENU_ITEM_MAIN_PAGE = "menuItemMainPage";
+	public static final Long TYPE_METHOD_EVENT = 3L;
 
+	// right type
+	public static final Long TYPE_PAGE = 0L;
+	public static final Long TYPE_TAB = 5L;
 
-    //Page view
-    public static final String PAGE_MAIN_PAGE = "home";
-    //Other
-    public static final Long IS_ADMIN = 1L;
-    
 }

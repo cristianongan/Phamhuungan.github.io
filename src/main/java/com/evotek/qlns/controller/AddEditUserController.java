@@ -8,7 +8,8 @@ import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.zkoss.spring.SpringUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Event;
@@ -35,394 +36,298 @@ import com.evotek.qlns.util.key.LanguageKeys;
 import com.evotek.qlns.util.key.Values;
 import com.evotek.qlns.util.key.ZkKeys;
 
-
 /**
  *
  * @author LinhLH
  */
-public class AddEditUserController extends BasicController<Window>
-        implements Serializable {
+@Controller
+public class AddEditUserController extends BasicController<Window> implements Serializable {
 
-    private Window winUpdateUser;
-    
-    private Div winParent;
+	private static final long serialVersionUID = -2959880949068841736L;
 
-    private Textbox tbUserName;
-    private Textbox tbEmail;
-    private Textbox tbFirstName;
-    private Textbox tbMiddleName;
-    private Textbox tbLastName;
-    private Textbox tbBirthplace;
-    private Textbox tbAddress;
-    private Textbox tbPhone;
-    private Textbox tbMobile;
+	private static final Logger _log = LogManager.getLogger(AddEditUserController.class);
 
-    private Combobox cbGender;
+	@Autowired
+	private UserService userService;
 
-    private A btnClearGender;
-    
-    private Datebox dbBirthday;
+	private A btnClearGender;
 
-    private User user;
+	private Combobox cbGender;
+	private Datebox dbBirthday;
+	private boolean isManager;
+	private Textbox tbAddress;
+	private Textbox tbBirthplace;
+	private Textbox tbEmail;
+	private Textbox tbFirstName;
+	private Textbox tbLastName;
+	private Textbox tbMiddleName;
+
+	private Textbox tbMobile;
+
+	private Textbox tbPhone;
+
+	private Textbox tbUserName;
+
+	private User user;
 
 //    private String passwordEncode = StringPool.BLANK;
 
-    private boolean isManager;
+	private Div winParent;
 
-    @Override
-    public void doBeforeComposeChildren(Window win) throws Exception {
-        super.doBeforeComposeChildren(win);
+	private Window winUpdateUser;
 
-        this.winUpdateUser = win;
-    }
+	private Map<String, Object> _createParameterMap(boolean update) {
+		Map<String, Object> parameters = new HashMap<String, Object>();
 
-    @Override
-    public void doAfterCompose(Window win) throws Exception {
-        super.doAfterCompose(win);
+		parameters.put(Constants.PARENT_WINDOW, this.winParent);
+		parameters.put(Constants.OBJECT, this.user);
+		parameters.put(Constants.SECOND_OBJECT, !update || this.isManager);
 
-        //init data
-        this.initData();
-    }
+		return parameters;
+	}
 
+	/*
+	 * Hàm fill dữ liệu vào form khi thực hiện cập nhật
+	 */
+	private void _setEditForm() {
+		try {
+			this.tbUserName.setValue(this.user.getUserName());
+			this.tbEmail.setValue(this.user.getEmail());
+			this.tbFirstName.setValue(this.user.getFirstName());
+			this.tbMiddleName.setValue(this.user.getMiddleName());
+			this.tbLastName.setValue(this.user.getLastName());
+			this.tbBirthplace.setValue(this.user.getBirthPlace());
+			this.tbAddress.setValue(this.user.getAddress());
+			this.tbPhone.setValue(this.user.getPhone());
+			this.tbMobile.setValue(this.user.getMobile());
+			this.dbBirthday.setValue(this.user.getDateOfBirth());
+		} catch (WrongValueException ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+	}
 
-    public void initData() {
-        this.winParent = (Div) this.arg.get(Constants.PARENT_WINDOW);
+	private boolean _validate(String userName, String email, String firstName, String middleName, String lastName,
+			String birthPlace, String address, String phone, String mobile) {
 
-        this.user = (User) this.arg.get(Constants.OBJECT);
+		Long userId = Validator.isNull(this.user) ? null : this.user.getUserId();
 
-        this.isManager = GetterUtil.getBooleanValue(this.arg.get(Constants.SECOND_OBJECT),
-                false);
+		if (!_validateUserName(userName, userId)) {
 
-        if (Validator.isNotNull(this.user)) {
-            this.winUpdateUser.setTitle((String) this.arg.get(Constants.TITLE));
+			return false;
+		}
 
-            this._setEditForm();
+		if (!_validateEmail(email, userId)) {
+			return false;
+		}
 
-            this.tbUserName.setReadonly(true);
-        } else {
-            final String staticDomain = StaticUtil.DEFAULT_EMAIL_DOMAIN;
-            
-            this.tbEmail.setValue(staticDomain);
-            
-            this.tbUserName.addEventListener(Events.ON_CHANGING, new EventListener<Event>() {
+		// Ho
+		if (Validator.isNull(firstName)) {
+			this.tbFirstName.setErrorMessage(Values.getRequiredInputMsg(Labels.getLabel(LanguageKeys.FIRST_NAME)));
 
-                @Override
-				public void onEvent(Event t) throws Exception {
-                    AddEditUserController.this.tbEmail.setValue(AddEditUserController.this.tbUserName.getValue()+staticDomain);
-                }
-            });
-        }
+			return false;
+		}
 
-        this.onCreateGender();
-    }
+		if (firstName.length() > Values.SHORT_LENGTH) {
+			this.tbFirstName.setErrorMessage(
+					Values.getMaxLengthInvalidMsg(Labels.getLabel(LanguageKeys.FIRST_NAME), Values.SHORT_LENGTH));
 
-    public void onCreateGender() {
-        List<SimpleModel> genders =
-                this.userService.getGenderType();
-        this.cbGender.setModel(new ListModelList<SimpleModel>(genders));
-    }
+			return false;
+		}
 
-    public void onAfterRender$cbGender() {
-        if (Validator.isNotNull(this.user)
-                && Validator.isNotNull(this.user.getGender())) {
-                this.cbGender.setSelectedIndex(this.user.getGender().intValue());
-        }
-    }
-    
-    public void onSelect$cbGender() {
-        this.btnClearGender.setVisible(true);
-    }
-    
-    public void onClick$btnClearGender() {
-        this.cbGender.setSelectedIndex(-1);
-        this.btnClearGender.setVisible(false);
-    }
-    /*
-     * Hàm fill dữ liệu vào form khi thực hiện cập nhật
-     */
-    private void _setEditForm() {
-        try {
-            this.tbUserName.setValue(this.user.getUserName());
-            this.tbEmail.setValue(this.user.getEmail());
-            this.tbFirstName.setValue(this.user.getFirstName());
-            this.tbMiddleName.setValue(this.user.getMiddleName());
-            this.tbLastName.setValue(this.user.getLastName());
-            this.tbBirthplace.setValue(this.user.getBirthPlace());
-            this.tbAddress.setValue(this.user.getAddress());
-            this.tbPhone.setValue(this.user.getPhone());
-            this.tbMobile.setValue(this.user.getMobile());
-            this.dbBirthday.setValue(this.user.getDateOfBirth());
-        } catch (WrongValueException ex) {
-            _log.error(ex.getMessage(), ex);
-        }
-    }
-    //event
-    public void onClick$btnCancel() {
-        this.winUpdateUser.detach();
-    }
+		// Ten
+		if (Validator.isNotNull(lastName) && lastName.length() > Values.SHORT_LENGTH) {
+			this.tbLastName.setErrorMessage(
+					Values.getMaxLengthInvalidMsg(Labels.getLabel(LanguageKeys.LAST_NAME), Values.SHORT_LENGTH));
 
-    public void onClick$btnSave() {
-        save(false);
-    }
+			return false;
+		}
 
-    public void onClick$btnSaveAndContinue() {
-        save(true);
-    }
+		if (Validator.isNotNull(middleName) && middleName.length() > Values.SHORT_LENGTH) {
+			this.tbMiddleName.setErrorMessage(
+					Values.getMaxLengthInvalidMsg(Labels.getLabel(LanguageKeys.MIDDLE_NAME), Values.SHORT_LENGTH));
 
-    private void save(final boolean _continue){
-        boolean update = true;
+			return false;
+		}
+		// Noi sinh
+		if (Validator.isNotNull(birthPlace) && birthPlace.length() > Values.MEDIUM_LENGTH) {
+			this.tbBirthplace.setErrorMessage(
+					Values.getMaxLengthInvalidMsg(Labels.getLabel(LanguageKeys.PLACE_OF_BIRTH), Values.MEDIUM_LENGTH));
 
-        try {
-            String userName = GetterUtil.getString(this.tbUserName.getValue());
-            String email = GetterUtil.getString(this.tbEmail.getValue());
-            String firstName = GetterUtil.getString(this.tbFirstName.getValue());
-            String middleName = GetterUtil.getString(this.tbMiddleName.getValue());
-            String lastName = GetterUtil.getString(this.tbLastName.getValue());
-            Long gender = ComponentUtil.getComboboxValue(this.cbGender);
-            Date birthday = this.dbBirthday.getValue();
-            String birthPlace = GetterUtil.getString(this.tbBirthplace.getValue());
-            String address = GetterUtil.getString(this.tbAddress.getValue());
-            String phone = GetterUtil.getString(this.tbPhone.getValue());
-            String mobile = GetterUtil.getString(this.tbMobile.getValue());
+			return false;
+		}
 
-            if (this._validate(userName, email, firstName, middleName, lastName,
-                    birthPlace, address, phone, mobile)) {
-                if (Validator.isNull(this.user)) {
-                    update = false;
+		// Dia chi
+		if (Validator.isNotNull(address) && address.length() > Values.MEDIUM_LENGTH) {
+			this.tbAddress.setErrorMessage(
+					Values.getMaxLengthInvalidMsg(Labels.getLabel(LanguageKeys.ADDRESS), Values.MEDIUM_LENGTH));
 
-                    this.user = new User();
+			return false;
+		}
 
-                    this.user.setCreateDate(new Date());
-                    this.user.setStatus(Values.STATUS_NOT_READY);
-                    this.user.setUserName(userName);
-                }
+		// telephone
+		if (Validator.isNotNull(phone) && !Validator.isPhoneNumber(phone)) {
+			this.tbPhone.setErrorMessage(Values.getFormatInvalidMsg(Labels.getLabel(LanguageKeys.PHONE)));
 
-                this.user.setModifiedDate(new Date());
-                this.user.setEmail(email);
-                this.user.setFirstName(firstName);
-                this.user.setMiddleName(middleName);
-                this.user.setLastName(lastName);
-                this.user.setGender(gender);
-                this.user.setDateOfBirth(birthday);
-                this.user.setBirthPlace(birthPlace);
-                this.user.setAddress(address);
-                this.user.setPhone(phone);
-                this.user.setMobile(mobile);                
-                
-                this.saveUser(update, _continue);
-            }
-        } catch (WrongValueException ex) {
-            _log.error(ex.getMessage(), ex);
-        }
-    }
+			return false;
+		}
 
-    private void saveUser(boolean update, boolean _continue) {
-        try {
-            this.userService.saveOrUpdate(this.user);
+		// cellphone
+		if (Validator.isNotNull(mobile) && !Validator.isPhoneNumber(mobile)) {
+			this.tbPhone.setErrorMessage(Values.getFormatInvalidMsg(Labels.getLabel(LanguageKeys.MOBILE)));
 
-            //set default password
-            if(!update){
-                this.userService.createPassword(this.user);
-            }
-
-            this.winUpdateUser.detach();
-
-            if(_continue){
-                Events.sendEvent(ZkKeys.ON_LOAD_DATA_AND_REOPEN, this.winParent,
-                    null);
-            } else {
-                Events.sendEvent(ZkKeys.ON_LOAD_DATA, this.winParent,
-                    _createParameterMap(update));
-            }
-
-            ComponentUtil.createSuccessMessageBox(ComponentUtil.getSuccessKey(update));
-            
-        } catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
-
-            Messagebox.show(Labels.getLabel(
-                    ComponentUtil.getFailKey(update)));
-        }
-    }
-
-    private Map<String, Object> _createParameterMap(boolean update){
-        Map<String, Object> parameters = new HashMap<String, Object>();
-
-        parameters.put(Constants.PARENT_WINDOW, this.winParent);
-        parameters.put(Constants.OBJECT, this.user);
-        parameters.put(Constants.SECOND_OBJECT, !update||this.isManager);
-
-        return parameters;
-    }
-
-    private boolean _validate(String userName, String email, String firstName,
-            String middleName, String lastName, String birthPlace, String address,
-            String phone, String mobile){
-
-        Long userId = Validator.isNull(this.user) ? null : this.user.getUserId();
-
-        if(!_validateUserName(userName, userId)){
-
-            return false;
-        }
-
-        if(!_validateEmail(email, userId)){
-            return false;
-        }
-
-        //Ho
-        if (Validator.isNull(firstName)) {
-            this.tbFirstName.setErrorMessage(Values.getRequiredInputMsg(
-                    Labels.getLabel(LanguageKeys.FIRST_NAME)));
-
-            return false;
-        }
-
-        if (firstName.length() > Values.SHORT_LENGTH) {
-            this.tbFirstName.setErrorMessage(Values.getMaxLengthInvalidMsg(
-                    Labels.getLabel(LanguageKeys.FIRST_NAME), Values.SHORT_LENGTH));
-
-            return false;
-        }
-
-        //Ten
-        if (Validator.isNotNull(lastName)
-                && lastName.length() > Values.SHORT_LENGTH) {
-            this.tbLastName.setErrorMessage(Values.getMaxLengthInvalidMsg(
-                    Labels.getLabel(LanguageKeys.LAST_NAME),
-                    Values.SHORT_LENGTH));
-
-            return false;
-        }
-        
-        if (Validator.isNotNull(middleName)
-                && middleName.length() > Values.SHORT_LENGTH) {
-            this.tbMiddleName.setErrorMessage(Values.getMaxLengthInvalidMsg(
-                    Labels.getLabel(LanguageKeys.MIDDLE_NAME),
-                    Values.SHORT_LENGTH));
-
-            return false;
-        }
-        //Noi sinh
-        if (Validator.isNotNull(birthPlace)
-                && birthPlace.length() > Values.MEDIUM_LENGTH) {
-            this.tbBirthplace.setErrorMessage(Values.getMaxLengthInvalidMsg(
-                    Labels.getLabel(LanguageKeys.PLACE_OF_BIRTH),
-                    Values.MEDIUM_LENGTH));
-
-            return false;
-        }
-
-        //Dia chi
-        if (Validator.isNotNull(address)
-                && address.length() > Values.MEDIUM_LENGTH) {
-            this.tbAddress.setErrorMessage(Values.getMaxLengthInvalidMsg(
-                    Labels.getLabel(LanguageKeys.ADDRESS), Values.MEDIUM_LENGTH));
-
-            return false;
-        }
-
-        //telephone
-        if (Validator.isNotNull(phone)
-                && !Validator.isPhoneNumber(phone)) {
-            this.tbPhone.setErrorMessage(Values.getFormatInvalidMsg(
-                    Labels.getLabel(LanguageKeys.PHONE)));
-
-            return false;
-        }
-
-        //cellphone
-        if (Validator.isNotNull(mobile)
-                && !Validator.isPhoneNumber(mobile)) {
-            this.tbPhone.setErrorMessage(Values.getFormatInvalidMsg(
-                    Labels.getLabel(LanguageKeys.MOBILE)));
-
-            return false;
-        }
+			return false;
+		}
 
 //        if(!this._validatePassword()){
 //            return false;
 //        }
 
-        return true;
-    }
+		return true;
+	}
 
-    private boolean _validateUserName(String userName, Long userId){
-        //Ten dang nhap
-        if (Validator.isNull(userName)) {
-            this.tbUserName.setErrorMessage(Values.getRequiredInputMsg(
-                    Labels.getLabel(LanguageKeys.USER_LOGIN_NAME)));
+	private boolean _validateEmail(String email, Long userId) {
+		// email
+		if (Validator.isNull(email)) {
+			this.tbEmail.setErrorMessage(Values.getRequiredInputMsg(Labels.getLabel(LanguageKeys.EMAIL)));
 
-            return false;
-        }
+			return false;
+		}
 
-        //check length tên
-        if (userName.length() > Values.SHORT_LENGTH) {
-            this.tbUserName.setErrorMessage(Values.getMaxLengthInvalidMsg(
-                    Labels.getLabel(LanguageKeys.USER_LOGIN_NAME),
-                    Values.SHORT_LENGTH));
+		if (email.length() > Values.SHORT_LENGTH) {
+			this.tbEmail.setErrorMessage(
+					Values.getMaxLengthInvalidMsg(Labels.getLabel(LanguageKeys.EMAIL), Values.SHORT_LENGTH));
 
-            return false;
-        }
+			return false;
+		}
 
-        if (userName.length() < Values.MIN_NAME_LENGTH) {
-            this.tbUserName.setErrorMessage(Values.getMinLengthInvalidMsg(
-                    Labels.getLabel(LanguageKeys.USER_LOGIN_NAME),
-                    Values.MIN_NAME_LENGTH));
+		if (!Validator.isEmailAddress(email)) {
+			this.tbEmail.setErrorMessage(Values.getFormatInvalidMsg(Labels.getLabel(LanguageKeys.EMAIL)));
 
-            return false;
-        }
+			return false;
+		}
 
-        if(!Validator.isVariableName(userName)){
-            this.tbUserName.setErrorMessage(Values.getFormatInvalidMsg(
-                    Labels.getLabel(LanguageKeys.USER_LOGIN_NAME),
-                    Values.USER_NAME_PATTERN));
+		if (this.userService.isEmailExits(userId, email)) {
+			this.tbEmail.setErrorMessage(Values.getDuplicateMsg(Labels.getLabel(LanguageKeys.EMAIL)));
 
-            return false;
-        }
+			return false;
+		}
 
-        if(this.userService.isUserNameExits(userId, userName)){
-            this.tbUserName.setErrorMessage(Values.getDuplicateMsg(
-                    Labels.getLabel(LanguageKeys.USER_LOGIN_NAME)));
+		return true;
+	}
 
-            return false;
-        }
+	private boolean _validateUserName(String userName, Long userId) {
+		// Ten dang nhap
+		if (Validator.isNull(userName)) {
+			this.tbUserName.setErrorMessage(Values.getRequiredInputMsg(Labels.getLabel(LanguageKeys.USER_LOGIN_NAME)));
 
-        return true;
-    }
+			return false;
+		}
 
-    private boolean _validateEmail(String email, Long userId){
-        //email
-        if (Validator.isNull(email)) {
-            this.tbEmail.setErrorMessage(Values.getRequiredInputMsg(
-                    Labels.getLabel(LanguageKeys.EMAIL)));
+		// check length tên
+		if (userName.length() > Values.SHORT_LENGTH) {
+			this.tbUserName.setErrorMessage(
+					Values.getMaxLengthInvalidMsg(Labels.getLabel(LanguageKeys.USER_LOGIN_NAME), Values.SHORT_LENGTH));
 
-            return false;
-        }
+			return false;
+		}
 
-        if (email.length() > Values.SHORT_LENGTH) {
-            this.tbEmail.setErrorMessage(Values.getMaxLengthInvalidMsg(
-                    Labels.getLabel(LanguageKeys.EMAIL), Values.SHORT_LENGTH));
+		if (userName.length() < Values.MIN_NAME_LENGTH) {
+			this.tbUserName.setErrorMessage(Values.getMinLengthInvalidMsg(Labels.getLabel(LanguageKeys.USER_LOGIN_NAME),
+					Values.MIN_NAME_LENGTH));
 
-            return false;
-        }
+			return false;
+		}
 
-        if(!Validator.isEmailAddress(email)){
-            this.tbEmail.setErrorMessage(Values.getFormatInvalidMsg(
-                    Labels.getLabel(LanguageKeys.EMAIL)));
+		if (!Validator.isVariableName(userName)) {
+			this.tbUserName.setErrorMessage(Values.getFormatInvalidMsg(Labels.getLabel(LanguageKeys.USER_LOGIN_NAME),
+					Values.USER_NAME_PATTERN));
 
-            return false;
-        }
+			return false;
+		}
 
-        if(this.userService.isEmailExits(userId, email)){
-            this.tbEmail.setErrorMessage(Values.getDuplicateMsg(
-                    Labels.getLabel(LanguageKeys.EMAIL)));
+		if (this.userService.isUserNameExits(userId, userName)) {
+			this.tbUserName.setErrorMessage(Values.getDuplicateMsg(Labels.getLabel(LanguageKeys.USER_LOGIN_NAME)));
 
-            return false;
-        }
+			return false;
+		}
 
-        return true;
-    }
+		return true;
+	}
+
+	@Override
+	public void doAfterCompose(Window win) throws Exception {
+		super.doAfterCompose(win);
+
+		// init data
+		this.initData();
+	}
+
+	@Override
+	public void doBeforeComposeChildren(Window win) throws Exception {
+		super.doBeforeComposeChildren(win);
+
+		this.winUpdateUser = win;
+	}
+
+	public void initData() {
+		this.winParent = (Div) this.arg.get(Constants.PARENT_WINDOW);
+
+		this.user = (User) this.arg.get(Constants.OBJECT);
+
+		this.isManager = GetterUtil.getBooleanValue(this.arg.get(Constants.SECOND_OBJECT), false);
+
+		if (Validator.isNotNull(this.user)) {
+			this.winUpdateUser.setTitle((String) this.arg.get(Constants.TITLE));
+
+			this._setEditForm();
+
+			this.tbUserName.setReadonly(true);
+		} else {
+			final String staticDomain = StaticUtil.DEFAULT_EMAIL_DOMAIN;
+
+			this.tbEmail.setValue(staticDomain);
+
+			this.tbUserName.addEventListener(Events.ON_CHANGING, new EventListener<Event>() {
+
+				@Override
+				public void onEvent(Event t) throws Exception {
+					AddEditUserController.this.tbEmail
+							.setValue(AddEditUserController.this.tbUserName.getValue() + staticDomain);
+				}
+			});
+		}
+
+		this.onCreateGender();
+	}
+
+	public void onAfterRender$cbGender() {
+		if (Validator.isNotNull(this.user) && Validator.isNotNull(this.user.getGender())) {
+			this.cbGender.setSelectedIndex(this.user.getGender().intValue());
+		}
+	}
+
+	// event
+	public void onClick$btnCancel() {
+		this.winUpdateUser.detach();
+	}
+
+	public void onClick$btnClearGender() {
+		this.cbGender.setSelectedIndex(-1);
+		this.btnClearGender.setVisible(false);
+	}
+
+	public void onClick$btnSave() {
+		save(false);
+	}
+
+	public void onClick$btnSaveAndContinue() {
+		save(true);
+	}
+
+	public void onCreateGender() {
+		List<SimpleModel> genders = this.userService.getGenderType();
+		this.cbGender.setModel(new ListModelList<SimpleModel>(genders));
+	}
 
 //    private boolean _validatePassword(){
 //        if(Validator.isNotNull(user)){
@@ -538,22 +443,79 @@ public class AddEditUserController extends BasicController<Window>
 //        return Pattern.compile(sb.toString());
 //    }
 
-    //get set service
-    public UserService getUserService() {
-        if (this.userService == null) {
-            this.userService = (UserService)
-                    SpringUtil.getBean("userService");
-            setUserService(this.userService);
-        }
-        return this.userService;
-    }
+	public void onSelect$cbGender() {
+		this.btnClearGender.setVisible(true);
+	}
 
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
+	private void save(final boolean _continue) {
+		boolean update = true;
 
-    private transient UserService userService;
+		try {
+			String userName = GetterUtil.getString(this.tbUserName.getValue());
+			String email = GetterUtil.getString(this.tbEmail.getValue());
+			String firstName = GetterUtil.getString(this.tbFirstName.getValue());
+			String middleName = GetterUtil.getString(this.tbMiddleName.getValue());
+			String lastName = GetterUtil.getString(this.tbLastName.getValue());
+			Long gender = ComponentUtil.getComboboxValue(this.cbGender);
+			Date birthday = this.dbBirthday.getValue();
+			String birthPlace = GetterUtil.getString(this.tbBirthplace.getValue());
+			String address = GetterUtil.getString(this.tbAddress.getValue());
+			String phone = GetterUtil.getString(this.tbPhone.getValue());
+			String mobile = GetterUtil.getString(this.tbMobile.getValue());
 
-    private static final Logger _log =
-            LogManager.getLogger(AddEditUserController.class);
+			if (this._validate(userName, email, firstName, middleName, lastName, birthPlace, address, phone, mobile)) {
+				if (Validator.isNull(this.user)) {
+					update = false;
+
+					this.user = new User();
+
+					this.user.setCreateDate(new Date());
+					this.user.setStatus(Values.STATUS_NOT_READY);
+					this.user.setUserName(userName);
+				}
+
+				this.user.setModifiedDate(new Date());
+				this.user.setEmail(email);
+				this.user.setFirstName(firstName);
+				this.user.setMiddleName(middleName);
+				this.user.setLastName(lastName);
+				this.user.setGender(gender);
+				this.user.setDateOfBirth(birthday);
+				this.user.setBirthPlace(birthPlace);
+				this.user.setAddress(address);
+				this.user.setPhone(phone);
+				this.user.setMobile(mobile);
+
+				this.saveUser(update, _continue);
+			}
+		} catch (WrongValueException ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+	}
+
+	private void saveUser(boolean update, boolean _continue) {
+		try {
+			this.userService.saveOrUpdate(this.user);
+
+			// set default password
+			if (!update) {
+				this.userService.createPassword(this.user);
+			}
+
+			this.winUpdateUser.detach();
+
+			if (_continue) {
+				Events.sendEvent(ZkKeys.ON_LOAD_DATA_AND_REOPEN, this.winParent, null);
+			} else {
+				Events.sendEvent(ZkKeys.ON_LOAD_DATA, this.winParent, _createParameterMap(update));
+			}
+
+			ComponentUtil.createSuccessMessageBox(ComponentUtil.getSuccessKey(update));
+
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+
+			Messagebox.show(Labels.getLabel(ComponentUtil.getFailKey(update)));
+		}
+	}
 }

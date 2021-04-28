@@ -12,9 +12,9 @@ import com.evotek.qlns.model.FolderEntry;
  * @author linhlh2
  */
 public interface FolderEntryDAO {
-    public FolderEntry getLastedFolderEntry();
+	public FolderEntry getLastedFolderEntry();
 
-    public void saveOrUpdate(FolderEntry folder);
+	public void rollback();
 
-    public void rollback();
+	public void saveOrUpdate(FolderEntry folder);
 }

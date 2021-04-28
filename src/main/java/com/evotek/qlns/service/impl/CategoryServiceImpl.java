@@ -101,8 +101,8 @@ public class CategoryServiceImpl implements CategoryService {
 		return this.categoryDAO.getAllCategory();
 	}
 
-@Override
-public List<Category> getCategoryByParentId(Long parentId) throws Exception {
+	@Override
+	public List<Category> getCategoryByParentId(Long parentId) throws Exception {
 		return this.categoryDAO.getCategoryByParentId(parentId);
 	}
 
@@ -165,7 +165,7 @@ public List<Category> getCategoryByParentId(Long parentId) throws Exception {
 		return !rights.isEmpty();
 	}
 
-	//    @Override
+	// @Override
 	@Override
 	public void lockCategory(Category category) throws Exception {
 		try {

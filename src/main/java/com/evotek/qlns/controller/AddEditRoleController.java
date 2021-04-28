@@ -1,14 +1,11 @@
-/*
- * Copyright 2013 Viettel Telecom. All rights reserved.
- * VIETTEL PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- */
 package com.evotek.qlns.controller;
 
 import java.util.Date;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.zkoss.spring.SpringUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Checkbox;
@@ -26,177 +23,151 @@ import com.evotek.qlns.util.key.Constants;
 import com.evotek.qlns.util.key.LanguageKeys;
 import com.evotek.qlns.util.key.Values;
 
-
 /**
  *
  * @author LinhLH2
  */
+@Controller
 public class AddEditRoleController extends BasicController<Window> {
 
-    /**
-	 * 
-	 */
 	private static final long serialVersionUID = 6903205783062391225L;
+
+	private static final Logger _log = LogManager.getLogger(AddEditRoleController.class);
+
+	@Autowired
+	private RoleService roleService;
+
+	private Checkbox chbShareable;
+
+	private Role role;
+
+	private Textbox tbDescription;
+
+	private Textbox tbRoleName;
+
 	private Window winAddRole;
-    private Div winTemp;
 
-    private Textbox tbRoleName;
-    private Textbox tbDescription;
+	private Div winTemp;
 
-    private Checkbox chbShareable;
+	private void _setEditForm() {
+		this.tbRoleName.setValue(this.role.getRoleName());
+		this.tbDescription.setValue(this.role.getDescription());
 
-    private Role role;
+		this.chbShareable.setChecked(this.role.getShareable());
+	}
 
-    @Override
-    public void doBeforeComposeChildren(Window comp) throws Exception {
-        super.doBeforeComposeChildren(comp);
+	// validate
+	private boolean _validate(String roleName, String description) throws Exception {
+		if (Validator.isNull(roleName)) {
+			this.tbRoleName.setErrorMessage(Values.getRequiredInputMsg(Labels.getLabel(LanguageKeys.ROLE_NAME)));
 
-        this.winAddRole = comp;
-    }
+			return false;
+		}
 
-    @Override
-    public void doAfterCompose(Window comp) throws Exception {
-        super.doAfterCompose(comp);
-        
-        //init data
-        this.initData();
-    }
+		if (!Validator.isCodeString(roleName)) {
+			this.tbRoleName.setErrorMessage(Values.getFormatInvalidMsg(Labels.getLabel(LanguageKeys.ROLE_NAME)));
 
-    private void initData() throws Exception {
-        try {
-            this.winTemp = (Div) this.arg.get(Constants.PARENT_WINDOW);
+			return false;
+		}
 
-            this.role = (Role) this.arg.get(Constants.EDIT_OBJECT);
+		if (this.roleService.isRoleExist(roleName, this.role)) {
+			this.tbRoleName.setErrorMessage(Values.getDuplicateMsg(Labels.getLabel(LanguageKeys.ROLE_NAME)));
 
-            if(Validator.isNotNull(this.role)){
-                this.winAddRole.setTitle((String) this.arg.get(Constants.TITLE));
+			return false;
+		}
 
-                this._setEditForm();
-            }
-        } catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
-        }
-    }
+		if (roleName.length() > Values.MEDIUM_LENGTH) {
+			this.tbRoleName.setErrorMessage(
+					Values.getMaxLengthInvalidMsg(Labels.getLabel(LanguageKeys.ROLE_NAME), Values.MEDIUM_LENGTH));
 
-    private void _setEditForm(){
-        this.tbRoleName.setValue(this.role.getRoleName());
-        this.tbDescription.setValue(this.role.getDescription());
+			return false;
+		}
 
-        this.chbShareable.setChecked(this.role.getShareable());
-    }
+		if (Validator.isNotNull(description) && description.length() > Values.GREATE_LONG_LENGTH) {
+			this.tbDescription.setErrorMessage(Values.getMaxLengthInvalidMsg(Labels.getLabel(LanguageKeys.DESCRIPTION),
+					Values.GREATE_LONG_LENGTH));
 
-    //event method
-    public void onClick$btnCancel(){
-        this.winAddRole.detach();
-    }
+			return false;
+		}
 
-    public void onClick$btnSave() {
-        boolean update = true;
+		return true;
+	}
 
-        try {
-            String roleName = GetterUtil.getString(this.tbRoleName.getValue());
-            String description = GetterUtil.getString(this.tbDescription.getValue());
+	@Override
+	public void doAfterCompose(Window comp) throws Exception {
+		super.doAfterCompose(comp);
 
-            if(_validate(roleName, description)){
-                if(Validator.isNull(this.role)){
-                    update = false;
+		// init data
+		this.initData();
+	}
 
-                    this.role = new Role();
+	@Override
+	public void doBeforeComposeChildren(Window comp) throws Exception {
+		super.doBeforeComposeChildren(comp);
 
-                    this.role.setUserId(getUserId());
-                    this.role.setUserName(getUserName());
-                    this.role.setCreateDate(new Date());
-                    this.role.setStatus(Values.STATUS_ACTIVE);
-                    this.role.setImmune(Values.NOT_IMMUNE);
-                }
+		this.winAddRole = comp;
+	}
 
-                this.role.setRoleName(roleName);
-                this.role.setDescription(description);
-                this.role.setModifiedDate(new Date());
-                this.role.setShareable(this.chbShareable.isChecked());
+	private void initData() throws Exception {
+		try {
+			this.winTemp = (Div) this.arg.get(Constants.PARENT_WINDOW);
 
-                this.roleService.saveOrUpdateRole(this.role);
+			this.role = (Role) this.arg.get(Constants.EDIT_OBJECT);
 
-                ComponentUtil.createSuccessMessageBox(
-                        ComponentUtil.getSuccessKey(update));
+			if (Validator.isNotNull(this.role)) {
+				this.winAddRole.setTitle((String) this.arg.get(Constants.TITLE));
 
-                this.winAddRole.detach();
+				this._setEditForm();
+			}
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+	}
 
-                Events.sendEvent("onLoadRole", this.winTemp, null);
-            }
+	// event method
+	public void onClick$btnCancel() {
+		this.winAddRole.detach();
+	}
 
-        } catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
+	public void onClick$btnSave() {
+		boolean update = true;
 
-            Messagebox.show(Labels.getLabel(
-                    ComponentUtil.getFailKey(update)));
-        }
-    }
-    //event method
+		try {
+			String roleName = GetterUtil.getString(this.tbRoleName.getValue());
+			String description = GetterUtil.getString(this.tbDescription.getValue());
 
-    //validate
-    private boolean _validate(String roleName, String description)
-            throws Exception{
-        if(Validator.isNull(roleName)){
-            this.tbRoleName.setErrorMessage(Values.getRequiredInputMsg(
-                    Labels.getLabel(LanguageKeys.ROLE_NAME)));
+			if (_validate(roleName, description)) {
+				if (Validator.isNull(this.role)) {
+					update = false;
 
-            return false;
-        }
-        
-        if(!Validator.isCodeString(roleName)){
-            this.tbRoleName.setErrorMessage(Values.getFormatInvalidMsg(
-                    Labels.getLabel(LanguageKeys.ROLE_NAME)));
+					this.role = new Role();
 
-            return false;
-        }
+					this.role.setUserId(getUserId());
+					this.role.setUserName(getUserName());
+					this.role.setCreateDate(new Date());
+					this.role.setStatus(Values.STATUS_ACTIVE);
+					this.role.setImmune(Values.NOT_IMMUNE);
+				}
 
-        if(this.roleService.isRoleExist(roleName, this.role)){
-            this.tbRoleName.setErrorMessage(Values.getDuplicateMsg(
-                    Labels.getLabel(LanguageKeys.ROLE_NAME)));
+				this.role.setRoleName(roleName);
+				this.role.setDescription(description);
+				this.role.setModifiedDate(new Date());
+				this.role.setShareable(this.chbShareable.isChecked());
 
-            return false;
-        }
-        
-        if(roleName.length() > Values.MEDIUM_LENGTH){
-            this.tbRoleName.setErrorMessage(Values.getMaxLengthInvalidMsg(
-                    Labels.getLabel(LanguageKeys.ROLE_NAME),
-                    Values.MEDIUM_LENGTH));
+				this.roleService.saveOrUpdateRole(this.role);
 
-            return false;
-        }
+				ComponentUtil.createSuccessMessageBox(ComponentUtil.getSuccessKey(update));
 
-        if (Validator.isNotNull(description)
-                && description.length() > Values.GREATE_LONG_LENGTH) {
-            this.tbDescription.setErrorMessage(Values.getMaxLengthInvalidMsg(
-                    Labels.getLabel(LanguageKeys.DESCRIPTION),
-                    Values.GREATE_LONG_LENGTH));
+				this.winAddRole.detach();
 
-            return false;
-        }
+				Events.sendEvent("onLoadRole", this.winTemp, null);
+			}
 
-        return true;
-    }
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
 
-
-    //service
-    public RoleService getRoleService() {
-        if (this.roleService == null) {
-            this.roleService = (RoleService)
-                    SpringUtil.getBean("roleService");
-            
-            setRoleService(this.roleService);
-        }
-
-        return this.roleService;
-    }
-
-    public void setRoleService(RoleService roleService) {
-        this.roleService = roleService;
-    }
-
-    private transient RoleService roleService;
-
-    private static final Logger _log =
-            LogManager.getLogger(AddEditRoleController.class);
+			Messagebox.show(Labels.getLabel(ComponentUtil.getFailKey(update)));
+		}
+	}
+	// event method
 }

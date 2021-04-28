@@ -15,15 +15,15 @@ import com.evotek.qlns.model.Department;
  * @author My PC
  */
 public interface DepartmentService {
-    public List<Department> getDepartmentByParentId(Long parentId);
-    
-    public void saveOrUpdate(Department dept);
+	public int delete(List<Long> deptIds);
 
-    public int delete(List<Long> deptIds);
-    
-    public void updateOrdinal(Long parentId, Long deletedIndex);
+	public Department getDeparment(Long deptId);
 
-    public Department getDeparment(Long deptId);
-    
-    public Long getNextOrdinal(Long parentId);
+	public List<Department> getDepartmentByParentId(Long parentId);
+
+	public Long getNextOrdinal(Long parentId);
+
+	public void saveOrUpdate(Department dept);
+
+	public void updateOrdinal(Long parentId, Long deletedIndex);
 }

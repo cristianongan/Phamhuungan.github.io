@@ -34,61 +34,13 @@ import com.evotek.qlns.util.key.Constants;
 @Transactional
 public class DocumentTypeServiceImpl implements DocumentTypeService {
 
-	@Autowired
-	private DocumentTypeDAO documentTypeDAO;
+	private static final Logger _log = LogManager.getLogger(DocumentTypeServiceImpl.class);
 
 	@Autowired
 	private DocumentDAO documentDAO;
 
-	private static final Logger _log = LogManager.getLogger(DocumentTypeServiceImpl.class);
-
-	@Override
-	public void saveOrUpdate(DocumentType documentType) {
-		this.documentTypeDAO.saveOrUpdate(documentType);
-	}
-
-	@Override
-	public void saveOrUpdate(DocumentType documentType, boolean flush) {
-		this.documentTypeDAO.saveOrUpdate(documentType, flush);
-	}
-
-	@Override
-	public List<DocumentType> getDocTypeByParentId(Long parentId) {
-		return this.documentTypeDAO.getDocTypeByParentId(parentId);
-	}
-
-	@Override
-	public void updateDeleteOrdinal(ServletContext context, DocumentType parent, DocumentType remove) {
-		if (Validator.isNull(parent)) {
-			this.documentTypeDAO.delete(remove);
-
-			List<DocumentType> siblings = getDocTypeMap(context).get(null);
-
-			siblings.remove(remove);
-
-			for (DocumentType docType : siblings) {
-				if (Validator.isNull(docType.getDocumentTypeId())) {
-					continue;
-				}
-
-				docType.setOrdinal(Long.valueOf(siblings.indexOf(docType)));
-
-				this.documentTypeDAO.saveOrUpdate(docType, true);
-			}
-		} else {
-			List<DocumentType> childs = parent.getChildDocumentTypes();
-
-			childs.remove(remove);
-
-			this.documentTypeDAO.delete(remove);
-
-			for (int i = 0; i < childs.size(); i++) {
-				childs.get(i).setOrdinal(Long.valueOf(i));
-			}
-
-			this.documentTypeDAO.saveOrUpdate(parent, true);
-		}
-	}
+	@Autowired
+	private DocumentTypeDAO documentTypeDAO;
 
 	@Override
 	public void delete(DocumentType documentType) {
@@ -122,22 +74,39 @@ public class DocumentTypeServiceImpl implements DocumentTypeService {
 	}
 
 	@Override
-	public DocumentType getById(Long documentTypeId) {
-		return this.documentTypeDAO.getById(documentTypeId);
-	}
-
-	@Override
 	public List<DocumentType> getAllDocumentType() {
 		return this.documentTypeDAO.getAllDocumentType();
 	}
 
 	@Override
-	public Map<Long, List<DocumentType>> getDocTypeMap(ServletContext context) {
-		return getDocTypeMap(context, false);
+	public DocumentType getById(Long documentTypeId) {
+		return this.documentTypeDAO.getById(documentTypeId);
 	}
 
-	public void updateDocTypeMap(ServletContext context) {
-		this.getDocTypeMap(context, true);
+	@Override
+	public List<DocumentType> getDocTypeByParentId(Long parentId) {
+		return this.documentTypeDAO.getDocTypeByParentId(parentId);
+	}
+
+	private void getDocTypeMap(DocumentType root, Map<Long, List<DocumentType>> docTypeMap) {
+		List<DocumentType> childs = root.getChildDocumentTypes();
+
+		docTypeMap.put(root.getDocumentTypeId(), childs);
+
+		if (Validator.isNull(childs)) {
+			return;
+		}
+
+		for (DocumentType child : childs) {
+			if (Validator.isNotNull(child)) {
+				getDocTypeMap(child, docTypeMap);
+			}
+		}
+	}
+
+	@Override
+	public Map<Long, List<DocumentType>> getDocTypeMap(ServletContext context) {
+		return getDocTypeMap(context, false);
 	}
 
 	public Map<Long, List<DocumentType>> getDocTypeMap(ServletContext context, boolean doUpdate) {
@@ -165,20 +134,14 @@ public class DocumentTypeServiceImpl implements DocumentTypeService {
 		return docTypeMap;
 	}
 
-	private void getDocTypeMap(DocumentType root, Map<Long, List<DocumentType>> docTypeMap) {
-		List<DocumentType> childs = root.getChildDocumentTypes();
+	@Override
+	public void saveOrUpdate(DocumentType documentType) {
+		this.documentTypeDAO.saveOrUpdate(documentType);
+	}
 
-		docTypeMap.put(root.getDocumentTypeId(), childs);
-
-		if (Validator.isNull(childs)) {
-			return;
-		}
-
-		for (DocumentType child : childs) {
-			if (Validator.isNotNull(child)) {
-				getDocTypeMap(child, docTypeMap);
-			}
-		}
+	@Override
+	public void saveOrUpdate(DocumentType documentType, boolean flush) {
+		this.documentTypeDAO.saveOrUpdate(documentType, flush);
 	}
 
 	public void updateDelDocTypeMap(ServletContext context, DocumentType docType, DocumentType parentDocType) {
@@ -243,6 +206,43 @@ public class DocumentTypeServiceImpl implements DocumentTypeService {
 		}
 
 		context.setAttribute("docTypeMap", docTypeMap);
+	}
+
+	@Override
+	public void updateDeleteOrdinal(ServletContext context, DocumentType parent, DocumentType remove) {
+		if (Validator.isNull(parent)) {
+			this.documentTypeDAO.delete(remove);
+
+			List<DocumentType> siblings = getDocTypeMap(context).get(null);
+
+			siblings.remove(remove);
+
+			for (DocumentType docType : siblings) {
+				if (Validator.isNull(docType.getDocumentTypeId())) {
+					continue;
+				}
+
+				docType.setOrdinal(Long.valueOf(siblings.indexOf(docType)));
+
+				this.documentTypeDAO.saveOrUpdate(docType, true);
+			}
+		} else {
+			List<DocumentType> childs = parent.getChildDocumentTypes();
+
+			childs.remove(remove);
+
+			this.documentTypeDAO.delete(remove);
+
+			for (int i = 0; i < childs.size(); i++) {
+				childs.get(i).setOrdinal(Long.valueOf(i));
+			}
+
+			this.documentTypeDAO.saveOrUpdate(parent, true);
+		}
+	}
+
+	public void updateDocTypeMap(ServletContext context) {
+		this.getDocTypeMap(context, true);
 	}
 
 	@Override

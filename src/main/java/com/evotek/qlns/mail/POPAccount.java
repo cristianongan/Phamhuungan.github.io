@@ -8,8 +8,8 @@ package com.evotek.qlns.mail;
  */
 public class POPAccount extends Account {
 
-    protected POPAccount(String protocol, boolean secure, int port) {
-        super(protocol, secure, port);
-    }
+	protected POPAccount(String protocol, boolean secure, int port) {
+		super(protocol, secure, port);
+	}
 
 }

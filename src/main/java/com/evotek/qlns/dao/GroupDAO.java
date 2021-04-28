@@ -15,13 +15,13 @@ import com.evotek.qlns.model.Group;
  * @author linhlh2
  */
 public interface GroupDAO {
-    public void delete(Group group) throws DataAccessException;
+	public void delete(Group group) throws DataAccessException;
 
-    public void deleteByCategoryId(Long categoryId) throws Exception;
+	public void deleteByCategoryId(Long categoryId) throws Exception;
 
-    public List<Group> getGroupByCategoryId(Long categoryId) throws Exception;
+	public List<Group> getGroupByCategoryId(Long categoryId) throws Exception;
 
-    public void save(Group group) throws DataAccessException;
+	public void save(Group group) throws DataAccessException;
 
-    public void saveOrUpdate(Group group) throws DataAccessException;
+	public void saveOrUpdate(Group group) throws DataAccessException;
 }

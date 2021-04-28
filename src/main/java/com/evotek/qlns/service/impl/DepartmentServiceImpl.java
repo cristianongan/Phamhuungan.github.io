@@ -27,23 +27,8 @@ public class DepartmentServiceImpl implements DepartmentService {
 	private DepartmentDAO departmentDAO;
 
 	@Override
-	public List<Department> getDepartmentByParentId(Long parentId) {
-		return this.departmentDAO.getDepartmentByParentId(parentId);
-	}
-
-	@Override
-	public void saveOrUpdate(Department dept) {
-		this.departmentDAO.saveOrUpdate(dept);
-	}
-
-	@Override
 	public int delete(List<Long> deptIds) {
 		return this.departmentDAO.delete(deptIds);
-	}
-
-	@Override
-	public void updateOrdinal(Long parentId, Long deletedIndex) {
-		this.departmentDAO.updateOrdinal(parentId, deletedIndex);
 	}
 
 	@Override
@@ -52,7 +37,22 @@ public class DepartmentServiceImpl implements DepartmentService {
 	}
 
 	@Override
+	public List<Department> getDepartmentByParentId(Long parentId) {
+		return this.departmentDAO.getDepartmentByParentId(parentId);
+	}
+
+	@Override
 	public Long getNextOrdinal(Long parentId) {
 		return this.departmentDAO.getNextOrdinal(parentId);
+	}
+
+	@Override
+	public void saveOrUpdate(Department dept) {
+		this.departmentDAO.saveOrUpdate(dept);
+	}
+
+	@Override
+	public void updateOrdinal(Long parentId, Long deletedIndex) {
+		this.departmentDAO.updateOrdinal(parentId, deletedIndex);
 	}
 }

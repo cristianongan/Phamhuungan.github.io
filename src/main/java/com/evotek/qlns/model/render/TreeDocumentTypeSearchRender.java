@@ -22,50 +22,48 @@ import com.evotek.qlns.util.key.Constants;
  *
  * @author PC
  */
-public class TreeDocumentTypeSearchRender implements
-        TreeitemRenderer<DocumentTypeTreeNode> {
+public class TreeDocumentTypeSearchRender implements TreeitemRenderer<DocumentTypeTreeNode> {
 
-    private Bandbox bbTemp;
-    private A btnClear;
+	private Bandbox bbTemp;
+	private A btnClear;
 
-    public TreeDocumentTypeSearchRender(Bandbox bandbox, A btnClear) {
-        this.bbTemp = bandbox;
-        this.btnClear = btnClear;
-    }
+	public TreeDocumentTypeSearchRender(Bandbox bandbox, A btnClear) {
+		this.bbTemp = bandbox;
+		this.btnClear = btnClear;
+	}
 
-    @Override
+	@Override
 	public void render(Treeitem treeItem, DocumentTypeTreeNode t, int i) throws Exception {
-        DocumentType documentType = t.getData();
+		DocumentType documentType = t.getData();
 
-        Treerow dataRow = new Treerow();
+		Treerow dataRow = new Treerow();
 
-        dataRow.appendChild(ComponentUtil.createTreeCell(documentType.getTypeName()));
+		dataRow.appendChild(ComponentUtil.createTreeCell(documentType.getTypeName()));
 
-        treeItem.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+		treeItem.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
-            @Override
-            public void onEvent(Event t) throws Exception {
-                DocumentTypeTreeNode clickedNodeValue = ((Treeitem) t.getTarget()).getValue();
+			@Override
+			public void onEvent(Event t) throws Exception {
+				DocumentTypeTreeNode clickedNodeValue = ((Treeitem) t.getTarget()).getValue();
 
-                TreeDocumentTypeSearchRender.this.bbTemp.setValue(clickedNodeValue.getData().getTypeName());
-                
-                TreeDocumentTypeSearchRender.this.bbTemp.setAttribute(Constants.OBJECT,
-                        clickedNodeValue.getData());
-                TreeDocumentTypeSearchRender.this.bbTemp.setAttribute(Constants.ID,
-                        clickedNodeValue.getData().getDocumentTypeId());
-               
-                TreeDocumentTypeSearchRender.this.bbTemp.close();
-                
-                TreeDocumentTypeSearchRender.this.btnClear.setVisible(true);
-                TreeDocumentTypeSearchRender.this.btnClear.setDisabled(false);
-            }
-        });
+				TreeDocumentTypeSearchRender.this.bbTemp.setValue(clickedNodeValue.getData().getTypeName());
 
-        treeItem.appendChild(dataRow);
+				TreeDocumentTypeSearchRender.this.bbTemp.setAttribute(Constants.OBJECT, clickedNodeValue.getData());
+				TreeDocumentTypeSearchRender.this.bbTemp.setAttribute(Constants.ID,
+						clickedNodeValue.getData().getDocumentTypeId());
 
-        treeItem.setAttribute(Constants.DATA, documentType);
-        treeItem.setValue(t);
-        treeItem.setOpen(t.isOpen());
-    }
+				TreeDocumentTypeSearchRender.this.bbTemp.close();
+
+				TreeDocumentTypeSearchRender.this.btnClear.setVisible(true);
+				TreeDocumentTypeSearchRender.this.btnClear.setDisabled(false);
+			}
+		});
+
+		treeItem.appendChild(dataRow);
+
+		treeItem.setAttribute(Constants.DATA, documentType);
+		treeItem.setValue(t);
+		treeItem.setOpen(t.isOpen());
+	}
 
 }

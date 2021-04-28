@@ -16,39 +16,38 @@ import org.springframework.stereotype.Repository;
 
 import com.evotek.qlns.dao.FolderEntryDAO;
 import com.evotek.qlns.model.FolderEntry;
+
 /**
  *
  * @author linhlh2
  */
 @Repository
-public class FolderEntryDAOImpl extends AbstractDAO<FolderEntry>
-        implements FolderEntryDAO{
+public class FolderEntryDAOImpl extends AbstractDAO<FolderEntry> implements FolderEntryDAO {
 
-    private static final Logger _log =
-            LogManager.getLogger(FolderEntryDAOImpl.class);
+	private static final Logger _log = LogManager.getLogger(FolderEntryDAOImpl.class);
 
-    @Override
+	@Override
 	public FolderEntry getLastedFolderEntry() {
-        FolderEntry folder = null;
-        
-        try{
-        	Session session = getCurrentSession();
+		FolderEntry folder = null;
+
+		try {
+			Session session = getCurrentSession();
 
 			CriteriaBuilder builder = session.getCriteriaBuilder();
 
 			CriteriaQuery<FolderEntry> criteria = builder.createQuery(FolderEntry.class);
-			
-			Root<FolderEntry> root = criteria.from(FolderEntry.class);
-			
-			criteria.select(root);
-			
-			criteria.orderBy(builder.desc(root.get("folderId")));
-			
-			folder = (FolderEntry) session.createQuery(criteria).setMaxResults(1).uniqueResult();
-        }catch(Exception ex){
-            _log.error(ex.getMessage(), ex);
-        }
 
-        return folder;
-    }
+			Root<FolderEntry> root = criteria.from(FolderEntry.class);
+
+			criteria.select(root);
+
+			criteria.orderBy(builder.desc(root.get("folderId")));
+
+			folder = (FolderEntry) session.createQuery(criteria).setMaxResults(1).uniqueResult();
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+
+		return folder;
+	}
 }

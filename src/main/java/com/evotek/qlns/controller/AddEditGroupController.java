@@ -9,7 +9,8 @@ import java.util.Date;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.zkoss.spring.SpringUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Messagebox;
@@ -30,157 +31,139 @@ import com.evotek.qlns.util.key.Values;
  *
  * @author linhlh2
  */
-public class AddEditGroupController extends BasicController<Window>
-        implements Serializable {
+@Controller
+public class AddEditGroupController extends BasicController<Window> implements Serializable {
 
-    private static final long serialVersionUID = 1371000290846L;
-    
-    private Window winEditGroups;
-    private Window winTemp;
+	private static final long serialVersionUID = 1371000290846L;
 
-    private Group group;
+	private static final Logger _log = LogManager.getLogger(AddEditGroupController.class);
 
-    private Category category;
+	@Autowired
+	private CategoryService categoryService;
 
-    private Textbox tbGroupsName;
-    private Textbox tbDescription;
+	private Category category;
 
-    @Override
-    public void doBeforeComposeChildren(Window comp) throws Exception {
-        super.doBeforeComposeChildren(comp);
+	// get set service
 
-        this.winEditGroups = comp;
-    }
+	private Group group;
 
-    @Override
-    public void doAfterCompose(Window comp) throws Exception {
-        super.doAfterCompose(comp);
+	private Textbox tbDescription;
+	private Textbox tbGroupsName;
 
-        //init data
-        this.initData();
-    }
+	private Window winEditGroups;
 
-    //init data
-    public void initData() throws Exception {
-        try {
-            this.winTemp = (Window) this.arg.get(Constants.PARENT_WINDOW);
+	private Window winTemp;
 
-            this.category = (Category) this.arg.get(Constants.OBJECT);
+	private void _setEditForm() {
+		this.tbGroupsName.setValue(this.group.getGroupName());
+		this.tbDescription.setValue(this.group.getDescription());
+	}
 
-            if(Validator.isNull(this.category)){
-                this.category = new Category();
-            }
+	private boolean _validate(String groupName, String description) {
+		if (Validator.isNull(groupName)) {
+			this.tbGroupsName.setErrorMessage(Values.getRequiredInputMsg(Labels.getLabel(LanguageKeys.GROUP_NAME)));
 
-            this.group = (Group) this.arg.get(Constants.EDIT_OBJECT);
+			return false;
+		}
 
-            if(Validator.isNotNull(this.group)){
-                this.winEditGroups.setTitle((String) this.arg.get(Constants.TITLE));
+		if (groupName.length() > Values.MEDIUM_LENGTH) {
+			this.tbGroupsName.setErrorMessage(
+					Values.getMaxLengthInvalidMsg(Labels.getLabel(LanguageKeys.GROUP_NAME), Values.MEDIUM_LENGTH));
 
-                this._setEditForm();
-            }
-        } catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
-        }
-    }
+			return false;
+		}
 
-    private void _setEditForm(){
-        this.tbGroupsName.setValue(this.group.getGroupName());
-        this.tbDescription.setValue(this.group.getDescription());
-    }
+		if (Validator.isNotNull(description) && description.length() > Values.GREATE_LONG_LENGTH) {
+			this.tbDescription.setErrorMessage(Values.getMaxLengthInvalidMsg(Labels.getLabel(LanguageKeys.DESCRIPTION),
+					Values.GREATE_LONG_LENGTH));
 
-    //even method
-    public void onClick$btnCancel(){
-        this.winEditGroups.detach();
-    }
+			return false;
+		}
 
-    public void onClick$btnSave() throws Exception {
-        boolean update = true;
+		return true;
+	}
 
-        try {
-            String groupName = GetterUtil.getString(this.tbGroupsName.getValue());
-            String description = GetterUtil.getString(this.tbDescription.getValue());
+	@Override
+	public void doAfterCompose(Window comp) throws Exception {
+		super.doAfterCompose(comp);
 
-            if (_validate(groupName, description)) {
-                if(Validator.isNull(this.group)){
-                    update = false;
+		// init data
+		this.initData();
+	}
 
-                    this.group = new Group();
+	@Override
+	public void doBeforeComposeChildren(Window comp) throws Exception {
+		super.doBeforeComposeChildren(comp);
 
-                    this.group.setUserId(getUserId());
-                    this.group.setUserName(getUserName());
-                    this.group.setCreateDate(new Date());
-                    this.group.setCategoryId(this.category.getCategoryId());
-                    this.group.setStatus(Values.STATUS_ACTIVE);
-                }
+		this.winEditGroups = comp;
+	}
 
-                this.group.setGroupName(groupName);
-                this.group.setDescription(description);
-                this.group.setModifiedDate(new Date());
+	// init data
+	public void initData() throws Exception {
+		try {
+			this.winTemp = (Window) this.arg.get(Constants.PARENT_WINDOW);
 
-                this.categoryService.saveOrUpdateGroup(this.group);
+			this.category = (Category) this.arg.get(Constants.OBJECT);
 
-                ComponentUtil.createSuccessMessageBox(
-                        ComponentUtil.getSuccessKey(update));
+			if (Validator.isNull(this.category)) {
+				this.category = new Category();
+			}
 
-                this.winEditGroups.detach();
+			this.group = (Group) this.arg.get(Constants.EDIT_OBJECT);
 
-                Events.sendEvent("onLoadGroups", this.winTemp, null);
-            }
+			if (Validator.isNotNull(this.group)) {
+				this.winEditGroups.setTitle((String) this.arg.get(Constants.TITLE));
 
-        } catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
+				this._setEditForm();
+			}
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+	}
 
-            Messagebox.show(Labels.getLabel(
-                    ComponentUtil.getFailKey(update)));
-        }
-    }
-    //even method
+	// even method
+	public void onClick$btnCancel() {
+		this.winEditGroups.detach();
+	}
 
-    private boolean _validate(String groupName, String description) {
-        if (Validator.isNull(groupName)) {
-            this.tbGroupsName.setErrorMessage(Values.getRequiredInputMsg(
-                    Labels.getLabel(LanguageKeys.GROUP_NAME)));
+	public void onClick$btnSave() throws Exception {
+		boolean update = true;
 
-            return false;
-        }
+		try {
+			String groupName = GetterUtil.getString(this.tbGroupsName.getValue());
+			String description = GetterUtil.getString(this.tbDescription.getValue());
 
-        if (groupName.length() > Values.MEDIUM_LENGTH) {
-            this.tbGroupsName.setErrorMessage(Values.getMaxLengthInvalidMsg(
-                    Labels.getLabel(LanguageKeys.GROUP_NAME),
-                    Values.MEDIUM_LENGTH));
+			if (_validate(groupName, description)) {
+				if (Validator.isNull(this.group)) {
+					update = false;
 
-            return false;
-        }
+					this.group = new Group();
 
-        if (Validator.isNotNull(description)
-                && description.length() > Values.GREATE_LONG_LENGTH) {
-            this.tbDescription.setErrorMessage(Values.getMaxLengthInvalidMsg(
-                    Labels.getLabel(LanguageKeys.DESCRIPTION),
-                    Values.GREATE_LONG_LENGTH));
+					this.group.setUserId(getUserId());
+					this.group.setUserName(getUserName());
+					this.group.setCreateDate(new Date());
+					this.group.setCategoryId(this.category.getCategoryId());
+					this.group.setStatus(Values.STATUS_ACTIVE);
+				}
 
-            return false;
-        }
+				this.group.setGroupName(groupName);
+				this.group.setDescription(description);
+				this.group.setModifiedDate(new Date());
 
-        return true;
-    }
-    //get set service
-    public CategoryService getCategoryService() {
-        if (this.categoryService == null) {
-            this.categoryService = (CategoryService)
-                    SpringUtil.getBean("categoryService");
-            setCategoryService(this.categoryService);
-        }
+				this.categoryService.saveOrUpdateGroup(this.group);
 
-        return this.categoryService;
-    }
+				ComponentUtil.createSuccessMessageBox(ComponentUtil.getSuccessKey(update));
 
-    public void setCategoryService(CategoryService categoryService) {
-        this.categoryService = categoryService;
-    }
+				this.winEditGroups.detach();
 
-    private transient CategoryService categoryService;
-    //get set service
+				Events.sendEvent("onLoadGroups", this.winTemp, null);
+			}
 
-    private static final Logger _log =
-            LogManager.getLogger(AddEditGroupController.class);
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+
+			Messagebox.show(Labels.getLabel(ComponentUtil.getFailKey(update)));
+		}
+	}
+	// even method
 }

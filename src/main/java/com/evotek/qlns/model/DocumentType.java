@@ -37,188 +37,186 @@ import org.hibernate.annotations.LazyCollectionOption;
 @Table(name = "document_type")
 public class DocumentType implements Serializable, Comparable<DocumentType> {
 
-    private Long documentTypeId;
-    private String typeName;
-    private Long userId;
-    private String userName;
-    private Date createDate;
-    private Date modifiedDate;
-    private Long ordinal;
-    private String description;
-    private Long status;
-    private String icon;
-    private DocumentType parentDocumentType;
-    private List<DocumentType> childDocumentTypes = new ArrayList<DocumentType>();
+	private List<DocumentType> childDocumentTypes = new ArrayList<DocumentType>();
+	private Date createDate;
+	private String description;
+	private Long documentTypeId;
+	private String icon;
+	private Date modifiedDate;
+	private Long ordinal;
+	private DocumentType parentDocumentType;
+	private Long status;
+	private String typeName;
+	private Long userId;
+	private String userName;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_id")
-    public DocumentType getParentDocumentType() {
-        return this.parentDocumentType;
-    }
+	public DocumentType() {
+	}
 
-    public void setParentDocumentType(DocumentType parentDocumentType) {
-        this.parentDocumentType = parentDocumentType;
-    }
+	public DocumentType(Long documentTypeId, String typeName, String icon) {
+		this.documentTypeId = documentTypeId;
+		this.typeName = typeName;
+		this.icon = icon;
+	}
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "parentDocumentType", cascade = CascadeType.ALL)
-    @Cascade({org.hibernate.annotations.CascadeType.DELETE, 
-        org.hibernate.annotations.CascadeType.SAVE_UPDATE, 
-        org.hibernate.annotations.CascadeType.REFRESH})
+	@Override
+	public int compareTo(DocumentType o) {
+		if (this.ordinal == null) {
+			return 1;
+		}
+
+		if (o.ordinal == null) {
+			return -1;
+		}
+
+		return this.ordinal.compareTo(o.ordinal);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+
+		final DocumentType other = (DocumentType) obj;
+
+		if (this.documentTypeId != other.documentTypeId
+				&& (this.documentTypeId == null || !this.documentTypeId.equals(other.documentTypeId))) {
+			return false;
+		}
+
+		return true;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "parentDocumentType", cascade = CascadeType.ALL)
+	@Cascade({ org.hibernate.annotations.CascadeType.DELETE, org.hibernate.annotations.CascadeType.SAVE_UPDATE,
+			org.hibernate.annotations.CascadeType.REFRESH })
 //    @Cascade({org.hibernate.annotations.CascadeType.DELETE_ORPHAN, 
 //        org.hibernate.annotations.CascadeType.SAVE_UPDATE, 
 //        org.hibernate.annotations.CascadeType.REFRESH})
-    @LazyCollection(LazyCollectionOption.EXTRA)
+	@LazyCollection(LazyCollectionOption.EXTRA)
 //    @IndexColumn(name = "ordinal", base = 0)
-    @Fetch(FetchMode.SELECT)
-    public List<DocumentType> getChildDocumentTypes() {
-        return this.childDocumentTypes;
-    }
+	@Fetch(FetchMode.SELECT)
+	public List<DocumentType> getChildDocumentTypes() {
+		return this.childDocumentTypes;
+	}
 
-    public void setChildDocumentTypes(List<DocumentType> childDocumentTypes) {
-        this.childDocumentTypes = childDocumentTypes;
-    }
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "create_date", length = 7)
+	public Date getCreateDate() {
+		return this.createDate;
+	}
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "document_type_id", unique = true, nullable = false, precision = 22, scale = 0)
-    public Long getDocumentTypeId() {
-        return this.documentTypeId;
-    }
+	@Column(name = "description")
+	public String getDescription() {
+		return this.description;
+	}
 
-    public void setDocumentTypeId(Long documentTypeId) {
-        this.documentTypeId = documentTypeId;
-    }
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "document_type_id", unique = true, nullable = false, precision = 22, scale = 0)
+	public Long getDocumentTypeId() {
+		return this.documentTypeId;
+	}
 
-    @Column(name = "type_name", length = 255)
-    public String getTypeName() {
-        return this.typeName;
-    }
+	@Column(name = "icon", length = 75)
+	public String getIcon() {
+		return this.icon;
+	}
 
-    public void setTypeName(String typeName) {
-        this.typeName = typeName;
-    }
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "modified_date", length = 7)
+	public Date getModifiedDate() {
+		return this.modifiedDate;
+	}
 
-    @Column(name = "user_id", precision = 22, scale = 0)
-    public Long getUserId() {
-        return this.userId;
-    }
+	@Column(name = "ordinal", precision = 22, scale = 0)
+	public Long getOrdinal() {
+		return this.ordinal;
+	}
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "parent_id")
+	public DocumentType getParentDocumentType() {
+		return this.parentDocumentType;
+	}
 
-    @Column(name = "user_name", length = 75)
-    public String getUserName() {
-        return this.userName;
-    }
+	@Column(name = "status", precision = 22, scale = 0)
+	public Long getStatus() {
+		return this.status;
+	}
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
+	@Column(name = "type_name", length = 255)
+	public String getTypeName() {
+		return this.typeName;
+	}
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "create_date", length = 7)
-    public Date getCreateDate() {
-        return this.createDate;
-    }
+	@Column(name = "user_id", precision = 22, scale = 0)
+	public Long getUserId() {
+		return this.userId;
+	}
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
+	@Column(name = "user_name", length = 75)
+	public String getUserName() {
+		return this.userName;
+	}
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "modified_date", length = 7)
-    public Date getModifiedDate() {
-        return this.modifiedDate;
-    }
+	@Override
+	public int hashCode() {
+		int hash = 7;
+		return hash;
+	}
 
-    public void setModifiedDate(Date modifiedDate) {
-        this.modifiedDate = modifiedDate;
-    }
+	public void setChildDocumentTypes(List<DocumentType> childDocumentTypes) {
+		this.childDocumentTypes = childDocumentTypes;
+	}
 
-    @Column(name = "ordinal", precision = 22, scale = 0)
-    public Long getOrdinal() {
-        return this.ordinal;
-    }
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
 
-    public void setOrdinal(Long ordinal) {
-        this.ordinal = ordinal;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    @Column(name = "description")
-    public String getDescription() {
-        return this.description;
-    }
+	public void setDocumentTypeId(Long documentTypeId) {
+		this.documentTypeId = documentTypeId;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public void setIcon(String icon) {
+		this.icon = icon;
+	}
 
-    @Column(name = "status", precision = 22, scale = 0)
-    public Long getStatus() {
-        return this.status;
-    }
+	public void setModifiedDate(Date modifiedDate) {
+		this.modifiedDate = modifiedDate;
+	}
 
-    public void setStatus(Long status) {
-        this.status = status;
-    }
+	public void setOrdinal(Long ordinal) {
+		this.ordinal = ordinal;
+	}
 
-    @Column(name = "icon", length = 75)
-    public String getIcon() {
-        return this.icon;
-    }
+	public void setParentDocumentType(DocumentType parentDocumentType) {
+		this.parentDocumentType = parentDocumentType;
+	}
 
-    public void setIcon(String icon) {
-        this.icon = icon;
-    }
-    
-    @Override
-	public int compareTo(DocumentType o) {
-        if (this.ordinal == null) {
-            return 1;
-        }
+	public void setStatus(Long status) {
+		this.status = status;
+	}
 
-        if (o.ordinal == null) {
-            return -1;
-        }
+	public void setTypeName(String typeName) {
+		this.typeName = typeName;
+	}
 
-        return this.ordinal.compareTo(o.ordinal);
-    }
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
 
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-
-        final DocumentType other = (DocumentType) obj;
-
-        if (this.documentTypeId != other.documentTypeId
-                && (this.documentTypeId == null
-                || !this.documentTypeId.equals(other.documentTypeId))) {
-            return false;
-        }
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        return hash;
-    }
-    
-    public DocumentType() {
-    }
-
-    public DocumentType(Long documentTypeId, String typeName, String icon) {
-        this.documentTypeId = documentTypeId;
-        this.typeName = typeName;
-        this.icon = icon;
-    }
-    
 }

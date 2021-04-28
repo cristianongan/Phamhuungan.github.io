@@ -17,24 +17,23 @@ import org.zkoss.zul.Window;
  *
  * @author linhlh2
  */
-public class OpenDialogListener implements EventListener<Event>{
+public class OpenDialogListener implements EventListener<Event> {
 
-    private final String url;
-    private final Component comp;
-    private final Map<String, Object> parameters;
+	private final Component comp;
+	private final Map<String, Object> parameters;
+	private final String url;
 
-    public OpenDialogListener(String url, Component comp, Map<String, Object> parameters) {
-        this.url = url;
-        this.comp = comp;
-        this.parameters = parameters;
-    }
+	public OpenDialogListener(String url, Component comp, Map<String, Object> parameters) {
+		this.url = url;
+		this.comp = comp;
+		this.parameters = parameters;
+	}
 
-    @Override
+	@Override
 	public void onEvent(Event t) throws Exception {
-        Window win = (Window) Executions.createComponents(
-                this.url, this.comp, this.parameters);
-        
-        win.doModal();
-    }
+		Window win = (Window) Executions.createComponents(this.url, this.comp, this.parameters);
+
+		win.doModal();
+	}
 
 }

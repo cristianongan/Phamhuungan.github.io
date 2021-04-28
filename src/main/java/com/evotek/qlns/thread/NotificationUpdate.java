@@ -16,42 +16,42 @@ import com.evotek.qlns.service.StartUpService;
  *
  * @author linhlh2
  */
-public class NotificationUpdate{
+public class NotificationUpdate {
 
-    private StartUpService startUpService;
+	private static final Logger _log = LogManager.getLogger(NotificationUpdate.class);
 
-    public StartUpService getStartUpService() {
-        if (this.startUpService == null) {
-            this.startUpService = (StartUpService) SpringUtil.getBean("startUpService");
-            setStartUpService(this.startUpService);
-        }
+	private StartUpService startUpService;
 
-        return this.startUpService;
-    }
+	public StartUpService getStartUpService() {
+		if (this.startUpService == null) {
+			this.startUpService = (StartUpService) SpringUtil.getBean("startUpService");
+			setStartUpService(this.startUpService);
+		}
 
-    public void setStartUpService(StartUpService startUpService) {
-        this.startUpService = startUpService;
-    }
-    
-    //@Scheduled(cron="*/5 * * * * ?")
-    @Scheduled(fixedDelay = 3600000)//run each 1 hour
-    public void run() {
+		return this.startUpService;
+	}
 
-        try {
-            System.out.println("NotificationUpdate thread is running");
-            //set all expired notification to status 0
-            int updated = this.startUpService.updateNotificationStatus();
+	// @Scheduled(cron="*/5 * * * * ?")
+	@Scheduled(fixedDelay = 3600000) // run each 1 hour
+	public void run() {
 
-            _log.info(updated + " notifications have been updated!");
+		try {
+			System.out.println("NotificationUpdate thread is running");
+			// set all expired notification to status 0
+			int updated = this.startUpService.updateNotificationStatus();
 
-            int inserted = this.startUpService.insertNotification();
+			_log.info(updated + " notifications have been updated!");
 
-            _log.info(inserted + " notifications have been inserted!");
+			int inserted = this.startUpService.insertNotification();
 
-        } catch (Exception ex) {
-            _log.error(ex.getMessage());
-        }
-    }
-    
-    private static final Logger _log = LogManager.getLogger(NotificationUpdate.class);
+			_log.info(inserted + " notifications have been inserted!");
+
+		} catch (Exception ex) {
+			_log.error(ex.getMessage());
+		}
+	}
+
+	public void setStartUpService(StartUpService startUpService) {
+		this.startUpService = startUpService;
+	}
 }

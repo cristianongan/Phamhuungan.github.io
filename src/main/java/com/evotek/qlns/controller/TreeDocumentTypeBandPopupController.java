@@ -14,7 +14,8 @@ import javax.servlet.ServletContext;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.zkoss.spring.SpringUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zul.A;
 import org.zkoss.zul.Bandbox;
@@ -32,131 +33,115 @@ import com.evotek.qlns.util.Validator;
  *
  * @author linhlh2
  */
-public class TreeDocumentTypeBandPopupController extends BasicController<Tree>
-        implements Serializable{
-    private Tree treeDocType;
+@Controller
+public class TreeDocumentTypeBandPopupController extends BasicController<Tree> implements Serializable {
 
-    private A btnClear;
-    private Bandbox bbDocumentType;
-    private DocumentType exclude;
-    
-    private Map<Long, List<DocumentType>> docTypeMap;
-    @Override
-    public void doBeforeComposeChildren(Tree comp) throws Exception {
-        super.doBeforeComposeChildren(comp); 
-    
-        this.treeDocType = comp;
-    }
+	private static final long serialVersionUID = -8308900492651966056L;
 
-    @Override
-    public void doAfterCompose(Tree comp) throws Exception {
-        super.doAfterCompose(comp);
-        
-        ServletContext context = Sessions.getCurrent().getWebApp().getServletContext();
-        
-        this.docTypeMap = this.documentTypeService.getDocTypeMap(context);
-        
-        this.init();
-    }
-    
-    public void init(){
-        Include include = (Include) this.treeDocType.getParent();
-        
-        this.bbDocumentType = (Bandbox) include.getAttribute(BANDBOX);
-        this.btnClear = (A) include.getAttribute(BTN_CLEAR);
-        this.exclude = (DocumentType) include.getAttribute(EXCLUDE);
-        
-        this.onCreate();
-    }
-    
-    public void onCreate() {
-        TreeBasicModel treeConfigModel = 
-                new TreeBasicModel(_buildCategoryTree(), false);
+	private static final Logger _log = LogManager.getLogger(TreeDocumentTypeBandPopupController.class);
 
-        this.treeDocType.setModel(treeConfigModel);
-        
-        this.treeDocType.setItemRenderer(new TreeDocumentTypeSearchRender(
-                this.bbDocumentType, this.btnClear));
-    }
+	@Autowired
+	private DocumentTypeService documentTypeService;
+	
+	private static final String BANDBOX = "bandbox";
+	private static final String BTN_CLEAR = "btnclear";
+	private static final String EXCLUDE = "exclude";
 
-    public DocumentTypeTreeNode _buildCategoryTree() {
-        //tạo cây menu không có gốc
-        DocumentTypeTreeNode rootNode = new DocumentTypeTreeNode(null,
-                new DocumentTypeTreeNode[]{});
+	private Bandbox bbDocumentType;
+	private A btnClear;
 
-        rootNode.setOpen(true);
+	private Map<Long, List<DocumentType>> docTypeMap;
 
-        try {
-            //Lấy danh sách các menu category
-            List<DocumentType> roots = this.docTypeMap.get(null);
+	
 
-            for (DocumentType root : roots) {
+	private DocumentType exclude;
 
-                if (Validator.isNull(root) 
-                        || Validator.isNull(root.getDocumentTypeId()) 
-                        || root.equals(this.exclude)) {
-                    continue;
-                }
-                
-                addChildToParent(root, rootNode);
-            }
-        } catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
-        }
+	private Tree treeDocType;
 
-        return rootNode;
-    }
+	public DocumentTypeTreeNode _buildCategoryTree() {
+		// tạo cây menu không có gốc
+		DocumentTypeTreeNode rootNode = new DocumentTypeTreeNode(null, new DocumentTypeTreeNode[] {});
 
-    public void addChildToParent(DocumentType parent, DocumentTypeTreeNode treeNode) {
-        List<DocumentType> childs
-                = this.docTypeMap.get(parent.getDocumentTypeId());
+		rootNode.setOpen(true);
 
-        if (Validator.isNotNull(childs)) {
-            //Tạo cây con tu parent
-            DocumentTypeTreeNode rootChilds = new DocumentTypeTreeNode(parent,
-                    new DocumentTypeTreeNode[]{});
+		try {
+			// Lấy danh sách các menu category
+			List<DocumentType> roots = this.docTypeMap.get(null);
 
-            rootChilds.setOpen(true);
+			for (DocumentType root : roots) {
 
-            //Gắn các menu item vào cây con vừa tạo
-            for (DocumentType child : childs) {
-                if (Validator.isNull(child)
-                        || Validator.isNull(child.getDocumentTypeId())
-                        || child.equals(this.exclude)) {
-                    continue;
-                }
-                
-                addChildToParent(child, rootChilds);
-            }
+				if (Validator.isNull(root) || Validator.isNull(root.getDocumentTypeId()) || root.equals(this.exclude)) {
+					continue;
+				}
 
-            //gắn cấy menu category vào cây menu
-            treeNode.add(rootChilds);
-        } else {
-            treeNode.add(new DocumentTypeTreeNode(parent));
-        }
-    }
+				addChildToParent(root, rootNode);
+			}
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
 
-    public DocumentTypeService getDocumentTypeService() {
-        if (this.documentTypeService == null) {
-            this.documentTypeService = (DocumentTypeService)
-                    SpringUtil.getBean("documentTypeService");
-            setDocumentTypeService(this.documentTypeService);
-        }
-        return this.documentTypeService;
-    }
+		return rootNode;
+	}
 
-    public void setDocumentTypeService(DocumentTypeService documentTypeService) {
-        this.documentTypeService = documentTypeService;
-    }
-    
-    private transient DocumentTypeService documentTypeService;
-    
-    private static final String BANDBOX = "bandbox";
-    
-    private static final String BTN_CLEAR = "btnclear";
-    
-    private static final String EXCLUDE = "exclude";
-    
-    private static final Logger _log =
-            LogManager.getLogger(TreeDocumentTypeBandPopupController.class);
+	public void addChildToParent(DocumentType parent, DocumentTypeTreeNode treeNode) {
+		List<DocumentType> childs = this.docTypeMap.get(parent.getDocumentTypeId());
+
+		if (Validator.isNotNull(childs)) {
+			// Tạo cây con tu parent
+			DocumentTypeTreeNode rootChilds = new DocumentTypeTreeNode(parent, new DocumentTypeTreeNode[] {});
+
+			rootChilds.setOpen(true);
+
+			// Gắn các menu item vào cây con vừa tạo
+			for (DocumentType child : childs) {
+				if (Validator.isNull(child) || Validator.isNull(child.getDocumentTypeId())
+						|| child.equals(this.exclude)) {
+					continue;
+				}
+
+				addChildToParent(child, rootChilds);
+			}
+
+			// gắn cấy menu category vào cây menu
+			treeNode.add(rootChilds);
+		} else {
+			treeNode.add(new DocumentTypeTreeNode(parent));
+		}
+	}
+
+	@Override
+	public void doAfterCompose(Tree comp) throws Exception {
+		super.doAfterCompose(comp);
+
+		ServletContext context = Sessions.getCurrent().getWebApp().getServletContext();
+
+		this.docTypeMap = this.documentTypeService.getDocTypeMap(context);
+
+		this.init();
+	}
+
+	@Override
+	public void doBeforeComposeChildren(Tree comp) throws Exception {
+		super.doBeforeComposeChildren(comp);
+
+		this.treeDocType = comp;
+	}
+
+	public void init() {
+		Include include = (Include) this.treeDocType.getParent();
+
+		this.bbDocumentType = (Bandbox) include.getAttribute(BANDBOX);
+		this.btnClear = (A) include.getAttribute(BTN_CLEAR);
+		this.exclude = (DocumentType) include.getAttribute(EXCLUDE);
+
+		this.onCreate();
+	}
+
+	public void onCreate() {
+		TreeBasicModel treeConfigModel = new TreeBasicModel(_buildCategoryTree(), false);
+
+		this.treeDocType.setModel(treeConfigModel);
+
+		this.treeDocType.setItemRenderer(new TreeDocumentTypeSearchRender(this.bbDocumentType, this.btnClear));
+	}
 }

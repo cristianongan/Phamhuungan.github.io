@@ -29,74 +29,64 @@ import com.evotek.qlns.util.key.LanguageKeys;
  *
  * @author My PC
  */
-public class WorkProcessRender implements ListitemRenderer<WorkProcess>{
+public class WorkProcessRender implements ListitemRenderer<WorkProcess> {
 
-    private Window _winParent;
-    private Staff _staff;
+	private static final String ADD_EDIT_WORK_PROCESS_PAGE = "/html/pages/manager_human_resource/editWorkProcess.zul";
+	private Staff _staff;
 
-    public WorkProcessRender(Window winParent, Staff staff) {
-        this._winParent = winParent;
-        this._staff = staff;
-    }
-    
-    @Override
+	private Window _winParent;
+
+	public WorkProcessRender(Window winParent, Staff staff) {
+		this._winParent = winParent;
+		this._staff = staff;
+	}
+
+	private Map<String, Object> _createParameterMap(WorkProcess wp, String title) {
+		Map<String, Object> parameters = new HashMap<String, Object>();
+
+		parameters.put(Constants.PARENT_WINDOW, this._winParent);
+		parameters.put(Constants.TITLE, title);
+		parameters.put(Constants.OBJECT, this._staff);
+		parameters.put(Constants.EDIT_OBJECT, wp);
+
+		return parameters;
+	}
+
+	private Listcell _getAction(WorkProcess wp) {
+		Listcell action = new Listcell();
+
+		Hlayout hlayout = new Hlayout();
+
+		hlayout.setSpacing("0");
+
+		hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.EDIT),
+				ComponentUtil.EDIT_TOOLTIP, Events.ON_CLICK, ADD_EDIT_WORK_PROCESS_PAGE,
+				_createParameterMap(wp, Labels.getLabel(LanguageKeys.TITLE_EDIT_WORK_PROCESS)), Constants.Z_ICON_PENCIL,
+				Constants.BLUE));
+
+		// Thêm action "Xóa"
+		hlayout.appendChild(ComponentUtil.createButton(this._winParent, Labels.getLabel(LanguageKeys.BUTTON_DELETE),
+				ComponentUtil.DEL_TOOLTIP, Events.ON_CLICK, "onDeleteWorkProcess", wp, Constants.Z_ICON_TRASH_O,
+				Constants.RED));
+
+		action.appendChild(hlayout);
+
+		action.setStyle(Constants.STYLE_TEXT_ALIGN_CENTER);
+
+		return action;
+	}
+
+	@Override
 	public void render(Listitem item, WorkProcess wp, int index) throws Exception {
-        item.setAttribute("data", wp);
-        
-        item.appendChild(ComponentUtil.createListcell(GetterUtil.getDate(
-                wp.getFromDate(), DateUtil.SHORT_DATE_PATTERN),
-                Constants.STYLE_TEXT_ALIGN_CENTER));
-        item.appendChild(ComponentUtil.createListcell(GetterUtil.getDate(
-                wp.getToDate(), DateUtil.SHORT_DATE_PATTERN),
-                Constants.STYLE_TEXT_ALIGN_CENTER));
-        item.appendChild(ComponentUtil.createListcell(
-                wp.getCompany()));
-        item.appendChild(ComponentUtil.createListcell(
-                wp.getJobTitle()));
-        
-        item.appendChild(_getAction(wp));
-    }
-    
-    private Listcell _getAction(WorkProcess wp) {
-        Listcell action = new Listcell();
+		item.setAttribute("data", wp);
 
-        Hlayout hlayout = new Hlayout();
+		item.appendChild(ComponentUtil.createListcell(GetterUtil.getDate(wp.getFromDate(), DateUtil.SHORT_DATE_PATTERN),
+				Constants.STYLE_TEXT_ALIGN_CENTER));
+		item.appendChild(ComponentUtil.createListcell(GetterUtil.getDate(wp.getToDate(), DateUtil.SHORT_DATE_PATTERN),
+				Constants.STYLE_TEXT_ALIGN_CENTER));
+		item.appendChild(ComponentUtil.createListcell(wp.getCompany()));
+		item.appendChild(ComponentUtil.createListcell(wp.getJobTitle()));
 
-        hlayout.setSpacing("0");
-
-        hlayout.appendChild(ComponentUtil.createButton(null,
-                Labels.getLabel(LanguageKeys.EDIT), 
-                ComponentUtil.EDIT_TOOLTIP, Events.ON_CLICK,
-                ADD_EDIT_WORK_PROCESS_PAGE, _createParameterMap(wp, 
-                        Labels.getLabel(LanguageKeys.TITLE_EDIT_WORK_PROCESS)),
-                Constants.Z_ICON_PENCIL, Constants.BLUE));
-
-        //Thêm action "Xóa"
-        hlayout.appendChild(ComponentUtil.createButton(this._winParent,
-                Labels.getLabel(LanguageKeys.BUTTON_DELETE), 
-                ComponentUtil.DEL_TOOLTIP, Events.ON_CLICK,
-                "onDeleteWorkProcess", wp, Constants.Z_ICON_TRASH_O,
-                Constants.RED));
-
-        action.appendChild(hlayout);
-
-        action.setStyle(Constants.STYLE_TEXT_ALIGN_CENTER);
-        
-        return action;
-    }
-    
-    private Map<String, Object> _createParameterMap(
-            WorkProcess wp, String title) {
-        Map<String, Object> parameters = new HashMap<String, Object>();
-
-        parameters.put(Constants.PARENT_WINDOW, this._winParent);
-        parameters.put(Constants.TITLE, title);
-        parameters.put(Constants.OBJECT, this._staff);
-        parameters.put(Constants.EDIT_OBJECT, wp);
-
-        return parameters;
-    }
-    
-    private static final String ADD_EDIT_WORK_PROCESS_PAGE =
-            "/html/pages/manager_human_resource/editWorkProcess.zul";
+		item.appendChild(_getAction(wp));
+	}
 }

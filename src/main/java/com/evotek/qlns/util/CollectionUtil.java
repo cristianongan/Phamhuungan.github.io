@@ -15,7 +15,7 @@ import org.apache.commons.collections.CollectionUtils;
  * @author linhlh2
  */
 public class CollectionUtil {
-    public static Collection<?> subtract(Collection<?> first, Collection<?> second){
-        return CollectionUtils.subtract(first, second);
-    }
+	public static Collection<?> subtract(Collection<?> first, Collection<?> second) {
+		return CollectionUtils.subtract(first, second);
+	}
 }

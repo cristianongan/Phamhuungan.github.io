@@ -21,24 +21,22 @@ import com.evotek.qlns.util.key.LanguageKeys;
  *
  * @author linhlh2
  */
-public class DownloadFileGridViewRender <Component> implements
-        RowRenderer<FileEntry>{
+public class DownloadFileGridViewRender<Component> implements RowRenderer<FileEntry> {
 
-    @Override
+	@Override
 	public void render(Row row, FileEntry entry, int index) throws Exception {
-        row.appendChild(new Label(entry.getName()));
+		row.appendChild(new Label(entry.getName()));
 
-        A rm = new A();
+		A rm = new A();
 
-        rm.setImage(ComponentUtil.DOWNLOAD_ICON);
+		rm.setImage(ComponentUtil.DOWNLOAD_ICON);
 
-        rm.setTooltiptext(Labels.getLabel(LanguageKeys.DOWNLOAD));
+		rm.setTooltiptext(Labels.getLabel(LanguageKeys.DOWNLOAD));
 
-        rm.addEventListener(Events.ON_CLICK,
-                new DownloadFileEntryListener(entry));
+		rm.addEventListener(Events.ON_CLICK, new DownloadFileEntryListener(entry));
 
-        row.appendChild(rm);
+		row.appendChild(rm);
 
-    }
+	}
 
 }

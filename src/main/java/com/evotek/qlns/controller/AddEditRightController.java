@@ -10,7 +10,8 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.zkoss.spring.SpringUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Combobox;
@@ -34,186 +35,165 @@ import com.evotek.qlns.util.key.Values;
  *
  * @author linhlh2
  */
-public class AddEditRightController extends BasicController<Window>
-        implements Serializable {
+@Controller
+public class AddEditRightController extends BasicController<Window> implements Serializable {
 
-    private static final long serialVersionUID = 1371006808897L;
+	private static final long serialVersionUID = 1371006808897L;
 
-    private Window winEditRight;
-    private Window winTemp;
+	private static final Logger _log = LogManager.getLogger(AddEditRightController.class);
 
-    private Right right;
-    
-    private Category category;
+	@Autowired
+	private CategoryService categoryService;
 
-    private Textbox tbRightName;
-    private Textbox tbDescription;
+	private Category category;
 
-    private Combobox cbRightType;
+	// get set service
 
-    @Override
-    public void doBeforeComposeChildren(Window comp) throws Exception {
-        super.doBeforeComposeChildren(comp);
+	private Combobox cbRightType;
 
-        this.winEditRight = comp;
-    }
+	private Right right;
+	private Textbox tbDescription;
 
-    @Override
-    public void doAfterCompose(Window comp) throws Exception {
-        super.doAfterCompose(comp);
+	private Textbox tbRightName;
 
-        //init data
-        this.initData();
-    }
+	private Window winEditRight;
 
-    //init data
-    public void initData() throws Exception {
-        try {
-            this.winTemp = (Window) this.arg.get(Constants.PARENT_WINDOW);
+	private Window winTemp;
 
-            this.category = (Category) this.arg.get(Constants.OBJECT);
+	private void _setEditForm() {
+		this.tbRightName.setValue(this.right.getRightName());
+		this.tbDescription.setValue(this.right.getDescription());
+	}
 
-            if(Validator.isNull(this.category)){
-                this.category = new Category();
-            }
+	private boolean _validate(String rightName, String description) throws Exception {
+		if (Validator.isNull(rightName)) {
+			this.tbRightName.setErrorMessage(Values.getRequiredInputMsg(Labels.getLabel(LanguageKeys.RIGHT_NAME)));
 
-            this.right = (Right) this.arg.get(Constants.EDIT_OBJECT);
+			return false;
+		}
 
-            if(Validator.isNotNull(this.right)){
-                this.winEditRight.setTitle((String) this.arg.get(Constants.TITLE));
+		if (rightName.length() > Values.MEDIUM_LENGTH) {
+			this.tbRightName.setErrorMessage(
+					Values.getMaxLengthInvalidMsg(Labels.getLabel(LanguageKeys.RIGHT_NAME), Values.MEDIUM_LENGTH));
 
-                this._setEditForm();
-            } else {
-                this.tbRightName.setValue(this.category.getFolderName());
-            }
-        } catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
-        }
-    }
+			return false;
+		}
 
-    private void _setEditForm(){
-        this.tbRightName.setValue(this.right.getRightName());
-        this.tbDescription.setValue(this.right.getDescription());
-    }
+		if (this.categoryService.isRightExist(rightName, this.right)) {
+			this.tbRightName.setErrorMessage(Values.getDuplicateMsg(Labels.getLabel(LanguageKeys.RIGHT_NAME)));
 
-    //even method
-    public void onCreate$cbRightType(){
-        List<SimpleModel> rightTypes = this.categoryService.getRightType();
+			return false;
+		}
 
-        this.cbRightType.setModel(new ListModelList<SimpleModel>(rightTypes));
-    }
+		if (Validator.isNotNull(description) && description.length() > Values.GREATE_LONG_LENGTH) {
+			this.tbDescription.setErrorMessage(Values.getMaxLengthInvalidMsg(Labels.getLabel(LanguageKeys.DESCRIPTION),
+					Values.GREATE_LONG_LENGTH));
 
-    public void onAfterRender$cbRightType() {
-        if (Validator.isNotNull(this.right)
-                && Validator.isNotNull(this.right.getRightType())) {
-            this.cbRightType.setSelectedIndex(this.right.getRightType().intValue());
-        } else {
-            this.cbRightType.setSelectedIndex(Values.FIRST_INDEX);
-        }
-    }
+			return false;
+		}
 
-    public void onClick$btnCancel(){
-        this.winEditRight.detach();
-    }
+		return true;
+	}
 
-    public void onClick$btnSave() throws Exception {
-        boolean update = true;
+	@Override
+	public void doAfterCompose(Window comp) throws Exception {
+		super.doAfterCompose(comp);
 
-        try {
-            String rightName = GetterUtil.getString(this.tbRightName.getValue());
-            Long rightType = ComponentUtil.getComboboxValue(this.cbRightType);
-            String description = GetterUtil.getString(this.tbDescription.getValue());
+		// init data
+		this.initData();
+	}
 
-            if (_validate(rightName, description)) {
-                if(Validator.isNull(this.right)){
-                    update = false;
+	@Override
+	public void doBeforeComposeChildren(Window comp) throws Exception {
+		super.doBeforeComposeChildren(comp);
 
-                    this.right = new Right();
+		this.winEditRight = comp;
+	}
 
-                    this.right.setUserId(getUserId());
-                    this.right.setUserName(getUserName());
-                    this.right.setCreateDate(new Date());
-                    this.right.setCategoryId(this.category.getCategoryId());
-                    this.right.setStatus(Values.STATUS_ACTIVE);
-                }
+	// init data
+	public void initData() throws Exception {
+		try {
+			this.winTemp = (Window) this.arg.get(Constants.PARENT_WINDOW);
 
-                this.right.setRightName(rightName);
-                this.right.setRightType(rightType);
-                this.right.setDescription(description);
-                this.right.setModifiedDate(new Date());
+			this.category = (Category) this.arg.get(Constants.OBJECT);
 
-                this.categoryService.saveOrUpdateRight(this.right);
+			if (Validator.isNull(this.category)) {
+				this.category = new Category();
+			}
 
-                ComponentUtil.createSuccessMessageBox(
-                        ComponentUtil.getSuccessKey(update));
+			this.right = (Right) this.arg.get(Constants.EDIT_OBJECT);
 
-                this.winEditRight.detach();
+			if (Validator.isNotNull(this.right)) {
+				this.winEditRight.setTitle((String) this.arg.get(Constants.TITLE));
 
-                Events.sendEvent("onLoadRight", this.winTemp, null);
-            }
+				this._setEditForm();
+			} else {
+				this.tbRightName.setValue(this.category.getFolderName());
+			}
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+	}
 
-        } catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
+	public void onAfterRender$cbRightType() {
+		if (Validator.isNotNull(this.right) && Validator.isNotNull(this.right.getRightType())) {
+			this.cbRightType.setSelectedIndex(this.right.getRightType().intValue());
+		} else {
+			this.cbRightType.setSelectedIndex(Values.FIRST_INDEX);
+		}
+	}
 
-            Messagebox.show(Labels.getLabel(
-                    ComponentUtil.getFailKey(update)));
-        }
-    }
-    //even method
+	public void onClick$btnCancel() {
+		this.winEditRight.detach();
+	}
 
-    private boolean _validate(String rightName, String description)
-            throws Exception{
-        if(Validator.isNull(rightName)){
-            this.tbRightName.setErrorMessage(Values.getRequiredInputMsg(
-                    Labels.getLabel(LanguageKeys.RIGHT_NAME)));
+	public void onClick$btnSave() throws Exception {
+		boolean update = true;
 
-            return false;
-        }
+		try {
+			String rightName = GetterUtil.getString(this.tbRightName.getValue());
+			Long rightType = ComponentUtil.getComboboxValue(this.cbRightType);
+			String description = GetterUtil.getString(this.tbDescription.getValue());
 
-        if (rightName.length() > Values.MEDIUM_LENGTH) {
-            this.tbRightName.setErrorMessage(Values.getMaxLengthInvalidMsg(
-                    Labels.getLabel(LanguageKeys.RIGHT_NAME),
-                    Values.MEDIUM_LENGTH));
+			if (_validate(rightName, description)) {
+				if (Validator.isNull(this.right)) {
+					update = false;
 
-            return false;
-        }
+					this.right = new Right();
 
-        if(this.categoryService.isRightExist(rightName, this.right)){
-            this.tbRightName.setErrorMessage(Values.getDuplicateMsg(
-                    Labels.getLabel(LanguageKeys.RIGHT_NAME)));
+					this.right.setUserId(getUserId());
+					this.right.setUserName(getUserName());
+					this.right.setCreateDate(new Date());
+					this.right.setCategoryId(this.category.getCategoryId());
+					this.right.setStatus(Values.STATUS_ACTIVE);
+				}
 
-            return false;
-        }
+				this.right.setRightName(rightName);
+				this.right.setRightType(rightType);
+				this.right.setDescription(description);
+				this.right.setModifiedDate(new Date());
 
-        if (Validator.isNotNull(description)
-                && description.length() > Values.GREATE_LONG_LENGTH) {
-            this.tbDescription.setErrorMessage(Values.getMaxLengthInvalidMsg(
-                    Labels.getLabel(LanguageKeys.DESCRIPTION),
-                    Values.GREATE_LONG_LENGTH));
+				this.categoryService.saveOrUpdateRight(this.right);
 
-            return false;
-        }
+				ComponentUtil.createSuccessMessageBox(ComponentUtil.getSuccessKey(update));
 
-        return true;
-    }
-    //get set service
-    public CategoryService getCategoryService() {
-        if (this.categoryService == null) {
-            this.categoryService = (CategoryService)
-                    SpringUtil.getBean("categoryService");
-            setCategoryService(this.categoryService);
-        }
+				this.winEditRight.detach();
 
-        return this.categoryService;
-    }
+				Events.sendEvent("onLoadRight", this.winTemp, null);
+			}
 
-    public void setCategoryService(CategoryService categoryService) {
-        this.categoryService = categoryService;
-    }
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
 
-    private transient CategoryService categoryService;
-    //get set service
+			Messagebox.show(Labels.getLabel(ComponentUtil.getFailKey(update)));
+		}
+	}
+	// even method
 
-    private static final Logger _log =
-            LogManager.getLogger(AddEditRightController.class);
+	// even method
+	public void onCreate$cbRightType() {
+		List<SimpleModel> rightTypes = this.categoryService.getRightType();
+
+		this.cbRightType.setModel(new ListModelList<SimpleModel>(rightTypes));
+	}
 }

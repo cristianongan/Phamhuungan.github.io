@@ -8,10 +8,10 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerA
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 
 @SpringBootApplication
-@EnableAutoConfiguration(exclude = { //  
-        DataSourceAutoConfiguration.class, //
-        DataSourceTransactionManagerAutoConfiguration.class, //
-        HibernateJpaAutoConfiguration.class })
+@EnableAutoConfiguration(exclude = { //
+		DataSourceAutoConfiguration.class, //
+		DataSourceTransactionManagerAutoConfiguration.class, //
+		HibernateJpaAutoConfiguration.class })
 public class QlnsApplication {
 
 	public static void main(String[] args) {

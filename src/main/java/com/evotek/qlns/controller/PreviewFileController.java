@@ -11,6 +11,7 @@ import java.io.Serializable;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Controller;
 import org.zkoss.util.media.AMedia;
 import org.zkoss.zul.Iframe;
 import org.zkoss.zul.Window;
@@ -20,52 +21,52 @@ import com.evotek.qlns.util.key.Constants;
 
 /**
  *
- * @author My PC
+ * @author LinhLH
  */
-public class PreviewFileController extends BasicController<Window>
-        implements Serializable{
+@Controller
+public class PreviewFileController extends BasicController<Window> implements Serializable {
 
-    private Window win;
+	private static final long serialVersionUID = 8095093259223337416L;
 
-    private Iframe viewer;
+	private static final Logger _log = LogManager.getLogger(PreviewFileController.class);
 
-    private File file;
+	private String ctype;
 
-    private String format;
-    private String ctype;
+	private File file;
 
-    @Override
-    public void doBeforeComposeChildren(Window comp) throws Exception {
-        super.doBeforeComposeChildren(comp);
+	private String format;
+	private Iframe viewer;
 
-        this.win = comp;
-    }
+	private Window win;
 
-    @Override
-    public void doAfterCompose(Window comp) throws Exception {
-        super.doAfterCompose(comp);
+	@Override
+	public void doAfterCompose(Window comp) throws Exception {
+		super.doAfterCompose(comp);
 
-        this.init();
-    }
+		this.init();
+	}
 
-    public void init() throws Exception{
-        try {
-            this.file = (File) this.arg.get(Constants.OBJECT);
-            this.format = (String) this.arg.get(Constants.KEY);
-            this.ctype = (String) this.arg.get(Constants.VALUE);
+	@Override
+	public void doBeforeComposeChildren(Window comp) throws Exception {
+		super.doBeforeComposeChildren(comp);
 
-            if (Validator.isNotNull(this.file)) {
+		this.win = comp;
+	}
 
-                AMedia media = new AMedia(this.file.getName(), this.format,
-                        this.ctype, new FileInputStream(this.file));
+	public void init() throws Exception {
+		try {
+			this.file = (File) this.arg.get(Constants.OBJECT);
+			this.format = (String) this.arg.get(Constants.KEY);
+			this.ctype = (String) this.arg.get(Constants.VALUE);
 
-                this.viewer.setContent(media);
-            }
-        } catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
-        }
-    }
+			if (Validator.isNotNull(this.file)) {
 
-    private static final Logger _log =
-            LogManager.getLogger(PreviewFileController.class);
+				AMedia media = new AMedia(this.file.getName(), this.format, this.ctype, new FileInputStream(this.file));
+
+				this.viewer.setContent(media);
+			}
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+	}
 }

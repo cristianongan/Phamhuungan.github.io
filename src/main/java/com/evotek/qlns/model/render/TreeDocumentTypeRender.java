@@ -25,37 +25,56 @@ import com.evotek.qlns.util.key.LanguageKeys;
  */
 public class TreeDocumentTypeRender implements TreeitemRenderer<DocumentTypeTreeNode> {
 
-    private Window winparent;
-    private DocumentTypeService documentTypeService;
+	private DocumentTypeService documentTypeService;
+	private Window winparent;
 
-    public TreeDocumentTypeRender(Window win, DocumentTypeService _doDocumentTypeService) {
-        this.winparent = win;
-        this.documentTypeService = _doDocumentTypeService;
-    }
+	public TreeDocumentTypeRender(Window win, DocumentTypeService _doDocumentTypeService) {
+		this.winparent = win;
+		this.documentTypeService = _doDocumentTypeService;
+	}
 
-    @Override
-    public void render(final Treeitem item, DocumentTypeTreeNode node, int index)
-            throws Exception {
-        DocumentType documentType = node.getData();
-        //tree cell
-        Treerow treeRow = new Treerow();
+	private Menupopup _createContextMenu(final Treerow treeRow, DocumentType documentType) {
+		// context menu
+		Menupopup popup = new Menupopup();
 
-        item.appendChild(treeRow);
+		popup.setPage(treeRow.getPage());
 
-        item.setValue(node);
-        item.setOpen(node.isOpen());
-        item.setAttribute(Constants.DATA, documentType);
-        //name
-        treeRow.appendChild(ComponentUtil.createTreeCell(
-                documentType.getTypeName()));
-        //status
+		popup.appendChild(ComponentUtil.createMenuitem(this.winparent, Labels.getLabel(LanguageKeys.ADD),
+				Events.ON_CLICK, "onAdd", documentType, Constants.Z_ICON_PLUS, Constants.BLUE));
+
+//        if (documentType.getParentDocumentType() != null) { //neu khong phai la root
+		popup.appendChild(ComponentUtil.createMenuitem(this.winparent, Labels.getLabel(LanguageKeys.EDIT),
+				Events.ON_CLICK, "onEdit", documentType, Constants.Z_ICON_PENCIL, Constants.BLUE));
+//        popup.appendChild(ComponentUtil.createMenuitem(winparent,
+//                Labels.getLabel(LanguageKeys.BUTTON_DELETE),
+//                Events.ON_CLICK, "onDelete", documentType,
+//                ComponentUtil.DELETE_ICON));
+//        }
+
+		return popup;
+	}
+
+	@Override
+	public void render(final Treeitem item, DocumentTypeTreeNode node, int index) throws Exception {
+		DocumentType documentType = node.getData();
+		// tree cell
+		Treerow treeRow = new Treerow();
+
+		item.appendChild(treeRow);
+
+		item.setValue(node);
+		item.setOpen(node.isOpen());
+		item.setAttribute(Constants.DATA, documentType);
+		// name
+		treeRow.appendChild(ComponentUtil.createTreeCell(documentType.getTypeName()));
+		// status
 //        treeRow.appendChild(ComponentUtil.createTreeCell(
 //                Values.getLockStatus(documentType.getStatus())));
 
-        treeRow.setContext(_createContextMenu(treeRow, documentType));
+		treeRow.setContext(_createContextMenu(treeRow, documentType));
 
-        treeRow.addForward(Events.ON_DOUBLE_CLICK, this.winparent, "onEdit", documentType);
-        //cho phep keo doi tuong
+		treeRow.addForward(Events.ON_DOUBLE_CLICK, this.winparent, "onEdit", documentType);
+		// cho phep keo doi tuong
 //        if (documentType.getChildDocumentTypes().isEmpty()) {
 //            item.setDraggable(String.valueOf(true));
 //        }
@@ -100,33 +119,7 @@ public class TreeDocumentTypeRender implements TreeitemRenderer<DocumentTypeTree
 //                }
 //            }
 //        });
-    }
-
-    private Menupopup _createContextMenu(final Treerow treeRow,
-            DocumentType documentType) {
-        //context menu
-        Menupopup popup = new Menupopup();
-
-        popup.setPage(treeRow.getPage());
-        
-        popup.appendChild(ComponentUtil.createMenuitem(this.winparent,
-                Labels.getLabel(LanguageKeys.ADD), Events.ON_CLICK, "onAdd",
-                documentType, Constants.Z_ICON_PLUS, 
-                Constants.BLUE));
-
-//        if (documentType.getParentDocumentType() != null) { //neu khong phai la root
-        popup.appendChild(ComponentUtil.createMenuitem(this.winparent,
-                Labels.getLabel(LanguageKeys.EDIT), Events.ON_CLICK,
-                "onEdit", documentType, Constants.Z_ICON_PENCIL, 
-                Constants.BLUE));
-//        popup.appendChild(ComponentUtil.createMenuitem(winparent,
-//                Labels.getLabel(LanguageKeys.BUTTON_DELETE),
-//                Events.ON_CLICK, "onDelete", documentType,
-//                ComponentUtil.DELETE_ICON));
-//        }
-
-        return popup;
-    }
+	}
 
 //    private void _remove(DocumentType draggedDocType) {
 //        draggedDocType.setOrdinal(null);

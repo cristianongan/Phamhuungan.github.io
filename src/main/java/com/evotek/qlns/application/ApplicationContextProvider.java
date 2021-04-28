@@ -5,18 +5,19 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
 /**
- * EN: Easy access to the spring applicationContext. Configured as spring bean.<br>
+ * EN: Easy access to the spring applicationContext. Configured as spring
+ * bean.<br>
  */
 public class ApplicationContextProvider implements ApplicationContextAware {
 
-    private static ApplicationContext ctx = null;
+	private static ApplicationContext ctx = null;
 
-    public static ApplicationContext getApplicationContext() {
-        return ctx;
-    }
+	public static ApplicationContext getApplicationContext() {
+		return ctx;
+	}
 
-    @Override
-    public void setApplicationContext(ApplicationContext ctx) throws BeansException {
-        ApplicationContextProvider.ctx = ctx;
-    }
+	@Override
+	public void setApplicationContext(ApplicationContext ctx) throws BeansException {
+		ApplicationContextProvider.ctx = ctx;
+	}
 }

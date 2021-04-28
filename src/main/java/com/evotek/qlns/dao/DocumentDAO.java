@@ -18,37 +18,34 @@ import com.evotek.qlns.model.Document;
  */
 public interface DocumentDAO {
 
-    public List<Document> getAll();
+	public void delete(Collection<Document> documents);
 
-    public int getDocumentCountAdv(String documentContent,
-            String documentNumber, Long documentType, String department,
-            Date fromDate, Date toDate);
+	public void delete(Document document) throws DataAccessException;
 
-    public List<Document> getDocumentListAdv(String documentContent,
-            String documentNumber, Long documentType, String department,
-            Date fromDate, Date toDate, int firstResult, int maxResult,
-            String orderByColumn, String orderByType);
+	public List<Document> getAll();
 
-    public int getDocumentCountBasic(String textSearch);
+	public List<Document> getDocumentByI_N_C(Long documentId, String documentNumber, String content);
 
-    public List<Document> getDocumentListBasic(String textSearch, int firstResult,
-            int maxResult, String orderByColumn, String orderByType);
+	public int getDocumentByIdListCount(List<Long> idList);
 
-    public void delete(Document document) throws DataAccessException;
+	public List<Document> getDocumentByN(String documentNumber);
 
-    public void delete(Collection<Document> documents);
+	public int getDocumentCountAdv(String documentContent, String documentNumber, Long documentType, String department,
+			Date fromDate, Date toDate);
 
-    public void saveOrUpdate(Document document);
-    
-    public void saveOrUpdate(Collection<Document> documents);
+	public int getDocumentCountBasic(String textSearch);
 
-    public int getDocumentByIdListCount(List<Long> idList);
+	public List<Document> getDocumentListAdv(String documentContent, String documentNumber, Long documentType,
+			String department, Date fromDate, Date toDate, int firstResult, int maxResult, String orderByColumn,
+			String orderByType);
 
-    public List<Document> getDocumentListByIdList(List<Long> idList, int firstResult,
-            int maxResult, String orderByColumn, String orderByType);
+	public List<Document> getDocumentListBasic(String textSearch, int firstResult, int maxResult, String orderByColumn,
+			String orderByType);
 
-    public List<Document> getDocumentByI_N_C(Long documentId, String documentNumber, 
-            String content);
+	public List<Document> getDocumentListByIdList(List<Long> idList, int firstResult, int maxResult,
+			String orderByColumn, String orderByType);
 
-    public List<Document> getDocumentByN(String documentNumber);
+	public void saveOrUpdate(Collection<Document> documents);
+
+	public void saveOrUpdate(Document document);
 }

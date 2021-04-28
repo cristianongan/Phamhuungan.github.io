@@ -25,169 +25,165 @@ import org.hibernate.annotations.FetchMode;
 @Table(name = "role")
 public class Role implements Serializable {
 
-    private Long userId;
-    private String description;
-    private String userName;
-    private String roleName;
-    private Date createDate;
-    private Long status;
-    private Date modifiedDate;
-    private Long roleId;
-    private Long immune;
-    private Boolean shareable;
-    private Set<User> users = new HashSet<User>(0);
-    private Set<Group> groups = new HashSet<Group>(0);
+	private Date createDate;
+	private String description;
+	private Set<Group> groups = new HashSet<Group>(0);
+	private Long immune;
+	private Date modifiedDate;
+	private Long roleId;
+	private String roleName;
+	private Boolean shareable;
+	private Long status;
+	private Long userId;
+	private String userName;
+	private Set<User> users = new HashSet<User>(0);
 
-    @Column(name = "user_id", precision = 22, scale = 0)
-    public Long getUserId() {
-        return this.userId;
-    }
+	public Role() {
+	}
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
+	public Role(Long roleId) {
+		this.roleId = roleId;
+	}
 
-    @Column(name = "description", length = 1000)
-    public String getDescription() {
-        return this.description;
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
 
-    @Column(name = "user_name", length = 200)
-    public String getUserName() {
-        return this.userName;
-    }
+		final Role other = (Role) obj;
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
+		if (this.roleId != other.roleId && (this.roleId == null || !this.roleId.equals(other.roleId))) {
+			return false;
+		}
 
-    @Column(name = "role_name", length = 200)
-    public String getRoleName() {
-        return this.roleName;
-    }
+		return true;
+	}
 
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
-    }
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "create_date", length = 7)
+	public Date getCreateDate() {
+		return this.createDate;
+	}
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "create_date", length = 7)
-    public Date getCreateDate() {
-        return this.createDate;
-    }
+	@Column(name = "description", length = 1000)
+	public String getDescription() {
+		return this.description;
+	}
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
-    @Column(name = "status", precision = 22, scale = 0)
-    public Long getStatus() {
-        return this.status;
-    }
-
-    public void setStatus(Long status) {
-        this.status = status;
-    }
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "modified_date", length = 7)
-    public Date getModifiedDate() {
-        return this.modifiedDate;
-    }
-
-    public void setModifiedDate(Date modifiedDate) {
-        this.modifiedDate = modifiedDate;
-    }
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "role_id", unique = true, nullable = false, precision = 22, scale = 0)
-    public Long getRoleId() {
-        return this.roleId;
-    }
-
-    public void setRoleId(Long roleId) {
-        this.roleId = roleId;
-    }
-
-    @Column(name = "immune", precision = 22, scale = 0)
-    public Long getImmune() {
-        return this.immune;
-    }
-
-    public void setImmune(Long immune) {
-        this.immune = immune;
-    }
-
-    @Column(name = "shareable", precision = 1, scale = 0)
-    public Boolean getShareable() {
-        return this.shareable;
-    }
-
-    public void setShareable(Boolean shareable) {
-        this.shareable = shareable;
-    }
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "role_group", joinColumns = {
-        @JoinColumn(name = "role_id", nullable = false, updatable = false)
-    }, inverseJoinColumns = {
-        @JoinColumn(name = "group_id", nullable = false, updatable = false)
-    })
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "role_group", joinColumns = {
+			@JoinColumn(name = "role_id", nullable = false, updatable = false) }, inverseJoinColumns = {
+					@JoinColumn(name = "group_id", nullable = false, updatable = false) })
 //    @LazyCollection(LazyCollectionOption.EXTRA)
-    @Fetch(FetchMode.SELECT)
-    public Set<Group> getGroups() {
-        return this.groups;
-    }
+	@Fetch(FetchMode.SELECT)
+	public Set<Group> getGroups() {
+		return this.groups;
+	}
 
-    public void setGroups(Set<Group> groups) {
-        this.groups = groups;
-    }
+	@Column(name = "immune", precision = 22, scale = 0)
+	public Long getImmune() {
+		return this.immune;
+	}
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "roles")
-    public Set<User> getUsers() {
-        return this.users;
-    }
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "modified_date", length = 7)
+	public Date getModifiedDate() {
+		return this.modifiedDate;
+	}
 
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "role_id", unique = true, nullable = false, precision = 22, scale = 0)
+	public Long getRoleId() {
+		return this.roleId;
+	}
 
-    public Role() {
-    }
+	@Column(name = "role_name", length = 200)
+	public String getRoleName() {
+		return this.roleName;
+	}
 
-    public Role(Long roleId) {
-        this.roleId = roleId;
-    }
+	@Column(name = "shareable", precision = 1, scale = 0)
+	public Boolean getShareable() {
+		return this.shareable;
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        
-        final Role other = (Role) obj;
-        
-        if (this.roleId != other.roleId 
-                && (this.roleId == null 
-                || !this.roleId.equals(other.roleId))) {
-            return false;
-        }
-        
-        return true;
-    }
+	@Column(name = "status", precision = 22, scale = 0)
+	public Long getStatus() {
+		return this.status;
+	}
 
-    @Override
-    public int hashCode() {
-        int hash = 5;
-        return hash;
-    }
+	@Column(name = "user_id", precision = 22, scale = 0)
+	public Long getUserId() {
+		return this.userId;
+	}
+
+	@Column(name = "user_name", length = 200)
+	public String getUserName() {
+		return this.userName;
+	}
+
+	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "roles")
+	public Set<User> getUsers() {
+		return this.users;
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 5;
+		return hash;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public void setGroups(Set<Group> groups) {
+		this.groups = groups;
+	}
+
+	public void setImmune(Long immune) {
+		this.immune = immune;
+	}
+
+	public void setModifiedDate(Date modifiedDate) {
+		this.modifiedDate = modifiedDate;
+	}
+
+	public void setRoleId(Long roleId) {
+		this.roleId = roleId;
+	}
+
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
+	}
+
+	public void setShareable(Boolean shareable) {
+		this.shareable = shareable;
+	}
+
+	public void setStatus(Long status) {
+		this.status = status;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public void setUsers(Set<User> users) {
+		this.users = users;
+	}
 }

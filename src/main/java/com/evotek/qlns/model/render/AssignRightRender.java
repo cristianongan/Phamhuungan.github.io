@@ -22,26 +22,15 @@ import com.evotek.qlns.util.key.Constants;
  *
  * @author linhlh2
  */
-public class AssignRightRender implements ListitemRenderer<Right>{
+public class AssignRightRender implements ListitemRenderer<Right> {
 
-    private Set<Right> rights;
+	private static final String[] _type = StaticUtil.MENU_RIGHT_TYPE;
 
-    public AssignRightRender(Set<Right> rights) {
-        this.rights = rights;
-    }
+	private Set<Right> rights;
 
-    @Override
-	public void render(Listitem items, Right right, int index) throws Exception {
-        items.appendChild(ComponentUtil.createListcell(StringPool.BLANK,
-                Constants.STYLE_TEXT_ALIGN_CENTER));
-        items.appendChild(new Listcell(right.getRightName()));
-        items.appendChild(new Listcell(getRightTypeName(right.getRightType())));
-        items.appendChild(new Listcell(right.getDescription()));
-
-        items.setSelected(this.rights.contains(right));
-
-        items.setAttribute("data", right);
-    }
+	public AssignRightRender(Set<Right> rights) {
+		this.rights = rights;
+	}
 
 //    private boolean isAssigned(Right right){
 //        for(Right _right: rights){
@@ -53,16 +42,25 @@ public class AssignRightRender implements ListitemRenderer<Right>{
 //        return false;
 //    }
 
-    private String getRightTypeName(Long type){
-        String statusName = StringPool.BLANK;
+	private String getRightTypeName(Long type) {
+		String statusName = StringPool.BLANK;
 
-        if(Validator.isNotNull(type)
-                && type< _type.length){
-            statusName = _type[type.intValue()];
-        }
+		if (Validator.isNotNull(type) && type < _type.length) {
+			statusName = _type[type.intValue()];
+		}
 
-        return statusName;
-    }
+		return statusName;
+	}
 
-    private static final String[] _type = StaticUtil.MENU_RIGHT_TYPE;
+	@Override
+	public void render(Listitem items, Right right, int index) throws Exception {
+		items.appendChild(ComponentUtil.createListcell(StringPool.BLANK, Constants.STYLE_TEXT_ALIGN_CENTER));
+		items.appendChild(new Listcell(right.getRightName()));
+		items.appendChild(new Listcell(getRightTypeName(right.getRightType())));
+		items.appendChild(new Listcell(right.getDescription()));
+
+		items.setSelected(this.rights.contains(right));
+
+		items.setAttribute("data", right);
+	}
 }

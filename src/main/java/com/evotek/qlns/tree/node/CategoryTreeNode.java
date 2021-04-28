@@ -16,43 +16,40 @@ import com.evotek.qlns.model.Category;
  */
 public class CategoryTreeNode extends DefaultTreeNode<Category> {
 
-    private static final long serialVersionUID = 1370486533732L;
-   
-    private boolean open = false;
+	private static final long serialVersionUID = 1370486533732L;
 
-    public CategoryTreeNode(Category data, DefaultTreeNode<Category>[] children) {
-        super(data, children);
-    }
+	private boolean open = false;
 
-    public CategoryTreeNode(Category data, DefaultTreeNode<Category>[] children,
-            boolean open) {
-        super(data, children);
+	public CategoryTreeNode(Category data) {
+		super(data);
 
-        this.setOpen(open);
-    }
+	}
 
-    public CategoryTreeNode(Category data, List<? extends
-            DefaultTreeNode<Category>> children) {
-        super(data, children);
-    }
+	public CategoryTreeNode(Category data, DefaultTreeNode<Category>[] children) {
+		super(data, children);
+	}
 
-    public CategoryTreeNode(Category data, List<? extends
-            DefaultTreeNode<Category>> children, boolean open) {
-        super(data, children);
+	public CategoryTreeNode(Category data, DefaultTreeNode<Category>[] children, boolean open) {
+		super(data, children);
 
-        this.setOpen(open);
-    }
+		this.setOpen(open);
+	}
 
-    public CategoryTreeNode(Category data) {
-        super(data);
+	public CategoryTreeNode(Category data, List<? extends DefaultTreeNode<Category>> children) {
+		super(data, children);
+	}
 
-    }
+	public CategoryTreeNode(Category data, List<? extends DefaultTreeNode<Category>> children, boolean open) {
+		super(data, children);
 
-    public boolean isOpen() {
-        return this.open;
-    }
+		this.setOpen(open);
+	}
 
-    public void setOpen(boolean open) {
-        this.open = open;
-    }
+	public boolean isOpen() {
+		return this.open;
+	}
+
+	public void setOpen(boolean open) {
+		this.open = open;
+	}
 }

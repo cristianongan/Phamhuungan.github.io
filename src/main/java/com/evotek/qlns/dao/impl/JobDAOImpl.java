@@ -27,6 +27,8 @@ import com.evotek.qlns.model.Job;
  */
 @Repository
 public class JobDAOImpl extends AbstractDAO<Job> implements JobDAO {
+	private static final Logger _log = LogManager.getLogger(JobDAOImpl.class);
+
 	@Override
 	public List<Job> getJobTitle() {
 		List<Job> results = new ArrayList<Job>();
@@ -65,11 +67,11 @@ public class JobDAOImpl extends AbstractDAO<Job> implements JobDAO {
 			CriteriaQuery<String> criteria = builder.createQuery(String.class);
 
 			Root<Job> root = criteria.from(Job.class);
-			
+
 			criteria.distinct(true).select(root.get("jobTitle"));
-			
+
 			criteria.orderBy(builder.asc(root.get("jobTitle")));
-			
+
 			results = session.createQuery(criteria).getResultList();
 
 		} catch (Exception e) {
@@ -78,6 +80,4 @@ public class JobDAOImpl extends AbstractDAO<Job> implements JobDAO {
 
 		return results;
 	}
-
-	private static final Logger _log = LogManager.getLogger(JobDAOImpl.class);
 }

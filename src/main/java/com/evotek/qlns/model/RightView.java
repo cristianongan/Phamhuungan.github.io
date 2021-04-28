@@ -15,142 +15,140 @@ import javax.persistence.TemporalType;
 public class RightView implements Serializable {
 
 	private static final long serialVersionUID = 2314895873576489861L;
-	
+
 	private Long categoryId;
-    private Long rightType;
-    private Long userId;
-    private String description;
-    private String userName;
-    private String rightName;
-    private Date createDate;
-    private Long status;
-    private Date modifiedDate;
-    private Long rightId;
+	private Date createDate;
+	private String description;
+	private Date modifiedDate;
+	private Long rightId;
+	private String rightName;
+	private Long rightType;
+	private Long status;
+	private Long userId;
+	private String userName;
 
-    @Column(name = "category_id", precision = 22, scale = 0)
-    public Long getCategoryId() {
-        return this.categoryId;
-    }
+	public RightView() {
+	}
 
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
-    }
+	public RightView(Long rightId) {
+		this.rightId = rightId;
+	}
 
-    @Column(name = "right_type", precision = 22, scale = 0)
-    public Long getRightType() {
-        return this.rightType;
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
 
-    public void setRightType(Long rightType) {
-        this.rightType = rightType;
-    }
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
 
-    @Column(name = "user_id", precision = 22, scale = 0)
-    public Long getUserId() {
-        return this.userId;
-    }
+		final RightView other = (RightView) obj;
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
+		if (this.rightId != other.rightId && (this.rightId == null || !this.rightId.equals(other.rightId))) {
+			return false;
+		}
 
-    @Column(name = "description", length = 1000)
-    public String getDescription() {
-        return this.description;
-    }
+		return true;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	@Column(name = "category_id", precision = 22, scale = 0)
+	public Long getCategoryId() {
+		return this.categoryId;
+	}
 
-    @Column(name = "user_name", length = 50)
-    public String getUserName() {
-        return this.userName;
-    }
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "create_date", length = 7)
+	public Date getCreateDate() {
+		return this.createDate;
+	}
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
+	@Column(name = "description", length = 1000)
+	public String getDescription() {
+		return this.description;
+	}
 
-    @Column(name = "right_name", length = 75)
-    public String getRightName() {
-        return this.rightName;
-    }
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "modified_date", length = 7)
+	public Date getModifiedDate() {
+		return this.modifiedDate;
+	}
 
-    public void setRightName(String rightName) {
-        this.rightName = rightName;
-    }
+	@Id
+	@Column(name = "right_id", unique = true, nullable = false, precision = 22, scale = 0)
+	public Long getRightId() {
+		return this.rightId;
+	}
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "create_date", length = 7)
-    public Date getCreateDate() {
-        return this.createDate;
-    }
+	@Column(name = "right_name", length = 75)
+	public String getRightName() {
+		return this.rightName;
+	}
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
+	@Column(name = "right_type", precision = 22, scale = 0)
+	public Long getRightType() {
+		return this.rightType;
+	}
 
-    @Column(name = "status", precision = 22, scale = 0)
-    public Long getStatus() {
-        return this.status;
-    }
+	@Column(name = "status", precision = 22, scale = 0)
+	public Long getStatus() {
+		return this.status;
+	}
 
-    public void setStatus(Long status) {
-        this.status = status;
-    }
+	@Column(name = "user_id", precision = 22, scale = 0)
+	public Long getUserId() {
+		return this.userId;
+	}
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "modified_date", length = 7)
-    public Date getModifiedDate() {
-        return this.modifiedDate;
-    }
+	@Column(name = "user_name", length = 50)
+	public String getUserName() {
+		return this.userName;
+	}
 
-    public void setModifiedDate(Date modifiedDate) {
-        this.modifiedDate = modifiedDate;
-    }
+	@Override
+	public int hashCode() {
+		int hash = 5;
+		return hash;
+	}
 
-    @Id
-    @Column(name = "right_id", unique = true, nullable = false, precision = 22, scale = 0)
-    public Long getRightId() {
-        return this.rightId;
-    }
+	public void setCategoryId(Long categoryId) {
+		this.categoryId = categoryId;
+	}
 
-    public void setRightId(Long rightId) {
-        this.rightId = rightId;
-    }
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
 
-    public RightView() {
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public RightView(Long rightId) {
-        this.rightId = rightId;
-    }
+	public void setModifiedDate(Date modifiedDate) {
+		this.modifiedDate = modifiedDate;
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        
-        final RightView other = (RightView) obj;
-        
-        if (this.rightId != other.rightId 
-                && (this.rightId == null 
-                || !this.rightId.equals(other.rightId))) {
-            return false;
-        }
-        
-        return true;
-    }
+	public void setRightId(Long rightId) {
+		this.rightId = rightId;
+	}
 
-    @Override
-    public int hashCode() {
-        int hash = 5;
-        return hash;
-    }
+	public void setRightName(String rightName) {
+		this.rightName = rightName;
+	}
+
+	public void setRightType(Long rightType) {
+		this.rightType = rightType;
+	}
+
+	public void setStatus(Long status) {
+		this.status = status;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
 }

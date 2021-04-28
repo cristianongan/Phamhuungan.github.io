@@ -41,564 +41,549 @@ import com.evotek.qlns.common.impl.NamespaceContextImpl;
  */
 public class XmlDomUtils {
 
-    private DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-    private Document dom;
-    private XPath xpath = XPathFactory.newInstance().newXPath();
-
-    public XmlDomUtils() {
-    }
-    
-    public Document read(File file) {
-        try {
-            DocumentBuilder db = this.dbf.newDocumentBuilder();
-
-            this.dom = db.parse(file);
-        } catch (ParserConfigurationException pce) {
-            pce.printStackTrace();
-        } catch (SAXException se) {
-            se.printStackTrace();
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
-
-        return this.dom;
-    }
-
-    public Document read(InputStream inputStream) {
-        try {
-            DocumentBuilder db = this.dbf.newDocumentBuilder();
-
-            this.dom = db.parse(inputStream);
-        } catch (ParserConfigurationException pce) {
-            pce.printStackTrace();
-        } catch (SAXException se) {
-            se.printStackTrace();
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
-
-        return this.dom;
-    }
-
-    public Document read(Blob blob) {
-        try {
-            if(Validator.isNull(blob)){
-                return null;
-            }
-
-            DocumentBuilder db = this.dbf.newDocumentBuilder();
-
-            InputStream inputStream = blob.getBinaryStream();
-
-            this.dom = db.parse(inputStream);
-        } catch (ParserConfigurationException pce) {
-            pce.printStackTrace();
-        } catch (SAXException se) {
-            se.printStackTrace();
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }catch (SQLException sqle) {
-            sqle.printStackTrace();
-        }
-
-        return this.dom;
-    }
-
-    public Document read(String uri) {
-        try {
-            DocumentBuilder db = this.dbf.newDocumentBuilder();
-
-            this.dom = db.parse(uri);
-        } catch (ParserConfigurationException pce) {
-            pce.printStackTrace();
-        } catch (SAXException se) {
-            se.printStackTrace();
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
-
-        return this.dom;
-    }
-
-    public Document read(File file, boolean namespaceAware) {
-        try {
-            this.dbf.setNamespaceAware(namespaceAware);
-
-            this.dom = read(file);
-
-            this.setNamespaceContext(this.dom);
-        } catch (Exception ioe) {
-            ioe.printStackTrace();
-        }
-
-        return this.dom;
-    }
-
-    public Document read(InputStream inputStream, boolean namespaceAware) {
-        try {
-            this.dbf.setNamespaceAware(namespaceAware);
-
-            this.dom = read(inputStream);
-
-            this.setNamespaceContext(this.dom);
-        } catch (Exception ioe) {
-            ioe.printStackTrace();
-        }
-
-        return this.dom;
-    }
-
-    public Document read(String uri, boolean namespaceAware) {
-        try {
-            this.dbf.setNamespaceAware(namespaceAware);
-
-            this.dom = read(uri);
-
-            this.setNamespaceContext(this.dom);
-        } catch (Exception ioe) {
-            ioe.printStackTrace();
-        }
-
-        return this.dom;
-    }
-
-    public Document readString(String xml) {
-        try {
-            DocumentBuilder db = this.dbf.newDocumentBuilder();
-
-            InputSource is = new InputSource(new StringReader(xml));
-
-            this.dom = db.parse(is);
-        }catch (ParserConfigurationException pce) {
-            pce.printStackTrace();
-        } catch (SAXException se) {
-            se.printStackTrace();
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
+	private static final Logger _log = LogManager.getLogger(XmlDomUtils.class);
+	private DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+	private Document dom;
 
-        return this.dom;
-    }
-
-    public Element getRootElement(Document doc) {
-        return doc.getDocumentElement();
-    }
+	private XPath xpath = XPathFactory.newInstance().newXPath();
 
-    public Document createDocument() {
-        try {
-            DocumentBuilder db = this.dbf.newDocumentBuilder();
+	public XmlDomUtils() {
+	}
 
-            this.dom = db.newDocument();
-        } catch (ParserConfigurationException ex) {
-            ex.printStackTrace();
-        }
+	public Document createDocument() {
+		try {
+			DocumentBuilder db = this.dbf.newDocumentBuilder();
 
-        return this.dom;
-    }
+			this.dom = db.newDocument();
+		} catch (ParserConfigurationException ex) {
+			ex.printStackTrace();
+		}
 
-    public NodeList selectNodeList(Document doc, String tagName) {
-        return  doc.getElementsByTagName(tagName);
-    }
+		return this.dom;
+	}
 
-    public NodeList selectNodeList(Element element, String tagName) {
-        return  element.getElementsByTagName(tagName);
-    }
+	public Element createElement(Document doc, String nameElement, String data, Element parent) {
+		Element element = null;
 
-    public List<Node> selectNode(Document doc, String tagName) {
-        NodeList nodeList = doc.getElementsByTagName(tagName);
+		try {
+			if (nameElement != null) {
+				element = doc.createElement(nameElement);
+				if (data != null) {
+					element.appendChild(doc.createTextNode(data));
+				}
+				if (parent != null) {
+					parent.appendChild(element);
+				}
+			}
+		} catch (DOMException ex) {
+			_log.error(ex.getMessage(), ex);
+		}
 
-        List<Node> nodes = new ArrayList<Node>();
+		return element;
+	}
 
-        for(int i=0; i<nodeList.getLength(); i++) {
-            nodes.add(nodeList.item(i));
-        }
+	public String getAttribute(Node node, String attrName) {
+		Element element = (Element) node;
 
-        return nodes;
-    }
+		return element.getAttribute(attrName);
+	}
 
-    public List<Node> selectNode(Element element, String tagName) {
-        NodeList nodeList = element.getElementsByTagName(tagName);
+	public List<String[]> getChildValues(Document doc, String tagName) {
+		NodeList nodeList = doc.getElementsByTagName(tagName);
 
-        List<Node> nodes = new ArrayList<Node>();
+		return getChildValues(nodeList);
+	}
 
-        for(int i=0; i<nodeList.getLength(); i++) {
-            nodes.add(nodeList.item(i));
-        }
+	public List<String[]> getChildValues(Document doc, String tagName, String[] tagNames) {
+		NodeList nodeList = doc.getElementsByTagName(tagName);
 
-        return nodes;
-    }
-    
-    public Node selectUniqueNode(NodeList nodeList, String tagName, String attrName, 
-            String attrValue) {
-        Node node = null;
-        
-        for(int i=0; i<nodeList.getLength(); i++) {
-            Element element = (Element) nodeList.item(i);
-            
-            String attr = element.getAttribute(attrName);
-            
-            if(attr!=null && attr.equals(attrValue)){
-                node = element;
-            }
-        }
-        
-        return node;
-    }
+		return getChildValues(nodeList, tagNames);
+	}
 
-    public Node selectUniqueNode(Document doc, String tagName, String attrName,
-            String attrValue) {
-        NodeList nodeList = selectNodeList(doc, tagName);
+	public List<String[]> getChildValues(NodeList nodeList) {
+		List<String[]> results = new ArrayList<String[]>();
 
-        return selectUniqueNode(nodeList, tagName, attrName, attrValue);
-    }
+		for (int i = 0; i < nodeList.getLength(); i++) {
+			Element element = (Element) nodeList.item(i);
 
-    public Node selectUniqueNode(Element element, String tagName, String attrName,
-            String attrValue) {
-        NodeList nodeList = selectNodeList(element, tagName);
+			NodeList childNodes = element.getChildNodes();
 
-        return selectUniqueNode(nodeList, tagName, attrName, attrValue);
-    }
+			if (childNodes.getLength() > 0) {
+				String[] values = new String[childNodes.getLength()];
 
-    public Node selectFirstNode(Document doc, String tagName) {
-        Node node = null;
+				for (int j = 0; j < childNodes.getLength(); j++) {
+					values[j] = childNodes.item(j).getTextContent();
+				}
 
-        NodeList nodeList = doc.getElementsByTagName(tagName);
+				results.add(values);
+			}
+		}
 
-        if(nodeList.getLength()>0) {
-            node = nodeList.item(0);
-        }
+		return results;
+	}
 
-        return node;
-    }
+	public List<String[]> getChildValues(NodeList nodeList, String[] tagNames) {
+		List<String[]> results = new ArrayList<String[]>();
 
-    public Node selectFirstNode(Element element, String tagName) {
-        Node node = null;
+		int size = tagNames.length;
 
-        NodeList nodeList = element.getElementsByTagName(tagName);
+		for (int i = 0; i < nodeList.getLength(); i++) {
+			Element element = (Element) nodeList.item(i);
 
-        if(nodeList.getLength()>0) {
-            node = nodeList.item(0);
-        }
+			if (size > 0) {
+				String[] values = new String[size];
 
-        return node;
-    }
+				for (int j = 0; j < size; j++) {
+					Element child = (Element) selectFirstNode(element, tagNames[j]);
 
-    public Node selectLastNode(Document doc, String tagName) {
-        Node node = null;
+					values[j] = child.getTextContent();
+				}
 
-        NodeList nodeList = doc.getElementsByTagName(tagName);
+				results.add(values);
+			}
+		}
 
-        if(nodeList.getLength()>0) {
-            node = nodeList.item(nodeList.getLength()-1);
-        }
+		return results;
+	}
 
-        return node;
-    }
+	public Element getElementByXpath(Document doc, String path) throws Exception {
+		Element child = null;
 
-    public Node selectLastNode(Element element, String tagName) {
-        Node node = null;
+		try {
+			Node node = getNodeByXpath(doc, path);
 
-        NodeList nodeList = element.getElementsByTagName(tagName);
+			if (node == null) {
+				return null;
+			}
 
-        if(nodeList.getLength()>0) {
-            node = nodeList.item(nodeList.getLength()-1);
-        }
+			child = (Element) node;
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
 
-        return node;
-    }
+		return child;
+	}
 
-    public Node selectNodeByIndex(Document doc, String tagName, int index) {
-        Node node = null;
+	public Element getElementByXpath(Element e, String path) throws Exception {
+		Element child = null;
 
-        NodeList nodeList = doc.getElementsByTagName(tagName);
+		try {
+			Node node = getNodeByXpath(e, path);
 
-        if(nodeList.getLength()>0 && index< nodeList.getLength()) {
-            node = nodeList.item(index);
-        }
+			if (node == null) {
+				return null;
+			}
 
-        return node;
-    }
+			child = (Element) node;
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
 
-    public Node selectNodeByIndex(Element element, String tagName, int index) {
-        Node node = null;
+		return child;
+	}
 
-        NodeList nodeList = element.getElementsByTagName(tagName);
+	public String getElementContent(Element parent, String path) {
+		String content = StringPool.BLANK;
 
-        if(nodeList.getLength()>0 && index< nodeList.getLength()) {
-            node = nodeList.item(index);
-        }
+		try {
+			Element child = getElementByXpath(parent, path);
 
-        return node;
-    }
+			if (child != null) {
+				content = child.getTextContent();
+			}
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
 
-    public String getAttribute(Node node, String attrName) {
-        Element element = (Element) node;
+		return content;
+	}
 
-        return element.getAttribute(attrName);
-    }
+	public Map<String, String> getMapAttribute(Document doc, String tagName, String key, String value) {
+		Map<String, String> mapAttribute = new HashMap<String, String>();
 
-    public Map<String, String> getMapAttribute(NodeList nodeList, String key,
-            String value) {
-        Map<String, String> mapAttribute = new HashMap<String, String>();
+		NodeList nodeList = doc.getElementsByTagName(tagName);
 
-        for(int i=0; i<nodeList.getLength(); i++) {
-            Element element = (Element) nodeList.item(i);
+		if (nodeList.getLength() > 0) {
+			mapAttribute = getMapAttribute(nodeList, key, value);
+		}
 
-            String _key = element.getAttribute(key);
-            String _value = element.getAttribute(key);
+		return mapAttribute;
+	}
 
-            if(_key!=null && _value!=null) {
-                mapAttribute.put(_key, _value);
-            }
-        }
+	public Map<String, String> getMapAttribute(NodeList nodeList, String key, String value) {
+		Map<String, String> mapAttribute = new HashMap<String, String>();
 
-        return mapAttribute;
-    }
+		for (int i = 0; i < nodeList.getLength(); i++) {
+			Element element = (Element) nodeList.item(i);
 
-    public Map<String, String> getMapAttribute(Document doc, String tagName,
-            String key, String value) {
-        Map<String, String> mapAttribute = new HashMap<String, String>();
+			String _key = element.getAttribute(key);
+			String _value = element.getAttribute(key);
 
-        NodeList nodeList = doc.getElementsByTagName(tagName);
+			if (_key != null && _value != null) {
+				mapAttribute.put(_key, _value);
+			}
+		}
 
-        if(nodeList.getLength()>0) {
-            mapAttribute = getMapAttribute(nodeList, key, value);
-        }
+		return mapAttribute;
+	}
 
-        return mapAttribute;
-    }
+	public Node getNodeByXpath(Document doc, String path) throws Exception {
+		Node node = null;
 
-    public List<String[]> getChildValues(NodeList nodeList) {
-        List<String[]> results = new ArrayList<String[]>();
+		try {
+			XPathExpression xPathExpression = this.xpath.compile(path);
 
-        for(int i=0; i< nodeList.getLength(); i++) {
-            Element element = (Element) nodeList.item(i);
+			Object result = xPathExpression.evaluate(doc, XPathConstants.NODE);
 
-            NodeList childNodes = element.getChildNodes();
+			if (result == null) {
+				return null;
+			}
 
-            if(childNodes.getLength()>0) {
-                String[] values = new String[childNodes.getLength()];
+			node = (Node) result;
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
 
-                for(int j=0; j< childNodes.getLength(); j++) {
-                    values[j] = childNodes.item(j).getTextContent();
-                }
+		return node;
+	}
 
-                results.add(values);
-            }
-        }
+	public Node getNodeByXpath(Element e, String path) throws Exception {
+		Node node = null;
 
-        return results;
-    }
+		try {
 
-    public List<String[]> getChildValues(Document doc, String tagName) {
-        NodeList nodeList = doc.getElementsByTagName(tagName);
+			XPathExpression xPathExpression = this.xpath.compile(path);
 
-        return getChildValues(nodeList);
-    }
+			Object result = xPathExpression.evaluate(e, XPathConstants.NODE);
 
-    public List<String[]> getChildValues(NodeList nodeList, String[] tagNames) {
-        List<String[]> results = new ArrayList<String[]>();
+			if (result == null) {
+				return null;
+			}
 
-        int size = tagNames.length;
+			node = (Node) result;
 
-        for(int i=0; i< nodeList.getLength(); i++) {
-            Element element = (Element) nodeList.item(i);
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
 
-            if(size>0) {
-                String[] values = new String[size];
+		return node;
+	}
 
-                for(int j=0; j< size; j++) {
-                    Element child = (Element) selectFirstNode(element, tagNames[j]);
+	public NodeList getNodeListByXpath(Document doc, String path) throws Exception {
+		NodeList nodes = null;
 
-                    values[j] = child.getTextContent();
-                }
+		try {
+			XPathExpression xPathExpression = this.xpath.compile(path);
 
-                results.add(values);
-            }
-        }
+			Object result = xPathExpression.evaluate(doc, XPathConstants.NODESET);
 
-        return results;
-    }
+			if (result == null) {
+				return null;
+			}
 
-    public List<String[]> getChildValues(Document doc, String tagName,
-            String[] tagNames) {
-        NodeList nodeList = doc.getElementsByTagName(tagName);
+			nodes = (NodeList) result;
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
 
-        return getChildValues(nodeList, tagNames);
-    }
+		return nodes;
+	}
 
-    public NodeList getNodeListByXpath(Document doc, String path)
-            throws Exception {
-        NodeList nodes = null;
+	public NodeList getNodeListByXpath(Element e, String path) throws Exception {
+		NodeList nodes = null;
 
-        try {
-            XPathExpression xPathExpression = this.xpath.compile(path);
+		try {
+			XPathExpression xPathExpression = this.xpath.compile(path);
 
-            Object result = xPathExpression.evaluate(doc, XPathConstants.NODESET);
+			Object result = xPathExpression.evaluate(e, XPathConstants.NODESET);
 
-            if (result == null) {
-                return null;
-            }
+			if (result == null) {
+				return null;
+			}
 
-            nodes = (NodeList) result;
-        } catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
-        }
+			nodes = (NodeList) result;
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
 
-        return nodes;
-    }
+		return nodes;
+	}
 
-    public Node getNodeByXpath(Document doc, String path)
-            throws Exception {
-        Node node = null;
+	public Element getRootElement(Document doc) {
+		return doc.getDocumentElement();
+	}
 
-        try {
-            XPathExpression xPathExpression = this.xpath.compile(path);
+	public Document read(Blob blob) {
+		try {
+			if (Validator.isNull(blob)) {
+				return null;
+			}
 
-            Object result = xPathExpression.evaluate(doc, XPathConstants.NODE);
+			DocumentBuilder db = this.dbf.newDocumentBuilder();
 
-            if (result == null) {
-                return null;
-            }
+			InputStream inputStream = blob.getBinaryStream();
 
-            node = (Node) result;
-        } catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
-        }
+			this.dom = db.parse(inputStream);
+		} catch (ParserConfigurationException pce) {
+			pce.printStackTrace();
+		} catch (SAXException se) {
+			se.printStackTrace();
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		} catch (SQLException sqle) {
+			sqle.printStackTrace();
+		}
 
-        return node;
-    }
+		return this.dom;
+	}
 
-    public Element getElementByXpath(Document doc, String path)
-            throws Exception {
-        Element child = null;
+	public Document read(File file) {
+		try {
+			DocumentBuilder db = this.dbf.newDocumentBuilder();
 
-        try {
-            Node node = getNodeByXpath(doc, path);
+			this.dom = db.parse(file);
+		} catch (ParserConfigurationException pce) {
+			pce.printStackTrace();
+		} catch (SAXException se) {
+			se.printStackTrace();
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
 
-            if (node == null) {
-                return null;
-            }
+		return this.dom;
+	}
 
-            child = (Element) node;
-        } catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
-        }
+	public Document read(File file, boolean namespaceAware) {
+		try {
+			this.dbf.setNamespaceAware(namespaceAware);
 
+			this.dom = read(file);
 
-        return child;
-    }
+			this.setNamespaceContext(this.dom);
+		} catch (Exception ioe) {
+			ioe.printStackTrace();
+		}
 
-    public NodeList getNodeListByXpath(Element e, String path)
-            throws Exception {
-        NodeList nodes = null;
+		return this.dom;
+	}
 
-        try {
-            XPathExpression xPathExpression = this.xpath.compile(path);
+	public Document read(InputStream inputStream) {
+		try {
+			DocumentBuilder db = this.dbf.newDocumentBuilder();
 
-            Object result = xPathExpression.evaluate(e, XPathConstants.NODESET);
+			this.dom = db.parse(inputStream);
+		} catch (ParserConfigurationException pce) {
+			pce.printStackTrace();
+		} catch (SAXException se) {
+			se.printStackTrace();
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
 
-            if (result == null) {
-                return null;
-            }
+		return this.dom;
+	}
 
-            nodes = (NodeList) result;
-        } catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
-        }
+	public Document read(InputStream inputStream, boolean namespaceAware) {
+		try {
+			this.dbf.setNamespaceAware(namespaceAware);
 
-        return nodes;
-    }
+			this.dom = read(inputStream);
 
-    public Node getNodeByXpath(Element e, String path)
-            throws Exception {
-        Node node = null;
+			this.setNamespaceContext(this.dom);
+		} catch (Exception ioe) {
+			ioe.printStackTrace();
+		}
 
-        try {
+		return this.dom;
+	}
 
-            XPathExpression xPathExpression = this.xpath.compile(path);
+	public Document read(String uri) {
+		try {
+			DocumentBuilder db = this.dbf.newDocumentBuilder();
 
-            Object result = xPathExpression.evaluate(e, XPathConstants.NODE);
+			this.dom = db.parse(uri);
+		} catch (ParserConfigurationException pce) {
+			pce.printStackTrace();
+		} catch (SAXException se) {
+			se.printStackTrace();
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
 
-            if (result == null) {
-                return null;
-            }
+		return this.dom;
+	}
 
-            node = (Node) result;
+	public Document read(String uri, boolean namespaceAware) {
+		try {
+			this.dbf.setNamespaceAware(namespaceAware);
 
-        } catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
-        }
+			this.dom = read(uri);
 
-        return node;
-    }
+			this.setNamespaceContext(this.dom);
+		} catch (Exception ioe) {
+			ioe.printStackTrace();
+		}
 
-    public Element getElementByXpath(Element e, String path)
-            throws Exception {
-        Element child = null;
+		return this.dom;
+	}
 
-        try {
-            Node node = getNodeByXpath(e, path);
+	public Document readString(String xml) {
+		try {
+			DocumentBuilder db = this.dbf.newDocumentBuilder();
 
-            if (node == null) {
-                return null;
-            }
-            
-            child = (Element) node;
-        } catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
-        }
+			InputSource is = new InputSource(new StringReader(xml));
 
-        return child;
-    }
+			this.dom = db.parse(is);
+		} catch (ParserConfigurationException pce) {
+			pce.printStackTrace();
+		} catch (SAXException se) {
+			se.printStackTrace();
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
 
-    private void setNamespaceContext(Document doc)
-            throws Exception {
-        try {
-            if (this.dbf.isNamespaceAware()) {
-                this.xpath.setNamespaceContext(new NamespaceContextImpl(doc, true));
-            }
-        } catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
-        }
-    }
+		return this.dom;
+	}
 
-    public Element createElement(Document doc, String nameElement,
-            String data, Element parent) {
-        Element element = null;
+	public Node selectFirstNode(Document doc, String tagName) {
+		Node node = null;
 
-        try {
-            if (nameElement != null) {
-                element = doc.createElement(nameElement);
-                if (data != null) {
-                    element.appendChild(doc.createTextNode(data));
-                }
-                if (parent != null) {
-                    parent.appendChild(element);
-                }
-            }
-        } catch (DOMException ex) {
-            _log.error(ex.getMessage(), ex);
-        }
+		NodeList nodeList = doc.getElementsByTagName(tagName);
 
-        return element;
-    }
-    
-    public String getElementContent(Element parent, String path){
-        String content = StringPool.BLANK;
-        
-        try {
-            Element child = getElementByXpath(parent, path);
-            
-            if(child != null){
-                content = child.getTextContent();
-            }
-        } catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
-        }
-        
-        return content;
-    }
-    
-    private static final Logger _log = LogManager.getLogger(XmlDomUtils.class);
+		if (nodeList.getLength() > 0) {
+			node = nodeList.item(0);
+		}
+
+		return node;
+	}
+
+	public Node selectFirstNode(Element element, String tagName) {
+		Node node = null;
+
+		NodeList nodeList = element.getElementsByTagName(tagName);
+
+		if (nodeList.getLength() > 0) {
+			node = nodeList.item(0);
+		}
+
+		return node;
+	}
+
+	public Node selectLastNode(Document doc, String tagName) {
+		Node node = null;
+
+		NodeList nodeList = doc.getElementsByTagName(tagName);
+
+		if (nodeList.getLength() > 0) {
+			node = nodeList.item(nodeList.getLength() - 1);
+		}
+
+		return node;
+	}
+
+	public Node selectLastNode(Element element, String tagName) {
+		Node node = null;
+
+		NodeList nodeList = element.getElementsByTagName(tagName);
+
+		if (nodeList.getLength() > 0) {
+			node = nodeList.item(nodeList.getLength() - 1);
+		}
+
+		return node;
+	}
+
+	public List<Node> selectNode(Document doc, String tagName) {
+		NodeList nodeList = doc.getElementsByTagName(tagName);
+
+		List<Node> nodes = new ArrayList<Node>();
+
+		for (int i = 0; i < nodeList.getLength(); i++) {
+			nodes.add(nodeList.item(i));
+		}
+
+		return nodes;
+	}
+
+	public List<Node> selectNode(Element element, String tagName) {
+		NodeList nodeList = element.getElementsByTagName(tagName);
+
+		List<Node> nodes = new ArrayList<Node>();
+
+		for (int i = 0; i < nodeList.getLength(); i++) {
+			nodes.add(nodeList.item(i));
+		}
+
+		return nodes;
+	}
+
+	public Node selectNodeByIndex(Document doc, String tagName, int index) {
+		Node node = null;
+
+		NodeList nodeList = doc.getElementsByTagName(tagName);
+
+		if (nodeList.getLength() > 0 && index < nodeList.getLength()) {
+			node = nodeList.item(index);
+		}
+
+		return node;
+	}
+
+	public Node selectNodeByIndex(Element element, String tagName, int index) {
+		Node node = null;
+
+		NodeList nodeList = element.getElementsByTagName(tagName);
+
+		if (nodeList.getLength() > 0 && index < nodeList.getLength()) {
+			node = nodeList.item(index);
+		}
+
+		return node;
+	}
+
+	public NodeList selectNodeList(Document doc, String tagName) {
+		return doc.getElementsByTagName(tagName);
+	}
+
+	public NodeList selectNodeList(Element element, String tagName) {
+		return element.getElementsByTagName(tagName);
+	}
+
+	public Node selectUniqueNode(Document doc, String tagName, String attrName, String attrValue) {
+		NodeList nodeList = selectNodeList(doc, tagName);
+
+		return selectUniqueNode(nodeList, tagName, attrName, attrValue);
+	}
+
+	public Node selectUniqueNode(Element element, String tagName, String attrName, String attrValue) {
+		NodeList nodeList = selectNodeList(element, tagName);
+
+		return selectUniqueNode(nodeList, tagName, attrName, attrValue);
+	}
+
+	public Node selectUniqueNode(NodeList nodeList, String tagName, String attrName, String attrValue) {
+		Node node = null;
+
+		for (int i = 0; i < nodeList.getLength(); i++) {
+			Element element = (Element) nodeList.item(i);
+
+			String attr = element.getAttribute(attrName);
+
+			if (attr != null && attr.equals(attrValue)) {
+				node = element;
+			}
+		}
+
+		return node;
+	}
+
+	private void setNamespaceContext(Document doc) throws Exception {
+		try {
+			if (this.dbf.isNamespaceAware()) {
+				this.xpath.setNamespaceContext(new NamespaceContextImpl(doc, true));
+			}
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+	}
 }

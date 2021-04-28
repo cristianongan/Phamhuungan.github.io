@@ -19,44 +19,41 @@ import com.evotek.qlns.model.User;
  */
 public interface DocumentService {
 
-    public List<String> getDepartment();
+	public void delete(Document document);
 
-    public int getDocumentCountAdv(String documentContent,
-            String documentNumber, Long documentType, String department,
-            Date fromDate, Date toDate);
+	public void deleteAll(List<Document> documents);
 
-    public List<Document> getDocumentListAdv(String documentContent,
-            String documentNumber, Long documentType, String department,
-            Date fromDate, Date toDate, int firstResult, int maxResult,
-            String orderByColumn, String orderByType);
+	public List<String> getDepartment();
 
-    public int getDocumentCountBasic(String textSearch);
+	public int getDocumentByIdListCount(List<Long> idList);
 
-    public int getDocumentByIdListCount(List<Long> idList);
+	public int getDocumentCountAdv(String documentContent, String documentNumber, Long documentType, String department,
+			Date fromDate, Date toDate);
 
-    public List<Document> getDocumentListByIdList(List<Long> idList, int firstResult,
-            int maxResult, String orderByColumn, String orderByType);
+	public int getDocumentCountBasic(String textSearch);
 
-    public List<Document> getDocumentListBasic(String textSearch, int firstResult,
-            int maxResult, String orderByColumn, String orderByType);
+	public List<Document> getDocumentListAdv(String documentContent, String documentNumber, Long documentType,
+			String department, Date fromDate, Date toDate, int firstResult, int maxResult, String orderByColumn,
+			String orderByType);
 
-    public void delete(Document document);
+	public List<Document> getDocumentListBasic(String textSearch, int firstResult, int maxResult, String orderByColumn,
+			String orderByType);
 
-    public void deleteAll(List<Document> documents);
+	public List<Document> getDocumentListByIdList(List<Long> idList, int firstResult, int maxResult,
+			String orderByColumn, String orderByType);
 
-    public List<FileEntry> saveMedia(User user, List<Media> medium, Document document);
+	public List<FileEntry> getListFileEntrys(Long documentId);
 
-    public List<FileEntry> removeFileEntry(List<FileEntry> deleteFiles);
+	public boolean isExisted(String documentNumber);
 
-    public void saveOrUpdate(Document document);
+	public boolean isExisted(String documentNumber, String content, Long documentId);
 
-    public List<FileEntry> getListFileEntrys(Long documentId);
+	public List<FileEntry> removeFileEntry(List<FileEntry> deleteFiles);
 
 //    public List<FileEntry> getListFileEntryById(List<Long> listId);
 
-    public boolean isExisted(String documentNumber, String content, 
-            Long documentId);
+	public List<FileEntry> saveMedia(User user, List<Media> medium, Document document);
 
-    public boolean isExisted(String documentNumber);
+	public void saveOrUpdate(Document document);
 
 }

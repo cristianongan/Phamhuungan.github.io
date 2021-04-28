@@ -25,157 +25,155 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "work_process")
 public class WorkProcess implements Serializable {
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "work_process_id")
-    private Long workProcessId;
-    @Column(name = "user_id")
-    private Long userId;
-    @Column(name = "user_name")
-    private String userName;
-    @Column(name = "create_date")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createDate;
-    @Column(name = "modified_date")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date modifiedDate;
-    @Column(name = "staff_id")
-    private Long staffId;
-    @Column(name = "from_date")
-    @Temporal(TemporalType.DATE)
-    private Date fromDate;
-    @Column(name = "to_date")
-    @Temporal(TemporalType.DATE)
-    private Date toDate;
-    @Column(name = "company")
-    private String company;
-    @Column(name = "job_title")
-    private String jobTitle;
-    @Column(name = "description")
-    private String description;
+	private static final long serialVersionUID = 1L;
+	@Column(name = "company")
+	private String company;
+	@Column(name = "create_date")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date createDate;
+	@Column(name = "description")
+	private String description;
+	@Column(name = "from_date")
+	@Temporal(TemporalType.DATE)
+	private Date fromDate;
+	@Column(name = "job_title")
+	private String jobTitle;
+	@Column(name = "modified_date")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date modifiedDate;
+	@Column(name = "staff_id")
+	private Long staffId;
+	@Column(name = "to_date")
+	@Temporal(TemporalType.DATE)
+	private Date toDate;
+	@Column(name = "user_id")
+	private Long userId;
+	@Column(name = "user_name")
+	private String userName;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "work_process_id")
+	private Long workProcessId;
 
-    public WorkProcess() {
-    }
+	public WorkProcess() {
+	}
 
-    public WorkProcess(Long workProcessId) {
-        this.workProcessId = workProcessId;
-    }
+	public WorkProcess(Long workProcessId) {
+		this.workProcessId = workProcessId;
+	}
 
-    public Long getWorkProcessId() {
-        return this.workProcessId;
-    }
+	@Override
+	public boolean equals(Object object) {
+		// TODO: Warning - this method won't work in the case the id fields are not set
+		if (!(object instanceof WorkProcess)) {
+			return false;
+		}
+		WorkProcess other = (WorkProcess) object;
+		if ((this.workProcessId == null && other.workProcessId != null)
+				|| (this.workProcessId != null && !this.workProcessId.equals(other.workProcessId))) {
+			return false;
+		}
+		return true;
+	}
 
-    public void setWorkProcessId(Long workProcessId) {
-        this.workProcessId = workProcessId;
-    }
+	public String getCompany() {
+		return this.company;
+	}
 
-    public Long getUserId() {
-        return this.userId;
-    }
+	public Date getCreateDate() {
+		return this.createDate;
+	}
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
+	public String getDescription() {
+		return this.description;
+	}
 
-    public String getUserName() {
-        return this.userName;
-    }
+	public Date getFromDate() {
+		return this.fromDate;
+	}
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
+	public String getJobTitle() {
+		return this.jobTitle;
+	}
 
-    public Date getCreateDate() {
-        return this.createDate;
-    }
+	public Date getModifiedDate() {
+		return this.modifiedDate;
+	}
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
+	public Long getStaffId() {
+		return this.staffId;
+	}
 
-    public Date getModifiedDate() {
-        return this.modifiedDate;
-    }
+	public Date getToDate() {
+		return this.toDate;
+	}
 
-    public void setModifiedDate(Date modifiedDate) {
-        this.modifiedDate = modifiedDate;
-    }
+	public Long getUserId() {
+		return this.userId;
+	}
 
-    public Long getStaffId() {
-        return this.staffId;
-    }
+	public String getUserName() {
+		return this.userName;
+	}
 
-    public void setStaffId(Long staffId) {
-        this.staffId = staffId;
-    }
+	public Long getWorkProcessId() {
+		return this.workProcessId;
+	}
 
-    public Date getFromDate() {
-        return this.fromDate;
-    }
+	@Override
+	public int hashCode() {
+		int hash = 0;
+		hash += (this.workProcessId != null ? this.workProcessId.hashCode() : 0);
+		return hash;
+	}
 
-    public void setFromDate(Date fromDate) {
-        this.fromDate = fromDate;
-    }
+	public void setCompany(String company) {
+		this.company = company;
+	}
 
-    public Date getToDate() {
-        return this.toDate;
-    }
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
 
-    public void setToDate(Date toDate) {
-        this.toDate = toDate;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public String getCompany() {
-        return this.company;
-    }
+	public void setFromDate(Date fromDate) {
+		this.fromDate = fromDate;
+	}
 
-    public void setCompany(String company) {
-        this.company = company;
-    }
+	public void setJobTitle(String jobTitle) {
+		this.jobTitle = jobTitle;
+	}
 
-    public String getJobTitle() {
-        return this.jobTitle;
-    }
+	public void setModifiedDate(Date modifiedDate) {
+		this.modifiedDate = modifiedDate;
+	}
 
-    public void setJobTitle(String jobTitle) {
-        this.jobTitle = jobTitle;
-    }
+	public void setStaffId(Long staffId) {
+		this.staffId = staffId;
+	}
 
-    public String getDescription() {
-        return this.description;
-    }
+	public void setToDate(Date toDate) {
+		this.toDate = toDate;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (this.workProcessId != null ? this.workProcessId.hashCode() : 0);
-        return hash;
-    }
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
 
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof WorkProcess)) {
-            return false;
-        }
-        WorkProcess other = (WorkProcess) object;
-        if ((this.workProcessId == null 
-                && other.workProcessId != null) 
-                || (this.workProcessId != null 
-                && !this.workProcessId.equals(other.workProcessId))) {
-            return false;
-        }
-        return true;
-    }
+	public void setWorkProcessId(Long workProcessId) {
+		this.workProcessId = workProcessId;
+	}
 
-    @Override
-    public String toString() {
-        return "com.evotek.qlns.model.WorkProcess[ workProcessId=" + this.workProcessId + " ]";
-    }
-    
+	@Override
+	public String toString() {
+		return "com.evotek.qlns.model.WorkProcess[ workProcessId=" + this.workProcessId + " ]";
+	}
+
 }

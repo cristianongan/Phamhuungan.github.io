@@ -1,7 +1,3 @@
-/*
- * Copyright 2013 Viettel Telecom. All rights reserved.
- * VIETTEL PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- */
 package com.evotek.qlns.controller;
 
 import java.io.Serializable;
@@ -11,7 +7,8 @@ import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.zkoss.spring.SpringUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
@@ -37,140 +34,122 @@ import com.evotek.qlns.util.key.ZkKeys;
  *
  * @author hungnt81
  */
-public class AssignRoleController extends BasicController<Window>
-        implements Serializable {
 
-    private Window winAssignRole;
-    private Window winParent;
+@Controller
+public class AssignRoleController extends BasicController<Window> implements Serializable {
 
-    private Listbox gridRole;
+	private static final long serialVersionUID = -3001693200983070558L;
 
-    private boolean isAdmin;
+	private static final Logger _log = LogManager.getLogger(AssignRoleController.class);
 
-    private User user;
+	@Autowired
+	private  UserService userService;
 
-    private Set<Role> excludeRoles;
+	private Set<Role> excludeRoles;
 
-    @Override
-    public void doBeforeComposeChildren(Window comp) throws Exception {
-        super.doBeforeComposeChildren(comp);
+	private Listbox gridRole;
 
-        this.winAssignRole = comp;
-    }
+	private boolean isAdmin;
 
-    @Override
-    public void doAfterCompose(Window comp) throws Exception {
-        super.doAfterCompose(comp);
+	private User user;
 
-        //init
-        initData();
-    }
+	private Window winAssignRole;
 
-    public void initData() {
-        try {
-            this.winParent = (Window) this.arg.get(Constants.PARENT_WINDOW);
+	private Window winParent;
 
-            this.user = (User) this.arg.get(Constants.OBJECT);
+	@Override
+	public void doAfterCompose(Window comp) throws Exception {
+		super.doAfterCompose(comp);
 
-            this.excludeRoles = (Set<Role>) this.arg.get(Constants.SECOND_OBJECT);
+		// init
+		initData();
+	}
 
-            this.isAdmin = this.getUserWorkspace().isAdministrator();
+	@Override
+	public void doBeforeComposeChildren(Window comp) throws Exception {
+		super.doBeforeComposeChildren(comp);
 
-            this.onSearch();
+		this.winAssignRole = comp;
+	}
 
-            
-        } catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
-        }
+	private List<Role> getRoleSelected() {
+		List<Role> roles = new ArrayList<Role>();
 
-    }
+		for (Listitem item : this.gridRole.getSelectedItems()) {
+			Role role = (Role) item.getAttribute("data");
 
-    public void onSearch() {
-        List<Role> roles = this.userService.getRoles(this.isAdmin);
+			if (Validator.isNotNull(role)) {
+				roles.add(role);
+			}
+		}
 
-        roles = (List<Role>) CollectionUtil.subtract(roles, this.excludeRoles);
-        
-        this.gridRole.setModel(new SimpleListModel<Role>(roles));
-        this.gridRole.setItemRenderer(new UserRoleRender());
-        
-        this.gridRole.setMultiple(true);
-    }
+		return roles;
+	}
 
-    public void onClick$btnCancel() {
-        this.winAssignRole.detach();
-    }
+	public void initData() {
+		try {
+			this.winParent = (Window) this.arg.get(Constants.PARENT_WINDOW);
 
-    public void onClick$btnAdd() {
-        final List<Role> roles = this.getRoleSelected();
+			this.user = (User) this.arg.get(Constants.OBJECT);
 
-        if (Validator.isNull(roles)) {
-            Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_SELECT_RECORD),
-                    Labels.getLabel(LanguageKeys.ERROR), Messagebox.OK,
-                    Messagebox.EXCLAMATION);
-        } else {
-            Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_ADD),
-                    Labels.getLabel(LanguageKeys.MESSAGE_INFOR_ADD),
-                    Messagebox.OK | Messagebox.CANCEL,
-                    Messagebox.QUESTION,
-                    new EventListener<Event>() {
+			this.excludeRoles = (Set<Role>) this.arg.get(Constants.SECOND_OBJECT);
 
-                        @Override
+			this.isAdmin = this.getUserWorkspace().isAdministrator();
+
+			this.onSearch();
+
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+
+	}
+
+	public void onClick$btnAdd() {
+		final List<Role> roles = this.getRoleSelected();
+
+		if (Validator.isNull(roles)) {
+			Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_SELECT_RECORD), Labels.getLabel(LanguageKeys.ERROR),
+					Messagebox.OK, Messagebox.EXCLAMATION);
+		} else {
+			Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_ADD),
+					Labels.getLabel(LanguageKeys.MESSAGE_INFOR_ADD), Messagebox.OK | Messagebox.CANCEL,
+					Messagebox.QUESTION, new EventListener<Event>() {
+
+						@Override
 						public void onEvent(Event e) throws Exception {
-                            if (Messagebox.ON_OK.equals(e.getName())) {
-                                try {
-                                    AssignRoleController.this.userService.assignRoleToUser(AssignRoleController.this.user, roles,
-                                            AssignRoleController.this.isAdmin);
+							if (Messagebox.ON_OK.equals(e.getName())) {
+								try {
+									AssignRoleController.this.userService.assignRoleToUser(
+											AssignRoleController.this.user, roles, AssignRoleController.this.isAdmin);
 
-                                    ComponentUtil.createSuccessMessageBox(
-                                            LanguageKeys.MESSAGE_UPDATE_SUCCESS);
+									ComponentUtil.createSuccessMessageBox(LanguageKeys.MESSAGE_UPDATE_SUCCESS);
 
-                                    AssignRoleController.this.winAssignRole.detach();
+									AssignRoleController.this.winAssignRole.detach();
 
-                                    Events.sendEvent(ZkKeys.ON_LOAD_DATA,
-                                            AssignRoleController.this.winParent, null);
-                                } catch (Exception ex) {
-                                    _log.error(ex.getMessage(), ex);
+									Events.sendEvent(ZkKeys.ON_LOAD_DATA, AssignRoleController.this.winParent, null);
+								} catch (Exception ex) {
+									_log.error(ex.getMessage(), ex);
 
-                                    Messagebox.show(Labels.getLabel(
-                                            LanguageKeys.MESSAGE_ACTIVATE_FAIL));
-                                }
-                            }
-                        }
-                    });
-        }
-    }
+									Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_ACTIVATE_FAIL));
+								}
+							}
+						}
+					});
+		}
+	}
 
+	public void onClick$btnCancel() {
+		this.winAssignRole.detach();
+	}
 
-    private List<Role> getRoleSelected(){
-        List<Role> roles = new ArrayList<Role>();
+	public void onSearch() {
+		List<Role> roles = this.userService.getRoles(this.isAdmin);
 
-        for (Listitem item : this.gridRole.getSelectedItems()) {
-            Role role = (Role) item.getAttribute("data");
+		roles = (List<Role>) CollectionUtil.subtract(roles, this.excludeRoles);
 
-            if(Validator.isNotNull(role)){
-                roles.add(role);
-            }
-        }
+		this.gridRole.setModel(new SimpleListModel<Role>(roles));
+		this.gridRole.setItemRenderer(new UserRoleRender());
 
-        return roles;
-    }
-    //get set service
-
-    public UserService getUserService() {
-        if (this.userService == null) {
-            this.userService = (UserService)
-                    SpringUtil.getBean("userService");
-            setUserService(this.userService);
-        }
-        return this.userService;
-    }
-
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
-
-    private transient UserService userService;
-    
-    private static final Logger _log =
-            LogManager.getLogger(AssignRoleController.class);
+		this.gridRole.setMultiple(true);
+	}
 }

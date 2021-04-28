@@ -16,70 +16,70 @@ import javax.persistence.TemporalType;
 @Table(name = "user_login")
 public class UserLogin implements Serializable {
 
-    private Boolean success;
-    private String userName;
-    private String ip;
-    private Long userLoginId;
-    private Date loginTime;
+	private String ip;
+	private Date loginTime;
+	private Boolean success;
+	private Long userLoginId;
+	private String userName;
 
-    @Column(name = "success", length = 1)
-    public Boolean getSuccess() {
-        return this.success;
-    }
+	public UserLogin() {
+	}
 
-    public void setSuccess(Boolean success) {
-        this.success = success;
-    }
+	public UserLogin(Long userLoginId) {
+		this.userLoginId = userLoginId;
+	}
 
-    @Column(name = "user_name", length = 75)
-    public String getUserName() {
-        return this.userName;
-    }
+	public UserLogin(String userName, String ip) {
+		this.userName = userName;
+		this.ip = ip;
+	}
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
+	@Column(name = "ip", length = 75)
+	public String getIp() {
+		return this.ip;
+	}
 
-    @Column(name = "ip", length = 75)
-    public String getIp() {
-        return this.ip;
-    }
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "login_time", length = 7)
+	public Date getLoginTime() {
+		return this.loginTime;
+	}
 
-    public void setIp(String ip) {
-        this.ip = ip;
-    }
+	@Column(name = "success", length = 1)
+	public Boolean getSuccess() {
+		return this.success;
+	}
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_login_id", unique = true, nullable = false, precision = 22, scale = 0)
-    public Long getUserLoginId() {
-        return this.userLoginId;
-    }
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "user_login_id", unique = true, nullable = false, precision = 22, scale = 0)
+	public Long getUserLoginId() {
+		return this.userLoginId;
+	}
 
-    public void setUserLoginId(Long userLoginId) {
-        this.userLoginId = userLoginId;
-    }
+	@Column(name = "user_name", length = 75)
+	public String getUserName() {
+		return this.userName;
+	}
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "login_time", length = 7)
-    public Date getLoginTime() {
-        return this.loginTime;
-    }
+	public void setIp(String ip) {
+		this.ip = ip;
+	}
 
-    public void setLoginTime(Date loginTime) {
-        this.loginTime = loginTime;
-    }
+	public void setLoginTime(Date loginTime) {
+		this.loginTime = loginTime;
+	}
 
-    public UserLogin() {
-    }
+	public void setSuccess(Boolean success) {
+		this.success = success;
+	}
 
-    public UserLogin(Long userLoginId) {
-        this.userLoginId = userLoginId;
-    }
+	public void setUserLoginId(Long userLoginId) {
+		this.userLoginId = userLoginId;
+	}
 
-    public UserLogin(String userName, String ip) {
-        this.userName = userName;
-        this.ip = ip;
-    }
-    
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
 }

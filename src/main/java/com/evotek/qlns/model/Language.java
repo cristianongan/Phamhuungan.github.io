@@ -14,69 +14,69 @@ import org.apache.commons.lang.builder.ToStringBuilder;
  */
 public class Language implements Serializable {
 
-    private static final long serialVersionUID = -3863392491172579819L;
-    private int id;
-    private String lanLocale;
-    private String lanText;
+	private static final long serialVersionUID = -3863392491172579819L;
+	private int id;
+	private String lanLocale;
+	private String lanText;
 
-    public Language() {
-    }
+	public Language() {
+	}
 
-    public Language(int id, String lanLocale, String lanText) {
-        this.id = id;
-        this.lanLocale = lanLocale;
-        this.lanText = lanText;
-    }
+	public Language(int id, String lanLocale, String lanText) {
+		this.id = id;
+		this.lanLocale = lanLocale;
+		this.lanText = lanText;
+	}
 
-    public void setId(int id) {
-        this.id = id;
-    }
+	public boolean equals(Language language) {
+		return getId() == language.getId();
+	}
 
-    public int getId() {
-        return this.id;
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
 
-    public void setLanLocale(String lanLocale) {
-        this.lanLocale = lanLocale;
-    }
+		if (obj instanceof Language) {
+			Language language = (Language) obj;
+			return equals(language);
+		}
 
-    public String getLanLocale() {
-        return this.lanLocale;
-    }
+		return false;
+	}
 
-    public void setLanText(String lanText) {
-        this.lanText = lanText;
-    }
+	public int getId() {
+		return this.id;
+	}
 
-    public String getLanText() {
-        return this.lanText;
-    }
+	public String getLanLocale() {
+		return this.lanLocale;
+	}
 
-    @Override
-    public int hashCode() {
-        return Long.valueOf(getId()).hashCode();
-    }
+	public String getLanText() {
+		return this.lanText;
+	}
 
-    public boolean equals(Language language) {
-        return getId() == language.getId();
-    }
+	@Override
+	public int hashCode() {
+		return Long.valueOf(getId()).hashCode();
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-        if (obj instanceof Language) {
-            Language language = (Language) obj;
-            return equals(language);
-        }
+	public void setLanLocale(String lanLocale) {
+		this.lanLocale = lanLocale;
+	}
 
-        return false;
-    }
+	public void setLanText(String lanText) {
+		this.lanText = lanText;
+	}
 
-    @Override
+	@Override
 	public String toString() {
-        return new ToStringBuilder(this).append("id", getId()).toString();
-    }
+		return new ToStringBuilder(this).append("id", getId()).toString();
+	}
 }

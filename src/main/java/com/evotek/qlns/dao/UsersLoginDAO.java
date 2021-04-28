@@ -15,12 +15,12 @@ import com.evotek.qlns.model.UserLogin;
  */
 public interface UsersLoginDAO {
 
-    public int countByIp(String ip);
+	public int countByIp(String ip);
 
-    public List<UserLogin> getUsersLogin(String ip);
+	public void delete(List<UserLogin> userLogins);
 
-    public void delete(List<UserLogin> userLogins);
+	public List<UserLogin> getUsersLogin(String ip);
 
-    public void saveOrUpdate(UserLogin loginLog);
+	public void saveOrUpdate(UserLogin loginLog);
 
 }

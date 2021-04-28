@@ -11,7 +11,8 @@ import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.zkoss.spring.SpringUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
@@ -42,235 +43,205 @@ import com.evotek.qlns.util.key.LanguageKeys;
 
 /**
  *
- * @author manhnn1
+ * @author LinhLH
  */
+@Controller
 public class RolePermissionController extends BasicController<Window> {
 
-    private Window winPermission;
+	private static final long serialVersionUID = 3639420784672994103L;
 
-    private Button btnSave;
-    
-    private Role role;
-    
-    private Set<Group> groups;
-    
-    private Tree treeMenu;
-    private TreeBasicModel treeModel;
-    
-    private Listbox searchResult;
-    private Category categorySelected;
-    
-    private Map<Long, List<Group>> mapGroups = new HashMap<Long, List<Group>>();
+	private static final Logger _log = LogManager.getLogger(RolePermissionController.class);
 
-    @Override
-    public void doBeforeComposeChildren(Window comp) throws Exception {
-        super.doBeforeComposeChildren(comp);
+	@Autowired
+	private RoleService roleService;
 
-        this.winPermission = comp;
-    }
+	@Autowired
+	private CategoryService categoryService;
 
-    @Override
-    public void doAfterCompose(Window comp) throws Exception {
-        super.doAfterCompose(comp);
+	private Button btnSave;
 
-        //init data
-        this.initData();
-    }
+	private Category categorySelected;
 
-    public void initData() throws Exception {
+	private Set<Group> groups;
+	private Map<Long, List<Group>> mapGroups = new HashMap<Long, List<Group>>();
+
+	private Role role;
+
+	private Listbox searchResult;
+
+	private Tree treeMenu;
+
+	private TreeBasicModel treeModel;
+
+	private Window winPermission;
+
+	/**
+	 * Hàm tạo cây menu
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	private CategoryTreeNode _buildCategoryTree() throws Exception {
+		// tạo cây menu không có gốc
+		CategoryTreeNode menu = new CategoryTreeNode(null, new CategoryTreeNode[] {});
+
+		menu.setOpen(true);
+
+		try {
+			Long categoryId = null;
+			// Lấy danh sách các menu category
+			List<Category> roots = this.categoryService.getCategoryByParentId(null);
+
+			for (Category root : roots) {
+				categoryId = root.getCategoryId();
+				// Lấy danh sách các menu item ứng với mỗi menu category
+				List<Category> childs = this.categoryService.getCategoryByParentId(categoryId);
+				if (!childs.isEmpty()) {
+					// Tạo cây con với gốc là menu category
+					CategoryTreeNode item = new CategoryTreeNode(root, new CategoryTreeNode[] {});
+
+					item.setOpen(true);
+
+					// Gắn các menu item vào cây con vừa tạo
+					for (Category child : childs) {
+						item.add(new CategoryTreeNode(child));
+
+						this.mapGroups.put(child.getCategoryId(),
+								this.roleService.getGroupByCategoryId(child.getCategoryId()));
+					}
+
+					// gắn cấy menu category vào cây menu
+					menu.add(item);
+				} else {
+					menu.add(new CategoryTreeNode(root));
+				}
+
+				this.mapGroups.put(categoryId, this.roleService.getGroupByCategoryId(categoryId));
+			}
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+
+		return menu;
+	}
+
+	@Override
+	public void doAfterCompose(Window comp) throws Exception {
+		super.doAfterCompose(comp);
+
+		// init data
+		this.initData();
+	}
+
+	@Override
+	public void doBeforeComposeChildren(Window comp) throws Exception {
+		super.doBeforeComposeChildren(comp);
+
+		this.winPermission = comp;
+	}
+
+	public void initData() throws Exception {
 //        winTemp = (Window) arg.get(Constants.PARENT_WINDOW);
 
-        this.role = (Role) this.arg.get(Constants.EDIT_OBJECT);
+		this.role = (Role) this.arg.get(Constants.EDIT_OBJECT);
 
-        this.groups = this.role.getGroups();
-        
-        this.searchResult.addEventListener(Events.ON_SELECT, new EventListener<Event>() {
-            @Override
+		this.groups = this.role.getGroups();
+
+		this.searchResult.addEventListener(Events.ON_SELECT, new EventListener<Event>() {
+			@Override
 			public void onEvent(Event t) throws Exception {
-                RolePermissionController.this.btnSave.setVisible(true);
-            }
-        });
-    }
+				RolePermissionController.this.btnSave.setVisible(true);
+			}
+		});
+	}
 
-    public void onCreate$treeMenu() throws Exception {
-        try {
-            this.treeModel = new TreeBasicModel(_buildCategoryTree());
+	public void onClick$btnCancel() {
+		this.winPermission.detach();
+	}
 
-            this.treeModel.setMultiple(true);
+	public void onClick$btnSave() {
+		try {
+			List<Group> allGroups = this.mapGroups.get(this.categorySelected.getCategoryId());
 
-            this.treeMenu.setItemRenderer(new TreeitemRenderer<CategoryTreeNode>() {
+			Set<Listitem> listitems = this.searchResult.getSelectedItems();
 
-                @Override
+			for (Listitem item : listitems) {
+				if (item instanceof Listitem) {
+					Group group = (Group) item.getValue();
+
+					this.groups.add(group);
+
+					allGroups.remove(group);
+				}
+			}
+
+			this.groups.removeAll(allGroups);
+
+			this.role.setGroups(this.groups);
+
+			this.roleService.saveOrUpdateRole(this.role);
+
+			this.btnSave.setVisible(false);
+
+			ComponentUtil.createSuccessMessageBox(LanguageKeys.MESSAGE_UPDATE_SUCCESS);
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+
+			Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_UPDATE_FAIL));
+		}
+	}
+
+	public void onCreate$treeMenu() throws Exception {
+		try {
+			this.treeModel = new TreeBasicModel(_buildCategoryTree());
+
+			this.treeModel.setMultiple(true);
+
+			this.treeMenu.setItemRenderer(new TreeitemRenderer<CategoryTreeNode>() {
+
+				@Override
 				public void render(Treeitem item, CategoryTreeNode t, int i) throws Exception {
-                    final Category category = t.getData();
+					final Category category = t.getData();
 
-                    //tree cell
-                    Treerow dataRow = new Treerow();
+					// tree cell
+					Treerow dataRow = new Treerow();
 
-                    dataRow.setParent(item);
+					dataRow.setParent(item);
 
-                    item.setValue(t);
-                    item.setOpen(t.isOpen());
-                    item.setAttribute("data", category);
+					item.setValue(t);
+					item.setOpen(t.isOpen());
+					item.setAttribute("data", category);
 
-                    dataRow.appendChild(ComponentUtil.createTreeCell(
-                            Labels.getLabel(category.getLanguageKey())));//Ten menu
-                }
-            });
-            
-            this.searchResult.setItemRenderer(new AssignPermissionRender(this.groups));
-            this.searchResult.setModel(new ListModelList<Group>());
-            this.searchResult.setMultiple(true);
-            
-            this.treeMenu.setModel(this.treeModel);
-            
-            this.treeMenu.addEventListener(Events.ON_SELECT, new EventListener<Event>() {
-                @Override
+					dataRow.appendChild(ComponentUtil.createTreeCell(Labels.getLabel(category.getLanguageKey())));// Ten
+																													// menu
+				}
+			});
+
+			this.searchResult.setItemRenderer(new AssignPermissionRender(this.groups));
+			this.searchResult.setModel(new ListModelList<Group>());
+			this.searchResult.setMultiple(true);
+
+			this.treeMenu.setModel(this.treeModel);
+
+			this.treeMenu.addEventListener(Events.ON_SELECT, new EventListener<Event>() {
+				@Override
 				public void onEvent(Event event) throws Exception {
-                    RolePermissionController.this.categorySelected = ((CategoryTreeNode) 
-                            RolePermissionController.this.treeMenu.getSelectedItem().getValue()).getData();
-                    
-                    RolePermissionController.this.searchResult.setModel(
-                            new SimpleModelList<Group>(
-                                    RolePermissionController.this.mapGroups.get(RolePermissionController.this.categorySelected.getCategoryId())));
-                    
-                    RolePermissionController.this.searchResult.invalidate();
-                    
-                    RolePermissionController.this.btnSave.setVisible(false);
-                }
-            });
-        } catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
-        }
+					RolePermissionController.this.categorySelected = ((CategoryTreeNode) RolePermissionController.this.treeMenu
+							.getSelectedItem().getValue()).getData();
 
-    }
+					RolePermissionController.this.searchResult
+							.setModel(new SimpleModelList<Group>(RolePermissionController.this.mapGroups
+									.get(RolePermissionController.this.categorySelected.getCategoryId())));
 
-    /**
-     * Hàm tạo cây menu
-     * @return
-     * @throws Exception
-     */
-    private CategoryTreeNode _buildCategoryTree()
-            throws Exception{
-        //tạo cây menu không có gốc
-        CategoryTreeNode menu = new CategoryTreeNode(null,
-                new CategoryTreeNode[]{});
+					RolePermissionController.this.searchResult.invalidate();
 
-        menu.setOpen(true);
+					RolePermissionController.this.btnSave.setVisible(false);
+				}
+			});
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
 
-        try{
-            Long categoryId = null;
-            //Lấy danh sách các menu category
-            List<Category> roots = this.categoryService.getCategoryByParentId(null);
-            
+	}
 
-            for(Category root: roots){
-                categoryId = root.getCategoryId();
-                //Lấy danh sách các menu item ứng với mỗi menu category
-                List<Category> childs = this.categoryService.getCategoryByParentId(
-                        categoryId);
-                if (!childs.isEmpty()) {
-                    //Tạo cây con với gốc là menu category
-                    CategoryTreeNode item = new CategoryTreeNode(root,
-                            new CategoryTreeNode[]{});
-
-                    item.setOpen(true);
-
-                    //Gắn các menu item vào cây con vừa tạo
-                    for (Category child : childs) {
-                        item.add(new CategoryTreeNode(child));
-
-                        this.mapGroups.put(child.getCategoryId(), this.roleService.getGroupByCategoryId(
-                                child.getCategoryId()));
-                    }
-
-                    //gắn cấy menu category vào cây menu
-                    menu.add(item);
-                } else {
-                    menu.add(new CategoryTreeNode(root));
-                }
-                
-                this.mapGroups.put(categoryId, this.roleService.getGroupByCategoryId(
-                        categoryId));
-            }
-        }catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
-        }
-
-        return menu;
-    }
-
-    public void onClick$btnCancel() {
-        this.winPermission.detach();
-    }
-
-    public void onClick$btnSave() {
-        try{
-            List<Group> allGroups = this.mapGroups.get(this.categorySelected.getCategoryId());
-
-            Set<Listitem> listitems = this.searchResult.getSelectedItems();
-
-            for(Listitem item: listitems){
-                if(item instanceof Listitem){
-                    Group group = (Group) item.getValue();
-
-                    this.groups.add(group);
-                    
-                    allGroups.remove(group);
-                }
-            }
-
-            this.groups.removeAll(allGroups);
-            
-            this.role.setGroups(this.groups);
-
-            this.roleService.saveOrUpdateRole(this.role);
-
-            this.btnSave.setVisible(false);
-            
-            ComponentUtil.createSuccessMessageBox(LanguageKeys.MESSAGE_UPDATE_SUCCESS);
-        }catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
-
-            Messagebox.show(Labels.getLabel(
-                    LanguageKeys.MESSAGE_UPDATE_FAIL));
-        }
-    }
-
-    //service
-    public RoleService getRoleService() {
-        if (this.roleService == null) {
-            this.roleService = (RoleService)
-                    SpringUtil.getBean("roleService");
-            
-            setRoleService(this.roleService);
-        }
-
-        return this.roleService;
-    }
-
-    public void setRoleService(RoleService roleService) {
-        this.roleService = roleService;
-    }
-
-    public CategoryService getCategoryService() {
-        if (this.categoryService == null) {
-            this.categoryService = (CategoryService)
-                    SpringUtil.getBean("categoryService");
-
-            setCategoryService(this.categoryService);
-        }
-
-        return this.categoryService;
-    }
-
-    public void setCategoryService(CategoryService categoryService) {
-        this.categoryService = categoryService;
-    }
-
-    private transient CategoryService categoryService;
-    private transient RoleService roleService;
-
-    private static final Logger _log =
-            LogManager.getLogger(RolePermissionController.class);
 }

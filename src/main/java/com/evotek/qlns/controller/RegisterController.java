@@ -12,7 +12,8 @@ import java.util.regex.Pattern;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.zkoss.spring.SpringUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Captcha;
@@ -33,339 +34,309 @@ import com.evotek.qlns.util.key.Values;
 
 /**
  *
- * @author My PC
+ * @author LinhLH
  */
-public class RegisterController extends BasicController<Div>
-        implements Serializable {
+@Controller
+public class RegisterController extends BasicController<Div> implements Serializable {
 
-    private static final long serialVersionUID = 1368611560951L;
-    
-    private Div registerWin;
-    
-    private Captcha cpaRegister;
+	private static final long serialVersionUID = 1368611560951L;
 
-    private Textbox tbUserName;
-    private Textbox tbEmail;
-    private Textbox tbPassword;
-    private Textbox tbConfirmPassword;
-    private Textbox captchaRegister;
-    
-    private Html htmlSuccess;
-    private Html htmlError;
-    
-    private Checkbox chkAccept;
-    
-    private User user;
+	private static final Logger _log = LogManager.getLogger(RegisterController.class);
 
-    @Override
-    public void doBeforeComposeChildren(Div comp) throws Exception {
-        super.doBeforeComposeChildren(comp);
-        
-        this.registerWin = comp;
-    }
+	@Autowired
+	private UserService userService;
 
-    @Override
-    public void doAfterCompose(Div comp) throws Exception {
-        super.doAfterCompose(comp); 
-    }
-    
-    public void onClick$btnReCaptchaRegister(){
-        this.cpaRegister.randomValue();
-    }
-    
-    public void onOK() {
-        String userName = GetterUtil.getString(this.tbUserName.getValue());
-        String email = GetterUtil.getString(this.tbEmail.getValue());
-        String password = GetterUtil.getString(this.tbPassword.getValue());
-        String confirmPassword = GetterUtil.getString(this.tbConfirmPassword.getValue());
-        String captcha = this.captchaRegister.getValue();
-        
-        if(!_validateUserLimited()){
-            
-        } else if(_validate(userName, email, password, confirmPassword, captcha)){
-            this.user = new User();
-            
-            this.user.setCreateDate(new Date());
-            this.user.setStatus(Values.STATUS_NOT_READY);
-            this.user.setUserName(userName);
-            this.user.setModifiedDate(new Date());
-            this.user.setEmail(email);
-            
-            this.saveUser(this.user);
-        }
-    }
-    
-    private void saveUser(User user) {
-        try {
-            this.userService.saveOrUpdate(user);
+	public enum Result {
+		ERROR, SUCCESS, WARNING
+	}
 
-            //set default password
-            this.userService.createPassword(user);
+	private static final int pwdMaxlength = StaticUtil.PASSWORD_POLICY_MAX_LENGTH;
 
-            showResultMsg(Result.SUCCESS);
-        } catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
+	private static final int pwdMinlength = StaticUtil.PASSWORD_POLICY_MIN_LENGTH;
 
-            showResultMsg(Result.ERROR);
-        }
-        
-        this.cpaRegister.randomValue();
-    }
-    
-    private boolean _validateUserLimited(){
-        return true;
-    }
-    
-    private boolean _validate(String userName, String email, String password, 
-            String confirmPassword, String captcha) {
-        if(!_validateUserName(userName)){
+	private Textbox captchaRegister;
+	private Checkbox chkAccept;
+	private Captcha cpaRegister;
 
-            return false;
-        }
+	private Html htmlError;
+	private Html htmlSuccess;
 
-        if(!_validateEmail(email)){
-            return false;
-        }
-        
-        if(!this._validatePassword(password, confirmPassword)){
-            return false;
-        }
-        
-        if(!this.cpaRegister.getValue().equals(captcha)){
-            this.captchaRegister.setErrorMessage(
-                    Labels.getLabel(LanguageKeys.CAPTCHA_NOT_MATCH));
-            
+	private Div registerWin;
+
+	private Textbox tbConfirmPassword;
+
+	private Textbox tbEmail;
+
+	private Textbox tbPassword;
+
+	private Textbox tbUserName;
+
+	private User user;
+
+	private Pattern _getPasswordPatter(boolean forceLowerLetter, boolean forceUpperLetter, boolean forceForceDigit,
+			boolean forceForceSymbol, String symbolRange) {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append(StringPool.OPEN_PARENTHESIS);
+
+		if (forceLowerLetter) {
+			sb.append("(?=.*[a-z])");
+		}
+
+		if (forceUpperLetter) {
+			sb.append("(?=.*[A-Z])");
+		}
+
+		if (forceForceDigit) {
+			sb.append("(?=.*\\d)");
+		}
+
+		if (forceForceSymbol && symbolRange.length() > 0) {
+			sb.append("(?=.*[");
+			sb.append(symbolRange);
+			sb.append("])");
+		}
+
+		sb.append(StringPool.PERIOD);
+		sb.append(StringPool.OPEN_CURLY_BRACE);
+		sb.append(pwdMinlength);
+		sb.append(StringPool.COMMA);
+		sb.append(pwdMaxlength);
+		sb.append(StringPool.CLOSE_CURLY_BRACE);
+		sb.append(StringPool.CLOSE_PARENTHESIS);
+
+		return Pattern.compile(sb.toString());
+	}
+
+	private boolean _validate(String userName, String email, String password, String confirmPassword, String captcha) {
+		if (!_validateUserName(userName)) {
+
+			return false;
+		}
+
+		if (!_validateEmail(email)) {
+			return false;
+		}
+
+		if (!this._validatePassword(password, confirmPassword)) {
+			return false;
+		}
+
+		if (!this.cpaRegister.getValue().equals(captcha)) {
+			this.captchaRegister.setErrorMessage(Labels.getLabel(LanguageKeys.CAPTCHA_NOT_MATCH));
+
 //            cpaRegister.randomValue();
-            
-            return false;
-        }
-        
-        if(!this.chkAccept.isChecked()){
-            ComponentUtil.createErrorMessageBox(
-                    LanguageKeys.YOU_MUST_ACCEPT_USER_AGREEMENT);
-            
-            return false;
-        }
-        
-        return true;
-    }
-    
-    private boolean _validateUserName(String userName){
-        //Ten dang nhap
-        if (Validator.isNull(userName)) {
-            this.tbUserName.setErrorMessage(Values.getRequiredInputMsg(
-                    Labels.getLabel(LanguageKeys.USER_LOGIN_NAME)));
 
-            return false;
-        }
+			return false;
+		}
 
-        //check length tên
-        if (userName.length() > Values.SHORT_LENGTH) {
-            this.tbUserName.setErrorMessage(Values.getMaxLengthInvalidMsg(
-                    Labels.getLabel(LanguageKeys.USER_LOGIN_NAME),
-                    Values.SHORT_LENGTH));
+		if (!this.chkAccept.isChecked()) {
+			ComponentUtil.createErrorMessageBox(LanguageKeys.YOU_MUST_ACCEPT_USER_AGREEMENT);
 
-            return false;
-        }
+			return false;
+		}
 
-        if (userName.length() < Values.MIN_NAME_LENGTH) {
-            this.tbUserName.setErrorMessage(Values.getMinLengthInvalidMsg(
-                    Labels.getLabel(LanguageKeys.USER_LOGIN_NAME),
-                    Values.MIN_NAME_LENGTH));
+		return true;
+	}
 
-            return false;
-        }
+	private boolean _validateEmail(String email) {
+		// email
+		if (Validator.isNull(email)) {
+			this.tbEmail.setErrorMessage(Values.getRequiredInputMsg(Labels.getLabel(LanguageKeys.EMAIL)));
 
-        if(!Validator.isVariableName(userName)){
-            this.tbUserName.setErrorMessage(Values.getFormatInvalidMsg(
-                    Labels.getLabel(LanguageKeys.USER_LOGIN_NAME),
-                    Values.USER_NAME_PATTERN));
+			return false;
+		}
 
-            return false;
-        }
+		if (email.length() > Values.SHORT_LENGTH) {
+			this.tbEmail.setErrorMessage(
+					Values.getMaxLengthInvalidMsg(Labels.getLabel(LanguageKeys.EMAIL), Values.SHORT_LENGTH));
 
-        if(this.userService.isUserNameExits(null, userName)){
-            this.tbUserName.setErrorMessage(Values.getDuplicateMsg(
-                    Labels.getLabel(LanguageKeys.USER_LOGIN_NAME)));
+			return false;
+		}
 
-            return false;
-        }
+		if (!Validator.isEmailAddress(email)) {
+			this.tbEmail.setErrorMessage(Values.getFormatInvalidMsg(Labels.getLabel(LanguageKeys.EMAIL)));
 
-        return true;
-    }
-    
-    private boolean _validateEmail(String email){
-        //email
-        if (Validator.isNull(email)) {
-            this.tbEmail.setErrorMessage(Values.getRequiredInputMsg(
-                    Labels.getLabel(LanguageKeys.EMAIL)));
+			return false;
+		}
 
-            return false;
-        }
+		if (this.userService.isEmailExits(null, email)) {
+			this.tbEmail.setErrorMessage(Values.getDuplicateMsg(Labels.getLabel(LanguageKeys.EMAIL)));
 
-        if (email.length() > Values.SHORT_LENGTH) {
-            this.tbEmail.setErrorMessage(Values.getMaxLengthInvalidMsg(
-                    Labels.getLabel(LanguageKeys.EMAIL), Values.SHORT_LENGTH));
+			return false;
+		}
 
-            return false;
-        }
+		return true;
+	}
 
-        if(!Validator.isEmailAddress(email)){
-            this.tbEmail.setErrorMessage(Values.getFormatInvalidMsg(
-                    Labels.getLabel(LanguageKeys.EMAIL)));
+	private boolean _validatePassword(String password, String confirmPassword) {
+		if (Validator.isNull(password)) {
+			this.tbPassword.setErrorMessage(Values.getRequiredInputMsg(Labels.getLabel(LanguageKeys.PASSWORD)));
 
-            return false;
-        }
+			return false;
+		}
 
-        if(this.userService.isEmailExits(null, email)){
-            this.tbEmail.setErrorMessage(Values.getDuplicateMsg(
-                    Labels.getLabel(LanguageKeys.EMAIL)));
+		if (!confirmPassword.equals(password)) {
+			this.tbConfirmPassword
+					.setErrorMessage(Values.getNotSameMsg(Labels.getLabel(LanguageKeys.CONFIRM_PASSWORD)));
 
-            return false;
-        }
+			return false;
+		}
 
-        return true;
-    }
+		if (password.length() < pwdMinlength) {
+			this.tbPassword.setErrorMessage(
+					Values.getMinLengthInvalidMsg(Labels.getLabel(LanguageKeys.PASSWORD), pwdMinlength));
 
-    private boolean _validatePassword(String password, String confirmPassword) {
-        if (Validator.isNull(password)) {
-            this.tbPassword.setErrorMessage(Values.getRequiredInputMsg(
-                    Labels.getLabel(LanguageKeys.PASSWORD)));
+			return false;
+		}
 
-            return false;
-        }
+		if (password.length() > pwdMaxlength) {
+			this.tbPassword.setErrorMessage(
+					Values.getMaxLengthInvalidMsg(Labels.getLabel(LanguageKeys.PASSWORD), pwdMaxlength));
 
-        if (!confirmPassword.equals(password)) {
-            this.tbConfirmPassword.setErrorMessage(Values.getNotSameMsg(
-                    Labels.getLabel(LanguageKeys.CONFIRM_PASSWORD)));
+			return false;
+		}
 
-            return false;
-        }
+		boolean forceLowerLetter = StaticUtil.PASSWORD_POLICY_FORCE_LOWERCASE_LETTER;
+		boolean forceUpperLetter = StaticUtil.PASSWORD_POLICY_FORCE_UPPERCASE_LETTER;
+		boolean forceForceDigit = StaticUtil.PASSWORD_POLICY_FORCE_DIGIT;
+		boolean forceForceSymbol = StaticUtil.PASSWORD_POLICY_FORCE_SYMBOL;
+		String symbolRange = StaticUtil.PASSWORD_POLICY_CHARSET_SYMBOL;
 
-        if (password.length() < pwdMinlength) {
-            this.tbPassword.setErrorMessage(Values.getMinLengthInvalidMsg(
-                    Labels.getLabel(LanguageKeys.PASSWORD), pwdMinlength));
+		Matcher matcher = this
+				._getPasswordPatter(forceLowerLetter, forceUpperLetter, forceForceDigit, forceForceSymbol, symbolRange)
+				.matcher(password);
 
-            return false;
-        }
+		if (!matcher.matches()) {
+			this.tbPassword.setErrorMessage(Values.getPwdNotMatch(Labels.getLabel(LanguageKeys.PASSWORD),
+					forceLowerLetter, forceUpperLetter, forceForceDigit, forceForceSymbol, symbolRange));
 
-        if (password.length() > pwdMaxlength) {
-            this.tbPassword.setErrorMessage(Values.getMaxLengthInvalidMsg(
-                    Labels.getLabel(LanguageKeys.PASSWORD), pwdMaxlength));
+			return false;
+		}
 
-            return false;
-        }
+		return true;
+	}
 
-        boolean forceLowerLetter = StaticUtil.PASSWORD_POLICY_FORCE_LOWERCASE_LETTER;
-        boolean forceUpperLetter = StaticUtil.PASSWORD_POLICY_FORCE_UPPERCASE_LETTER;
-        boolean forceForceDigit = StaticUtil.PASSWORD_POLICY_FORCE_DIGIT;
-        boolean forceForceSymbol = StaticUtil.PASSWORD_POLICY_FORCE_SYMBOL;
-        String symbolRange = StaticUtil.PASSWORD_POLICY_CHARSET_SYMBOL;
+	private boolean _validateUserLimited() {
+		return true;
+	}
 
-        Matcher matcher = this._getPasswordPatter(forceLowerLetter,
-                forceUpperLetter, forceForceDigit, forceForceSymbol,
-                symbolRange).matcher(password);
+	private boolean _validateUserName(String userName) {
+		// Ten dang nhap
+		if (Validator.isNull(userName)) {
+			this.tbUserName.setErrorMessage(Values.getRequiredInputMsg(Labels.getLabel(LanguageKeys.USER_LOGIN_NAME)));
 
-        if (!matcher.matches()) {
-            this.tbPassword.setErrorMessage(Values.getPwdNotMatch(
-                    Labels.getLabel(LanguageKeys.PASSWORD), forceLowerLetter,
-                    forceUpperLetter, forceForceDigit, forceForceSymbol,
-                    symbolRange));
+			return false;
+		}
 
-            return false;
-        }
+		// check length tên
+		if (userName.length() > Values.SHORT_LENGTH) {
+			this.tbUserName.setErrorMessage(
+					Values.getMaxLengthInvalidMsg(Labels.getLabel(LanguageKeys.USER_LOGIN_NAME), Values.SHORT_LENGTH));
 
-        return true;
-    }
+			return false;
+		}
 
-    private Pattern _getPasswordPatter(boolean forceLowerLetter,
-            boolean forceUpperLetter, boolean forceForceDigit,
-            boolean forceForceSymbol, String symbolRange) {
-        StringBuilder sb = new StringBuilder();
+		if (userName.length() < Values.MIN_NAME_LENGTH) {
+			this.tbUserName.setErrorMessage(Values.getMinLengthInvalidMsg(Labels.getLabel(LanguageKeys.USER_LOGIN_NAME),
+					Values.MIN_NAME_LENGTH));
 
-        sb.append(StringPool.OPEN_PARENTHESIS);
+			return false;
+		}
 
-        if (forceLowerLetter) {
-            sb.append("(?=.*[a-z])");
-        }
+		if (!Validator.isVariableName(userName)) {
+			this.tbUserName.setErrorMessage(Values.getFormatInvalidMsg(Labels.getLabel(LanguageKeys.USER_LOGIN_NAME),
+					Values.USER_NAME_PATTERN));
 
-        if (forceUpperLetter) {
-            sb.append("(?=.*[A-Z])");
-        }
+			return false;
+		}
 
-        if (forceForceDigit) {
-            sb.append("(?=.*\\d)");
-        }
+		if (this.userService.isUserNameExits(null, userName)) {
+			this.tbUserName.setErrorMessage(Values.getDuplicateMsg(Labels.getLabel(LanguageKeys.USER_LOGIN_NAME)));
 
-        if (forceForceSymbol && symbolRange.length() > 0) {
-            sb.append("(?=.*[");
-            sb.append(symbolRange);
-            sb.append("])");
-        }
+			return false;
+		}
 
-        sb.append(StringPool.PERIOD);
-        sb.append(StringPool.OPEN_CURLY_BRACE);
-        sb.append(pwdMinlength);
-        sb.append(StringPool.COMMA);
-        sb.append(pwdMaxlength);
-        sb.append(StringPool.CLOSE_CURLY_BRACE);
-        sb.append(StringPool.CLOSE_PARENTHESIS);
+		return true;
+	}
 
-        return Pattern.compile(sb.toString());
-    }
-    
-    private void showResultMsg(Result result){
-        
-        switch(result){
-            case SUCCESS:
-                this.htmlSuccess.setContent(Labels.getLabel(
-                        LanguageKeys.REGISTER_SUCCESS, new Object[]{this.user.getEmail()}));
-                
-                Clients.evalJavaScript("showRegisterResult('.register-success')");
-                
-                break;
-            case ERROR:
-                this.htmlError.setContent(Labels.getLabel(LanguageKeys.REGISTER_FAIL));
-                
-                Clients.evalJavaScript("showRegisterResult('.register-fail')");
-                
-                break;
-            default:
-                this.htmlError.setContent(Labels.getLabel(LanguageKeys.REGISTER_LIMITED));
-                
-                Clients.evalJavaScript("showRegisterResult('.register-fail')");
-                
-                break;
-        }
-    }
-    // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-    // ++++++++++++++++ Setter/Getter ++++++++++++++++++ //
-    // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-    public UserService getUserService() {
-        if (this.userService == null) {
-            this.userService = (UserService)
-                    SpringUtil.getBean("userService");
-            setUserService(this.userService);
-        }
+	@Override
+	public void doAfterCompose(Div comp) throws Exception {
+		super.doAfterCompose(comp);
+	}
 
-        return this.userService;
-    }
+	@Override
+	public void doBeforeComposeChildren(Div comp) throws Exception {
+		super.doBeforeComposeChildren(comp);
 
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
+		this.registerWin = comp;
+	}
 
-    private transient UserService userService;
-    
-    private static final int pwdMinlength  = StaticUtil.PASSWORD_POLICY_MIN_LENGTH;
-    private static final int pwdMaxlength  = StaticUtil.PASSWORD_POLICY_MAX_LENGTH;
-    
-    public enum Result {
-        SUCCESS,
-        ERROR,
-        WARNING
-    }
-    
-    private static final Logger _log =
-            LogManager.getLogger(RegisterController.class);
+	public void onClick$btnReCaptchaRegister() {
+		this.cpaRegister.randomValue();
+	}
+
+	public void onOK() {
+		String userName = GetterUtil.getString(this.tbUserName.getValue());
+		String email = GetterUtil.getString(this.tbEmail.getValue());
+		String password = GetterUtil.getString(this.tbPassword.getValue());
+		String confirmPassword = GetterUtil.getString(this.tbConfirmPassword.getValue());
+		String captcha = this.captchaRegister.getValue();
+
+		if (!_validateUserLimited()) {
+
+		} else if (_validate(userName, email, password, confirmPassword, captcha)) {
+			this.user = new User();
+
+			this.user.setCreateDate(new Date());
+			this.user.setStatus(Values.STATUS_NOT_READY);
+			this.user.setUserName(userName);
+			this.user.setModifiedDate(new Date());
+			this.user.setEmail(email);
+
+			this.saveUser(this.user);
+		}
+	}
+
+	private void saveUser(User user) {
+		try {
+			this.userService.saveOrUpdate(user);
+
+			// set default password
+			this.userService.createPassword(user);
+
+			showResultMsg(Result.SUCCESS);
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+
+			showResultMsg(Result.ERROR);
+		}
+
+		this.cpaRegister.randomValue();
+	}
+
+	private void showResultMsg(Result result) {
+
+		switch (result) {
+		case SUCCESS:
+			this.htmlSuccess
+					.setContent(Labels.getLabel(LanguageKeys.REGISTER_SUCCESS, new Object[] { this.user.getEmail() }));
+
+			Clients.evalJavaScript("showRegisterResult('.register-success')");
+
+			break;
+		case ERROR:
+			this.htmlError.setContent(Labels.getLabel(LanguageKeys.REGISTER_FAIL));
+
+			Clients.evalJavaScript("showRegisterResult('.register-fail')");
+
+			break;
+		default:
+			this.htmlError.setContent(Labels.getLabel(LanguageKeys.REGISTER_LIMITED));
+
+			Clients.evalJavaScript("showRegisterResult('.register-fail')");
+
+			break;
+		}
+	}
 }

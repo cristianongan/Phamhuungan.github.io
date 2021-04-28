@@ -13,7 +13,8 @@ import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.zkoss.spring.SpringUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Event;
@@ -34,158 +35,139 @@ import com.evotek.qlns.util.Validator;
 import com.evotek.qlns.util.key.Constants;
 import com.evotek.qlns.util.key.LanguageKeys;
 
-
 /**
  *
- * @author hungnt81
+ * @author LinhLH
  */
-public class UserRoleController extends BasicController<Window>
-        implements Serializable {
+@Controller
+public class UserRoleController extends BasicController<Window> implements Serializable {
 
-    private Window winUserRole;
-    private Div winParent;
+	private static final long serialVersionUID = -8558183729803388458L;
 
-    private Listbox gridRole;
+	private static final Logger _log = LogManager.getLogger(UserRoleController.class);
 
-    private User user;
+	private static final String ADD_ROLE_PAGE = "/html/pages/manager_user/add_role.zul";
 
-    private boolean isAdmin;
+	@Autowired
+	private UserService userService;
 
-    private Set<Role> _roles;
+	private Set<Role> _roles;
 
-    @Override
-    public void doBeforeComposeChildren(Window comp) throws Exception {
-        super.doBeforeComposeChildren(comp);
+	private Listbox gridRole;
 
-        this.winUserRole = comp;
-    }
+	private boolean isAdmin;
 
+	private User user;
 
-    @Override
-    public void doAfterCompose(Window comp) throws Exception {
-        super.doAfterCompose(comp);
+	private Div winParent;
 
-        //init data
-        this.initData();
-        
-    }
+	private Window winUserRole;
 
-    public void initData() throws Exception {
-        try {
-            this.winParent = (Div) this.arg.get(Constants.PARENT_WINDOW);
+	@Override
+	public void doAfterCompose(Window comp) throws Exception {
+		super.doAfterCompose(comp);
 
-            this.user = (User) this.arg.get(Constants.OBJECT);
+		// init data
+		this.initData();
 
-            this.winUserRole.setTitle(Labels.getLabel(
-                    LanguageKeys.ROLE_ASSIGNED_TO_USER,
-                    new Object[]{this.user.getUserName()}));
+	}
 
-            this.isAdmin = this.getUserWorkspace().isAdministrator();
+	@Override
+	public void doBeforeComposeChildren(Window comp) throws Exception {
+		super.doBeforeComposeChildren(comp);
 
-            this.onSearch();
-        } catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
-        }
-    }
+		this.winUserRole = comp;
+	}
 
-    public void onClick$btnCancel() {
-        this.winUserRole.detach();
-    }
+	private List<Role> getRoleSelected() {
+		List<Role> roles = new ArrayList<Role>();
 
-    public void onSearch() {
-        if (this.user != null) {
-            this._roles = this.user.getRoles();
+		for (Listitem item : this.gridRole.getSelectedItems()) {
+			Role role = (Role) item.getAttribute("data");
 
-            this.gridRole.setItemRenderer(new UserRoleRender());
-            this.gridRole.setModel(new SimpleModelList<Role>(this._roles));
-            this.gridRole.setMultiple(true);
-        }
-    }
+			if (Validator.isNotNull(role)) {
+				roles.add(role);
+			}
+		}
 
-    public void onClick$btnAdd() {
-        Map<String, Object> parameters = new HashMap<String, Object>();
+		return roles;
+	}
 
-        parameters.put(Constants.PARENT_WINDOW, this.winUserRole);
-        parameters.put(Constants.OBJECT, this.user);
-        parameters.put(Constants.SECOND_OBJECT, this._roles);
+	public void initData() throws Exception {
+		try {
+			this.winParent = (Div) this.arg.get(Constants.PARENT_WINDOW);
 
-        Window win = (Window) Executions.createComponents(ADD_ROLE_PAGE,
-                this.winUserRole, parameters);
+			this.user = (User) this.arg.get(Constants.OBJECT);
 
-        win.doModal();
-    }
+			this.winUserRole.setTitle(
+					Labels.getLabel(LanguageKeys.ROLE_ASSIGNED_TO_USER, new Object[] { this.user.getUserName() }));
 
-    public void onClick$btnDelete() {
-        final List<Role> roles = this.getRoleSelected();
+			this.isAdmin = this.getUserWorkspace().isAdministrator();
 
-        if (Validator.isNull(roles)) {
-            Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_SELECT_RECORD),
-                    Labels.getLabel(LanguageKeys.ERROR), Messagebox.OK,
-                    Messagebox.EXCLAMATION);
-        } else {
-            Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_DELETE),
-                    Labels.getLabel(LanguageKeys.MESSAGE_INFOR_DELETE),
-                    Messagebox.OK | Messagebox.CANCEL,
-                    Messagebox.QUESTION,
-                    new EventListener<Event>() {
+			this.onSearch();
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+	}
 
-                        @Override
+	public void onClick$btnAdd() {
+		Map<String, Object> parameters = new HashMap<String, Object>();
+
+		parameters.put(Constants.PARENT_WINDOW, this.winUserRole);
+		parameters.put(Constants.OBJECT, this.user);
+		parameters.put(Constants.SECOND_OBJECT, this._roles);
+
+		Window win = (Window) Executions.createComponents(ADD_ROLE_PAGE, this.winUserRole, parameters);
+
+		win.doModal();
+	}
+
+	public void onClick$btnCancel() {
+		this.winUserRole.detach();
+	}
+
+	public void onClick$btnDelete() {
+		final List<Role> roles = this.getRoleSelected();
+
+		if (Validator.isNull(roles)) {
+			Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_SELECT_RECORD), Labels.getLabel(LanguageKeys.ERROR),
+					Messagebox.OK, Messagebox.EXCLAMATION);
+		} else {
+			Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_DELETE),
+					Labels.getLabel(LanguageKeys.MESSAGE_INFOR_DELETE), Messagebox.OK | Messagebox.CANCEL,
+					Messagebox.QUESTION, new EventListener<Event>() {
+
+						@Override
 						public void onEvent(Event e) throws Exception {
-                            if (Messagebox.ON_OK.equals(e.getName())) {
-                                try {
-                                    UserRoleController.this.userService.delete(roles, UserRoleController.this.user);
+							if (Messagebox.ON_OK.equals(e.getName())) {
+								try {
+									UserRoleController.this.userService.delete(roles, UserRoleController.this.user);
 
-                                    ComponentUtil.createSuccessMessageBox(
-                                                 LanguageKeys.MESSAGE_DELETE_SUCCESS);
+									ComponentUtil.createSuccessMessageBox(LanguageKeys.MESSAGE_DELETE_SUCCESS);
 
-                                    onSearch();
-                                } catch (Exception ex) {
-                                    _log.error(ex.getMessage(), ex);
+									onSearch();
+								} catch (Exception ex) {
+									_log.error(ex.getMessage(), ex);
 
-                                    Messagebox.show(Labels.getLabel(
-                                            LanguageKeys.MESSAGE_DELETE_FAIL));
-                                }
-                            }
-                        }
-                    });
-        }
-    }
+									Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_DELETE_FAIL));
+								}
+							}
+						}
+					});
+		}
+	}
 
-    public void onLoadData(Event event) throws Exception{
-        this.onSearch();
-    }
+	public void onLoadData(Event event) throws Exception {
+		this.onSearch();
+	}
 
-    private List<Role> getRoleSelected(){
-        List<Role> roles = new ArrayList<Role>();
+	public void onSearch() {
+		if (this.user != null) {
+			this._roles = this.user.getRoles();
 
-        for (Listitem item : this.gridRole.getSelectedItems()) {
-            Role role = (Role) item.getAttribute("data");
-
-            if(Validator.isNotNull(role)){
-                roles.add(role);
-            }
-        }
-
-        return roles;
-    }
-//get set service
-    public UserService getUserService() {
-        if (this.userService == null) {
-            this.userService = (UserService)
-                    SpringUtil.getBean("userService");
-            setUserService(this.userService);
-        }
-        return this.userService;
-    }
-
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
-
-    private transient UserService userService;
-
-    private static final String ADD_ROLE_PAGE =
-            "/html/pages/manager_user/add_role.zul";
-
-    private static final Logger _log = LogManager.getLogger(UserRoleController.class);
+			this.gridRole.setItemRenderer(new UserRoleRender());
+			this.gridRole.setModel(new SimpleModelList<Role>(this._roles));
+			this.gridRole.setMultiple(true);
+		}
+	}
 }

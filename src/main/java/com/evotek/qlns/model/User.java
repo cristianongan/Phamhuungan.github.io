@@ -26,305 +26,300 @@ import org.hibernate.annotations.FetchMode;
 @Table(name = "user_")
 public class User implements Serializable {
 
-    private Long userId;
-    private String description;
-    private String mobile;
-    private Date modifiedDate;
-    private Long status;
-    private String phone;
-    private String lastName;
-    private String middleName;
-    private String firstName;
-    private String userName;
-    private Long gender;
-    private Date dateOfBirth;
-    private String email;
-    private Date createDate;
-    private String password;
-    private String birthPlace;
-    private String address;
-    private Long deptId;
-    private Set<Role> roles = new HashSet<Role>(0);
-    private String fullName;
-    private String deptName;
-    private String verificationCode;
+	private String address;
+	private String birthPlace;
+	private Date createDate;
+	private Date dateOfBirth;
+	private Long deptId;
+	private String deptName;
+	private String description;
+	private String email;
+	private String firstName;
+	private String fullName;
+	private Long gender;
+	private String lastName;
+	private String middleName;
+	private String mobile;
+	private Date modifiedDate;
+	private String password;
+	private String phone;
+	private Set<Role> roles = new HashSet<Role>(0);
+	private Long status;
+	private Long userId;
+	private String userName;
+	private String verificationCode;
 
-    @Column(name = "dept_id", precision = 22, scale = 0)
-    public Long getDeptId() {
-        return this.deptId;
-    }
+	public User() {
+	}
 
-    public void setDeptId(Long deptId) {
-        this.deptId = deptId;
-    }
+	public User(Long userId) {
+		this.userId = userId;
+	}
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id", unique = true, nullable = false, precision = 22, scale = 0)
-    public Long getUserId() {
-        return this.userId;
-    }
+	public User(Long userId, String userName) {
+		this.userId = userId;
+		this.userName = userName;
+	}
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
+	public User(String userName) {
+		this.userName = userName;
+	}
 
-    @Column(name = "description", length = 1000)
-    public String getDescription() {
-        return this.description;
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
 
-    @Column(name = "phone", length = 20)
-    public String getPhone() {
-        return this.phone;
-    }
+		final User other = (User) obj;
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
+		if (this.userId != other.userId && (this.userId == null || !this.userId.equals(other.userId))) {
+			return false;
+		}
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "modified_date", length = 7)
-    public Date getModifiedDate() {
-        return this.modifiedDate;
-    }
+		return true;
+	}
 
-    public void setModifiedDate(Date modifiedDate) {
-        this.modifiedDate = modifiedDate;
-    }
+	@Column(name = "address", length = 200)
+	public String getAddress() {
+		return this.address;
+	}
 
-    @Column(name = "status", nullable = false, precision = 22, scale = 0)
-    public Long getStatus() {
-        return this.status;
-    }
+	@Column(name = "birth_place", length = 200)
+	public String getBirthPlace() {
+		return this.birthPlace;
+	}
 
-    public void setStatus(Long status) {
-        this.status = status;
-    }
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "create_date", length = 7)
+	public Date getCreateDate() {
+		return this.createDate;
+	}
 
-    @Column(name = "mobile", length = 20)
-    public String getMobile() {
-        return this.mobile;
-    }
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "date_of_birth", length = 7)
+	public Date getDateOfBirth() {
+		return this.dateOfBirth;
+	}
 
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
-    }
+	@Column(name = "dept_id", precision = 22, scale = 0)
+	public Long getDeptId() {
+		return this.deptId;
+	}
 
-    @Column(name = "last_name", length = 200)
-    public String getLastName() {
-        return this.lastName;
-    }
+	@Transient
+	public String getDeptName() {
+		return this.deptName;
+	}
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
+	@Column(name = "description", length = 1000)
+	public String getDescription() {
+		return this.description;
+	}
 
-    @Column(name = "first_name", length = 200)
-    public String getFirstName() {
-        return this.firstName;
-    }
+	@Column(name = "email", length = 100)
+	public String getEmail() {
+		return this.email;
+	}
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
+	@Column(name = "first_name", length = 200)
+	public String getFirstName() {
+		return this.firstName;
+	}
 
-    @Column(name = "middle_name", length = 200)
-    public String getMiddleName() {
-        return this.middleName;
-    }
+	@Transient
+	public String getFullName() {
+		if (this.firstName != null) {
+			this.fullName = this.firstName + " ";
+		}
 
-    public void setMiddleName(String middleName) {
-        this.middleName = middleName;
-    }
+		if (this.middleName != null) {
+			this.fullName = this.fullName + this.middleName + " ";
+		}
 
-    @Column(name = "user_name", unique = true, length = 200)
-    public String getUserName() {
-        return this.userName;
-    }
+		if (this.lastName != null) {
+			this.fullName = this.fullName + this.lastName;
+		}
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
+		if (this.fullName != null) {
+			this.fullName = this.fullName.trim();
+		}
 
-    @Column(name = "gender", precision = 22, scale = 0)
-    public Long getGender() {
-        return this.gender;
-    }
+		return this.fullName;
+	}
 
-    public void setGender(Long gender) {
-        this.gender = gender;
-    }
+	@Column(name = "gender", precision = 22, scale = 0)
+	public Long getGender() {
+		return this.gender;
+	}
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "date_of_birth", length = 7)
-    public Date getDateOfBirth() {
-        return this.dateOfBirth;
-    }
+	@Column(name = "last_name", length = 200)
+	public String getLastName() {
+		return this.lastName;
+	}
 
-    public void setDateOfBirth(Date dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
+	@Column(name = "middle_name", length = 200)
+	public String getMiddleName() {
+		return this.middleName;
+	}
 
-    @Column(name = "email", length = 100)
-    public String getEmail() {
-        return this.email;
-    }
+	@Column(name = "mobile", length = 20)
+	public String getMobile() {
+		return this.mobile;
+	}
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "modified_date", length = 7)
+	public Date getModifiedDate() {
+		return this.modifiedDate;
+	}
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "create_date", length = 7)
-    public Date getCreateDate() {
-        return this.createDate;
-    }
+	@Column(name = "password", length = 255)
+	public String getPassword() {
+		return this.password;
+	}
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
+	@Column(name = "phone", length = 20)
+	public String getPhone() {
+		return this.phone;
+	}
 
-    @Column(name = "password", length = 255)
-    public String getPassword() {
-        return this.password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    @Column(name = "birth_place", length = 200)
-    public String getBirthPlace() {
-        return this.birthPlace;
-    }
-
-    public void setBirthPlace(String birthPlace) {
-        this.birthPlace = birthPlace;
-    }
-
-    @Column(name = "address", length = 200)
-    public String getAddress() {
-        return this.address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_role", joinColumns = {
-        @JoinColumn(name = "user_id", nullable = false, updatable = false)
-    }, inverseJoinColumns = {
-        @JoinColumn(name = "role_id", nullable = false, updatable = false)
-    })
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "user_role", joinColumns = {
+			@JoinColumn(name = "user_id", nullable = false, updatable = false) }, inverseJoinColumns = {
+					@JoinColumn(name = "role_id", nullable = false, updatable = false) })
 //    @LazyCollection(LazyCollectionOption.EXTRA)
-    @Fetch(FetchMode.SELECT)
-    public Set<Role> getRoles() {
-        return this.roles;
-    }
+	@Fetch(FetchMode.SELECT)
+	public Set<Role> getRoles() {
+		return this.roles;
+	}
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
+	@Column(name = "status", nullable = false, precision = 22, scale = 0)
+	public Long getStatus() {
+		return this.status;
+	}
 
-    @Column(name = "verification_code", length = 255)
-    public String getVerificationCode() {
-        return this.verificationCode;
-    }
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "user_id", unique = true, nullable = false, precision = 22, scale = 0)
+	public Long getUserId() {
+		return this.userId;
+	}
 
-    public void setVerificationCode(String verificationCode) {
-        this.verificationCode = verificationCode;
-    }
-    
-    
-    @Transient
-    public boolean isActive() {
-        if (this.status == null) {
-            return false;
-        }
+	@Column(name = "user_name", unique = true, length = 200)
+	public String getUserName() {
+		return this.userName;
+	}
 
-        return !this.status.equals(0L);
-    }
+	@Column(name = "verification_code", length = 255)
+	public String getVerificationCode() {
+		return this.verificationCode;
+	}
 
-    @Transient
-    public String getDeptName() {
-        return this.deptName;
-    }
+	@Override
+	public int hashCode() {
+		int hash = 5;
+		return hash;
+	}
 
-    public void setDeptName(String deptName) {
-        this.deptName = deptName;
-    }
+	@Transient
+	public boolean isActive() {
+		if (this.status == null) {
+			return false;
+		}
 
-    @Transient
-    public String getFullName() {
-        if(this.firstName!=null){
-            this.fullName = this.firstName + " ";
-        }
+		return !this.status.equals(0L);
+	}
 
-        if(this.middleName != null){
-            this.fullName = this.fullName + this.middleName + " ";
-        }
+	public void setAddress(String address) {
+		this.address = address;
+	}
 
-        if(this.lastName != null){
-            this.fullName = this.fullName + this.lastName;
-        }
+	public void setBirthPlace(String birthPlace) {
+		this.birthPlace = birthPlace;
+	}
 
-        if(this.fullName != null){
-            this.fullName = this.fullName.trim();
-        }
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
 
-        return this.fullName;
-    }
+	public void setDateOfBirth(Date dateOfBirth) {
+		this.dateOfBirth = dateOfBirth;
+	}
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
+	public void setDeptId(Long deptId) {
+		this.deptId = deptId;
+	}
 
-    public User() {
-    }
+	public void setDeptName(String deptName) {
+		this.deptName = deptName;
+	}
 
-    public User(Long userId) {
-        this.userId = userId;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public User(Long userId, String userName) {
-        this.userId = userId;
-        this.userName = userName;
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    public User(String userName) {
-        this.userName = userName;
-    }
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
 
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
+	public void setGender(Long gender) {
+		this.gender = gender;
+	}
 
-        final User other = (User) obj;
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
 
-        if (this.userId != other.userId
-                && (this.userId == null
-                || !this.userId.equals(other.userId))) {
-            return false;
-        }
+	public void setMiddleName(String middleName) {
+		this.middleName = middleName;
+	}
 
-        return true;
-    }
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
 
-    @Override
-    public int hashCode() {
-        int hash = 5;
-        return hash;
-    }
+	public void setModifiedDate(Date modifiedDate) {
+		this.modifiedDate = modifiedDate;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
+	}
+
+	public void setStatus(Long status) {
+		this.status = status;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public void setVerificationCode(String verificationCode) {
+		this.verificationCode = verificationCode;
+	}
 }

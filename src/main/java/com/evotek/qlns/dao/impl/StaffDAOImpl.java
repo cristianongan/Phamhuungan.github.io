@@ -16,7 +16,6 @@ import javax.persistence.criteria.Root;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.hibernate.type.IntegerType;
@@ -57,7 +56,7 @@ public class StaffDAOImpl extends AbstractDAO<Staff> implements StaffDAO {
 			int _day = StaticUtil.NOTIFY_BIRTHDAY_BEFORE_DAY;
 
 			Session session = getCurrentSession();
-			
+
 			StringBuilder sb = new StringBuilder();
 
 			sb.append("select staff.* from staff where date_of_birth is not null and status = 1 and ");
@@ -65,14 +64,14 @@ public class StaffDAOImpl extends AbstractDAO<Staff> implements StaffDAO {
 			sb.append(" and DAYOFYEAR(date_of_birth)>=? and DAYOFYEAR(date_of_birth)<=?) ");
 			sb.append(" or ((MOD(YEAR(date_of_birth),4)>0 and MOD(YEAR(date_of_birth),400)>0) ");
 			sb.append(" and DAYOFYEAR(date_of_birth)>=? and DAYOFYEAR(date_of_birth)<=?) ");
-			
+
 			Query<Staff> q = session.createNativeQuery(sb.toString(), Staff.class);
-			
+
 			q.setParameter(0, dayOfYear + _day - 1, IntegerType.INSTANCE);
 			q.setParameter(1, dayOfYear + _day + 1, IntegerType.INSTANCE);
 			q.setParameter(2, dayOfYear, IntegerType.INSTANCE);
 			q.setParameter(3, dayOfYear + _day, IntegerType.INSTANCE);
-			
+
 			results = q.list();
 		} catch (Exception ex) {
 			_log.error(ex.getMessage(), ex);

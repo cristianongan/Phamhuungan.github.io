@@ -10,7 +10,8 @@ import java.util.Date;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.zkoss.spring.SpringUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Datebox;
@@ -29,135 +30,121 @@ import com.evotek.qlns.util.key.Values;
 
 /**
  *
- * @author My PC
+ * @author LinhLH
  */
-public class AddEditSalaryLmController extends BasicController<Window>{
-    /**
-	 * 
-	 */
+@Controller
+public class AddEditSalaryLmController extends BasicController<Window> {
 	private static final long serialVersionUID = -420472383138292995L;
+
+	private static final Logger _log = LogManager.getLogger(AddEditSalaryLmController.class);
+
+	@Autowired
+	private StaffService staffService;
+
+	private Staff staff;
 	
+	private Datebox dbFromDate;
+
+	private Datebox dbToDate;
+	private Longbox lgbSalary;
+
+	private SalaryLandmark salaryLm;
+
 	private Window winEditSalaryLm;
-    private Window winTemp;
 
-    private Datebox dbFromDate;
-    private Datebox dbToDate;
-    
-    private Longbox lgbSalary;
-    
-    private SalaryLandmark salaryLm;
-    private Staff staff;
-    
-    @Override
-    public void doBeforeComposeChildren(Window comp) throws Exception {
-        super.doBeforeComposeChildren(comp);
-        
-        this.winEditSalaryLm = comp;
-    }
+	private Window winTemp;
 
-    @Override
-    public void doAfterCompose(Window comp) throws Exception {
-        super.doAfterCompose(comp);
-        
-        this.initData();
-    }
-    
-    //init data
-    public void initData() throws Exception {
-        try {
-            this.winTemp = (Window) this.arg.get(Constants.PARENT_WINDOW);
+	private void _setEditForm() {
+		this.dbFromDate.setValue(this.salaryLm.getFromDate());
+		this.dbToDate.setValue(this.salaryLm.getToDate());
+		this.lgbSalary.setValue(this.salaryLm.getSalary());
+	}
 
-            this.staff = (Staff) this.arg.get(Constants.OBJECT);
-            this.salaryLm = (SalaryLandmark) this.arg.get(Constants.EDIT_OBJECT);
+	private boolean _validate(Long salary) {
+		if (Validator.isNull(salary)) {
+			this.lgbSalary.setErrorMessage(Values.getRequiredInputMsg(Labels.getLabel(LanguageKeys.SALARY)));
 
-            if(Validator.isNotNull(this.salaryLm)){
-                this.winEditSalaryLm.setTitle((String) this.arg.get(Constants.TITLE));
+			this.lgbSalary.setFocus(true);
 
-                this._setEditForm();
-            } 
-        } catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
-        }
-    }
-    
-    private void _setEditForm() {
-        this.dbFromDate.setValue(this.salaryLm.getFromDate());
-        this.dbToDate.setValue(this.salaryLm.getToDate());
-        this.lgbSalary.setValue(this.salaryLm.getSalary());
-    }
-    
-    public void onClick$btnSave() throws Exception {
-        boolean update = true;
+			return false;
+		}
 
-        try {
-            Date fromDate = this.dbFromDate.getValue();
-            Date toDate = this.dbToDate.getValue();
-            Long salary = this.lgbSalary.getValue();
-            
-            if(_validate(salary)){
-                if(Validator.isNull(this.salaryLm)){
-                    update = false;
-                    
-                    this.salaryLm = new SalaryLandmark();
-                    
-                    this.salaryLm.setUserId(getUserId());
-                    this.salaryLm.setUserName(getUserName());
-                    this.salaryLm.setCreateDate(new Date());
-                }
-                
-                this.salaryLm.setFromDate(fromDate);
-                this.salaryLm.setToDate(toDate);
-                this.salaryLm.setSalary(salary);
-                this.salaryLm.setModifiedDate(new Date());
-                
-                this.staffService.saveOrUpdate(this.salaryLm);
-                
-                ComponentUtil.createSuccessMessageBox(
-                        ComponentUtil.getSuccessKey(update));
+		return true;
+	}
 
-                this.winEditSalaryLm.detach();
+	@Override
+	public void doAfterCompose(Window comp) throws Exception {
+		super.doAfterCompose(comp);
 
-                Events.sendEvent("onLoadReloadSalaryLm", this.winTemp, null);
-            }
-        } catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
+		this.initData();
+	}
 
-            Messagebox.show(Labels.getLabel(
-                    ComponentUtil.getFailKey(update)));
-        }
-    }
-    
-    private boolean _validate(Long salary){
-        if (Validator.isNull(salary)) {
-            this.lgbSalary.setErrorMessage(Values.getRequiredInputMsg(
-                    Labels.getLabel(LanguageKeys.SALARY)));
-            
-            this.lgbSalary.setFocus(true);
-            
-            return false;
-        }
-        
-        return true;
-    }
-    
-    public void onClick$btnCancel(){
-        this.winEditSalaryLm.detach();
-    }
-    //get set service
-    public StaffService getStaffService() {
-        if (this.staffService == null) {
-            this.staffService = (StaffService) SpringUtil.getBean("staffService");
-            setStaffService(this.staffService);
-        }
-        return this.staffService;
-    }
+	@Override
+	public void doBeforeComposeChildren(Window comp) throws Exception {
+		super.doBeforeComposeChildren(comp);
 
-    public void setStaffService(StaffService StaffService) {
-        this.staffService = StaffService;
-    }
+		this.winEditSalaryLm = comp;
+	}
 
-    private transient StaffService staffService;
-    
-    private static final Logger _log
-            = LogManager.getLogger(AddEditSalaryLmController.class);
+	// init data
+	public void initData() throws Exception {
+		try {
+			this.winTemp = (Window) this.arg.get(Constants.PARENT_WINDOW);
+
+			this.staff = (Staff) this.arg.get(Constants.OBJECT);
+			this.salaryLm = (SalaryLandmark) this.arg.get(Constants.EDIT_OBJECT);
+
+			if (Validator.isNotNull(this.salaryLm)) {
+				this.winEditSalaryLm.setTitle((String) this.arg.get(Constants.TITLE));
+
+				this._setEditForm();
+			}
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+	}
+
+	public void onClick$btnCancel() {
+		this.winEditSalaryLm.detach();
+	}
+
+	public void onClick$btnSave() throws Exception {
+		boolean update = true;
+
+		try {
+			Date fromDate = this.dbFromDate.getValue();
+			Date toDate = this.dbToDate.getValue();
+			Long salary = this.lgbSalary.getValue();
+
+			if (_validate(salary)) {
+				if (Validator.isNull(this.salaryLm)) {
+					update = false;
+
+					this.salaryLm = new SalaryLandmark();
+
+					this.salaryLm.setUserId(getUserId());
+					this.salaryLm.setUserName(getUserName());
+					this.salaryLm.setCreateDate(new Date());
+				}
+
+				this.salaryLm.setFromDate(fromDate);
+				this.salaryLm.setToDate(toDate);
+				this.salaryLm.setSalary(salary);
+				this.salaryLm.setModifiedDate(new Date());
+
+				this.staffService.saveOrUpdate(this.salaryLm);
+
+				ComponentUtil.createSuccessMessageBox(ComponentUtil.getSuccessKey(update));
+
+				this.winEditSalaryLm.detach();
+
+				Events.sendEvent("onLoadReloadSalaryLm", this.winTemp, null);
+			}
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+
+			Messagebox.show(Labels.getLabel(ComponentUtil.getFailKey(update)));
+		}
+	}
+
 }

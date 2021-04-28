@@ -34,117 +34,115 @@ import com.evotek.qlns.util.Validator;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService, Serializable {
 
-    private static final long serialVersionUID = 1368775416931L;
+	private static final Logger _log = LogManager.getLogger(UserDetailsServiceImpl.class);
 
-    private static final Logger _log = LogManager.getLogger(UserDetailsServiceImpl.class);
+	private static final long serialVersionUID = 1368775416931L;
 
-    @Autowired
-    private UserService userService;
+	@Autowired
+	private UserService userService;
 
-    @Override
-    public UserDetails loadUserByUsername(String userName) {
+	/**
+	 * Fills the GrantedAuthorities List for a specified user.<br>
+	 * 1. Gets a unique list of rights that a user have.<br>
+	 * 2. Creates GrantedAuthority objects from all rights. <br>
+	 * 3. Creates a GrantedAuthorities list from all GrantedAuthority objects.<br>
+	 *
+	 * @param user
+	 * @return
+	 */
+	private List<GrantedAuthority> getGrantedAuthority(Long userId) throws Exception {
 
-        User user = null;
+		final ArrayList<GrantedAuthority> rightsGrantedAuthorities = new ArrayList<GrantedAuthority>();
 
-        List<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
-        List<String> roles = new ArrayList<String>();
+		try {
+			// get the list of rights for a specified user from db.
+			final List<RightView> rightViews = this.userService.getRightViewByUserId(userId);
 
-        try {
-            user = getUserByUserName(userName);
+			// now create for all rights a GrantedAuthority entry
+			// and fill the GrantedAuthority List with these authorities.
 
-            if (user == null) {
-                saveLoginFailure(userName);
-                
-                return null;
-            }
+			for (final RightView rightView : rightViews) {
+				rightsGrantedAuthorities.add(new SimpleGrantedAuthority(rightView.getRightName()));
+			}
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
 
-            roles = getRolesByUser(user);
+		return rightsGrantedAuthorities;
+	}
 
-            grantedAuthorities = getGrantedAuthority(user.getUserId());
-        } catch (final NumberFormatException e) {
-            throw new DataRetrievalFailureException("Cannot loadUserByUsername userName:" +
-                    userName + " Exception:" + e.getMessage(), e);
-        } catch (Exception ex){
-            _log.error(ex.getMessage(), ex);
-        }
+	/**
+	 * Gets the roles has assign to user
+	 * 
+	 * @param User
+	 * @return
+	 */
+	public List<String> getRolesByUser(final User user) throws Exception {
+		return this.userService.getRolesNameByUser(user);
+	}
 
-        // Create the UserDetails object for a specified user with
-        // their grantedAuthorities List.
-        final UserDetails userDetails = new UserPrincipalImpl(user, roles,
-                grantedAuthorities);
+	/**
+	 * Gets the User object by his stored userName.<br>
+	 *
+	 * @param userName
+	 * @return
+	 */
+	public User getUserByUserName(final String userName) throws Exception {
+		return this.userService.getUserByUserName(userName);
+	}
 
-        if (_log.isDebugEnabled()) {
-            _log.debug("Rights for '" + user.getUserName() + "' (ID: " +
-                    user.getUserId() + ") evaluated. [" + this + "]");
-        }
+	@Override
+	public UserDetails loadUserByUsername(String userName) {
 
-        return userDetails;
-    }
+		User user = null;
 
-    /**
-     * Gets the User object by his stored userName.<br>
-     *
-     * @param userName
-     * @return
-     */
-    public User getUserByUserName(final String userName) throws Exception{
-        return this.userService.getUserByUserName(userName);
-    }
+		List<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
+		List<String> roles = new ArrayList<String>();
 
-    /**
-     * Gets the roles has assign to user
-     * @param User
-     * @return
-     */
-     public List<String> getRolesByUser(final User user) throws Exception{
-         return this.userService.getRolesNameByUser(user);
-     }
-    /**
-     * Fills the GrantedAuthorities List for a specified user.<br>
-     * 1. Gets a unique list of rights that a user have.<br>
-     * 2. Creates GrantedAuthority objects from all rights. <br>
-     * 3. Creates a GrantedAuthorities list from all GrantedAuthority objects.<br>
-     *
-     * @param user
-     * @return
-     */
-    private List<GrantedAuthority> getGrantedAuthority(Long userId) throws Exception {
+		try {
+			user = getUserByUserName(userName);
 
-        final ArrayList<GrantedAuthority> rightsGrantedAuthorities =
-                new ArrayList<GrantedAuthority>();
+			if (user == null) {
+				saveLoginFailure(userName);
 
-        try {
-            // get the list of rights for a specified user from db.
-            final List<RightView> rightViews = this.userService.
-                    getRightViewByUserId(userId);
+				return null;
+			}
 
-            // now create for all rights a GrantedAuthority entry
-            // and fill the GrantedAuthority List with these authorities.
+			roles = getRolesByUser(user);
 
-            for (final RightView rightView : rightViews) {
-                rightsGrantedAuthorities.add(
-                        new SimpleGrantedAuthority(rightView.getRightName()));
-            }
-        } catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
-        }
+			grantedAuthorities = getGrantedAuthority(user.getUserId());
+		} catch (final NumberFormatException e) {
+			throw new DataRetrievalFailureException(
+					"Cannot loadUserByUsername userName:" + userName + " Exception:" + e.getMessage(), e);
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
 
-        return rightsGrantedAuthorities;
-    }
-    
-    private void saveLoginFailure(String userName) {
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
-                .getRequestAttributes()).getRequest();
+		// Create the UserDetails object for a specified user with
+		// their grantedAuthorities List.
+		final UserDetails userDetails = new UserPrincipalImpl(user, roles, grantedAuthorities);
 
-        String ip = request.getRemoteAddr();
+		if (_log.isDebugEnabled()) {
+			_log.debug(
+					"Rights for '" + user.getUserName() + "' (ID: " + user.getUserId() + ") evaluated. [" + this + "]");
+		}
 
-        if (Validator.isIPAddress(ip)) {
-            UserLogin loginLog = new UserLogin(userName, ip);
+		return userDetails;
+	}
 
-            loginLog.setLoginTime(new Date());
-            loginLog.setSuccess(false);
+	private void saveLoginFailure(String userName) {
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+				.getRequest();
 
-            this.userService.saveOrUpdate(loginLog);
-        }
-    }
+		String ip = request.getRemoteAddr();
+
+		if (Validator.isIPAddress(ip)) {
+			UserLogin loginLog = new UserLogin(userName, ip);
+
+			loginLog.setLoginTime(new Date());
+			loginLog.setSuccess(false);
+
+			this.userService.saveOrUpdate(loginLog);
+		}
+	}
 }

@@ -76,385 +76,406 @@ import com.evotek.qlns.util.key.ZkKeys;
  */
 public class ComponentUtil {
 
-    public static String EDIT_ICON = "/html/images/icons/edit.png";
-    public static String STAR_ICON = "/html/images/icons/star.png";
-    public static String LOCK_ICON = "/html/images/icons/lock.png";
-    public static String UNLOCK_ICON = "/html/images/icons/unlock.png";
-    public static String DELETE_ICON = "/html/images/icons/delete.png";
-    public static String KEY_ICON = "/html/images/icons/key.png";
-    public static String ASSIGN_ICON = "/html/images/icons/assign.png";
-    public static String PUBLIC_ICON = "/html/images/icons/public.png";
-    public static String PENDING_ICON = "/html/images/icons/pending.png";
-    public static String RESOURCE_ICON = "/html/images/icons/resource.png";
-    public static String EDIT_ADD_ICON = "/html/images/icons/edit_add.png";
-    public static String ADD_ICON = "/html/images/icons/add.png";
-    public static String REMOVE_ICON = "/html/images/icons/remove.png";
-    public static String ATTACH_ICON = "/html/images/icons/attach.png";
-    public static String DOWNLOAD_ICON = "/html/images/icons/download.png";
-    public static String REFERENCE_ICON = "/html/images/icons/reference.png";
-    public static String OK_ICON = "/html/images/icons/ok.png";
-    public static String DEPT_TREE_PAGE = "/html/pages/common/commonDepartment.zul";
-    public static String USER_TREE_PAGE = "/html/pages/common/commonGridUser.zul";
-    
-    public static String EDIT_TOOLTIP = "editTooltip";
-    public static String DEL_TOOLTIP = "delTooltip";
-    public static String CALCEL_TOOLTIP = "calcelTooltip";
-    public static String DETAIL_TOOLTIP = "detailTooltip";
-    public static String LOCK_TOOLTIP = "lockTooltip";
-    public static String UNLOCK_TOOLTIP = "unlockTooltip";
-    public static String RIGHT_TOOLTIP = "rightTooltip";
-    public static String ASSIGN_RIGHT_TOOLTIP = "assignRightTooltip";
-    public static String ASSIGN_ROLE_TOOLTIP = "assignRoleTooltip";
-
-    public static Object getValue(Component comp) {
-        if (comp == null) {
-            return null;
-        }
-
-        if (comp instanceof Textbox) {
-            return ((Textbox) comp).getValue();
-        }
-
-        if (comp instanceof Datebox) {
-            return ((Datebox) comp).getValue();
-        }
-
-        return null;
-    }
-
-    public static Object getValue(Combobox combobox) {
-        if (combobox.getSelectedItem() == null) {
-            return null;
-        }
-
-        return combobox.getSelectedItem().getValue();
-    }
-
-    public static String getTextboxValue(Component cmp) {
-        if (cmp.getFirstChild() instanceof Textbox) {
-            return GetterUtil.getString(((Textbox) cmp.getFirstChild()).getValue());
-        }
-
-        return StringPool.BLANK;
-    }
-
-    public static Long getComboboxValue(Component parentCmp) {
-        if (parentCmp instanceof Combobox) {
-            return getComboboxValue((Combobox) parentCmp);
-        }
-
-        return null;
-    }
-
-    public static Long getComboboxValue(Combobox combobox) {
-        Long cboValue = GetterUtil.getLong(getValue(combobox));
+	public static String ADD_ICON = "/html/images/icons/add.png";
+	public static String ASSIGN_ICON = "/html/images/icons/assign.png";
+	public static String ASSIGN_RIGHT_TOOLTIP = "assignRightTooltip";
+	public static String ASSIGN_ROLE_TOOLTIP = "assignRoleTooltip";
+	public static String ATTACH_ICON = "/html/images/icons/attach.png";
+	public static String CALCEL_TOOLTIP = "calcelTooltip";
+	public static String DEL_TOOLTIP = "delTooltip";
+	public static String DELETE_ICON = "/html/images/icons/delete.png";
+	public static String DEPT_TREE_PAGE = "/html/pages/common/commonDepartment.zul";
+	public static String DETAIL_TOOLTIP = "detailTooltip";
+	public static String DOWNLOAD_ICON = "/html/images/icons/download.png";
+	public static String EDIT_ADD_ICON = "/html/images/icons/edit_add.png";
+	public static String EDIT_ICON = "/html/images/icons/edit.png";
+	public static String EDIT_TOOLTIP = "editTooltip";
+	public static String KEY_ICON = "/html/images/icons/key.png";
+	public static String LOCK_ICON = "/html/images/icons/lock.png";
+	public static String LOCK_TOOLTIP = "lockTooltip";
+	private static final String MESSAGE_BOX_PAGE = "/html/pages/common/messageBox.zul";
+	private static final String MSG_ERROR = "error";
 
-        if (Validator.isNull(cboValue)) {
-            return null;
-        }
+	private static final String MSG_INFORMATION = "information";
+	private static final String MSG_SUCCESS = "success";
+	private static final String MSG_WARNING = "warning";
+	public static String OK_ICON = "/html/images/icons/ok.png";
+	public static String PENDING_ICON = "/html/images/icons/pending.png";
+	public static String PUBLIC_ICON = "/html/images/icons/public.png";
+	public static String REFERENCE_ICON = "/html/images/icons/reference.png";
+	public static String REMOVE_ICON = "/html/images/icons/remove.png";
+	public static String RESOURCE_ICON = "/html/images/icons/resource.png";
 
-        return cboValue;
-    }
+	public static String RIGHT_TOOLTIP = "rightTooltip";
 
-    public static Long getBandboxValue(Bandbox bandbox) {
-        Long bbValue = GetterUtil.getLong(bandbox.getAttribute(Constants.ID));
+	public static String STAR_ICON = "/html/images/icons/star.png";
 
-        if (Validator.isNull(bbValue)) {
-            return null;
-        }
+	public static String UNLOCK_ICON = "/html/images/icons/unlock.png";
 
-        return bbValue;
-    }
+	public static String UNLOCK_TOOLTIP = "unlockTooltip";
 
-    public static String getComboboxLabel(Combobox combobox) {
-        String cboLabel = GetterUtil.getString(combobox.getValue());
+	public static String USER_TREE_PAGE = "/html/pages/common/commonGridUser.zul";
 
-        return cboLabel;
-    }
+	public static void clear(Component comp) {
+		if (comp.getChildren() != null) {
+			comp.getChildren().clear();
+		}
+	}
 
-    public static List<Long> getSelectedId(Tree tree) {
-        List<Long> ids = new ArrayList<Long>();
+	public static Listcell createAddRemoveButton(final Listbox listbox, final Listitem item, final Object object,
+			final int index, boolean allowRemoveOld) {
+		Listcell cell = new Listcell();
 
-        Set<Treeitem> items = tree.getSelectedItems();
+		Hbox hbox = new Hbox();
 
-        for (Treeitem item : items) {
-            Long id = (Long) item.getAttribute(Constants.OBJECT_ID);
+		Toolbarbutton btnAddRow = new Toolbarbutton();
 
-            if (Validator.isNotNull(id)) {
-                ids.add(id);
-            }
-        }
+		btnAddRow.setImage(ADD_ICON);
+		btnAddRow.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
-        return ids;
-    }
+			@Override
+			public void onEvent(Event t) throws Exception {
+				ListModelList listModelList = (ListModelList) listbox.getListModel();
+				listModelList.add(item.getIndex() + 1, object);
+			}
+		});
 
-    public static Component createComponent(Long type, String id) {
-        Component comp = null;
+		hbox.appendChild(btnAddRow);
 
-        switch (type.intValue()) {
-            case 4:
-//                comp = createDatebox(DateUtil.SHORT_DATE_PATTERN);
-//
-//                break;
+		if (allowRemoveOld) {
+			Toolbarbutton btnDeleteRow = new Toolbarbutton();
 
-            case 5:
-                comp = createDatebox(DateUtil.SHORT_DATE_PATTERN);
+			btnDeleteRow.setImage(REMOVE_ICON);
+			btnDeleteRow.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
-//                ((Datebox) comp).setReadonly(true);
+				@Override
+				public void onEvent(Event t) throws Exception {
+					ListModelList listModelList = (ListModelList) listbox.getListModel();
+					listModelList.remove(item.getIndex());
 
-                break;
+					if (listModelList.isEmpty()) {
+						listModelList.add(index, object);
+					}
+				}
+			});
 
-            default:
-                comp = createTextbox();
+			hbox.appendChild(btnDeleteRow);
+		}
+//        if (index == 0) { //khong xoa dong dau tien
+//            btnDeleteRow.setVisible(false);
+//        }
 
-                break;
-        }
+		cell.appendChild(hbox);
 
-        comp.setId(id);
+		return cell;
+	}
 
-        return comp;
-    }
+	public static A createAIcon(String iconSclass) {
+		A a = new A();
 
-    public static Component createComponent(Long type, String id, Map item) {
-        Component comp = null;
+		a.setIconSclass(iconSclass);
 
-        switch (type.intValue()) {
-            case 4:
-                comp = createDatebox(DateUtil.SHORT_DATE_PATTERN);
+		return a;
+	}
 
-                if (Validator.isNotNull(item)) {
-                    ((Datebox) comp).setValue((Date) item.get(id));
-                }
+	public static Button createAttachButton(Div divContainer, Div divFileList, String config) {
+		Button button = new Button(Labels.getLabel(LanguageKeys.DOCUMENT_ATTACH));
 
-                break;
+		button.setUpload(config);
+		button.setIconSclass(Constants.Z_ICON_PAPERCLIP);
+		button.setSclass(Constants.BTN_SUCCESS);
 
-            case 5:
-                comp = createDatebox(DateUtil.LONG_DATE_PATTERN);
+		List<Media> medium = new ArrayList<Media>();
 
-                if (Validator.isNotNull(item)) {
-                    ((Datebox) comp).setValue((Date) item.get(id));
-                }
-//                ((Datebox) comp).setReadonly(true);
+		button.addEventListener(Events.ON_UPLOAD, new OnUploadAttachmentListener(medium, divFileList));
 
-                break;
+		divContainer.setAttribute(Constants.DATA, medium);
 
-            default:
-                comp = createTextbox();
+		return button;
+	}
 
-                ((Textbox) comp).setMultiline(true);
+	public static Div createAttachment(String config, List<FileEntry> oldFiles) {
+		Div divContainer = new Div();
+		Div divFileList = new Div();
 
-                if (Validator.isNotNull(item)) {
-                    ((Textbox) comp).setValue((String) item.get(id));
-                    ((Textbox) comp).setTooltiptext((String) item.get(id));
-                }
+		divContainer.setSclass("z-div-attach");
 
-                break;
-        }
+		divContainer.appendChild(createAttachButton(divContainer, divFileList, config));
+		// Tao grid chua file cu da upload
+		if (!oldFiles.isEmpty()) {
+			List<FileEntry> deleteFiles = new ArrayList<FileEntry>();
 
-        comp.setId(id);
+			divContainer.appendChild(createOldFileGrid(oldFiles, deleteFiles));
 
-        return comp;
-    }
+			divContainer.setAttribute(Constants.OBJECT, deleteFiles);
+		}
 
-    public static Treecell createTreeCell(Label label) {
-        Treecell cell = new Treecell();
+		divContainer.appendChild(divFileList);
 
-        cell.appendChild(label);
-        cell.setStyle(Constants.STYLE_BORDER_NONE);
+		return divContainer;
+	}
 
-        return cell;
-    }
+	public static Bandbox createBandbox(String value, boolean readOnly) {
+		Bandbox bb = new Bandbox();
 
-    public static Treecell createTreeCell(Long status) {
-        Treecell cell = new Treecell();
+		if (Validator.isNotNull(value)) {
+			bb.setValue(value);
+		}
 
-        cell.appendChild(createStatusImage(status));
-        cell.setStyle(Constants.STYLE_BORDER_NONE
-                + Constants.STYLE_TEXT_ALIGN_CENTER);
+		bb.setReadonly(readOnly);
+		bb.setMold(ZkKeys.ROUNDED);
+		bb.setHflex(ZkKeys.HFLEX_1);
 
-        return cell;
-    }
+		return bb;
+	}
 
-    public static Treerow createTreerow(Label label) {
-        Treerow treeRow = new Treerow();
+	public static Bandpopup createBandpopup(String width) {
+		Bandpopup bp = new Bandpopup();
 
-        treeRow.appendChild(createTreeCell(label));
+		bp.setWidth(width);
 
-        return treeRow;
-    }
+		return bp;
+	}
 
-    public static Treerow createTreerow(String label) {
-        return createTreerow(new Label(label));
-    }
+	public static Bandpopup createBandpopup(String width, String pageInclude) {
+		Bandpopup bp = new Bandpopup();
 
-    public static Treecell createTreeCell(String label) {
-        return createTreeCell(new Label(label));
-    }
+		bp.setWidth(width);
 
-    public static Treecell createTreeCell(String label, String style) {
-        Label labelTemp = createLabel(label, style);
+		Include include = new Include(pageInclude);
 
-        Treecell cell = createTreeCell(labelTemp);
+		bp.appendChild(include);
 
-        cell.setStyle(style);
+		return bp;
+	}
 
-        return cell;
-    }
+	public static Button createButton(Component parent, String label, String event, String url,
+			Map<String, Object> parameter) {
+		Button button = new Button();
 
-    public static Treecell createTreeCell(String label, String tooltip,
-            String style, String cellStyle) {
-        Label labelTemp = createLabel(label, style);
-        labelTemp.setTooltiptext(tooltip);
-        Treecell cell = new Treecell();
-        cell.appendChild(labelTemp);
-        cell.setStyle(cellStyle);
-        return cell;
-    }
+		button.setTooltiptext(label);
 
-    public static Treecell createTreeCell(String label, String labelStyle,
-            String cellStyle) {
-        Treecell cell = createTreeCell(label, labelStyle);
+		button.addEventListener(event, new OpenDialogListener(url, parent, parameter));
 
-        cell.setStyle(cellStyle);
+		return button;
+	}
 
-        return cell;
-    }
+	public static Button createButton(Component parent, String label, String event, String url,
+			Map<String, Object> parameter, String iconSclass, String sclass) {
+		Button button = createButton(parent, label, event, url, parameter);
 
-    public static Listcell createListcell(String label, String style) {
-        Listcell cell = new Listcell(label);
+		button.setIconSclass(iconSclass);
+		button.setSclass(sclass);
 
-        cell.setStyle(style);
+		return button;
+	}
 
-        return cell;
-    }
+	public static Button createButton(Component parent, String label, String event, String eventForward, Object data) {
+		Button button = new Button();
 
-    public static Listcell createListcell(String label, String tooltip, String style) {
-        Listcell cell = new Listcell();
+		button.setTooltiptext(label);
 
-        Label label1 = new Label(label);
-        label1.setTooltiptext(tooltip);
-        label1.setStyle(style);
-        cell.appendChild(label1);
-        return cell;
-    }
+		button.addForward(event, parent, eventForward, data);
 
-    public static Listcell createListcell(Component comp) {
-        Listcell cell = new Listcell();
+		return button;
+	}
 
-        cell.appendChild(comp);
+	public static Button createButton(Component parent, String label, String event, String eventForward, Object data,
+			String iconSclass, String sclass) {
+		Button button = createButton(parent, label, event, eventForward, data);
 
-        return cell;
-    }
-    
-    public static Listcell createListcell(String label) {
-        Listcell cell = new Listcell();
+		button.setIconSclass(iconSclass);
+		button.setSclass(sclass);
 
-        cell.appendChild(new Label(label));
+		return button;
+	}
 
-        return cell;
-    }
+	public static Button createButton(Component parent, String label, String toolTipId, String event, String url,
+			Map<String, Object> parameter) {
+		Button button = new Button();
 
-    public static Listcell createTextboxListcell(String label) {
-        Listcell cell = new Listcell();
+		if (Validator.isNotNull(toolTipId)) {
+			button.setTooltip(toolTipId + ", position=after_center");
+		} else {
+			button.setTooltiptext(label);
+		}
 
-        Textbox tb = new Textbox(label);
-        
-        tb.setWidth("100%");
-        
-        cell.appendChild(tb);
+		button.addEventListener(event, new OpenDialogListener(url, parent, parameter));
 
-        return cell;
-    }
-    
-    public static Listcell createTextboxListcell(String label, String id) {
-        Listcell cell = new Listcell();
+		return button;
+	}
 
-        Textbox tb = new Textbox(label);
-        
-        tb.setWidth("100%");
-        tb.setId(id);
-        
-        cell.appendChild(tb);
+	public static Button createButton(Component parent, String label, String toolTipId, String event, String url,
+			Map<String, Object> parameter, String iconSclass, String sclass) {
+		Button button = createButton(parent, label, toolTipId, event, url, parameter);
 
-        return cell;
-    }
-    
-    public static Listcell createSpinnerListcell(Long value, String id) {
-        return createSpinnerListcell(value, id, StringPool.BLANK);
-    }
-    
-    public static Listcell createSpinnerListcell(Long value, String id, 
-            String style) {
-        Listcell cell = new Listcell();
-        
-        Spinner sp = new Spinner();
-        
-        if(value != null){
-            sp.setValue(value.intValue());
-        }
-        
-        if(Validator.isNotNull(style)){
-            sp.setStyle(style);
-        }
-        
-        sp.setWidth("98%");
-        sp.setId(id);
-        
-        cell.appendChild(sp);
+		button.setIconSclass(iconSclass);
+		button.setSclass(sclass);
 
-        return cell;
-    }
-    
-    public static Combobox createCombobox() {
-        Combobox cb = new Combobox();
+		return button;
+	}
 
-        cb.setMold(ZkKeys.ROUNDED);
-        cb.setHflex(ZkKeys.HFLEX_1);
+	public static Button createButton(Component parent, String label, String toolTipId, String event,
+			String eventForward, Object data) {
+		Button button = new Button();
 
-        cb.setReadonly(true);
+		if (Validator.isNotNull(toolTipId)) {
+			button.setTooltip(toolTipId + ", position=after_center");
+		} else {
+			button.setTooltiptext(label);
+		}
 
-        return cb;
-    }
+		button.addForward(event, parent, eventForward, data);
 
-    public static Combobox createCombobox(String[] values,
-            boolean defaultValue) {
-        Combobox cb = createCombobox();
+		return button;
+	}
 
-        if (defaultValue) {
-            cb.appendChild(createComboitem(StringPool.BLANK,
-                    Labels.getLabel(LanguageKeys.OPTION)));
-        }
+	public static Button createButton(Component parent, String label, String toolTipId, String event,
+			String eventForward, Object data, String iconSclass, String sclass) {
+		Button button = createButton(parent, label, toolTipId, event, eventForward, data);
 
-        for (int i = 0; i < values.length; i++) {
-            Comboitem item = createComboitem(Long.valueOf(i),
-                    values[i]);
+		button.setIconSclass(iconSclass);
+		button.setSclass(sclass);
 
-            item.setAttribute(Constants.DATA, values[i]);
+		return button;
+	}
 
-            cb.appendChild(item);
+	public static Button createButton(String label, String iconSclass, String sclass) {
+		Button button = new Button();
 
-            cb.setSelectedIndex(0);
-        }
+		button.setIconSclass(iconSclass);
+		button.setSclass(sclass);
+		button.setTooltiptext(label);
 
-        cb.setMold(ZkKeys.ROUNDED);
-        cb.setHflex(ZkKeys.HFLEX_1);
+		return button;
+	}
 
-        cb.setReadonly(true);
+	public static Button createButton(String label, String toolTipId, String iconSclass, String sclass) {
+		Button button = new Button();
 
-        return cb;
-    }
+		button.setIconSclass(iconSclass);
+		button.setSclass(sclass);
 
-    public static Combobox createComboboxNoneHflex() {
-        Combobox cb = new Combobox();
+		if (Validator.isNotNull(toolTipId)) {
+			button.setTooltip(toolTipId + ", position=after_center");
+		} else {
+			button.setTooltiptext(label);
+		}
 
-        cb.setMold(ZkKeys.ROUNDED);
+		return button;
+	}
 
-        cb.setReadonly(true);
+	public static Cell createCell(String label, String style) {
+		Cell cell = new Cell();
 
-        return cb;
-    }
+		cell.appendChild(new Label(label));
 
-//    public static Div createAttachment(String config, List<FileEntry> oldFiles) {
+		cell.setStyle(/* Constants.STYLE_BORDER_NONE + */style);
+
+		return cell;
+	}
+
+	public static Checkbox createCheckbox(Long value) {
+		Checkbox cb = new Checkbox();
+
+		cb.setChecked(Values.STATUS_DEACTIVE.equals(value));
+
+		return cb;
+	}
+
+	public static Checkbox createCheckbox(String id, boolean checked) {
+		Checkbox cb = new Checkbox();
+
+		cb.setId(id);
+		cb.setChecked(checked);
+
+		return cb;
+	}
+
+	public static Column createColumn(String width) {
+		return createColumn(StringPool.BLANK, width);
+	}
+
+	public static Column createColumn(String header, String width) {
+		Column column = new Column(header);
+
+		if (Validator.isNotNull(width)) {
+			column.setWidth(width);
+		}
+
+		return column;
+	}
+
+	public static Columns createColumns(String[] widths) {
+		Columns columns = new Columns();
+
+		for (int i = 0; i < widths.length; i++) {
+			columns.appendChild(createColumn(widths[i]));
+		}
+
+		return columns;
+	}
+
+	public static Combobox createCombobox() {
+		Combobox cb = new Combobox();
+
+		cb.setMold(ZkKeys.ROUNDED);
+		cb.setHflex(ZkKeys.HFLEX_1);
+
+		cb.setReadonly(true);
+
+		return cb;
+	}
+
+	public static Combobox createCombobox(String[] values, boolean defaultValue) {
+		Combobox cb = createCombobox();
+
+		if (defaultValue) {
+			cb.appendChild(createComboitem(StringPool.BLANK, Labels.getLabel(LanguageKeys.OPTION)));
+		}
+
+		for (int i = 0; i < values.length; i++) {
+			Comboitem item = createComboitem(Long.valueOf(i), values[i]);
+
+			item.setAttribute(Constants.DATA, values[i]);
+
+			cb.appendChild(item);
+
+			cb.setSelectedIndex(0);
+		}
+
+		cb.setMold(ZkKeys.ROUNDED);
+		cb.setHflex(ZkKeys.HFLEX_1);
+
+		cb.setReadonly(true);
+
+		return cb;
+	}
+
+	public static Combobox createComboboxNoneHflex() {
+		Combobox cb = new Combobox();
+
+		cb.setMold(ZkKeys.ROUNDED);
+
+		cb.setReadonly(true);
+
+		return cb;
+	}
+
+	public static Comboitem createComboitem(Long value, String label) {
+		Comboitem cbItem = new Comboitem();
+
+		cbItem.setValue(value);
+		cbItem.setLabel(label);
+
+		return cbItem;
+	}
+
+	public static Comboitem createComboitem(String value) {
+		return createComboitem(value, value);
+	}
+
+	// public static Div createAttachment(String config, List<FileEntry> oldFiles) {
 //        Div divContainer = new Div();
 //        Div divFileList = new Div();
 //
@@ -473,277 +494,158 @@ public class ComponentUtil {
 //
 //        return divContainer;
 //    }
-    public static Comboitem createComboitem(String value, String label) {
-        Comboitem cbItem = new Comboitem();
+	public static Comboitem createComboitem(String value, String label) {
+		Comboitem cbItem = new Comboitem();
 
-        cbItem.setValue(value);
-        cbItem.setLabel(label);
+		cbItem.setValue(value);
+		cbItem.setLabel(label);
 
-        return cbItem;
-    }
+		return cbItem;
+	}
 
-    public static Comboitem createComboitem(Long value, String label) {
-        Comboitem cbItem = new Comboitem();
+	public static Component createComponent(Long type, String id) {
+		Component comp = null;
 
-        cbItem.setValue(value);
-        cbItem.setLabel(label);
+		switch (type.intValue()) {
+		case 4:
+//                comp = createDatebox(DateUtil.SHORT_DATE_PATTERN);
+//
+//                break;
 
-        return cbItem;
-    }
+		case 5:
+			comp = createDatebox(DateUtil.SHORT_DATE_PATTERN);
 
-    public static Comboitem createComboitem(String value) {
-        return createComboitem(value, value);
-    }
+//                ((Datebox) comp).setReadonly(true);
 
-    public static Column createColumn(String header, String width) {
-        Column column = new Column(header);
+			break;
 
-        if (Validator.isNotNull(width)) {
-            column.setWidth(width);
-        }
+		default:
+			comp = createTextbox();
 
-        return column;
-    }
+			break;
+		}
 
-    public static Column createColumn(String width) {
-        return createColumn(StringPool.BLANK, width);
-    }
+		comp.setId(id);
 
-    public static Columns createColumns(String[] widths) {
-        Columns columns = new Columns();
+		return comp;
+	}
 
-        for (int i = 0; i < widths.length; i++) {
-            columns.appendChild(createColumn(widths[i]));
-        }
+	public static Component createComponent(Long type, String id, Map item) {
+		Component comp = null;
 
-        return columns;
-    }
+		switch (type.intValue()) {
+		case 4:
+			comp = createDatebox(DateUtil.SHORT_DATE_PATTERN);
 
-    public static Listheader createListheader(String header, String width) {
-        Listheader listheader = new Listheader(header);
+			if (Validator.isNotNull(item)) {
+				((Datebox) comp).setValue((Date) item.get(id));
+			}
 
-        listheader.setStyle(Constants.STYLE_COLUMN_MULTILINE);
+			break;
 
-        if (Validator.isNotNull(width)) {
-            listheader.setWidth(width);
-        }
+		case 5:
+			comp = createDatebox(DateUtil.LONG_DATE_PATTERN);
 
-        return listheader;
-    }
+			if (Validator.isNotNull(item)) {
+				((Datebox) comp).setValue((Date) item.get(id));
+			}
+//                ((Datebox) comp).setReadonly(true);
 
-    public static Listheader createListheader(String header, String width,
-            String columnSort) {
-        Listheader listheader = createListheader(header, width);
+			break;
 
-        listheader.setSort("auto(" + columnSort + ")");
+		default:
+			comp = createTextbox();
 
-        return listheader;
-    }
+			((Textbox) comp).setMultiline(true);
 
-    public static Listheader createListheader(String width) {
-        return createListheader(StringPool.BLANK, width);
-    }
+			if (Validator.isNotNull(item)) {
+				((Textbox) comp).setValue((String) item.get(id));
+				((Textbox) comp).setTooltiptext((String) item.get(id));
+			}
 
-    public static Listhead createListhead(String[] widths) {
-        Listhead listhead = new Listhead();
+			break;
+		}
 
-        for (int i = 0; i < widths.length; i++) {
-            listhead.appendChild(createListheader(widths[i]));
-        }
+		comp.setId(id);
 
-        return listhead;
-    }
+		return comp;
+	}
 
-    public static Datebox createDatebox() {
-        Datebox db = new Datebox();
+	public static Datebox createDatebox() {
+		Datebox db = new Datebox();
 
-        db.setMold(ZkKeys.ROUNDED);
-        db.setHflex(ZkKeys.HFLEX_1);
+		db.setMold(ZkKeys.ROUNDED);
+		db.setHflex(ZkKeys.HFLEX_1);
 
-        return db;
-    }
+		return db;
+	}
 
-    public static Datebox createDatebox(String format) {
-        Datebox db = createDatebox();
+	public static Datebox createDatebox(String format) {
+		Datebox db = createDatebox();
 
-        db.setFormat(format);
+		db.setFormat(format);
 
-        return db;
-    }
+		return db;
+	}
 
-    public static Listcell createListcell(String label, boolean multiline) {
-        Label lb = createLabel(label, multiline);
+	public static Div createDiv(String cssId) {
+		Div div = new Div();
 
-        Listcell cell = new Listcell();
+		div.setId(cssId);
 
-        cell.appendChild(lb);
-        cell.setTooltiptext(label);
-        cell.setStyle(Constants.STYLE_BORDER_NONE);
+		return div;
+	}
 
-        return cell;
-    }
+	public static Div createDiv(String label, String width) {
+		Div div = new Div();
 
-    public static Listcell createListcell(String label, String style, boolean multiline) {
-        Label lb = createLabel(label, style, multiline);
+		div.appendChild(createLabel(label));
 
-        Listcell cell = new Listcell();
+		div.setStyle(width);
 
-        cell.appendChild(lb);
-        cell.setStyle(Constants.STYLE_BORDER_NONE);
-        return cell;
-    }
+		return div;
+	}
 
-    public static Listcell createListcell(Component parent, String label,
-            String event, String url, Map<String, Object> parameter) {
-        Listcell cell = new Listcell();
+	public static Vlayout createDownloadFileBox(Collection<FileEntry> files) {
+		Vlayout vbox = new Vlayout();
 
-        Label lb = new Label(label);
+		if (Validator.isNull(files)) {
+			Grid grid = ComponentUtil.createGrid(Labels.getLabel(LanguageKeys.MESSAGE_NO_DOCUMENT_WAS_FOUND),
+					Constants.SCLASS_NO_STYLE);
 
-        lb.setZclass(Constants.CLASS_LINK_BUTTON);
+			vbox.appendChild(grid);
+		} else {
+			for (FileEntry file : files) {
+				A rm = new A(file.getName());
 
-        cell.appendChild(lb);
+				rm.addEventListener(Events.ON_CLICK, new PreviewFileListener(file));
 
-        cell.addEventListener(event, new OpenDialogListener(
-                url, parent, parameter));
+				vbox.appendChild(rm);
+			}
+		}
 
-        return cell;
-    }
+		return vbox;
+	}
 
-    public static Cell createCell(String label, String style) {
-        Cell cell = new Cell();
+	public static Div createDownloadFileGrid(List<FileEntry> files) {
+		Div div = new Div();
 
-        cell.appendChild(new Label(label));
+		Grid grid = ComponentUtil.createGrid(Labels.getLabel(LanguageKeys.MESSAGE_NO_DOCUMENT_WAS_FOUND),
+				Constants.SCLASS_NO_STYLE);
 
-        cell.setStyle(/*Constants.STYLE_BORDER_NONE + */style);
+		grid.setHflex("1");
+		grid.appendChild(ComponentUtil.createColumns(new String[] { "", "38px" }));
 
-        return cell;
-    }
+		grid.setModel(new ListModelList<FileEntry>(files));
 
-    public static Listbox createListbox(String mold, boolean checkmark,
-            boolean multiple, Integer pageSize, String id) {
-        Listbox listbox = new Listbox();
+		grid.setRowRenderer(new DownloadFileGridViewRender());
 
-        listbox.setCheckmark(checkmark);
-        listbox.setMultiple(multiple);
-        if (!"".equals(mold)) {
-            listbox.setMold(mold);
-            listbox.setPageSize(pageSize);
-        }
-        listbox.setId(id);
-        listbox.setEmptyMessage(Labels.getLabel(LanguageKeys.NO_RECORD_FOUNND));
+		div.appendChild(grid);
 
-        return listbox;
-    }
+		return div;
+	}
 
-    public static Groupbox createGroupbox(String title, boolean border) {
-        Groupbox gb = new Groupbox();
-
-        gb.setMold(ZkKeys.MOLD_3D);
-        gb.setTitle(title);
-
-        if (!border) {
-            gb.setStyle(Constants.STYLE_BORDER_NONE);
-        }
-
-        return gb;
-    }
-
-    public static Grid createGrid(String emptyString) {
-        Grid grid = new Grid();
-
-        if (Validator.isNotNull(emptyString)) {
-            grid.setEmptyMessage(emptyString);
-        }
-
-        grid.setStyle(Constants.STYLE_BORDER_NONE);
-
-        grid.appendChild(new Rows());
-
-        return grid;
-    }
-
-    public static Grid createGrid(String emptyString, String sClass) {
-        Grid grid = createGrid(emptyString);
-
-        grid.setSclass(sClass);
-
-        return grid;
-    }
-
-    public static Div createSimpleGrid(List<String> values) {
-        Div div = new Div();
-
-        for (String value : values) {
-            Div child = new Div();
-
-            child.appendChild(new Label(value));
-
-            div.appendChild(child);
-        }
-
-        return div;
-    }
-
-    public static Row createSimpleRow(String label) {
-        Row row = new Row();
-
-        row.appendChild(new Label(label));
-
-        return row;
-    }
-
-    public static Label createLabel(String value) {
-        Label label = new Label(value);
-
-        label.setHflex(ZkKeys.HFLEX_1);
-
-        return label;
-    }
-
-    public static Label createLabel(String value, String style) {
-        Label label = new Label(value);
-
-        label.setStyle(style);
-
-        return label;
-    }
-
-    public static Label createLabel(String value, String style,
-            boolean multiLine) {
-        Label label = createLabel(value, multiLine);
-
-        label.setStyle(style);
-
-        return label;
-    }
-
-    public static Label createLabel(String value, boolean multiLine) {
-        Label label = new Label(value);
-
-        label.setMultiline(multiLine);
-
-        return label;
-    }
-
-    public static Button createAttachButton(Div divContainer, Div divFileList,
-            String config) {
-        Button button = new Button(Labels.getLabel(LanguageKeys.DOCUMENT_ATTACH));
-
-        button.setUpload(config);
-        button.setIconSclass(Constants.Z_ICON_PAPERCLIP);
-        button.setSclass(Constants.BTN_SUCCESS);
-
-        List<Media> medium = new ArrayList<Media>();
-
-        button.addEventListener(Events.ON_UPLOAD, new OnUploadAttachmentListener(
-                medium, divFileList));
-
-        divContainer.setAttribute(Constants.DATA, medium);
-
-        return button;
-    }
-
-//    public static Div createOldFileGrid(List<FileEntry> oldFiles,
+	// public static Div createOldFileGrid(List<FileEntry> oldFiles,
 //            List<FileEntry> deleteFiles) {
 //        Div div = new Div();
 //
@@ -761,66 +663,151 @@ public class ComponentUtil {
 //
 //        return div;
 //    }
-    public static Div createDownloadFileGrid(List<FileEntry> files, Window window) {
-        Div div = new Div();
+	public static Div createDownloadFileGrid(List<FileEntry> files, Window window) {
+		Div div = new Div();
 
-        Grid grid = ComponentUtil.createGrid(
-                Labels.getLabel(LanguageKeys.MESSAGE_NO_DOCUMENT_WAS_FOUND),
-                Constants.SCLASS_NO_STYLE);
+		Grid grid = ComponentUtil.createGrid(Labels.getLabel(LanguageKeys.MESSAGE_NO_DOCUMENT_WAS_FOUND),
+				Constants.SCLASS_NO_STYLE);
 
-        grid.appendChild(ComponentUtil.createColumns(
-                new String[]{"80%", "10%", "10%"}));
+		grid.appendChild(ComponentUtil.createColumns(new String[] { "80%", "10%", "10%" }));
 
-        grid.setModel(new ListModelList<FileEntry>(files));
+		grid.setModel(new ListModelList<FileEntry>(files));
 
-        grid.setRowRenderer(new DownloadFileGridRender(window));
+		grid.setRowRenderer(new DownloadFileGridRender(window));
 
-        div.appendChild(grid);
+		div.appendChild(grid);
 
-        return div;
-    }
+		return div;
+	}
 
-    public static Div createDownloadFileGrid(List<FileEntry> files) {
-        Div div = new Div();
+	public static void createErrorMessageBox(String label) {
+		createMessageBox(MSG_ERROR, label);
+	}
 
-        Grid grid = ComponentUtil.createGrid(
-                Labels.getLabel(LanguageKeys.MESSAGE_NO_DOCUMENT_WAS_FOUND),
-                Constants.SCLASS_NO_STYLE);
+	public static void createErrorMessageBox(String label, Object[] args) {
+		createMessageBox(MSG_ERROR, label, args);
+	}
 
-        grid.setHflex("1");
-        grid.appendChild(ComponentUtil.createColumns(
-                new String[]{"", "38px"}));
+	public static Grid createGrid(String emptyString) {
+		Grid grid = new Grid();
 
-        grid.setModel(new ListModelList<FileEntry>(files));
+		if (Validator.isNotNull(emptyString)) {
+			grid.setEmptyMessage(emptyString);
+		}
 
-        grid.setRowRenderer(new DownloadFileGridViewRender());
+		grid.setStyle(Constants.STYLE_BORDER_NONE);
 
-        div.appendChild(grid);
+		grid.appendChild(new Rows());
 
-        return div;
-    }
+		return grid;
+	}
 
-    public static Vlayout createDownloadFileBox(Collection<FileEntry> files) {
-        Vlayout vbox = new Vlayout();
+	public static Grid createGrid(String emptyString, String sClass) {
+		Grid grid = createGrid(emptyString);
 
-        if (Validator.isNull(files)) {
-            Grid grid = ComponentUtil.createGrid(
-                    Labels.getLabel(LanguageKeys.MESSAGE_NO_DOCUMENT_WAS_FOUND),
-                    Constants.SCLASS_NO_STYLE);
+		grid.setSclass(sClass);
 
-            vbox.appendChild(grid);
-        } else {
-            for(FileEntry file: files){
-                A rm = new A(file.getName());
+		return grid;
+	}
 
-                rm.addEventListener(Events.ON_CLICK, new PreviewFileListener(file));
+	public static Groupbox createGroupbox(String title, boolean border) {
+		Groupbox gb = new Groupbox();
 
-                vbox.appendChild(rm);
-            }
-        }
+		gb.setMold(ZkKeys.MOLD_3D);
+		gb.setTitle(title);
 
-        return vbox;
-    }
+		if (!border) {
+			gb.setStyle(Constants.STYLE_BORDER_NONE);
+		}
+
+		return gb;
+	}
+
+	public static void createInforMessageBox(String label) {
+		createMessageBox(MSG_INFORMATION, label);
+	}
+
+	public static void createInforMessageBox(String label, Object[] args) {
+		createMessageBox(MSG_INFORMATION, label, args);
+	}
+
+	public static Label createLabel(String value) {
+		Label label = new Label(value);
+
+		label.setHflex(ZkKeys.HFLEX_1);
+
+		return label;
+	}
+
+	public static Label createLabel(String value, boolean multiLine) {
+		Label label = new Label(value);
+
+		label.setMultiline(multiLine);
+
+		return label;
+	}
+
+	public static Label createLabel(String value, String style) {
+		Label label = new Label(value);
+
+		label.setStyle(style);
+
+		return label;
+	}
+
+	public static Label createLabel(String value, String style, boolean multiLine) {
+		Label label = createLabel(value, multiLine);
+
+		label.setStyle(style);
+
+		return label;
+	}
+
+	public static Listbox createListbox(String mold, boolean checkmark, boolean multiple, Integer pageSize, String id) {
+		Listbox listbox = new Listbox();
+
+		listbox.setCheckmark(checkmark);
+		listbox.setMultiple(multiple);
+		if (!"".equals(mold)) {
+			listbox.setMold(mold);
+			listbox.setPageSize(pageSize);
+		}
+		listbox.setId(id);
+		listbox.setEmptyMessage(Labels.getLabel(LanguageKeys.NO_RECORD_FOUNND));
+
+		return listbox;
+	}
+
+	public static Listcell createListcell(Component comp) {
+		Listcell cell = new Listcell();
+
+		cell.appendChild(comp);
+
+		return cell;
+	}
+
+	public static Listcell createListcell(Component parent, String label, String event, String url,
+			Map<String, Object> parameter) {
+		Listcell cell = new Listcell();
+
+		Label lb = new Label(label);
+
+		lb.setZclass(Constants.CLASS_LINK_BUTTON);
+
+		cell.appendChild(lb);
+
+		cell.addEventListener(event, new OpenDialogListener(url, parent, parameter));
+
+		return cell;
+	}
+
+	public static Listcell createListcell(String label) {
+		Listcell cell = new Listcell();
+
+		cell.appendChild(new Label(label));
+
+		return cell;
+	}
 
 //    public static Button createButton(Component parent, String label,
 //            String event, String url, Map<String, Object> parameter) {
@@ -832,600 +819,562 @@ public class ComponentUtil {
 //        return button;
 //    }
 
-    public static Menuitem createMenuitem(Component parent, String label,
-            String event, String url, Map<String, Object> parameter) {
-        Menuitem menuitem = new Menuitem(label);
-
-        menuitem.addEventListener(event, new OpenDialogListener(
-                url, parent, parameter));
-
-        return menuitem;
-    }
-
-    public static Menuitem createMenuitem(Component parent, String label,
-            String event, String url, Map<String, Object> parameter,
-            String imageUrl) {
-        Menuitem menuitem = createMenuitem(parent, label, event, url, parameter);
-
-        menuitem.setImage(imageUrl);
-
-        return menuitem;
-    }
-
-    public static Menuitem createMenuitem(Component parent, String label,
-            String event, String eventForward, Object data) {
-        Menuitem menuitem = new Menuitem(label);
-
-        menuitem.addForward(event, parent, eventForward, data);
-
-        return menuitem;
-    }
-
-    public static Menuitem createMenuitem(Component parent, String label,
-            String event, String eventForward, Object data, String imageUrl) {
-        Menuitem menuitem = createMenuitem(parent, label, event, eventForward,
-                data);
-
-        menuitem.setImage(imageUrl);
-
-        return menuitem;
-    }
-    
-    public static Menuitem createMenuitem(Component parent, String label,
-            String event, String eventForward, Object data, String iconSclass, 
-            String sclass) {
-        Menuitem menuitem = createMenuitem(parent, label, event, eventForward,
-                data);
-
-        menuitem.setIconSclass(iconSclass);
-        menuitem.setSclass(sclass);
-
-        return menuitem;
-    }
-
-    public static Button createButton(String label, String iconSclass, 
-            String sclass){
-        Button button = new Button();
-        
-        button.setIconSclass(iconSclass);
-        button.setSclass(sclass);
-        button.setTooltiptext(label);
-        
-        return button;
-    }
-    
-    public static Button createButton(String label, String toolTipId, 
-            String iconSclass, String sclass){
-        Button button = new Button();
-        
-        button.setIconSclass(iconSclass);
-        button.setSclass(sclass);
-        
-        if(Validator.isNotNull(toolTipId)){
-            button.setTooltip(toolTipId +", position=after_center");
-        } else {
-            button.setTooltiptext(label);
-        }
-        
-        return button;
-    }
-    
-    public static Button createButton(Component parent, String label,
-            String event, String url, Map<String, Object> parameter,
-            String iconSclass, String sclass) {
-        Button button = createButton(parent, label, event, url, parameter);
-
-        button.setIconSclass(iconSclass);
-        button.setSclass(sclass);
-
-        return button;
-    }
-    
-    public static Button createButton(Component parent, String label, String toolTipId,
-            String event, String url, Map<String, Object> parameter,
-            String iconSclass, String sclass) {
-        Button button = createButton(parent, label, toolTipId, event, url, parameter);
-
-        button.setIconSclass(iconSclass);
-        button.setSclass(sclass);
-
-        return button;
-    }
-    
-    public static Button createButton(Component parent, String label, String toolTipId,
-            String event, String url, Map<String, Object> parameter) {
-        Button button = new Button();
-        
-        if(Validator.isNotNull(toolTipId)){
-            button.setTooltip(toolTipId +", position=after_center");
-        } else {
-            button.setTooltiptext(label);
-        }
-
-        button.addEventListener(event, new OpenDialogListener(
-                url, parent, parameter));
-
-        return button;
-    }
-    
-    public static Button createButton(Component parent, String label,
-            String event, String url, Map<String, Object> parameter) {
-        Button button = new Button();
-        
-        button.setTooltiptext(label);
-
-        button.addEventListener(event, new OpenDialogListener(
-                url, parent, parameter));
-
-        return button;
-    }
-    
-    public static Button createButton(Component parent, String label, 
-            String event, String eventForward, Object data) {
-        Button button = new Button();
-        
-        button.setTooltiptext(label);
-
-        button.addForward(event, parent, eventForward, data);
-
-        return button;
-    }
-    
-    public static Button createButton(Component parent, String label, String toolTipId,
-            String event, String eventForward, Object data) {
-        Button button = new Button();
-        
-        if(Validator.isNotNull(toolTipId)){
-            button.setTooltip(toolTipId +", position=after_center");
-        } else {
-            button.setTooltiptext(label);
-        }
-
-        button.addForward(event, parent, eventForward, data);
-
-        return button;
-    }
-    
-    public static Button createButton(Component parent, String label,
-            String event, String eventForward, Object data, String iconSclass, 
-            String sclass) {
-        Button button = createButton(parent, label, event, eventForward,
-                data);
-
-        button.setIconSclass(iconSclass);
-        button.setSclass(sclass);
-
-        return button;
-    }
-    
-    public static Button createButton(Component parent, String label, String toolTipId,
-            String event, String eventForward, Object data, String iconSclass, 
-            String sclass) {
-        Button button = createButton(parent, label, toolTipId, event, eventForward,
-                data);
-
-        button.setIconSclass(iconSclass);
-        button.setSclass(sclass);
-
-        return button;
-    }
-    
-    public static Toolbarbutton createToolbarButton(Component parent, String label,
-            String event, String url, Map<String, Object> parameter,
-            String iconSclass, String sclass) {
-        Toolbarbutton tbb = createToolbarButton(parent, label, event, url, parameter);
-
-        tbb.setIconSclass(iconSclass);
-        tbb.setSclass(sclass);
-
-        return tbb;
-    }
-    
-    public static Toolbarbutton createToolbarButton(Component parent, String label,
-            String event, String url, Map<String, Object> parameter) {
-        Toolbarbutton tbb = new Toolbarbutton();
-        
-        tbb.setTooltiptext(label);
-
-        tbb.addEventListener(event, new OpenDialogListener(
-                url, parent, parameter));
-
-        return tbb;
-    }
-    
-    public static Toolbarbutton createToolbarButton(Component parent, String label,
-            String event, String eventForward, Object data) {
-        Toolbarbutton tbb = new Toolbarbutton();
-        
-        tbb.setTooltiptext(label);
-
-        tbb.addForward(event, parent, eventForward, data);
-
-        return tbb;
-    }
-    
-    public static Toolbarbutton createToolbarButton(Component parent, String label,
-            String event, String eventForward, Object data, String iconSclass, 
-            String sclass) {
-        Toolbarbutton tbb = createToolbarButton(parent, label, event, eventForward,
-                data);
-
-        tbb.setIconSclass(iconSclass);
-        tbb.setSclass(sclass);
-
-        return tbb;
-    }
-    
-    public static Textbox createTextbox(String value, String id) {
-        Textbox tb = new Textbox(value);
-
-        tb.setId(id);
-        tb.setMold(ZkKeys.ROUNDED);
-        tb.setHflex(ZkKeys.HFLEX_1);
-
-        return tb;
-    }
-
-    public static Textbox createTextbox(String value, String id,
-            String placeHolder) {
-        Textbox tb = createTextbox(value, id);
-
-        tb.setPlaceholder(placeHolder);
-
-        return tb;
-    }
-
-    public static Textbox createTextbox(String id) {
-        return createTextbox(StringPool.BLANK, id);
-    }
-
-    public static Textbox createTextbox() {
-        return createTextbox(StringPool.BLANK);
-    }
-
-    public static Div createDiv(String cssId) {
-        Div div = new Div();
-
-        div.setId(cssId);
-
-        return div;
-    }
-
-    public static Div createDiv(String label, String width) {
-        Div div = new Div();
-
-        div.appendChild(createLabel(label));
-
-        div.setStyle(width);
-
-        return div;
-    }
-
-    public static Bandbox createBandbox(String value, boolean readOnly) {
-        Bandbox bb = new Bandbox();
-
-        if (Validator.isNotNull(value)) {
-            bb.setValue(value);
-        }
-
-        bb.setReadonly(readOnly);
-        bb.setMold(ZkKeys.ROUNDED);
-        bb.setHflex(ZkKeys.HFLEX_1);
-
-        return bb;
-    }
-
-    public static Listcell createAddRemoveButton(final Listbox listbox,
-            final Listitem item, final Object object, final int index,
-            boolean allowRemoveOld) {
-        Listcell cell = new Listcell();
-
-        Hbox hbox = new Hbox();
-
-        Toolbarbutton btnAddRow = new Toolbarbutton();
-
-        btnAddRow.setImage(ADD_ICON);
-        btnAddRow.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
-
-            @Override
-            public void onEvent(Event t) throws Exception {
-                ListModelList listModelList = (ListModelList) listbox.getListModel();
-                listModelList.add(item.getIndex() + 1, object);
-            }
-        });
-
-        hbox.appendChild(btnAddRow);
-
-        if (allowRemoveOld) {
-            Toolbarbutton btnDeleteRow = new Toolbarbutton();
-
-            btnDeleteRow.setImage(REMOVE_ICON);
-            btnDeleteRow.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
-
-                @Override
-                public void onEvent(Event t) throws Exception {
-                    ListModelList listModelList = (ListModelList) listbox.getListModel();
-                    listModelList.remove(item.getIndex());
-
-                    if (listModelList.isEmpty()) {
-                        listModelList.add(index, object);
-                    }
-                }
-            });
-
-            hbox.appendChild(btnDeleteRow);
-        }
-//        if (index == 0) { //khong xoa dong dau tien
-//            btnDeleteRow.setVisible(false);
-//        }
-
-        cell.appendChild(hbox);
-
-        return cell;
-    }
-
-    public static Listcell createRemoveButton(final Listbox listbox,
-            final Listitem item) {
-        Listcell cell = new Listcell();
-
-        Toolbarbutton btnDeleteRow = new Toolbarbutton();
-
-        btnDeleteRow.setImage(REMOVE_ICON);
-        btnDeleteRow.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
-
-            @Override
-            public void onEvent(Event t) throws Exception {
-                ListModelList listModelList = (ListModelList) listbox.getListModel();
-                listModelList.remove(item.getIndex());
-            }
-        });
-
-        return cell;
-    }
-
-    public static Bandpopup createBandpopup(String width, String pageInclude) {
-        Bandpopup bp = new Bandpopup();
-
-        bp.setWidth(width);
-
-        Include include = new Include(pageInclude);
-
-        bp.appendChild(include);
-
-        return bp;
-    }
-
-    public static Bandpopup createBandpopup(String width) {
-        Bandpopup bp = new Bandpopup();
-
-        bp.setWidth(width);
-
-        return bp;
-    }
-
-    public static Checkbox createCheckbox(Long value) {
-        Checkbox cb = new Checkbox();
-
-        cb.setChecked(Values.STATUS_DEACTIVE.equals(value));
-
-        return cb;
-    }
-
-    public static Checkbox createCheckbox(String id, boolean checked) {
-        Checkbox cb = new Checkbox();
-
-        cb.setId(id);
-        cb.setChecked(checked);
-
-        return cb;
-    }
-
-    public static void setSelectedItem(Combobox cb, String value) {
-        for (Comboitem item : cb.getItems()) {
-            if (value.equals(item.getValue())) {
-                cb.setSelectedItem(item);
-
-                break;
-            }
-        }
-    }
-
-    public static String getSuccessKey(boolean update) {
-        if (update) {
-            return LanguageKeys.MESSAGE_UPDATE_SUCCESS;
-        }
-
-        return LanguageKeys.MESSAGE_INSERT_SUCCESS;
-    }
-
-    public static String getFailKey(boolean update) {
-        if (update) {
-            return LanguageKeys.MESSAGE_UPDATE_FAIL;
-        }
-
-        return LanguageKeys.MESSAGE_INSERT_FAIL;
-    }
-
-    public static void clear(Component comp) {
-        if (comp.getChildren() != null) {
-            comp.getChildren().clear();
-        }
-    }
-
-    public static void createSuccessMessageBox(String label) {
-        createMessageBox(MSG_SUCCESS, label);
-    }
-
-    public static void createSuccessMessageBox(String label, Object[] args) {
-        createMessageBox(MSG_SUCCESS, label, args);
-    }
-
-    public static void createErrorMessageBox(String label) {
-        createMessageBox(MSG_ERROR, label);
-    }
-
-    public static void createErrorMessageBox(String label, Object[] args) {
-        createMessageBox(MSG_ERROR, label, args);
-    }
-
-    public static void createWarningMessageBox(String label) {
-        createMessageBox(MSG_WARNING, label);
-    }
+	public static Listcell createListcell(String label, boolean multiline) {
+		Label lb = createLabel(label, multiline);
 
-    public static void createWarningMessageBox(String label, Object[] args) {
-        createMessageBox(MSG_WARNING, label, args);
-    }
+		Listcell cell = new Listcell();
 
-    public static void createInforMessageBox(String label) {
-        createMessageBox(MSG_INFORMATION, label);
-    }
+		cell.appendChild(lb);
+		cell.setTooltiptext(label);
+		cell.setStyle(Constants.STYLE_BORDER_NONE);
 
-    public static void createInforMessageBox(String label, Object[] args) {
-        createMessageBox(MSG_INFORMATION, label, args);
-    }
+		return cell;
+	}
 
-    public static void createMessageBox(String type, String label) {
-        HashMap<String, Object> mapNotice = new HashMap<String, Object>();
+	public static Listcell createListcell(String label, String style) {
+		Listcell cell = new Listcell(label);
 
-        mapNotice.put("type", type);
-        mapNotice.put("notice", Labels.getLabel(label));
+		cell.setStyle(style);
 
-        Executions.createComponents(
-                MESSAGE_BOX_PAGE, null, mapNotice);
-    }
+		return cell;
+	}
 
-    public static void createMessageBox(String type, String label,
-            Object[] args) {
-        HashMap<String, Object> mapNotice = new HashMap<String, Object>();
+	public static Listcell createListcell(String label, String style, boolean multiline) {
+		Label lb = createLabel(label, style, multiline);
 
-        mapNotice.put("type", type);
-        mapNotice.put("notice", Labels.getLabel(label, args));
+		Listcell cell = new Listcell();
 
-        Executions.createComponents(
-                MESSAGE_BOX_PAGE, null, mapNotice);
-    }
+		cell.appendChild(lb);
+		cell.setStyle(Constants.STYLE_BORDER_NONE);
+		return cell;
+	}
 
-    public static Image createStatusImage(Long status) {
-        if (Validator.isNull(status)) {
-            return null;
-        }
-
-        if (status.equals(Values.STATUS_ACTIVE)) {
-            return new Image(OK_ICON);
-        }
-
-        return new Image(LOCK_ICON);
-    }
-
-    public static void refreshMainMenu() {
-        Window winParent = (Window) Sessions.getCurrent().
-                getAttribute("mainMenuWindow");
-
-        winParent.invalidate();
-
-        Events.sendEvent("onLoadData", winParent, null);
-    }
-
-    public static List<SimpleModel> getComboboxStatusValue(String[] statusKeys,
-            boolean hasDefault) {
-        List<SimpleModel> threadStatusList = new ArrayList<SimpleModel>();
-
-        if (hasDefault) {
-            threadStatusList.add(new SimpleModel(Values.DEFAULT_OPTION_VALUE_INT,
-                    Labels.getLabel(LanguageKeys.OPTION)));
-        }
-
-        for (int i = 0; i < statusKeys.length; i++) {
-            threadStatusList.add(new SimpleModel(i, statusKeys[i]));
-        }
-
-        return threadStatusList;
-    }
-
-    public static Div createAttachment(String config, List<FileEntry> oldFiles) {
-        Div divContainer = new Div();
-        Div divFileList = new Div();
-
-        divContainer.setSclass("z-div-attach");
-        
-        divContainer.appendChild(
-                createAttachButton(divContainer, divFileList, config));
-        //Tao grid chua file cu da upload
-        if (!oldFiles.isEmpty()) {
-            List<FileEntry> deleteFiles = new ArrayList<FileEntry>();
-
-            divContainer.appendChild(createOldFileGrid(oldFiles, deleteFiles));
-
-            divContainer.setAttribute(Constants.OBJECT, deleteFiles);
-        }
-
-        divContainer.appendChild(divFileList);
-
-        return divContainer;
-    }
-
-    public static Div createOldFileGrid(List<FileEntry> oldFiles,
-            List<FileEntry> deleteFiles) {
-        Div div = new Div();
-
-        Grid grid = ComponentUtil.createGrid(StringPool.BLANK,
-                Constants.SCLASS_NO_STYLE);
-
-        grid.appendChild(ComponentUtil.createColumns(
-                new String[]{"88%", "12%"}));
-
-        grid.setModel(new ListModelList<FileEntry>(oldFiles));
-
-        grid.setRowRenderer(new OldFileGridRender(deleteFiles));
-
-        div.appendChild(grid);
-
-        return div;
-    }
-
-    public static Label createTooltip(String text, int lengthLimit){
-        Label label = new Label();
-
-        if(Validator.isNull(text)
-                || lengthLimit<0
-                || text.length()<lengthLimit){
-            label.setValue(text);
-        } else {
-            label.setValue(text.substring(0, lengthLimit) +
-                    StringPool.THREE_PERIOD);
-
-            label.setTooltiptext(text);
-        }
-
-        return label;
-    }
-    
-    public static A createAIcon(String iconSclass){
-        A a = new A();
-        
-        a.setIconSclass(iconSclass);
-        
-        return a;
-    }
-    
-    public static Component getParentByLevel(Component startComp, int level){
-        Component comp = startComp.getParent();
-        
-        while(level>1){
-            comp = comp.getParent();
-            
-            level--;
-        }
-        
-        return comp;
-    }
-    
-    private static final String MSG_SUCCESS         = "success";
-    private static final String MSG_ERROR           = "error";
-    private static final String MSG_WARNING         = "warning";
-    private static final String MSG_INFORMATION     = "information";
-    private static final String MESSAGE_BOX_PAGE    =
-            "/html/pages/common/messageBox.zul";
-
-    
+	public static Listcell createListcell(String label, String tooltip, String style) {
+		Listcell cell = new Listcell();
+
+		Label label1 = new Label(label);
+		label1.setTooltiptext(tooltip);
+		label1.setStyle(style);
+		cell.appendChild(label1);
+		return cell;
+	}
+
+	public static Listhead createListhead(String[] widths) {
+		Listhead listhead = new Listhead();
+
+		for (int i = 0; i < widths.length; i++) {
+			listhead.appendChild(createListheader(widths[i]));
+		}
+
+		return listhead;
+	}
+
+	public static Listheader createListheader(String width) {
+		return createListheader(StringPool.BLANK, width);
+	}
+
+	public static Listheader createListheader(String header, String width) {
+		Listheader listheader = new Listheader(header);
+
+		listheader.setStyle(Constants.STYLE_COLUMN_MULTILINE);
+
+		if (Validator.isNotNull(width)) {
+			listheader.setWidth(width);
+		}
+
+		return listheader;
+	}
+
+	public static Listheader createListheader(String header, String width, String columnSort) {
+		Listheader listheader = createListheader(header, width);
+
+		listheader.setSort("auto(" + columnSort + ")");
+
+		return listheader;
+	}
+
+	public static Menuitem createMenuitem(Component parent, String label, String event, String url,
+			Map<String, Object> parameter) {
+		Menuitem menuitem = new Menuitem(label);
+
+		menuitem.addEventListener(event, new OpenDialogListener(url, parent, parameter));
+
+		return menuitem;
+	}
+
+	public static Menuitem createMenuitem(Component parent, String label, String event, String url,
+			Map<String, Object> parameter, String imageUrl) {
+		Menuitem menuitem = createMenuitem(parent, label, event, url, parameter);
+
+		menuitem.setImage(imageUrl);
+
+		return menuitem;
+	}
+
+	public static Menuitem createMenuitem(Component parent, String label, String event, String eventForward,
+			Object data) {
+		Menuitem menuitem = new Menuitem(label);
+
+		menuitem.addForward(event, parent, eventForward, data);
+
+		return menuitem;
+	}
+
+	public static Menuitem createMenuitem(Component parent, String label, String event, String eventForward,
+			Object data, String imageUrl) {
+		Menuitem menuitem = createMenuitem(parent, label, event, eventForward, data);
+
+		menuitem.setImage(imageUrl);
+
+		return menuitem;
+	}
+
+	public static Menuitem createMenuitem(Component parent, String label, String event, String eventForward,
+			Object data, String iconSclass, String sclass) {
+		Menuitem menuitem = createMenuitem(parent, label, event, eventForward, data);
+
+		menuitem.setIconSclass(iconSclass);
+		menuitem.setSclass(sclass);
+
+		return menuitem;
+	}
+
+	public static void createMessageBox(String type, String label) {
+		HashMap<String, Object> mapNotice = new HashMap<String, Object>();
+
+		mapNotice.put("type", type);
+		mapNotice.put("notice", Labels.getLabel(label));
+
+		Executions.createComponents(MESSAGE_BOX_PAGE, null, mapNotice);
+	}
+
+	public static void createMessageBox(String type, String label, Object[] args) {
+		HashMap<String, Object> mapNotice = new HashMap<String, Object>();
+
+		mapNotice.put("type", type);
+		mapNotice.put("notice", Labels.getLabel(label, args));
+
+		Executions.createComponents(MESSAGE_BOX_PAGE, null, mapNotice);
+	}
+
+	public static Div createOldFileGrid(List<FileEntry> oldFiles, List<FileEntry> deleteFiles) {
+		Div div = new Div();
+
+		Grid grid = ComponentUtil.createGrid(StringPool.BLANK, Constants.SCLASS_NO_STYLE);
+
+		grid.appendChild(ComponentUtil.createColumns(new String[] { "88%", "12%" }));
+
+		grid.setModel(new ListModelList<FileEntry>(oldFiles));
+
+		grid.setRowRenderer(new OldFileGridRender(deleteFiles));
+
+		div.appendChild(grid);
+
+		return div;
+	}
+
+	public static Listcell createRemoveButton(final Listbox listbox, final Listitem item) {
+		Listcell cell = new Listcell();
+
+		Toolbarbutton btnDeleteRow = new Toolbarbutton();
+
+		btnDeleteRow.setImage(REMOVE_ICON);
+		btnDeleteRow.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+
+			@Override
+			public void onEvent(Event t) throws Exception {
+				ListModelList listModelList = (ListModelList) listbox.getListModel();
+				listModelList.remove(item.getIndex());
+			}
+		});
+
+		return cell;
+	}
+
+	public static Div createSimpleGrid(List<String> values) {
+		Div div = new Div();
+
+		for (String value : values) {
+			Div child = new Div();
+
+			child.appendChild(new Label(value));
+
+			div.appendChild(child);
+		}
+
+		return div;
+	}
+
+	public static Row createSimpleRow(String label) {
+		Row row = new Row();
+
+		row.appendChild(new Label(label));
+
+		return row;
+	}
+
+	public static Listcell createSpinnerListcell(Long value, String id) {
+		return createSpinnerListcell(value, id, StringPool.BLANK);
+	}
+
+	public static Listcell createSpinnerListcell(Long value, String id, String style) {
+		Listcell cell = new Listcell();
+
+		Spinner sp = new Spinner();
+
+		if (value != null) {
+			sp.setValue(value.intValue());
+		}
+
+		if (Validator.isNotNull(style)) {
+			sp.setStyle(style);
+		}
+
+		sp.setWidth("98%");
+		sp.setId(id);
+
+		cell.appendChild(sp);
+
+		return cell;
+	}
+
+	public static Image createStatusImage(Long status) {
+		if (Validator.isNull(status)) {
+			return null;
+		}
+
+		if (status.equals(Values.STATUS_ACTIVE)) {
+			return new Image(OK_ICON);
+		}
+
+		return new Image(LOCK_ICON);
+	}
+
+	public static void createSuccessMessageBox(String label) {
+		createMessageBox(MSG_SUCCESS, label);
+	}
+
+	public static void createSuccessMessageBox(String label, Object[] args) {
+		createMessageBox(MSG_SUCCESS, label, args);
+	}
+
+	public static Textbox createTextbox() {
+		return createTextbox(StringPool.BLANK);
+	}
+
+	public static Textbox createTextbox(String id) {
+		return createTextbox(StringPool.BLANK, id);
+	}
+
+	public static Textbox createTextbox(String value, String id) {
+		Textbox tb = new Textbox(value);
+
+		tb.setId(id);
+		tb.setMold(ZkKeys.ROUNDED);
+		tb.setHflex(ZkKeys.HFLEX_1);
+
+		return tb;
+	}
+
+	public static Textbox createTextbox(String value, String id, String placeHolder) {
+		Textbox tb = createTextbox(value, id);
+
+		tb.setPlaceholder(placeHolder);
+
+		return tb;
+	}
+
+	public static Listcell createTextboxListcell(String label) {
+		Listcell cell = new Listcell();
+
+		Textbox tb = new Textbox(label);
+
+		tb.setWidth("100%");
+
+		cell.appendChild(tb);
+
+		return cell;
+	}
+
+	public static Listcell createTextboxListcell(String label, String id) {
+		Listcell cell = new Listcell();
+
+		Textbox tb = new Textbox(label);
+
+		tb.setWidth("100%");
+		tb.setId(id);
+
+		cell.appendChild(tb);
+
+		return cell;
+	}
+
+	public static Toolbarbutton createToolbarButton(Component parent, String label, String event, String url,
+			Map<String, Object> parameter) {
+		Toolbarbutton tbb = new Toolbarbutton();
+
+		tbb.setTooltiptext(label);
+
+		tbb.addEventListener(event, new OpenDialogListener(url, parent, parameter));
+
+		return tbb;
+	}
+
+	public static Toolbarbutton createToolbarButton(Component parent, String label, String event, String url,
+			Map<String, Object> parameter, String iconSclass, String sclass) {
+		Toolbarbutton tbb = createToolbarButton(parent, label, event, url, parameter);
+
+		tbb.setIconSclass(iconSclass);
+		tbb.setSclass(sclass);
+
+		return tbb;
+	}
+
+	public static Toolbarbutton createToolbarButton(Component parent, String label, String event, String eventForward,
+			Object data) {
+		Toolbarbutton tbb = new Toolbarbutton();
+
+		tbb.setTooltiptext(label);
+
+		tbb.addForward(event, parent, eventForward, data);
+
+		return tbb;
+	}
+
+	public static Toolbarbutton createToolbarButton(Component parent, String label, String event, String eventForward,
+			Object data, String iconSclass, String sclass) {
+		Toolbarbutton tbb = createToolbarButton(parent, label, event, eventForward, data);
+
+		tbb.setIconSclass(iconSclass);
+		tbb.setSclass(sclass);
+
+		return tbb;
+	}
+
+	public static Label createTooltip(String text, int lengthLimit) {
+		Label label = new Label();
+
+		if (Validator.isNull(text) || lengthLimit < 0 || text.length() < lengthLimit) {
+			label.setValue(text);
+		} else {
+			label.setValue(text.substring(0, lengthLimit) + StringPool.THREE_PERIOD);
+
+			label.setTooltiptext(text);
+		}
+
+		return label;
+	}
+
+	public static Treecell createTreeCell(Label label) {
+		Treecell cell = new Treecell();
+
+		cell.appendChild(label);
+		cell.setStyle(Constants.STYLE_BORDER_NONE);
+
+		return cell;
+	}
+
+	public static Treecell createTreeCell(Long status) {
+		Treecell cell = new Treecell();
+
+		cell.appendChild(createStatusImage(status));
+		cell.setStyle(Constants.STYLE_BORDER_NONE + Constants.STYLE_TEXT_ALIGN_CENTER);
+
+		return cell;
+	}
+
+	public static Treecell createTreeCell(String label) {
+		return createTreeCell(new Label(label));
+	}
+
+	public static Treecell createTreeCell(String label, String style) {
+		Label labelTemp = createLabel(label, style);
+
+		Treecell cell = createTreeCell(labelTemp);
+
+		cell.setStyle(style);
+
+		return cell;
+	}
+
+	public static Treecell createTreeCell(String label, String labelStyle, String cellStyle) {
+		Treecell cell = createTreeCell(label, labelStyle);
+
+		cell.setStyle(cellStyle);
+
+		return cell;
+	}
+
+	public static Treecell createTreeCell(String label, String tooltip, String style, String cellStyle) {
+		Label labelTemp = createLabel(label, style);
+		labelTemp.setTooltiptext(tooltip);
+		Treecell cell = new Treecell();
+		cell.appendChild(labelTemp);
+		cell.setStyle(cellStyle);
+		return cell;
+	}
+
+	public static Treerow createTreerow(Label label) {
+		Treerow treeRow = new Treerow();
+
+		treeRow.appendChild(createTreeCell(label));
+
+		return treeRow;
+	}
+
+	public static Treerow createTreerow(String label) {
+		return createTreerow(new Label(label));
+	}
+
+	public static void createWarningMessageBox(String label) {
+		createMessageBox(MSG_WARNING, label);
+	}
+
+	public static void createWarningMessageBox(String label, Object[] args) {
+		createMessageBox(MSG_WARNING, label, args);
+	}
+
+	public static Long getBandboxValue(Bandbox bandbox) {
+		Long bbValue = GetterUtil.getLong(bandbox.getAttribute(Constants.ID));
+
+		if (Validator.isNull(bbValue)) {
+			return null;
+		}
+
+		return bbValue;
+	}
+
+	public static String getComboboxLabel(Combobox combobox) {
+		String cboLabel = GetterUtil.getString(combobox.getValue());
+
+		return cboLabel;
+	}
+
+	public static List<SimpleModel> getComboboxStatusValue(String[] statusKeys, boolean hasDefault) {
+		List<SimpleModel> threadStatusList = new ArrayList<SimpleModel>();
+
+		if (hasDefault) {
+			threadStatusList
+					.add(new SimpleModel(Values.DEFAULT_OPTION_VALUE_INT, Labels.getLabel(LanguageKeys.OPTION)));
+		}
+
+		for (int i = 0; i < statusKeys.length; i++) {
+			threadStatusList.add(new SimpleModel(i, statusKeys[i]));
+		}
+
+		return threadStatusList;
+	}
+
+	public static Long getComboboxValue(Combobox combobox) {
+		Long cboValue = GetterUtil.getLong(getValue(combobox));
+
+		if (Validator.isNull(cboValue)) {
+			return null;
+		}
+
+		return cboValue;
+	}
+
+	public static Long getComboboxValue(Component parentCmp) {
+		if (parentCmp instanceof Combobox) {
+			return getComboboxValue((Combobox) parentCmp);
+		}
+
+		return null;
+	}
+
+	public static String getFailKey(boolean update) {
+		if (update) {
+			return LanguageKeys.MESSAGE_UPDATE_FAIL;
+		}
+
+		return LanguageKeys.MESSAGE_INSERT_FAIL;
+	}
+
+	public static Component getParentByLevel(Component startComp, int level) {
+		Component comp = startComp.getParent();
+
+		while (level > 1) {
+			comp = comp.getParent();
+
+			level--;
+		}
+
+		return comp;
+	}
+
+	public static List<Long> getSelectedId(Tree tree) {
+		List<Long> ids = new ArrayList<Long>();
+
+		Set<Treeitem> items = tree.getSelectedItems();
+
+		for (Treeitem item : items) {
+			Long id = (Long) item.getAttribute(Constants.OBJECT_ID);
+
+			if (Validator.isNotNull(id)) {
+				ids.add(id);
+			}
+		}
+
+		return ids;
+	}
+
+	public static String getSuccessKey(boolean update) {
+		if (update) {
+			return LanguageKeys.MESSAGE_UPDATE_SUCCESS;
+		}
+
+		return LanguageKeys.MESSAGE_INSERT_SUCCESS;
+	}
+
+	public static String getTextboxValue(Component cmp) {
+		if (cmp.getFirstChild() instanceof Textbox) {
+			return GetterUtil.getString(((Textbox) cmp.getFirstChild()).getValue());
+		}
+
+		return StringPool.BLANK;
+	}
+
+	public static Object getValue(Combobox combobox) {
+		if (combobox.getSelectedItem() == null) {
+			return null;
+		}
+
+		return combobox.getSelectedItem().getValue();
+	}
+
+	public static Object getValue(Component comp) {
+		if (comp == null) {
+			return null;
+		}
+
+		if (comp instanceof Textbox) {
+			return ((Textbox) comp).getValue();
+		}
+
+		if (comp instanceof Datebox) {
+			return ((Datebox) comp).getValue();
+		}
+
+		return null;
+	}
+
+	public static void refreshMainMenu() {
+		Window winParent = (Window) Sessions.getCurrent().getAttribute("mainMenuWindow");
+
+		winParent.invalidate();
+
+		Events.sendEvent("onLoadData", winParent, null);
+	}
+
+	public static void setSelectedItem(Combobox cb, String value) {
+		for (Comboitem item : cb.getItems()) {
+			if (value.equals(item.getValue())) {
+				cb.setSelectedItem(item);
+
+				break;
+			}
+		}
+	}
+
 }

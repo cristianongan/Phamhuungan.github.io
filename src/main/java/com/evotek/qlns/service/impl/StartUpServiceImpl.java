@@ -92,7 +92,8 @@ public class StartUpServiceImpl implements StartUpService {
 	public int insertCtExpiredNotification() {
 		List<Staff> staffs = this.staffDAO.getContractExpiredStaff();
 
-		List<Long> notiStaffIds = this.notificationDAO.getStaffIdByT_S(Values.NOTI_CONTRACT_EXPIRED, Values.STATUS_ACTIVE);
+		List<Long> notiStaffIds = this.notificationDAO.getStaffIdByT_S(Values.NOTI_CONTRACT_EXPIRED,
+				Values.STATUS_ACTIVE);
 
 		List<Notification> notifives = new ArrayList<Notification>();
 

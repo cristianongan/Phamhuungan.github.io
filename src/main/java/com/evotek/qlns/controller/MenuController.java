@@ -12,7 +12,8 @@ import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.zkoss.spring.SpringUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Event;
@@ -35,285 +36,263 @@ import com.evotek.qlns.util.key.LanguageKeys;
 
 /**
  *
- * @author hungnt81
- * LinhLH2 fixed
+ * @author LinhLH2
  */
-public class MenuController extends BasicController<Div>
-        implements Serializable {
+@Controller
+public class MenuController extends BasicController<Div> implements Serializable {
 
-    private Tree treeMenu;
-    private Div winMenu;
-    private Include parent;
+	private static final long serialVersionUID = 882799078126995809L;
 
-    private TreeBasicModel treeCategoryModelUtil;
+	private static final Logger _log = LogManager.getLogger(MenuController.class);
 
-    @Override
-    public void doBeforeComposeChildren(Div comp) throws Exception {
-        super.doBeforeComposeChildren(comp);
+	private static final String EDIT_PAGE = "/html/pages/manager_menu/edit.zul";
 
-        this.winMenu = comp;
-    }
+	@Autowired
+	private CategoryService categoryService;
 
-    @Override
-    public void doAfterCompose(Div comp) throws Exception {
-        super.doAfterCompose(comp);
-        
-        this.parent = (Include) this.winMenu.getParent();
-        
-        this.onCreateTree();
-    }
+	private Include parent;
 
-    public void onClick$adminPage(){
-        this.parent.setSrc("/html/pages/admin/default.zul");
-    }
-    /**
-     * Hàm tạo cây menu
-     * @throws Exception
-     */
-    public void onCreateTree() throws Exception {
-        try {
-            this.treeCategoryModelUtil = new TreeBasicModel(_buildCategoryTree());
+	private TreeBasicModel treeCategoryModelUtil;
 
-            this.treeCategoryModelUtil.setMultiple(true);
+	private Tree treeMenu;
 
-            this.treeMenu.setItemRenderer(new TreeCategoryRender(this.winMenu));
-            this.treeMenu.setModel(this.treeCategoryModelUtil);
-            this.treeMenu.setCheckmark(true);
-        } catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
-        }
+	private Div winMenu;
 
-    }
+	/**
+	 * Hàm tạo cây menu
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	private CategoryTreeNode _buildCategoryTree() throws Exception {
+		// tạo cây menu không có gốc
+		CategoryTreeNode menu = new CategoryTreeNode(null, new CategoryTreeNode[] {});
 
-    /**
-     * Hàm tạo cây menu
-     * @return
-     * @throws Exception
-     */
-    private CategoryTreeNode _buildCategoryTree()
-            throws Exception{
-        //tạo cây menu không có gốc
-        CategoryTreeNode menu = new CategoryTreeNode(null,
-                new CategoryTreeNode[]{});
+		menu.setOpen(true);
 
-        menu.setOpen(true);
+		try {
 
-        try{
+			// Lấy danh sách các menu category
+			List<Category> roots = this.categoryService.getCategoryByParentId(null);
 
-            //Lấy danh sách các menu category
-            List<Category> roots = this.categoryService.getCategoryByParentId(null);
-            
+			for (Category root : roots) {
 
-            for(Category root: roots){
+				// Lấy danh sách các menu item ứng với mỗi menu category
+				List<Category> childs = this.categoryService.getCategoryByParentId(root.getCategoryId());
+				if (!childs.isEmpty()) {
+					// Tạo cây con với gốc là menu category
+					CategoryTreeNode item = new CategoryTreeNode(root, new CategoryTreeNode[] {});
 
-                //Lấy danh sách các menu item ứng với mỗi menu category
-                List<Category> childs = this.categoryService.getCategoryByParentId(
-                        root.getCategoryId());
-                if (!childs.isEmpty()) {
-                    //Tạo cây con với gốc là menu category
-                    CategoryTreeNode item = new CategoryTreeNode(root,
-                            new CategoryTreeNode[]{});
+					item.setOpen(true);
 
-                    item.setOpen(true);
+					// Gắn các menu item vào cây con vừa tạo
+					for (Category child : childs) {
+						item.add(new CategoryTreeNode(child));
+					}
 
-                    //Gắn các menu item vào cây con vừa tạo
-                    for (Category child : childs) {
-                        item.add(new CategoryTreeNode(child));
-                    }
+					// gắn cấy menu category vào cây menu
+					menu.add(item);
+				} else {
+					menu.add(new CategoryTreeNode(root));
+				}
+			}
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
 
-                    //gắn cấy menu category vào cây menu
-                    menu.add(item);
-                } else {
-                    menu.add(new CategoryTreeNode(root));
-                }
-            }
-        }catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
-        }
+		return menu;
+	}
 
-        return menu;
-    }
+	@Override
+	public void doAfterCompose(Div comp) throws Exception {
+		super.doAfterCompose(comp);
 
-    /**
-     * Hàm xử lý sự kiện onClick khi click vào nút "Thêm" - có id = btnAdd
-     */
-    public void onClick$btnAdd() {
-        //Tạo map để set các tham số truyền vào khi mở popup cập nhật/thêm mới
-        Map<String, Object> parameters = new HashMap<String, Object>();
+		this.parent = (Include) this.winMenu.getParent();
 
-        parameters.put(Constants.PARENT_WINDOW, this.winMenu);
-        parameters.put(Constants.TITLE, Labels.getLabel(LanguageKeys.ADD));
-        parameters.put(Constants.ID, 0L);
+		this.onCreateTree();
+	}
 
-        Window win = (Window) Executions.createComponents(
-                EDIT_PAGE , this.winMenu, parameters);
+	@Override
+	public void doBeforeComposeChildren(Div comp) throws Exception {
+		super.doBeforeComposeChildren(comp);
 
-        win.doModal();
-    }
+		this.winMenu = comp;
+	}
 
-    /**
-     * Hàm thực hiện reload lại cây menu
-     * @param event
-     * @throws Exception
-     */
-    public void onLoadData(Event event) throws Exception {
-        this.onCreateTree();
-    }
+	/**
+	 * Hàm lấy danh sách id các menu item được chọn
+	 * 
+	 * @return
+	 */
+	public List<Long> getSelectedItem() {
+		List<Long> categoryIds = new ArrayList<Long>();
 
-    /**
-     * Hàm lấy danh sách id các menu item được chọn
-     * @return
-     */
-    public List<Long> getSelectedItem() {
-        List<Long> categoryIds = new ArrayList<Long>();
+		if (this.treeMenu.getItems() != null) {
+			for (Object item : this.treeMenu.getItems()) {
+				Treeitem treeitem = (Treeitem) item;
 
-        if (this.treeMenu.getItems() != null) {
-            for (Object item : this.treeMenu.getItems()) {
-                Treeitem treeitem = (Treeitem) item;
+				if (treeitem.isSelected()) {
+					Category categoryTemp = (Category) treeitem.getAttribute("data");
 
-                if (treeitem.isSelected()) {
-                    Category categoryTemp =
-                            (Category) treeitem.getAttribute("data");
+					categoryIds.add(categoryTemp.getCategoryId());
+				}
+			}
+		} else {
+			Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_SELECT_RECORD));
+		}
 
-                    categoryIds.add(categoryTemp.getCategoryId());
-                }
-            }
-        } else {
-            Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_SELECT_RECORD));
-        }
+		return categoryIds;
+	}
 
-        return categoryIds;
-    }
+	public void onClick$adminPage() {
+		this.parent.setSrc("/html/pages/admin/default.zul");
+	}
 
-    //event method
-    /**
-     * Hàm xử lý sự kiện khi click vào nút "Khóa". Hàm sẽ chuyển
-     * menu item về trạng thái khóa(không hoạt động), status=0
-     * @param event
-     * @throws Exception
-     */
-    public void onLockCategory(Event event) throws Exception {
-        final Category category = (Category) event.getData();
+	/**
+	 * Hàm xử lý sự kiện onClick khi click vào nút "Thêm" - có id = btnAdd
+	 */
+	public void onClick$btnAdd() {
+		// Tạo map để set các tham số truyền vào khi mở popup cập nhật/thêm mới
+		Map<String, Object> parameters = new HashMap<String, Object>();
 
-        Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_LOCK),
-                Labels.getLabel(LanguageKeys.MESSAGE_INFOR_LOCK),
-                Messagebox.OK | Messagebox.CANCEL,
-                Messagebox.QUESTION,
-                new EventListener() {
+		parameters.put(Constants.PARENT_WINDOW, this.winMenu);
+		parameters.put(Constants.TITLE, Labels.getLabel(LanguageKeys.ADD));
+		parameters.put(Constants.ID, 0L);
 
-                    @Override
+		Window win = (Window) Executions.createComponents(EDIT_PAGE, this.winMenu, parameters);
+
+		win.doModal();
+	}
+
+	/**
+	 * Hàm tạo cây menu
+	 * 
+	 * @throws Exception
+	 */
+	public void onCreateTree() throws Exception {
+		try {
+			this.treeCategoryModelUtil = new TreeBasicModel(_buildCategoryTree());
+
+			this.treeCategoryModelUtil.setMultiple(true);
+
+			this.treeMenu.setItemRenderer(new TreeCategoryRender(this.winMenu));
+			this.treeMenu.setModel(this.treeCategoryModelUtil);
+			this.treeMenu.setCheckmark(true);
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+
+	}
+
+	// get set service
+
+	/**
+	 * Hàm xóa category khi click chọn nút "Xóa". Category chỉ có thể xóa sau khi
+	 * Khóa (status=0)
+	 * 
+	 * @param event
+	 * @throws Exception
+	 */
+	public void onDeleteCategory(Event event) throws Exception {
+		final Category category = (Category) event.getData();
+
+		Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_DELETE),
+				Labels.getLabel(LanguageKeys.MESSAGE_INFOR_DELETE), Messagebox.OK | Messagebox.CANCEL,
+				Messagebox.QUESTION, new EventListener() {
+
+					@Override
 					public void onEvent(Event e) throws Exception {
-                        if (Messagebox.ON_OK.equals(e.getName())) {
-                            try {
-                                MenuController.this.categoryService.lockCategory(category);
+						if (Messagebox.ON_OK.equals(e.getName())) {
+							try {
+								MenuController.this.categoryService.deleteCategory(category);
 
-                                ComponentUtil.createSuccessMessageBox(LanguageKeys.MESSAGE_LOCK_ITEM_SUCCESS);
+								ComponentUtil.createSuccessMessageBox(LanguageKeys.MESSAGE_DELETE_SUCCESS);
 
-                                onCreateTree();
-                            } catch (Exception ex) {
-                                _log.error(ex.getMessage(), ex);
+								onCreateTree();
+							} catch (Exception ex) {
+								_log.error(ex.getMessage(), ex);
 
-                                Messagebox.show(Labels.getLabel(
-                                        LanguageKeys.MESSAGE_LOCK_ITEM_FAIL));
-                            }
-                        }
-                    }
-                });
-    }
+								Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_DELETE_FAIL));
+							}
+						}
+					}
+				});
+	}
 
-    /**
-     * Hàm xử lý sự kiện khi click vào nút "Mở khóa". Hàm sẽ chuyển
-     * menu item về trạng thái mở khóa (hoạt động), status=1
-     * @param event
-     * @throws Exception
-     */
-    public void onUnlockCategory(Event event) throws Exception {
-        final Category category = (Category) event.getData();
+	/**
+	 * Hàm thực hiện reload lại cây menu
+	 * 
+	 * @param event
+	 * @throws Exception
+	 */
+	public void onLoadData(Event event) throws Exception {
+		this.onCreateTree();
+	}
 
-        Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_UNLOCK),
-                Labels.getLabel(LanguageKeys.MESSAGE_INFOR_UNLOCK),
-                Messagebox.OK | Messagebox.CANCEL,
-                Messagebox.QUESTION,
-                new EventListener() {
+	// event method
+	/**
+	 * Hàm xử lý sự kiện khi click vào nút "Khóa". Hàm sẽ chuyển menu item về trạng
+	 * thái khóa(không hoạt động), status=0
+	 * 
+	 * @param event
+	 * @throws Exception
+	 */
+	public void onLockCategory(Event event) throws Exception {
+		final Category category = (Category) event.getData();
 
-                    @Override
+		Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_LOCK),
+				Labels.getLabel(LanguageKeys.MESSAGE_INFOR_LOCK), Messagebox.OK | Messagebox.CANCEL,
+				Messagebox.QUESTION, new EventListener() {
+
+					@Override
 					public void onEvent(Event e) throws Exception {
-                        if (Messagebox.ON_OK.equals(e.getName())) {
-                            try {
-                                MenuController.this.categoryService.unlockCategory(category);
+						if (Messagebox.ON_OK.equals(e.getName())) {
+							try {
+								MenuController.this.categoryService.lockCategory(category);
 
-                                ComponentUtil.createSuccessMessageBox(LanguageKeys.MESSAGE_UNLOCK_ITEM_SUCCESS);
+								ComponentUtil.createSuccessMessageBox(LanguageKeys.MESSAGE_LOCK_ITEM_SUCCESS);
 
-                                onCreateTree();
-                            } catch (Exception ex) {
-                                _log.error(ex.getMessage(), ex);
+								onCreateTree();
+							} catch (Exception ex) {
+								_log.error(ex.getMessage(), ex);
 
-                                Messagebox.show(Labels.getLabel(
-                                        LanguageKeys.MESSAGE_UNLOCK_ITEM_FAIL));
-                            }
-                        }
-                    }
-                });
-    }
+								Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_LOCK_ITEM_FAIL));
+							}
+						}
+					}
+				});
+	}
 
-    /**
-     * Hàm xóa category khi click chọn nút "Xóa". Category chỉ có thể xóa sau
-     * khi Khóa (status=0)
-     * @param event
-     * @throws Exception
-     */
-    public void onDeleteCategory(Event event) throws Exception {
-        final Category category = (Category) event.getData();
+	/**
+	 * Hàm xử lý sự kiện khi click vào nút "Mở khóa". Hàm sẽ chuyển menu item về
+	 * trạng thái mở khóa (hoạt động), status=1
+	 * 
+	 * @param event
+	 * @throws Exception
+	 */
+	public void onUnlockCategory(Event event) throws Exception {
+		final Category category = (Category) event.getData();
 
-        Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_DELETE),
-                Labels.getLabel(LanguageKeys.MESSAGE_INFOR_DELETE),
-                Messagebox.OK | Messagebox.CANCEL,
-                Messagebox.QUESTION,
-                new EventListener() {
+		Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_UNLOCK),
+				Labels.getLabel(LanguageKeys.MESSAGE_INFOR_UNLOCK), Messagebox.OK | Messagebox.CANCEL,
+				Messagebox.QUESTION, new EventListener() {
 
-                    @Override
+					@Override
 					public void onEvent(Event e) throws Exception {
-                        if (Messagebox.ON_OK.equals(e.getName())) {
-                            try {
-                                MenuController.this.categoryService.deleteCategory(category);
+						if (Messagebox.ON_OK.equals(e.getName())) {
+							try {
+								MenuController.this.categoryService.unlockCategory(category);
 
-                                ComponentUtil.createSuccessMessageBox(LanguageKeys.MESSAGE_DELETE_SUCCESS);
+								ComponentUtil.createSuccessMessageBox(LanguageKeys.MESSAGE_UNLOCK_ITEM_SUCCESS);
 
-                                onCreateTree();
-                            } catch (Exception ex) {
-                                _log.error(ex.getMessage(), ex);
+								onCreateTree();
+							} catch (Exception ex) {
+								_log.error(ex.getMessage(), ex);
 
-                                Messagebox.show(Labels.getLabel(
-                                        LanguageKeys.MESSAGE_DELETE_FAIL));
-                            }
-                        }
-                    }
-                });
-    }
-
-    //get set service
-    
-
-    public CategoryService getCategoryService() {
-        if (this.categoryService == null) {
-            this.categoryService = (CategoryService)
-                    SpringUtil.getBean("categoryService");
-
-            setCategoryService(this.categoryService);
-        }
-
-        return this.categoryService;
-    }
-
-    public void setCategoryService(CategoryService categoryService) {
-        this.categoryService = categoryService;
-    }
-
-    private transient CategoryService categoryService;
-
-    private static final String EDIT_PAGE =
-            "/html/pages/manager_menu/edit.zul";
-
-    private static final Logger _log =
-            LogManager.getLogger(MenuController.class);
+								Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_UNLOCK_ITEM_FAIL));
+							}
+						}
+					}
+				});
+	}
 }

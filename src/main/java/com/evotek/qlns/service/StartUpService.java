@@ -16,16 +16,16 @@ import com.evotek.qlns.model.Notification;
  */
 public interface StartUpService {
 
-    public int updateNotificationStatus();
+	public void expired(Notification notify);
 
-    public int insertNotification();
-    
-    public int insertCtExpiredNotification();
-    
-    public int insertBirthDayNotification();
-    
-    public List<Notification> getNotifies();
+	public List<Notification> getNotifies();
 
-    public void expired(Notification notify);
-    
+	public int insertBirthDayNotification();
+
+	public int insertCtExpiredNotification();
+
+	public int insertNotification();
+
+	public int updateNotificationStatus();
+
 }

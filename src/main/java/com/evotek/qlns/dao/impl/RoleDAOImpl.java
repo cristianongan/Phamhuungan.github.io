@@ -34,6 +34,33 @@ public class RoleDAOImpl extends AbstractDAO<Role> implements RoleDAO {
 	private static final Logger _log = LogManager.getLogger(RoleDAOImpl.class);
 
 	@Override
+	public int getCountAllRoles() throws Exception {
+		int result = 0;
+
+		try {
+			Session session = getCurrentSession();
+
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+
+			CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
+
+			Root<Role> root = criteria.from(Role.class);
+
+			criteria.select(builder.count(root)).where(builder.notEqual(root.get("status"), Values.STATUS_DEACTIVE));
+
+			Long count = (Long) session.createQuery(criteria).uniqueResult();
+
+			if (count != null) {
+				result = count.intValue();
+			}
+		} catch (Exception e) {
+			_log.error(e.getMessage(), e);
+		}
+
+		return result;
+	}
+
+	@Override
 	public Role getNewRole() {
 		return new Role();
 	}
@@ -53,6 +80,45 @@ public class RoleDAOImpl extends AbstractDAO<Role> implements RoleDAO {
 		}
 
 		return role;
+	}
+
+	@Override
+	public Role getRoleByName(String roleName) throws Exception {
+		Role result = null;
+
+		try {
+			Session session = getCurrentSession();
+
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+
+			CriteriaQuery<Role> criteria = builder.createQuery(Role.class);
+
+			Root<Role> root = criteria.from(Role.class);
+
+			List<Predicate> predicates = new ArrayList<Predicate>();
+
+			if (Validator.isNotNull(roleName)) {
+				predicates.add(builder.like(builder.lower(root.get("roleName")),
+						QueryUtil.getFullStringParam(roleName, true), CharPool.BACK_SLASH));
+			}
+
+			predicates.add(builder.notEqual(root.get("status"), Values.STATUS_DEACTIVE));
+
+			criteria.select(root).where(predicates.toArray(new Predicate[predicates.size()]));
+
+			criteria.orderBy(builder.asc(builder.lower(root.get("roleName"))));
+
+			List<Role> roles = session.createQuery(criteria).getResultList();
+
+			if (!roles.isEmpty()) {
+				result = roles.get(0);
+			}
+		} catch (Exception e) {
+			_log.error(e.getMessage(), e);
+
+		}
+
+		return result;
 	}
 
 	@Override
@@ -120,33 +186,6 @@ public class RoleDAOImpl extends AbstractDAO<Role> implements RoleDAO {
 		}
 
 		return roles;
-	}
-
-	@Override
-	public int getCountAllRoles() throws Exception {
-		int result = 0;
-
-		try {
-			Session session = getCurrentSession();
-
-			CriteriaBuilder builder = session.getCriteriaBuilder();
-
-			CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
-
-			Root<Role> root = criteria.from(Role.class);
-
-			criteria.select(builder.count(root)).where(builder.notEqual(root.get("status"), Values.STATUS_DEACTIVE));
-
-			Long count = (Long) session.createQuery(criteria).uniqueResult();
-
-			if (count != null) {
-				result = count.intValue();
-			}
-		} catch (Exception e) {
-			_log.error(e.getMessage(), e);
-		}
-
-		return result;
 	}
 
 	@Override
@@ -242,44 +281,5 @@ public class RoleDAOImpl extends AbstractDAO<Role> implements RoleDAO {
 		}
 
 		return roles;
-	}
-
-	@Override
-	public Role getRoleByName(String roleName) throws Exception {
-		Role result = null;
-
-		try {
-			Session session = getCurrentSession();
-
-			CriteriaBuilder builder = session.getCriteriaBuilder();
-
-			CriteriaQuery<Role> criteria = builder.createQuery(Role.class);
-
-			Root<Role> root = criteria.from(Role.class);
-
-			List<Predicate> predicates = new ArrayList<Predicate>();
-
-			if (Validator.isNotNull(roleName)) {
-				predicates.add(builder.like(builder.lower(root.get("roleName")),
-						QueryUtil.getFullStringParam(roleName, true), CharPool.BACK_SLASH));
-			}
-
-			predicates.add(builder.notEqual(root.get("status"), Values.STATUS_DEACTIVE));
-
-			criteria.select(root).where(predicates.toArray(new Predicate[predicates.size()]));
-
-			criteria.orderBy(builder.asc(builder.lower(root.get("roleName"))));
-
-			List<Role> roles = session.createQuery(criteria).getResultList();
-
-			if (!roles.isEmpty()) {
-				result = roles.get(0);
-			}
-		} catch (Exception e) {
-			_log.error(e.getMessage(), e);
-
-		}
-
-		return result;
 	}
 }

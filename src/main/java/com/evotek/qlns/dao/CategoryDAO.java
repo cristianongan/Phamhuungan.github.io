@@ -18,21 +18,20 @@ import com.evotek.qlns.model.User;
  */
 public interface CategoryDAO {
 
-    public List<Category> getAllCategory() throws Exception;
+	public void delete(Category category) throws DataAccessException;
 
-    public List<Category> getCategoryItems() throws Exception;
+	public List<Category> getAllCategory() throws Exception;
 
-    public List<Category> getCategoryByUser(User user) throws Exception;
+	public Category getCategoryById(Long categoryId) throws Exception;
 
-    public List<Category> getCategoryByParentId(Long parentId) throws Exception;
+	public List<Category> getCategoryByParentId(Long parentId) throws Exception;
 
-    public List<Category> getCategoryMenuByParentId(Long parentId) throws Exception;
+	public List<Category> getCategoryByUser(User user) throws Exception;
 
-    public Category getCategoryById(Long categoryId) throws Exception;
+	public List<Category> getCategoryItems() throws Exception;
 
-    public void saveOrUpdate(Category category) throws DataAccessException;
-    
-    public void delete(Category category) throws DataAccessException;
+	public List<Category> getCategoryMenuByParentId(Long parentId) throws Exception;
+
+	public void saveOrUpdate(Category category) throws DataAccessException;
 
 }
-

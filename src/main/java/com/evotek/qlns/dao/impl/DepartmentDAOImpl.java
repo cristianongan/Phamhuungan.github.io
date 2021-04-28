@@ -102,14 +102,14 @@ public class DepartmentDAOImpl extends AbstractDAO<Department> implements Depart
 			CriteriaQuery<BigDecimal> criteria = builder.createQuery(BigDecimal.class);
 
 			Root<Department> root = criteria.from(Department.class);
-			
+
 			criteria.select(builder.max(root.get("ordinal")));
 
 			Predicate pre = Validator.isNull(parentId) ? builder.isNull(root.get("parentId"))
 					: builder.equal(root.get("parentId"), parentId);
-			
+
 			criteria.where(pre);
-			
+
 			BigDecimal result = (BigDecimal) session.createQuery(criteria).getSingleResult();
 
 			if (Validator.isNotNull(result)) {
@@ -121,7 +121,7 @@ public class DepartmentDAOImpl extends AbstractDAO<Department> implements Depart
 
 		return index;
 	}
-	
+
 	@Override
 	public Long getNextOrdinalSql(Long parentId) {
 		Long index = 0L;
@@ -172,15 +172,15 @@ public class DepartmentDAOImpl extends AbstractDAO<Department> implements Depart
 			sb.append(" and  ordinal>:deletedIndex");
 
 			Query q = getCurrentSession().createQuery(sb.toString());
-			
+
 			if (Validator.isNotNull(parentId)) {
 				q.setParameter("parentId", parentId);
 			}
-			
+
 			q.setParameter("deletedIndex", deletedIndex);
 
 			int result = q.executeUpdate();
-			
+
 			_log.info(String.format("DepartmentDAOImpl.updateOrdinal update successful %d item", result));
 		} catch (HibernateException e) {
 			_log.error(e.getMessage(), e);

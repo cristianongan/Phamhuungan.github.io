@@ -16,12 +16,12 @@ import com.evotek.qlns.model.Job;
  */
 public interface JobDAO {
 
-    public List<Job> getJobTitle();
+	public void delete(Job job);
 
-    public void delete(Job job);
+	public List<Job> getJobTitle();
 
-    public void saveOrUpdate(Job job);
+	public List<String> getJobTitleOnly();
 
-    public List<String> getJobTitleOnly();
-    
+	public void saveOrUpdate(Job job);
+
 }

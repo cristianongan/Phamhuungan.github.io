@@ -14,12 +14,12 @@ import com.evotek.qlns.model.FileEntry;
  * @author linhlh2
  */
 public interface FileEntryDAO {
-    public void saveOrUpdate(FileEntry file);
+	public void delete(FileEntry file);
 
-    public void delete(FileEntry file);
+	public List<FileEntry> getFileEntryByIds(List<Long> fileIds);
 
-    public List<FileEntry> getFileEntryByIds(List<Long> fileIds);
+	public List<FileEntry> getFileListByDocumentId(Long documentId);
 
-    public List<FileEntry> getFileListByDocumentId(Long documentId);
+	public void saveOrUpdate(FileEntry file);
 
 }

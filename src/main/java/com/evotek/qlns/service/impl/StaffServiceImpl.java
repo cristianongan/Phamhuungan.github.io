@@ -37,80 +37,41 @@ import com.evotek.qlns.util.key.Values;
 @Transactional
 public class StaffServiceImpl implements StaffService {
 
-	@Autowired
-	private StaffDAO staffDAO;
-
-	@Autowired
-	private JobDAO jobDAO;
+	private static final Logger _log = LogManager.getLogger(StaffServiceImpl.class);
 
 	@Autowired
 	private ContractTypeDAO contractTypeDAO;
 
 	@Autowired
+	private JobDAO jobDAO;
+
+	@Autowired
 	private SalaryLandmarkDAO salaryLandmarkDAO;
+
+	@Autowired
+	private StaffDAO staffDAO;
 
 	@Autowired
 	private WorkProcessDAO workProcessDAO;
 
 	@Override
-	public Staff getStaff(Long staffId) {
-		return this.staffDAO.getStaff(staffId);
+	public void deleteAll(List<Staff> staff) throws Exception {
+		this.staffDAO.deleteAllStaff(staff);
 	}
 
 	@Override
-	public List<Staff> getStaff(String keyword, int firstResult, int maxResult, String orderByColumn,
-			String orderByType) {
-		return this.staffDAO.getStaff(keyword, firstResult, maxResult, orderByColumn, orderByType);
+	public void deleteContractType(ContractType ct) throws Exception {
+		this.contractTypeDAO.delete(ct);
 	}
 
 	@Override
-	public int getStaffCount(String keyword) {
-		return this.staffDAO.getStaffCount(keyword);
+	public void deleteJob(Job job) throws Exception {
+		this.jobDAO.delete(job);
 	}
 
 	@Override
-	public List<Staff> getStaff(String staffName, Long yearOfBirth, Department dept, String email, Job job,
-			String phone, int firstResult, int maxResult, String orderByColumn, String orderByType) {
-		return this.staffDAO.getStaff(staffName, yearOfBirth, dept, email, job, phone, firstResult, maxResult,
-				orderByColumn, orderByType);
-	}
-
-	@Override
-	public int getStaffCount(String staffName, Long yearOfBirth, Department dept, String email, Job job, String phone) {
-		return this.staffDAO.getStaffCount(staffName, yearOfBirth, dept, email, job, phone);
-	}
-
-	@Override
-	public List<Staff> getStaffByIdList(List<Long> idList, int firstResult, int maxResult, String orderByColumn,
-			String orderByType) {
-		return this.staffDAO.getStaffByIdList(idList, firstResult, maxResult, orderByColumn, orderByType);
-	}
-
-	@Override
-	public int getStaffCountByIdList(List<Long> idList) {
-		return this.staffDAO.getStaffCountByIdList(idList);
-	}
-
-	@Override
-	public void lockStaff(Staff staff) throws Exception {
-		try {
-			staff.setStatus(Values.STATUS_DEACTIVE);
-
-			this.staffDAO.saveOrUpdate(staff);
-		} catch (Exception ex) {
-			_log.error(ex.getMessage(), ex);
-		}
-	}
-
-	@Override
-	public void unlockStaff(Staff staff) throws Exception {
-		try {
-			staff.setStatus(Values.STATUS_ACTIVE);
-
-			this.staffDAO.saveOrUpdate(staff);
-		} catch (Exception ex) {
-			_log.error(ex.getMessage(), ex);
-		}
+	public void deleteSalaryLm(SalaryLandmark salaryLm) {
+		this.salaryLandmarkDAO.delete(salaryLm);
 	}
 
 	@Override
@@ -127,48 +88,13 @@ public class StaffServiceImpl implements StaffService {
 	}
 
 	@Override
-	public void deleteJob(Job job) throws Exception {
-		this.jobDAO.delete(job);
+	public void deleteWorkProcess(WorkProcess wp) {
+		this.workProcessDAO.delete(wp);
 	}
 
 	@Override
-	public void deleteContractType(ContractType ct) throws Exception {
-		this.contractTypeDAO.delete(ct);
-	}
-
-	@Override
-	public void saveOrUpdate(Staff staff) throws Exception {
-		this.staffDAO.saveOrUpdate(staff);
-	}
-
-	@Override
-	public void saveOrUpdate(Job job) throws Exception {
-		this.jobDAO.saveOrUpdate(job);
-	}
-
-	@Override
-	public void saveOrUpdate(ContractType ct) throws Exception {
-		this.contractTypeDAO.saveOrUpdate(ct);
-	}
-
-	@Override
-	public void saveOrUpdate(SalaryLandmark salaryLm) throws Exception {
-		this.salaryLandmarkDAO.saveOrUpdate(salaryLm);
-	}
-
-	@Override
-	public void saveOrUpdate(WorkProcess wp) throws Exception {
-		this.workProcessDAO.saveOrUpdate(wp);
-	}
-
-	@Override
-	public void deleteAll(List<Staff> staff) throws Exception {
-		this.staffDAO.deleteAllStaff(staff);
-	}
-
-	@Override
-	public List<Job> getJobTitle() {
-		return this.jobDAO.getJobTitle();
+	public List<String> getCompanyName() {
+		return this.workProcessDAO.getCompanyName();
 	}
 
 	@Override
@@ -177,28 +103,52 @@ public class StaffServiceImpl implements StaffService {
 	}
 
 	@Override
+	public List<Job> getJobTitle() {
+		return this.jobDAO.getJobTitle();
+	}
+
+	@Override
 	public List<SalaryLandmark> getSalaryLandmarkByStaffId(Long staffId) {
 		return this.salaryLandmarkDAO.getSalaryLandmarkByStaffId(staffId);
 	}
 
 	@Override
-	public void deleteSalaryLm(SalaryLandmark salaryLm) {
-		this.salaryLandmarkDAO.delete(salaryLm);
+	public Staff getStaff(Long staffId) {
+		return this.staffDAO.getStaff(staffId);
 	}
 
 	@Override
-	public List<WorkProcess> getWorkProcessByStaffId(Long staffId) {
-		return this.workProcessDAO.getWorkProcessByStaffId(staffId);
+	public List<Staff> getStaff(String keyword, int firstResult, int maxResult, String orderByColumn,
+			String orderByType) {
+		return this.staffDAO.getStaff(keyword, firstResult, maxResult, orderByColumn, orderByType);
 	}
 
 	@Override
-	public void deleteWorkProcess(WorkProcess wp) {
-		this.workProcessDAO.delete(wp);
+	public List<Staff> getStaff(String staffName, Long yearOfBirth, Department dept, String email, Job job,
+			String phone, int firstResult, int maxResult, String orderByColumn, String orderByType) {
+		return this.staffDAO.getStaff(staffName, yearOfBirth, dept, email, job, phone, firstResult, maxResult,
+				orderByColumn, orderByType);
 	}
 
 	@Override
-	public List<String> getCompanyName() {
-		return this.workProcessDAO.getCompanyName();
+	public List<Staff> getStaffByIdList(List<Long> idList, int firstResult, int maxResult, String orderByColumn,
+			String orderByType) {
+		return this.staffDAO.getStaffByIdList(idList, firstResult, maxResult, orderByColumn, orderByType);
+	}
+
+	@Override
+	public int getStaffCount(String keyword) {
+		return this.staffDAO.getStaffCount(keyword);
+	}
+
+	@Override
+	public int getStaffCount(String staffName, Long yearOfBirth, Department dept, String email, Job job, String phone) {
+		return this.staffDAO.getStaffCount(staffName, yearOfBirth, dept, email, job, phone);
+	}
+
+	@Override
+	public int getStaffCountByIdList(List<Long> idList) {
+		return this.staffDAO.getStaffCountByIdList(idList);
 	}
 
 	@Override
@@ -213,6 +163,56 @@ public class StaffServiceImpl implements StaffService {
 		return new ArrayList<String>(_s);
 	}
 
-	private static final Logger _log = LogManager.getLogger(StaffServiceImpl.class);
+	@Override
+	public List<WorkProcess> getWorkProcessByStaffId(Long staffId) {
+		return this.workProcessDAO.getWorkProcessByStaffId(staffId);
+	}
+
+	@Override
+	public void lockStaff(Staff staff) throws Exception {
+		try {
+			staff.setStatus(Values.STATUS_DEACTIVE);
+
+			this.staffDAO.saveOrUpdate(staff);
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+	}
+
+	@Override
+	public void saveOrUpdate(ContractType ct) throws Exception {
+		this.contractTypeDAO.saveOrUpdate(ct);
+	}
+
+	@Override
+	public void saveOrUpdate(Job job) throws Exception {
+		this.jobDAO.saveOrUpdate(job);
+	}
+
+	@Override
+	public void saveOrUpdate(SalaryLandmark salaryLm) throws Exception {
+		this.salaryLandmarkDAO.saveOrUpdate(salaryLm);
+	}
+
+	@Override
+	public void saveOrUpdate(Staff staff) throws Exception {
+		this.staffDAO.saveOrUpdate(staff);
+	}
+
+	@Override
+	public void saveOrUpdate(WorkProcess wp) throws Exception {
+		this.workProcessDAO.saveOrUpdate(wp);
+	}
+
+	@Override
+	public void unlockStaff(Staff staff) throws Exception {
+		try {
+			staff.setStatus(Values.STATUS_ACTIVE);
+
+			this.staffDAO.saveOrUpdate(staff);
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+	}
 
 }

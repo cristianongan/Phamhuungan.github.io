@@ -19,16 +19,14 @@ import com.evotek.qlns.util.key.Constants;
  */
 public class UserRoleRender implements ListitemRenderer<Role> {
 
-    @Override
+	@Override
 	public void render(Listitem items, Role role, int index) throws Exception {
-        items.setAttribute("data",role);
+		items.setAttribute("data", role);
 
-        items.appendChild(ComponentUtil.createListcell(StringPool.BLANK,
-                Constants.STYLE_TEXT_ALIGN_CENTER));
-        items.appendChild(ComponentUtil.createListcell(
-                Integer.toString(index+1), Constants.STYLE_TEXT_ALIGN_CENTER));
-        items.appendChild(new Listcell(role.getRoleName()));
-        items.appendChild(new Listcell(role.getDescription()));
-    }
+		items.appendChild(ComponentUtil.createListcell(StringPool.BLANK, Constants.STYLE_TEXT_ALIGN_CENTER));
+		items.appendChild(ComponentUtil.createListcell(Integer.toString(index + 1), Constants.STYLE_TEXT_ALIGN_CENTER));
+		items.appendChild(new Listcell(role.getRoleName()));
+		items.appendChild(new Listcell(role.getDescription()));
+	}
 
 }

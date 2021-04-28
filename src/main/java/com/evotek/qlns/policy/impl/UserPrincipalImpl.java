@@ -23,16 +23,16 @@ public class UserPrincipalImpl extends org.springframework.security.core.userdet
 		implements UserPrincipal, Serializable {
 
 	private static final long serialVersionUID = 7682359879431168931L;
-	// Token for En-/decrypting the users password
-	private String userToken;
+	// Role
+	private Collection<String> roles;
+	// The user object
+	private User user;
 	// The user ID
 	private Long userId;
 	// The user name
 	private String userName;
-	// The user object
-	private User user;
-	// Role
-	private Collection<String> roles;
+	// Token for En-/decrypting the users password
+	private String userToken;
 
 	/**
 	 * Constructor
@@ -55,23 +55,16 @@ public class UserPrincipalImpl extends org.springframework.security.core.userdet
 
 		this.userId = user.getUserId();
 		this.userName = user.getUserName();
-		this.userToken = Validator.isNotNull(this.userId) ? DigestUtils.md5DigestAsHex(this.userId.toString().getBytes())
+		this.userToken = Validator.isNotNull(this.userId)
+				? DigestUtils.md5DigestAsHex(this.userId.toString().getBytes())
 				: StringPool.BLANK;
 		this.user = user;
 		this.roles = roles;
 	}
 
-	public String getUserToken() {
-		return this.userToken;
-	}
-
-	public void setUserToken(String userToken) {
-		this.userToken = userToken;
-	}
-
 	@Override
-	public Long getUserId() {
-		return this.userId;
+	public Collection<String> getRoles() {
+		return this.roles;
 	}
 
 	@Override
@@ -80,12 +73,20 @@ public class UserPrincipalImpl extends org.springframework.security.core.userdet
 	}
 
 	@Override
+	public Long getUserId() {
+		return this.userId;
+	}
+
+	@Override
 	public String getUserName() {
 		return this.userName;
 	}
 
-	@Override
-	public Collection<String> getRoles() {
-		return this.roles;
+	public String getUserToken() {
+		return this.userToken;
+	}
+
+	public void setUserToken(String userToken) {
+		this.userToken = userToken;
 	}
 }

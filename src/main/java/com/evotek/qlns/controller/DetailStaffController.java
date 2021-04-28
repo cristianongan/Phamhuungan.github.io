@@ -11,7 +11,8 @@ import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.zkoss.spring.SpringUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Event;
@@ -40,276 +41,249 @@ import com.evotek.qlns.util.key.Values;
 
 /**
  *
- * @author PC
+ * @author LinhLH
  */
-public class DetailStaffController extends BasicController<Window>
-        implements Serializable {
+@Controller
+public class DetailStaffController extends BasicController<Window> implements Serializable {
 
-    private Window winDetailStaff;
-    
-    private Label lbStaffName;
-    private Label lbDeptName;
-    private Label lbJobTitle;
-    private Label lbWorkDate;
-    private Label lbDateOfBirth;
-    private Label lbPermanentResidence;
-    private Label lbCurrentResidence;
-    private Label lbStatus;
-    private Label lbNote;
-    private Label lbContractType;
-    private Label lbContractFromDate;
-    private Label lbContractToDate;
-    private Label lbContractNumber;
-    private Label lbTaxCode;
-    private Label lbSalaryBasic;
-    private Label lbInsurancePaidDate;
-    private Label lbInsuranceBookNumber;
-    private Label lbPaidPlace;
-    private Label lbLevels;
-    private Label lbMajors;
-    private Label lbCollege;
-    private Label lbIdentityCard;
-    private Label lbGrantDate;
-    private Label lbGrantPlace;
-    private Label lbMobile;
-    private Label lbHomePhone;
-    private Label lbEmail;
+	private static final long serialVersionUID = 9166160847764008289L;
 
-    private Listbox listSalaryLm;
-    private Listbox listWorkProcess;
-    
-    private Staff staff;
-    private ListModel model;
-    private Integer index;
-    
-    @Override
-    public void doBeforeComposeChildren(Window comp) throws Exception {
-        super.doBeforeComposeChildren(comp);
+	private static final Logger _log = LogManager.getLogger(DetailStaffController.class);
 
-        this.winDetailStaff = comp;
-    }
+	@Autowired
+	private StaffService staffService;
 
-    @Override
-    public void doAfterCompose(Window comp) throws Exception {
-        super.doAfterCompose(comp);
+	private static final String ADD_EDIT_SALARY_LANDMARK_PAGE = "/html/pages/manager_human_resource/editSalaryLandmark.zul";
+	private static final String ADD_EDIT_WORK_PROCESS_PAGE = "/html/pages/manager_human_resource/editWorkProcess.zul";
 
-        this.staff = (Staff) this.arg.get(Constants.OBJECT);
+	private Integer index;
+	private Label lbCollege;
+	private Label lbContractFromDate;
+	private Label lbContractNumber;
+	private Label lbContractToDate;
+	private Label lbContractType;
+	private Label lbCurrentResidence;
+	private Label lbDateOfBirth;
+	private Label lbDeptName;
+	private Label lbEmail;
+	private Label lbGrantDate;
+	private Label lbGrantPlace;
+	private Label lbHomePhone;
+	private Label lbIdentityCard;
+	private Label lbInsuranceBookNumber;
+	private Label lbInsurancePaidDate;
+	private Label lbJobTitle;
+	private Label lbLevels;
+	private Label lbMajors;
+	private Label lbMobile;
+	private Label lbNote;
+	private Label lbPaidPlace;
+	private Label lbPermanentResidence;
+	private Label lbSalaryBasic;
+	private Label lbStaffName;
 
-        this.model = (ListModel) this.arg.get(Constants.MODEL);
-        
-        this.index = (Integer) this.arg.get(Constants.INDEX);
-        
-        initData();
-    }
+	private Label lbStatus;
+	private Label lbTaxCode;
 
-    public void initData() {
-        if (Validator.isNotNull(this.staff)) {
-            this.winDetailStaff.setTitle(Labels.getLabel(LanguageKeys.TITLE_STAFF_DETAIL,
-                    new Object[]{this.staff.getStaffName()}));
+	private Label lbWorkDate;
+	private Listbox listSalaryLm;
+	private Listbox listWorkProcess;
 
-            this.onLoadData();
+	private ListModel model;
 
-            this.onLoadSalaryLandmark();
+	private Staff staff;
 
-            this.onLoadWorkProcess();
-        }
-    }
+	private Window winDetailStaff;
 
-    public void onLoadData() {
-        this.lbStaffName.setValue(this.staff.getStaffName());
-        this.lbDeptName.setValue(this.staff.getDepartment()!=null?
-                this.staff.getDepartment().getDeptName():StringPool.BLANK);
-        this.lbJobTitle.setValue(this.staff.getJob()!=null?
-                this.staff.getJob().getJobTitle():StringPool.BLANK);
-        this.lbWorkDate.setValue(GetterUtil.getDate(
-                this.staff.getWorkDate(), DateUtil.SHORT_DATE_PATTERN));
-        this.lbDateOfBirth.setValue(GetterUtil.getDate(
-                this.staff.getDateOfBirth(), DateUtil.SHORT_DATE_PATTERN));
-        this.lbPermanentResidence.setValue(this.staff.getPermanentResidence());
-        this.lbCurrentResidence.setValue(this.staff.getCurrentResidence());
-        this.lbStatus.setValue(Values.getStaffStatus(this.staff.getStatus()));
-        this.lbNote.setValue(this.staff.getNote());
-        this.lbContractType.setValue(this.staff.getContractType()!=null?
-                this.staff.getContractType().getContractTypeName():StringPool.BLANK);
-        this.lbContractFromDate.setValue(GetterUtil.getDate(
-                this.staff.getContractFromDate(), DateUtil.SHORT_DATE_PATTERN));
-        this.lbContractToDate.setValue(GetterUtil.getDate(
-                this.staff.getContractToDate(), DateUtil.SHORT_DATE_PATTERN));
-        this.lbContractNumber.setValue(this.staff.getContractNumber());
-        this.lbTaxCode.setValue(this.staff.getTaxCode());
-        this.lbSalaryBasic.setValue(GetterUtil.getFormat(this.staff.getSalaryBasic()));
-        this.lbInsurancePaidDate.setValue(GetterUtil.getDate(
-                this.staff.getInsurancePaidDate(), DateUtil.SHORT_DATE_PATTERN));
-        this.lbInsuranceBookNumber.setValue(this.staff.getInsuranceBookNumber());
-        this.lbPaidPlace.setValue(this.staff.getPaidPlace());
-        this.lbLevels.setValue(this.staff.getLevels());
-        this.lbMajors.setValue(this.staff.getMajors());
-        this.lbCollege.setValue(this.staff.getCollege());
-        this.lbIdentityCard.setValue(this.staff.getIdentityCard());
-        this.lbGrantDate.setValue(GetterUtil.getDate(
-                this.staff.getGrantDate(), DateUtil.SHORT_DATE_PATTERN));
-        this.lbGrantPlace.setValue(this.staff.getGrantPlace());
-        this.lbMobile.setValue(this.staff.getMobile());
-        this.lbHomePhone.setValue(this.staff.getHomePhone());
-        this.lbEmail.setValue(this.staff.getEmail());
-    }
+	@Override
+	public void doAfterCompose(Window comp) throws Exception {
+		super.doAfterCompose(comp);
 
-    public void onLoadSalaryLandmark() {
-        List<SalaryLandmark> salaryLandmarks = 
-                this.staffService.getSalaryLandmarkByStaffId(this.staff.getStaffId());
+		this.staff = (Staff) this.arg.get(Constants.OBJECT);
 
-        this.listSalaryLm.setItemRenderer(new SalaryLandmarkRender(this.winDetailStaff, this.staff));
-        this.listSalaryLm.setModel(new ListModelList<SalaryLandmark>(salaryLandmarks));
-    }
+		this.model = (ListModel) this.arg.get(Constants.MODEL);
 
-    public void onLoadWorkProcess() {
-        List<WorkProcess> workProcesses = 
-                this.staffService.getWorkProcessByStaffId(this.staff.getStaffId());
-        
-        this.listWorkProcess.setItemRenderer(new WorkProcessRender(this.winDetailStaff, this.staff));
-        this.listWorkProcess.setModel(new ListModelList<WorkProcess>(workProcesses));
-    }
+		this.index = (Integer) this.arg.get(Constants.INDEX);
 
-    public void onClick$btnCancel() {
-        this.winDetailStaff.detach();
-    }
+		initData();
+	}
 
-    public void onDeleteStaff(Event event) throws Exception {
-        final SalaryLandmark salaryLm = (SalaryLandmark) event.getData();
+	@Override
+	public void doBeforeComposeChildren(Window comp) throws Exception {
+		super.doBeforeComposeChildren(comp);
 
-        Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_DELETE),
-                Labels.getLabel(LanguageKeys.MESSAGE_INFOR_DELETE),
-                Messagebox.OK | Messagebox.CANCEL,
-                Messagebox.QUESTION,
-                new EventListener() {
+		this.winDetailStaff = comp;
+	}
 
-                    @Override
+	public void initData() {
+		if (Validator.isNotNull(this.staff)) {
+			this.winDetailStaff.setTitle(
+					Labels.getLabel(LanguageKeys.TITLE_STAFF_DETAIL, new Object[] { this.staff.getStaffName() }));
+
+			this.onLoadData();
+
+			this.onLoadSalaryLandmark();
+
+			this.onLoadWorkProcess();
+		}
+	}
+
+	public void onClick$btnAddSalaryLm() {
+		Map map = new HashMap();
+
+		map.put(Constants.PARENT_WINDOW, this.winDetailStaff);
+		map.put(Constants.OBJECT, this.staff);
+
+		Window win = (Window) Executions.createComponents(ADD_EDIT_SALARY_LANDMARK_PAGE, null, map);
+
+		win.doModal();
+	}
+
+	public void onClick$btnAddWorkProcess() {
+		Map map = new HashMap();
+
+		map.put(Constants.PARENT_WINDOW, this.winDetailStaff);
+		map.put(Constants.OBJECT, this.staff);
+
+		Window win = (Window) Executions.createComponents(ADD_EDIT_WORK_PROCESS_PAGE, null, map);
+
+		win.doModal();
+	}
+
+	public void onClick$btnCancel() {
+		this.winDetailStaff.detach();
+	}
+
+	public void onClick$btnNext() throws Exception {
+		if (this.index == (this.model.getSize() - 1)) {
+			this.index = 0;
+		} else {
+			this.index++;
+		}
+
+		this.staff = (Staff) this.model.getElementAt(this.index);
+
+		initData();
+	}
+
+	public void onClick$btnPrevious() throws Exception {
+		if (this.index == 0) {
+			this.index = (this.model.getSize() - 1);
+		} else {
+			this.index--;
+		}
+
+		this.staff = (Staff) this.model.getElementAt(this.index);
+
+		initData();
+	}
+
+	public void onDeleteStaff(Event event) throws Exception {
+		final SalaryLandmark salaryLm = (SalaryLandmark) event.getData();
+
+		Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_DELETE),
+				Labels.getLabel(LanguageKeys.MESSAGE_INFOR_DELETE), Messagebox.OK | Messagebox.CANCEL,
+				Messagebox.QUESTION, new EventListener() {
+
+					@Override
 					public void onEvent(Event e) throws Exception {
-                        if (Messagebox.ON_OK.equals(e.getName())) {
-                            try {
-                                DetailStaffController.this.staffService.deleteSalaryLm(salaryLm);
+						if (Messagebox.ON_OK.equals(e.getName())) {
+							try {
+								DetailStaffController.this.staffService.deleteSalaryLm(salaryLm);
 
-                                ComponentUtil.createSuccessMessageBox(
-                                        LanguageKeys.MESSAGE_DELETE_SUCCESS);
+								ComponentUtil.createSuccessMessageBox(LanguageKeys.MESSAGE_DELETE_SUCCESS);
 
-                                onLoadSalaryLandmark();
-                            } catch (Exception ex) {
-                                _log.error(ex.getMessage(), ex);
+								onLoadSalaryLandmark();
+							} catch (Exception ex) {
+								_log.error(ex.getMessage(), ex);
 
-                                Messagebox.show(Labels.getLabel(
-                                                LanguageKeys.MESSAGE_DELETE_FAIL));
-                            }
-                        }
-                    }
-                });
-    }
-    
-    public void onDeleteWorkProcess(Event event) throws Exception {
-        final WorkProcess wp = (WorkProcess) event.getData();
+								Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_DELETE_FAIL));
+							}
+						}
+					}
+				});
+	}
 
-        Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_DELETE),
-                Labels.getLabel(LanguageKeys.MESSAGE_INFOR_DELETE),
-                Messagebox.OK | Messagebox.CANCEL,
-                Messagebox.QUESTION,
-                new EventListener() {
+	public void onDeleteWorkProcess(Event event) throws Exception {
+		final WorkProcess wp = (WorkProcess) event.getData();
 
-                    @Override
+		Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_DELETE),
+				Labels.getLabel(LanguageKeys.MESSAGE_INFOR_DELETE), Messagebox.OK | Messagebox.CANCEL,
+				Messagebox.QUESTION, new EventListener() {
+
+					@Override
 					public void onEvent(Event e) throws Exception {
-                        if (Messagebox.ON_OK.equals(e.getName())) {
-                            try {
-                                DetailStaffController.this.staffService.deleteWorkProcess(wp);
+						if (Messagebox.ON_OK.equals(e.getName())) {
+							try {
+								DetailStaffController.this.staffService.deleteWorkProcess(wp);
 
-                                ComponentUtil.createSuccessMessageBox(
-                                        LanguageKeys.MESSAGE_DELETE_SUCCESS);
+								ComponentUtil.createSuccessMessageBox(LanguageKeys.MESSAGE_DELETE_SUCCESS);
 
-                                onLoadWorkProcess();
-                            } catch (Exception ex) {
-                                _log.error(ex.getMessage(), ex);
+								onLoadWorkProcess();
+							} catch (Exception ex) {
+								_log.error(ex.getMessage(), ex);
 
-                                Messagebox.show(Labels.getLabel(
-                                                LanguageKeys.MESSAGE_DELETE_FAIL));
-                            }
-                        }
-                    }
-                });
-    }
+								Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_DELETE_FAIL));
+							}
+						}
+					}
+				});
+	}
 
-    public void onClick$btnAddSalaryLm() {
-        Map map = new HashMap();
+	public void onLoadData() {
+		this.lbStaffName.setValue(this.staff.getStaffName());
+		this.lbDeptName.setValue(
+				this.staff.getDepartment() != null ? this.staff.getDepartment().getDeptName() : StringPool.BLANK);
+		this.lbJobTitle.setValue(this.staff.getJob() != null ? this.staff.getJob().getJobTitle() : StringPool.BLANK);
+		this.lbWorkDate.setValue(GetterUtil.getDate(this.staff.getWorkDate(), DateUtil.SHORT_DATE_PATTERN));
+		this.lbDateOfBirth.setValue(GetterUtil.getDate(this.staff.getDateOfBirth(), DateUtil.SHORT_DATE_PATTERN));
+		this.lbPermanentResidence.setValue(this.staff.getPermanentResidence());
+		this.lbCurrentResidence.setValue(this.staff.getCurrentResidence());
+		this.lbStatus.setValue(Values.getStaffStatus(this.staff.getStatus()));
+		this.lbNote.setValue(this.staff.getNote());
+		this.lbContractType
+				.setValue(this.staff.getContractType() != null ? this.staff.getContractType().getContractTypeName()
+						: StringPool.BLANK);
+		this.lbContractFromDate
+				.setValue(GetterUtil.getDate(this.staff.getContractFromDate(), DateUtil.SHORT_DATE_PATTERN));
+		this.lbContractToDate.setValue(GetterUtil.getDate(this.staff.getContractToDate(), DateUtil.SHORT_DATE_PATTERN));
+		this.lbContractNumber.setValue(this.staff.getContractNumber());
+		this.lbTaxCode.setValue(this.staff.getTaxCode());
+		this.lbSalaryBasic.setValue(GetterUtil.getFormat(this.staff.getSalaryBasic()));
+		this.lbInsurancePaidDate
+				.setValue(GetterUtil.getDate(this.staff.getInsurancePaidDate(), DateUtil.SHORT_DATE_PATTERN));
+		this.lbInsuranceBookNumber.setValue(this.staff.getInsuranceBookNumber());
+		this.lbPaidPlace.setValue(this.staff.getPaidPlace());
+		this.lbLevels.setValue(this.staff.getLevels());
+		this.lbMajors.setValue(this.staff.getMajors());
+		this.lbCollege.setValue(this.staff.getCollege());
+		this.lbIdentityCard.setValue(this.staff.getIdentityCard());
+		this.lbGrantDate.setValue(GetterUtil.getDate(this.staff.getGrantDate(), DateUtil.SHORT_DATE_PATTERN));
+		this.lbGrantPlace.setValue(this.staff.getGrantPlace());
+		this.lbMobile.setValue(this.staff.getMobile());
+		this.lbHomePhone.setValue(this.staff.getHomePhone());
+		this.lbEmail.setValue(this.staff.getEmail());
+	}
 
-        map.put(Constants.PARENT_WINDOW, this.winDetailStaff);
-        map.put(Constants.OBJECT, this.staff);
+	public void onLoadReloadSalaryLm(Event event) {
+		this.onLoadSalaryLandmark();
+	}
 
-        Window win = (Window) Executions.createComponents(
-                ADD_EDIT_SALARY_LANDMARK_PAGE, null, map);
+	public void onLoadReloadWp(Event event) {
+		this.onLoadWorkProcess();
+	}
 
-        win.doModal();
-    }
-    
-    public void onClick$btnAddWorkProcess() {
-        Map map = new HashMap();
+	public void onLoadSalaryLandmark() {
+		List<SalaryLandmark> salaryLandmarks = this.staffService.getSalaryLandmarkByStaffId(this.staff.getStaffId());
 
-        map.put(Constants.PARENT_WINDOW, this.winDetailStaff);
-        map.put(Constants.OBJECT, this.staff);
+		this.listSalaryLm.setItemRenderer(new SalaryLandmarkRender(this.winDetailStaff, this.staff));
+		this.listSalaryLm.setModel(new ListModelList<SalaryLandmark>(salaryLandmarks));
+	}
 
-        Window win = (Window) Executions.createComponents(
-                ADD_EDIT_WORK_PROCESS_PAGE, null, map);
+	public void onLoadWorkProcess() {
+		List<WorkProcess> workProcesses = this.staffService.getWorkProcessByStaffId(this.staff.getStaffId());
 
-        win.doModal();
-    }
-    
-    public void onLoadReloadSalaryLm(Event event) {        
-        this.onLoadSalaryLandmark();
-    }
-    
-    public void onLoadReloadWp(Event event) {        
-        this.onLoadWorkProcess();
-    }
-    
-    public void onClick$btnPrevious() throws Exception{
-        if(this.index == 0){
-            this.index = (this.model.getSize() - 1);
-        } else {
-            this.index--;
-        }
-        
-        this.staff = (Staff) this.model.getElementAt(this.index);
-        
-        initData();
-    }
-    
-    public void onClick$btnNext() throws Exception{
-        if(this.index == (this.model.getSize() - 1)){
-            this.index = 0;
-        } else {
-            this.index++;
-        }
-        
-        this.staff = (Staff) this.model.getElementAt(this.index);
-        
-        initData();
-    }
-    
-    //get set service
-    public StaffService getStaffService() {
-        if (this.staffService == null) {
-            this.staffService = (StaffService) SpringUtil.getBean("staffService");
-            setStaffService(this.staffService);
-        }
-        return this.staffService;
-    }
-
-    public void setStaffService(StaffService staffService) {
-        this.staffService = staffService;
-    }
-
-    private transient StaffService staffService;
-
-    private static final String ADD_EDIT_SALARY_LANDMARK_PAGE =
-            "/html/pages/manager_human_resource/editSalaryLandmark.zul";
-    private static final String ADD_EDIT_WORK_PROCESS_PAGE =
-            "/html/pages/manager_human_resource/editWorkProcess.zul";
-    
-    private static final Logger _log
-            = LogManager.getLogger(DetailStaffController.class);
+		this.listWorkProcess.setItemRenderer(new WorkProcessRender(this.winDetailStaff, this.staff));
+		this.listWorkProcess.setModel(new ListModelList<WorkProcess>(workProcesses));
+	}
 }

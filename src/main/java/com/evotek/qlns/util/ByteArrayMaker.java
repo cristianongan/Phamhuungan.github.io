@@ -13,90 +13,89 @@ import java.io.ByteArrayOutputStream;
  */
 public class ByteArrayMaker extends ByteArrayOutputStream {
 
-    static boolean collect = false;
+	static boolean collect = false;
 
-    static {
-        String collectString = System.getProperty(MakerStats.class.getName());
+	static int defaultInitSize = 8000;
 
-        if (collectString != null) {
-            if (collectString.equals("true")) {
-                collect = true;
-            }
-        }
-    }
+	static MakerStats stats = null;
 
-    static MakerStats stats = null;
+	static {
+		String collectString = System.getProperty(MakerStats.class.getName());
 
-    static {
-        if (collect) {
-            stats = new MakerStats(ByteArrayMaker.class.toString());
-        }
-    }
+		if (collectString != null) {
+			if (collectString.equals("true")) {
+				collect = true;
+			}
+		}
+	}
 
-    static int defaultInitSize = 8000;
+	static {
+		if (collect) {
+			stats = new MakerStats(ByteArrayMaker.class.toString());
+		}
+	}
 
-    static {
-        String defaultInitSizeString = System.getProperty(
-                ByteArrayMaker.class.getName() + ".initial.size");
+	static {
+		String defaultInitSizeString = System.getProperty(ByteArrayMaker.class.getName() + ".initial.size");
 
-        if (defaultInitSizeString != null) {
-            try {
-                defaultInitSize = Integer.parseInt(defaultInitSizeString);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
+		if (defaultInitSizeString != null) {
+			try {
+				defaultInitSize = Integer.parseInt(defaultInitSizeString);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
-    public static MakerStats getStatistics() {
-        return stats;
-    }
+	public static MakerStats getStatistics() {
+		return stats;
+	}
 
-    public ByteArrayMaker() {
-        super(defaultInitSize);
+	private String _caller;
 
-        if (collect) {
-            _getInfo(new Throwable());
-        }
-    }
+	private int _initSize;
 
-    public ByteArrayMaker(int size) {
-        super(size);
+	public ByteArrayMaker() {
+		super(defaultInitSize);
 
-        if (collect) {
-            _getInfo(new Throwable());
-        }
-    }
+		if (collect) {
+			_getInfo(new Throwable());
+		}
+	}
 
-    @Override
+	public ByteArrayMaker(int size) {
+		super(size);
+
+		if (collect) {
+			_getInfo(new Throwable());
+		}
+	}
+
+	private void _getInfo(Throwable t) {
+		this._initSize = this.buf.length;
+
+		StackTraceElement[] elements = t.getStackTrace();
+
+		if (elements.length > 1) {
+			StackTraceElement el = elements[1];
+
+			this._caller = el.getClassName() + StringPool.PERIOD + el.getMethodName() + StringPool.COLON
+					+ el.getLineNumber();
+		}
+	}
+
+	@Override
 	public byte[] toByteArray() {
-        if (collect) {
-            stats.add(this._caller, this._initSize, this.count);
-        }
+		if (collect) {
+			stats.add(this._caller, this._initSize, this.count);
+		}
 
-        return super.toByteArray();
-    }
+		return super.toByteArray();
+	}
 
-    @Override
+	@Override
 	public String toString() {
-        return super.toString();
-    }
-
-    private void _getInfo(Throwable t) {
-        this._initSize = this.buf.length;
-
-        StackTraceElement[] elements = t.getStackTrace();
-
-        if (elements.length > 1) {
-            StackTraceElement el = elements[1];
-
-            this._caller
-                    = el.getClassName() + StringPool.PERIOD + el.getMethodName()
-                    + StringPool.COLON + el.getLineNumber();
-        }
-    }
-
-    private int _initSize;
-    private String _caller;
+		return super.toString();
+	}
 
 }

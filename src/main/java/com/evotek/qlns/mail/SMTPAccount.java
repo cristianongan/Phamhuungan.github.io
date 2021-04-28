@@ -8,8 +8,8 @@ package com.evotek.qlns.mail;
  */
 public class SMTPAccount extends Account {
 
-    protected SMTPAccount(String protocol, boolean secure, int port) {
-        super(protocol, secure, port);
-    }
+	protected SMTPAccount(String protocol, boolean secure, int port) {
+		super(protocol, secure, port);
+	}
 
 }

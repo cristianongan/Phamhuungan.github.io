@@ -26,34 +26,33 @@ import com.evotek.qlns.util.key.Values;
  *
  * @author linhlh2
  */
-public class AuthenticationSuccessHandlerImpl extends SimpleUrlAuthenticationSuccessHandler{
+public class AuthenticationSuccessHandlerImpl extends SimpleUrlAuthenticationSuccessHandler {
 
 	@Autowired
 	private UserService userService;
-	
-    @Override
-    public void onAuthenticationSuccess(HttpServletRequest request,
-            HttpServletResponse response, Authentication authentication)
-            throws IOException, ServletException {
-        UserPrincipalImpl userPrincipalm = SecurityUtil.getUserPrincipalImpl();
 
-        User user = userPrincipalm.getUser();
-        
-        if(Values.STATUS_NOT_READY.equals(user.getStatus())){
-            user.setStatus(Values.STATUS_ACTIVE);
+	@Override
+	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+			Authentication authentication) throws IOException, ServletException {
+		UserPrincipalImpl userPrincipalm = SecurityUtil.getUserPrincipalImpl();
 
-            this.userService.saveOrUpdate(user);
-        }
+		User user = userPrincipalm.getUser();
 
-        //remove login failure log
-        String ip = request.getRemoteAddr();
+		if (Values.STATUS_NOT_READY.equals(user.getStatus())) {
+			user.setStatus(Values.STATUS_ACTIVE);
 
-        if(Validator.isIPAddress(ip)){
-        	this.userService.remove(ip);
-        }
+			this.userService.saveOrUpdate(user);
+		}
 
-        setDefaultTargetUrl("/index.zul");
+		// remove login failure log
+		String ip = request.getRemoteAddr();
 
-        super.onAuthenticationSuccess(request, response, authentication);
-    }
+		if (Validator.isIPAddress(ip)) {
+			this.userService.remove(ip);
+		}
+
+		setDefaultTargetUrl("/index.zul");
+
+		super.onAuthenticationSuccess(request, response, authentication);
+	}
 }

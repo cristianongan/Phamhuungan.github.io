@@ -16,6 +16,11 @@ public class QueryUtil {
 	public static final int FIRST_INDEX = 0;
 	public static final int GET_ALL = -1;
 
+	// LinhLH2 fix
+	private static String _replaceSpecialCharacter(String param) {
+		return param.replaceAll("%", "\\\\%").replaceAll("_", "\\\\_").replaceAll("!", "\\\\!");
+	}
+
 	public static String addOrder(Class<?> c, String orderByColumn, String orderByType) {
 		StringBuilder sb = new StringBuilder();
 
@@ -39,24 +44,6 @@ public class QueryUtil {
 		return sb.toString();
 	}
 
-	public static String getLeftStringParam(String param) {
-		StringBuilder sb = new StringBuilder(2);
-
-		sb.append(StringPool.PERCENT);
-		sb.append(_replaceSpecialCharacter(param));
-
-		return sb.toString();
-	}
-
-	public static String getRightStringParam(String param) {
-		StringBuilder sb = new StringBuilder(2);
-
-		sb.append(_replaceSpecialCharacter(param));
-		sb.append(StringPool.PERCENT);
-
-		return sb.toString();
-	}
-
 	public static String getFullStringParam(String param, boolean caseInsensitive) {
 		StringBuilder sb = new StringBuilder(5);
 
@@ -73,6 +60,15 @@ public class QueryUtil {
 		return sb.toString();
 	}
 
+	public static String getLeftStringParam(String param) {
+		StringBuilder sb = new StringBuilder(2);
+
+		sb.append(StringPool.PERCENT);
+		sb.append(_replaceSpecialCharacter(param));
+
+		return sb.toString();
+	}
+
 	public static String getLeftStringParam(String param, boolean caseInsensitive) {
 		StringBuilder sb = new StringBuilder(2);
 
@@ -84,6 +80,15 @@ public class QueryUtil {
 
 		sb.append(StringPool.PERCENT);
 		sb.append(_replaceSpecialCharacter(param));
+
+		return sb.toString();
+	}
+
+	public static String getRightStringParam(String param) {
+		StringBuilder sb = new StringBuilder(2);
+
+		sb.append(_replaceSpecialCharacter(param));
+		sb.append(StringPool.PERCENT);
 
 		return sb.toString();
 	}
@@ -112,7 +117,7 @@ public class QueryUtil {
 
 		return sb.toString();
 	}
-	
+
 	public static String getStringParam(String param, boolean caseInsensitive) {
 		StringBuilder sb = new StringBuilder(1);
 
@@ -125,11 +130,6 @@ public class QueryUtil {
 		sb.append(_replaceSpecialCharacter(param));
 
 		return sb.toString();
-	}
-
-	// LinhLH2 fix
-	private static String _replaceSpecialCharacter(String param) {
-		return param.replaceAll("%", "\\\\%").replaceAll("_", "\\\\_").replaceAll("!", "\\\\!");
 	}
 
 	private static boolean hasProperty(Class<?> c, String name) {

@@ -22,167 +22,167 @@ import java.util.Properties;
  */
 public class PropertiesUtil {
 
-    public static void copyProperties(Properties from, Properties to) {
-        Iterator itr = from.entrySet().iterator();
+	public static void copyProperties(Properties from, Properties to) {
+		Iterator itr = from.entrySet().iterator();
 
-        while (itr.hasNext()) {
-            Map.Entry entry = (Map.Entry) itr.next();
+		while (itr.hasNext()) {
+			Map.Entry entry = (Map.Entry) itr.next();
 
-            to.setProperty((String) entry.getKey(), (String) entry.getValue());
-        }
-    }
+			to.setProperty((String) entry.getKey(), (String) entry.getValue());
+		}
+	}
 
-    public static Properties fromMap(Map map) {
-        if (map instanceof Properties) {
-            return (Properties) map;
-        }
+	public static Properties fromMap(Map map) {
+		if (map instanceof Properties) {
+			return (Properties) map;
+		}
 
-        Properties p = new Properties();
+		Properties p = new Properties();
 
-        Iterator itr = map.entrySet().iterator();
+		Iterator itr = map.entrySet().iterator();
 
-        while (itr.hasNext()) {
-            Map.Entry entry = (Map.Entry) itr.next();
+		while (itr.hasNext()) {
+			Map.Entry entry = (Map.Entry) itr.next();
 
-            String key = (String) entry.getKey();
-            String value = (String) entry.getValue();
+			String key = (String) entry.getKey();
+			String value = (String) entry.getValue();
 
-            if (value != null) {
-                p.setProperty(key, value);
-            }
-        }
+			if (value != null) {
+				p.setProperty(key, value);
+			}
+		}
 
-        return p;
-    }
+		return p;
+	}
 
-    public static void fromProperties(Properties p, Map map) {
-        map.clear();
+	public static void fromProperties(Properties p, Map map) {
+		map.clear();
 
-        Iterator itr = p.entrySet().iterator();
+		Iterator itr = p.entrySet().iterator();
 
-        while (itr.hasNext()) {
-            Map.Entry entry = (Map.Entry) itr.next();
+		while (itr.hasNext()) {
+			Map.Entry entry = (Map.Entry) itr.next();
 
-            map.put(entry.getKey(), entry.getValue());
-        }
-    }
+			map.put(entry.getKey(), entry.getValue());
+		}
+	}
 
-    public static Properties load(String s) throws IOException {
-        Properties p = new Properties();
+	public static String list(Map map) {
+		Properties props = fromMap(map);
 
-        load(p, s);
+		ByteArrayMaker bam = new ByteArrayMaker();
+		PrintStream ps = new PrintStream(bam);
 
-        return p;
-    }
+		props.list(ps);
 
-    public static void load(Properties p, String s) throws IOException {
-        if (Validator.isNotNull(s)) {
-            s = UnicodeFormatter.toString(s);
+		return bam.toString();
+	}
 
-            s = StringUtil.replace(s, "\\u003d", "=");
-            s = StringUtil.replace(s, "\\u000a", "\n");
-            s = StringUtil.replace(s, "\\u0021", "!");
-            s = StringUtil.replace(s, "\\u0023", "#");
-            s = StringUtil.replace(s, "\\u0020", " ");
-            s = StringUtil.replace(s, "\\u005c", "\\");
+	public static void list(Map map, PrintStream out) {
+		Properties props = fromMap(map);
 
-            p.load(new ByteArrayInputStream(s.getBytes()));
+		props.list(out);
+	}
 
-            List propertyNames = Collections.list(p.propertyNames());
+	public static void list(Map map, PrintWriter out) {
+		Properties props = fromMap(map);
 
-            for (int i = 0; i < propertyNames.size(); i++) {
-                String key = (String) propertyNames.get(i);
+		props.list(out);
+	}
 
-                String value = p.getProperty(key);
+	public static void load(Properties p, String s) throws IOException {
+		if (Validator.isNotNull(s)) {
+			s = UnicodeFormatter.toString(s);
+
+			s = StringUtil.replace(s, "\\u003d", "=");
+			s = StringUtil.replace(s, "\\u000a", "\n");
+			s = StringUtil.replace(s, "\\u0021", "!");
+			s = StringUtil.replace(s, "\\u0023", "#");
+			s = StringUtil.replace(s, "\\u0020", " ");
+			s = StringUtil.replace(s, "\\u005c", "\\");
+
+			p.load(new ByteArrayInputStream(s.getBytes()));
+
+			List propertyNames = Collections.list(p.propertyNames());
+
+			for (int i = 0; i < propertyNames.size(); i++) {
+				String key = (String) propertyNames.get(i);
+
+				String value = p.getProperty(key);
 
 				// Trim values because it may leave a trailing \r in certain
-                // Windows environments. This is a known case for loading SQL
-                // scripts in SQL Server.
-                if (value != null) {
-                    value = value.trim();
+				// Windows environments. This is a known case for loading SQL
+				// scripts in SQL Server.
+				if (value != null) {
+					value = value.trim();
 
-                    p.setProperty(key, value);
-                }
-            }
-        }
-    }
+					p.setProperty(key, value);
+				}
+			}
+		}
+	}
 
-    public static void merge(Properties p1, Properties p2) {
-        Enumeration enu = p2.propertyNames();
+	public static Properties load(String s) throws IOException {
+		Properties p = new Properties();
 
-        while (enu.hasMoreElements()) {
-            String key = (String) enu.nextElement();
-            String value = p2.getProperty(key);
+		load(p, s);
 
-            p1.setProperty(key, value);
-        }
-    }
+		return p;
+	}
 
-    public static String list(Map map) {
-        Properties props = fromMap(map);
+	public static void merge(Properties p1, Properties p2) {
+		Enumeration enu = p2.propertyNames();
 
-        ByteArrayMaker bam = new ByteArrayMaker();
-        PrintStream ps = new PrintStream(bam);
+		while (enu.hasMoreElements()) {
+			String key = (String) enu.nextElement();
+			String value = p2.getProperty(key);
 
-        props.list(ps);
+			p1.setProperty(key, value);
+		}
+	}
 
-        return bam.toString();
-    }
+	public static String toString(Properties p) {
+		SafeProperties safeProperties = null;
 
-    public static void list(Map map, PrintStream out) {
-        Properties props = fromMap(map);
+		if (p instanceof SafeProperties) {
+			safeProperties = (SafeProperties) p;
+		}
 
-        props.list(out);
-    }
+		StringBuilder sb = new StringBuilder();
 
-    public static void list(Map map, PrintWriter out) {
-        Properties props = fromMap(map);
+		Enumeration enu = p.propertyNames();
 
-        props.list(out);
-    }
+		while (enu.hasMoreElements()) {
+			String key = (String) enu.nextElement();
 
-    public static String toString(Properties p) {
-        SafeProperties safeProperties = null;
+			sb.append(key);
+			sb.append(StringPool.EQUAL);
 
-        if (p instanceof SafeProperties) {
-            safeProperties = (SafeProperties) p;
-        }
+			if (safeProperties != null) {
+				sb.append(safeProperties.getEncodedProperty(key));
+			} else {
+				sb.append(p.getProperty(key));
+			}
 
-        StringBuilder sb = new StringBuilder();
+			sb.append(StringPool.NEW_LINE);
+		}
 
-        Enumeration enu = p.propertyNames();
+		return sb.toString();
+	}
 
-        while (enu.hasMoreElements()) {
-            String key = (String) enu.nextElement();
+	public static void trimKeys(Properties p) {
+		Enumeration enu = p.propertyNames();
 
-            sb.append(key);
-            sb.append(StringPool.EQUAL);
+		while (enu.hasMoreElements()) {
+			String key = (String) enu.nextElement();
+			String value = p.getProperty(key);
 
-            if (safeProperties != null) {
-                sb.append(safeProperties.getEncodedProperty(key));
-            } else {
-                sb.append(p.getProperty(key));
-            }
+			String trimmedKey = key.trim();
 
-            sb.append(StringPool.NEW_LINE);
-        }
-
-        return sb.toString();
-    }
-
-    public static void trimKeys(Properties p) {
-        Enumeration enu = p.propertyNames();
-
-        while (enu.hasMoreElements()) {
-            String key = (String) enu.nextElement();
-            String value = p.getProperty(key);
-
-            String trimmedKey = key.trim();
-
-            if (!key.equals(trimmedKey)) {
-                p.remove(key);
-                p.setProperty(trimmedKey, value);
-            }
-        }
-    }
+			if (!key.equals(trimmedKey)) {
+				p.remove(key);
+				p.setProperty(trimmedKey, value);
+			}
+		}
+	}
 }

@@ -16,14 +16,14 @@ import com.evotek.qlns.model.WorkProcess;
  */
 public interface WorkProcessDAO {
 
-    public List<WorkProcess> getWorkProcessByStaffId(Long staffId);
+	public void delete(WorkProcess wp);
 
-    public void delete(WorkProcess wp);
+	public List<String> getCompanyName();
 
-    public List<String> getCompanyName();
+	public List<String> getJobTitle();
 
-    public List<String> getJobTitle();
+	public List<WorkProcess> getWorkProcessByStaffId(Long staffId);
 
-    public void saveOrUpdate(WorkProcess wp);
-    
+	public void saveOrUpdate(WorkProcess wp);
+
 }

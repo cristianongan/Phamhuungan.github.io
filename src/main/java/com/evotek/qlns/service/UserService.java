@@ -21,160 +21,160 @@ import com.evotek.qlns.model.UserLogin;
  */
 public interface UserService {
 
-    public void activateUser(List<User> users);
+	public void activateUser(List<User> users);
 
-    public void addRole(Long userId, String roleName);
+	public void addRole(Long userId, String roleName);
 
-    public void addRole(User user, String roleName);
+	public void addRole(User user, String roleName);
 
-    public void addVerifyResetPwd(User user);
+	public void addVerifyResetPwd(User user);
 
-    public void assignRoleToUser(User user, List<Role> roles, boolean isAdmin)
-            throws Exception;
+	public void assignRoleToUser(User user, List<Role> roles, boolean isAdmin) throws Exception;
 
-    public void createPassword(User user);
+	public void createPassword(User user);
 
-    public void delete(List<Role> roles, User user);
+	public void delete(List<Role> roles, User user);
 
-    public List<String> delete(List<User> users) throws Exception;
+	public List<String> delete(List<User> users) throws Exception;
 
 //    public List<Role> getRolesByUser(User user) throws Exception;
 
-    /**
-     * EN: Deletes an User.<br>
-     * @param user
-     * @throws java.lang.Exception
-     */
-    public void delete(User user) throws Exception;
+	/**
+	 * EN: Deletes an User.<br>
+	 * 
+	 * @param user
+	 * @throws java.lang.Exception
+	 */
+	public void delete(User user) throws Exception;
 
-    public List<Language> getAllLanguages() throws Exception;
+	public List<Language> getAllLanguages() throws Exception;
 
-    /**
-     * EN: Get a list of all Users.<br>
-     *
-     * @return List of Users / Liste aus Usern
-     * @throws java.lang.Exception
-     */
-    public List<User> getAllUsers() throws Exception;
+	/**
+	 * EN: Get a list of all Users.<br>
+	 *
+	 * @return List of Users / Liste aus Usern
+	 * @throws java.lang.Exception
+	 */
+	public List<User> getAllUsers() throws Exception;
 
-    /**
-     * EN: Get the count of all Users.<br>
-     *
-     * @return int
-     * @throws java.lang.Exception
-     */
-    public int getCountAllUsers() throws Exception;
+	/**
+	 * EN: Get the count of all Users.<br>
+	 *
+	 * @return int
+	 * @throws java.lang.Exception
+	 */
+	public int getCountAllUsers() throws Exception;
 
-    public List<SimpleModel> getGenderType();
+	public List<SimpleModel> getGenderType();
 
-    public Language getLanguageByLocale(String lan_locale) throws Exception;
+	public Language getLanguageByLocale(String lan_locale) throws Exception;
 
-    /**
-     * EN: Get a new User object.<br>
-     *
-     * @return Users
-     */
-    public User getNewUser();
+	/**
+	 * EN: Get a new User object.<br>
+	 *
+	 * @return Users
+	 */
+	public User getNewUser();
 
-    public List<Right> getRightsByUser(User user) throws Exception;
+	public List<Right> getRightsByUser(User user) throws Exception;
 
 //    public void saveRoles(List<UserRole> userRoles) throws Exception;
 
-    public List<RightView> getRightViewByUserId(Long userId) throws Exception;
+	public List<RightView> getRightViewByUserId(Long userId) throws Exception;
 
-    public Role getRoleByName(String roleName) throws Exception;
+	public Role getRoleByName(String roleName) throws Exception;
 
-    public List<Role> getRoles(boolean isAdmin);
+	public List<Role> getRoles(boolean isAdmin);
 
-    public List<String> getRolesNameByUser(User user) throws Exception;
+	public List<String> getRolesNameByUser(User user) throws Exception;
 
-    public User getUserByEmail(Long userId, String email);
+	public User getUserByEmail(Long userId, String email);
 
-    /**
-     * EN: Get an User by its ID.<br>
-     * @param userId
-     * @return User/ User
-     * @throws java.lang.Exception
-     */
-    public User getUserById(Long userId) throws Exception;
+	/**
+	 * EN: Get an User by its ID.<br>
+	 * 
+	 * @param userId
+	 * @return User/ User
+	 * @throws java.lang.Exception
+	 */
+	public User getUserById(Long userId) throws Exception;
 
-    /**
-     * EN: Get an User by its LoginName.<br>
-     * @param userName
-     *            UserName / User Name
-     * @return User/ User
-     * @throws java.lang.Exception
-     */
-    public User getUserByUserName(final String userName) throws Exception;
+	/**
+	 * EN: Get an User by its LoginName.<br>
+	 * 
+	 * @param userName UserName / User Name
+	 * @return User/ User
+	 * @throws java.lang.Exception
+	 */
+	public User getUserByUserName(final String userName) throws Exception;
 
-    public List<User> getUsers(String keyword, int itemStartNumber,
-            int pageSize, String orderByColumn, String orderByType);
+	public List<User> getUsers(String keyword, int itemStartNumber, int pageSize, String orderByColumn,
+			String orderByType);
 
-    public List<User> getUsers(String userName, String email, Long gender,
-            String birthPlace, Date birthdayFrom, Date birthdayTo, String phone,
-            String mobile,String account, Long status, int itemStartNumber,
-            int pageSize, String orderByColumn, String orderByType);
+	public List<User> getUsers(String userName, String email, Long gender, String birthPlace, Date birthdayFrom,
+			Date birthdayTo, String phone, String mobile, String account, Long status, int itemStartNumber,
+			int pageSize, String orderByColumn, String orderByType);
 
-    public int getUsersCount(String keyword);
+	public int getUsersCount(String keyword);
 
-    public int getUsersCount(String userName, String email,Long gender,
-            String birthPlace, Date birthdayFrom, Date birthdayTo, String phone,
-            String mobile, String account, Long status);
+	public int getUsersCount(String userName, String email, Long gender, String birthPlace, Date birthdayFrom,
+			Date birthdayTo, String phone, String mobile, String account, Long status);
 
-    /**
-     * EN: Get a list of Users by its emailaddress with the like SQL operator.<br>
-     *
-     * @param value
-     * @return List of Users
-     * @throws java.lang.Exception
-     */
-    public List<User> getUsersLikeEmail(String value) throws Exception;
+	/**
+	 * EN: Get a list of Users by its emailaddress with the like SQL operator.<br>
+	 *
+	 * @param value
+	 * @return List of Users
+	 * @throws java.lang.Exception
+	 */
+	public List<User> getUsersLikeEmail(String value) throws Exception;
 
-    /**
-     * EN: Gets a list of Users where the LastName name contains the %string% .<br>
-     *
-     * @param value
-     * @return List of Users / Liste of Users
-     * @throws java.lang.Exception
-     */
-    public List<User> getUsersLikeLastname(String value) throws Exception;
-    
-    /**
-     * EN: Gets a list of Users where the LoginName contains the %string% .<br>
-     *
-     * @param value
-     * @return List of Users / Liste of Users
-     * @throws java.lang.Exception
-     */
-    public List<User> getUsersLikeUserName(String value) throws Exception;
+	/**
+	 * EN: Gets a list of Users where the LastName name contains the %string% .<br>
+	 *
+	 * @param value
+	 * @return List of Users / Liste of Users
+	 * @throws java.lang.Exception
+	 */
+	public List<User> getUsersLikeLastname(String value) throws Exception;
 
-    public boolean isEmailExits(Long userId, String email);
+	/**
+	 * EN: Gets a list of Users where the LoginName contains the %string% .<br>
+	 *
+	 * @param value
+	 * @return List of Users / Liste of Users
+	 * @throws java.lang.Exception
+	 */
+	public List<User> getUsersLikeUserName(String value) throws Exception;
 
-    public boolean isIpAdrRequireCaptcha(String ip);
+	public boolean isEmailExits(Long userId, String email);
 
-    public boolean isUserNameExits(Long userId,String userName);
+	public boolean isIpAdrRequireCaptcha(String ip);
 
-    public void lockUser(List<User> users);
+	public boolean isUserNameExits(Long userId, String userName);
 
-    public void lockUser(User user);
-    
-    public void remove(String ip);
+	public void lockUser(List<User> users);
 
-    public void resetPassword(List<User> users);
+	public void lockUser(User user);
 
-    public void saveOrUpdate(List<User> users) throws Exception;
+	public void remove(String ip);
 
-    /**
-     * EN: Saves new or updates an User.<br>
-     * @param user
-     */
-    public void saveOrUpdate(User user);
+	public void resetPassword(List<User> users);
 
-    public void saveOrUpdate(UserLogin loginLog);
+	public void saveOrUpdate(List<User> users) throws Exception;
 
-    public List<Role> searchRoles(String roleName);
+	/**
+	 * EN: Saves new or updates an User.<br>
+	 * 
+	 * @param user
+	 */
+	public void saveOrUpdate(User user);
 
-    public void unlockUser(List<User> users);
-    
-    public void unlockUser(User user);
+	public void saveOrUpdate(UserLogin loginLog);
+
+	public List<Role> searchRoles(String roleName);
+
+	public void unlockUser(List<User> users);
+
+	public void unlockUser(User user);
 }

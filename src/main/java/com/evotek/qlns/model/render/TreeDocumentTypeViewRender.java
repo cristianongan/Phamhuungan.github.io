@@ -23,30 +23,27 @@ import com.evotek.qlns.util.key.ZkKeys;
  */
 public class TreeDocumentTypeViewRender implements TreeitemRenderer<DocumentTypeTreeNode> {
 
+	private Window win;
 
-      private Window win;
+	public TreeDocumentTypeViewRender(Window window) {
+		this.win = window;
+	}
 
-    public TreeDocumentTypeViewRender(Window window) {
-        this.win = window;
-    }
-
-
-    @Override
+	@Override
 	public void render(Treeitem treeItem, DocumentTypeTreeNode t, int i) throws Exception {
-        DocumentType documentType = t.getData();
+		DocumentType documentType = t.getData();
 
-        Treerow dataRow = new Treerow();
+		Treerow dataRow = new Treerow();
 
-        dataRow.appendChild(ComponentUtil.createTreeCell(documentType.getTypeName()));
+		dataRow.appendChild(ComponentUtil.createTreeCell(documentType.getTypeName()));
 
+		treeItem.appendChild(dataRow);
 
-        treeItem.appendChild(dataRow);
+		treeItem.setAttribute(Constants.DATA, documentType);
+		treeItem.setValue(t);
+		treeItem.setOpen(t.isOpen());
 
-        treeItem.setAttribute(Constants.DATA, documentType);
-        treeItem.setValue(t);
-        treeItem.setOpen(t.isOpen());
+		treeItem.addForward(Events.ON_CLICK, this.win, ZkKeys.ON_LOAD_DATA, documentType);
+	}
 
-        treeItem.addForward(Events.ON_CLICK, this.win, ZkKeys.ON_LOAD_DATA, documentType);
-    }
-    
 }

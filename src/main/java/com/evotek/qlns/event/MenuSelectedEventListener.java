@@ -18,34 +18,33 @@ import com.evotek.qlns.util.key.Constants;
  *
  * @author linhlh2
  */
-public class MenuSelectedEventListener implements EventListener<Event>{
+public class MenuSelectedEventListener implements EventListener<Event> {
 
-    private Include bodyLayout;
-    private String src;
-    private Map<String, Object> parameters;
+	private Include bodyLayout;
+	private Map<String, Object> parameters;
+	private String src;
 
-    public MenuSelectedEventListener(Include bodyLayout, String src) {
-        this.bodyLayout = bodyLayout;
-        this.src = src;
-    }
+	public MenuSelectedEventListener(Include bodyLayout, String src) {
+		this.bodyLayout = bodyLayout;
+		this.src = src;
+	}
 
-    public MenuSelectedEventListener(Include bodyLayout,
-            String src, Map<String, Object> parameters) {
-        this.bodyLayout = bodyLayout;
-        this.src = src;
-        this.parameters = parameters;
-    }
+	public MenuSelectedEventListener(Include bodyLayout, String src, Map<String, Object> parameters) {
+		this.bodyLayout = bodyLayout;
+		this.src = src;
+		this.parameters = parameters;
+	}
 
-    @Override
+	@Override
 	public void onEvent(Event t) throws Exception {
-        this.setSelectedMenu(this.src, this.parameters);
-    }
+		this.setSelectedMenu(this.src, this.parameters);
+	}
 
-    private void setSelectedMenu(String url, Map<String, Object> parameters) {
-        Sessions.getCurrent().setAttribute(Constants.MAP_PARAMETER, parameters);
+	private void setSelectedMenu(String url, Map<String, Object> parameters) {
+		Sessions.getCurrent().setAttribute(Constants.MAP_PARAMETER, parameters);
 
-        this.bodyLayout.setSrc(url);
+		this.bodyLayout.setSrc(url);
 
-        this.bodyLayout.invalidate();
-    }
+		this.bodyLayout.invalidate();
+	}
 }

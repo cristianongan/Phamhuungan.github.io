@@ -14,36 +14,36 @@ import org.zkoss.zul.ListModelList;
  *
  * @author linhlh2
  */
-public class SimpleModelList<E extends Object> extends ListModelList<E>{
+public class SimpleModelList<E extends Object> extends ListModelList<E> {
 
-    public SimpleModelList(int initialCapacity) {
-        super(initialCapacity);
+	public SimpleModelList() {
+		super();
 
-        setMultiple(true);
-    }
+		setMultiple(true);
+	}
 
-    public SimpleModelList(E[] array) {
-        super(array);
+	public SimpleModelList(Collection<? extends E> c) {
+		super(c);
 
-        setMultiple(true);
-    }
+		setMultiple(true);
+	}
 
-    public SimpleModelList(Collection<? extends E> c) {
-        super(c);
+	public SimpleModelList(E[] array) {
+		super(array);
 
-        setMultiple(true);
-    }
+		setMultiple(true);
+	}
 
-    public SimpleModelList() {
-        super();
+	public SimpleModelList(int initialCapacity) {
+		super(initialCapacity);
 
-        setMultiple(true);
-    }
+		setMultiple(true);
+	}
 
-    public SimpleModelList(List<E> list, boolean live) {
-        super(list, live);
+	public SimpleModelList(List<E> list, boolean live) {
+		super(list, live);
 
-        setMultiple(true);
-    }
+		setMultiple(true);
+	}
 
 }

@@ -20,152 +20,150 @@ import javax.persistence.TemporalType;
 @Table(name = "right_")
 public class Right implements Serializable {
 
-    private Long categoryId;
-    private Long rightType;
-    private Long userId;
-    private String description;
-    private String userName;
-    private String rightName;
-    private Date createDate;
-    private Long status;
-    private Date modifiedDate;
-    private Long rightId;
-    private Set<Group> groups = new HashSet<Group>(0);
+	private Long categoryId;
+	private Date createDate;
+	private String description;
+	private Set<Group> groups = new HashSet<Group>(0);
+	private Date modifiedDate;
+	private Long rightId;
+	private String rightName;
+	private Long rightType;
+	private Long status;
+	private Long userId;
+	private String userName;
 
-    @Column(name = "category_id", precision = 22, scale = 0)
-    public Long getCategoryId() {
-        return this.categoryId;
-    }
+	public Right() {
+	}
 
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
-    }
+	public Right(Long rightId) {
+		this.rightId = rightId;
+	}
 
-    @Column(name = "right_type", precision = 22, scale = 0)
-    public Long getRightType() {
-        return this.rightType;
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
 
-    public void setRightType(Long rightType) {
-        this.rightType = rightType;
-    }
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
 
-    @Column(name = "user_id", precision = 22, scale = 0)
-    public Long getUserId() {
-        return this.userId;
-    }
+		final Right other = (Right) obj;
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
+		if (this.rightId != other.rightId && (this.rightId == null || !this.rightId.equals(other.rightId))) {
+			return false;
+		}
 
-    @Column(name = "description", length = 1000)
-    public String getDescription() {
-        return this.description;
-    }
+		return true;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	@Column(name = "category_id", precision = 22, scale = 0)
+	public Long getCategoryId() {
+		return this.categoryId;
+	}
 
-    @Column(name = "user_name", length = 200)
-    public String getUserName() {
-        return this.userName;
-    }
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "create_date", length = 7)
+	public Date getCreateDate() {
+		return this.createDate;
+	}
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
+	@Column(name = "description", length = 1000)
+	public String getDescription() {
+		return this.description;
+	}
 
-    @Column(name = "right_name", length = 200)
-    public String getRightName() {
-        return this.rightName;
-    }
+	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "rights")
+	public Set<Group> getGroups() {
+		return this.groups;
+	}
 
-    public void setRightName(String rightName) {
-        this.rightName = rightName;
-    }
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "modified_date", length = 7)
+	public Date getModifiedDate() {
+		return this.modifiedDate;
+	}
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "create_date", length = 7)
-    public Date getCreateDate() {
-        return this.createDate;
-    }
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "right_id", unique = true, nullable = false, precision = 22, scale = 0)
+	public Long getRightId() {
+		return this.rightId;
+	}
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
+	@Column(name = "right_name", length = 200)
+	public String getRightName() {
+		return this.rightName;
+	}
 
-    @Column(name = "status", precision = 22, scale = 0)
-    public Long getStatus() {
-        return this.status;
-    }
+	@Column(name = "right_type", precision = 22, scale = 0)
+	public Long getRightType() {
+		return this.rightType;
+	}
 
-    public void setStatus(Long status) {
-        this.status = status;
-    }
+	@Column(name = "status", precision = 22, scale = 0)
+	public Long getStatus() {
+		return this.status;
+	}
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "modified_date", length = 7)
-    public Date getModifiedDate() {
-        return this.modifiedDate;
-    }
+	@Column(name = "user_id", precision = 22, scale = 0)
+	public Long getUserId() {
+		return this.userId;
+	}
 
-    public void setModifiedDate(Date modifiedDate) {
-        this.modifiedDate = modifiedDate;
-    }
+	@Column(name = "user_name", length = 200)
+	public String getUserName() {
+		return this.userName;
+	}
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "right_id", unique = true, nullable = false, precision = 22, scale = 0)
-    public Long getRightId() {
-        return this.rightId;
-    }
+	@Override
+	public int hashCode() {
+		int hash = 5;
+		return hash;
+	}
 
-    public void setRightId(Long rightId) {
-        this.rightId = rightId;
-    }
+	public void setCategoryId(Long categoryId) {
+		this.categoryId = categoryId;
+	}
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "rights")
-    public Set<Group> getGroups() {
-        return this.groups;
-    }
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
 
-    public void setGroups(Set<Group> groups) {
-        this.groups = groups;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public Right() {
-    }
+	public void setGroups(Set<Group> groups) {
+		this.groups = groups;
+	}
 
-    public Right(Long rightId) {
-        this.rightId = rightId;
-    }
+	public void setModifiedDate(Date modifiedDate) {
+		this.modifiedDate = modifiedDate;
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        
-        final Right other = (Right) obj;
-        
-        if (this.rightId != other.rightId 
-                && (this.rightId == null 
-                || !this.rightId.equals(other.rightId))) {
-            return false;
-        }
-        
-        return true;
-    }
+	public void setRightId(Long rightId) {
+		this.rightId = rightId;
+	}
 
-    @Override
-    public int hashCode() {
-        int hash = 5;
-        return hash;
-    }
+	public void setRightName(String rightName) {
+		this.rightName = rightName;
+	}
+
+	public void setRightType(Long rightType) {
+		this.rightType = rightType;
+	}
+
+	public void setStatus(Long status) {
+		this.status = status;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
 }

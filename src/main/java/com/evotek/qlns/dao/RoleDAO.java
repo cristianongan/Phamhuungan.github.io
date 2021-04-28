@@ -16,25 +16,25 @@ import com.evotek.qlns.model.Role;
  */
 public interface RoleDAO {
 
-    public Role getNewRole();
+	public void delete(Role role) throws DataAccessException;
 
-    public Role getRoleById(Long roleId) throws Exception;
+	public int getCountAllRoles() throws Exception;
 
-    public List<Role> getRoleByRN(String roleName) throws Exception;
+	public Role getNewRole();
 
-    public List<Role> getRoleByRN(String roleName, Long roleId) throws Exception;
+	public Role getRoleById(Long roleId) throws Exception;
 
-    public List<Role> getRoles(boolean isAdmin);
+	public Role getRoleByName(String roleName) throws Exception;
 
-    public int getCountAllRoles() throws Exception;
+	public List<Role> getRoleByRN(String roleName) throws Exception;
 
-    public List<Role> getRoles(String roleName, Long status) throws Exception;
+	public List<Role> getRoleByRN(String roleName, Long roleId) throws Exception;
 
-    public void saveOrUpdate(Role role) throws DataAccessException;
+	public List<Role> getRoles(boolean isAdmin);
 
-    public void delete(Role role) throws DataAccessException;
+	public List<Role> getRoles(String roleName, Long status) throws Exception;
 
-    public List<Role> searchRole(String roleName);
+	public void saveOrUpdate(Role role) throws DataAccessException;
 
-    public Role getRoleByName(String roleName) throws Exception;
+	public List<Role> searchRole(String roleName);
 }

@@ -24,45 +24,44 @@ import com.evotek.qlns.tree.node.CategoryTreeNode;
  */
 public class BandboxCategoryRender<Component> implements TreeitemRenderer<CategoryTreeNode> {
 
-    private Bandbox bbTemp;
+	private Bandbox bbTemp;
 
-    public BandboxCategoryRender(Bandbox bb) {
-        this.bbTemp = bb;
-    }
+	public BandboxCategoryRender(Bandbox bb) {
+		this.bbTemp = bb;
+	}
 
-    @Override
-    public void render(Treeitem trtm, CategoryTreeNode t, int i) throws Exception {
-        CategoryTreeNode dtn = t;
+	@Override
+	public void render(Treeitem trtm, CategoryTreeNode t, int i) throws Exception {
+		CategoryTreeNode dtn = t;
 
-        final Category category = dtn.getData();
+		final Category category = dtn.getData();
 
-        trtm.setValue(dtn);
-        trtm.setOpen(dtn.isOpen());
+		trtm.setValue(dtn);
+		trtm.setOpen(dtn.isOpen());
 
-        Treerow dataRow = new Treerow();
+		Treerow dataRow = new Treerow();
 
-        Treecell treeCell = new Treecell();
-        treeCell.appendChild(new Label(Labels.getLabel(category.getLanguageKey())));
+		Treecell treeCell = new Treecell();
+		treeCell.appendChild(new Label(Labels.getLabel(category.getLanguageKey())));
 
-        dataRow.appendChild(treeCell);
-        
-        trtm.appendChild(dataRow);
+		dataRow.appendChild(treeCell);
 
-        trtm.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+		trtm.appendChild(dataRow);
 
-            @Override
-            public void onEvent(Event t) throws Exception {
-                CategoryTreeNode clickedNodeValue = ((Treeitem) 
-                        t.getTarget()).getValue();
+		trtm.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
-                BandboxCategoryRender.this.bbTemp.setValue(Labels.getLabel(clickedNodeValue.getData().
-                        getLanguageKey()));
-                
-                BandboxCategoryRender.this.bbTemp.setAttribute("categoryId", category.getCategoryId());
+			@Override
+			public void onEvent(Event t) throws Exception {
+				CategoryTreeNode clickedNodeValue = ((Treeitem) t.getTarget()).getValue();
 
-                BandboxCategoryRender.this.bbTemp.setOpen(true);
-                BandboxCategoryRender.this.bbTemp.setOpen(false);
-            }
-        });
-    }
+				BandboxCategoryRender.this.bbTemp
+						.setValue(Labels.getLabel(clickedNodeValue.getData().getLanguageKey()));
+
+				BandboxCategoryRender.this.bbTemp.setAttribute("categoryId", category.getCategoryId());
+
+				BandboxCategoryRender.this.bbTemp.setOpen(true);
+				BandboxCategoryRender.this.bbTemp.setOpen(false);
+			}
+		});
+	}
 }

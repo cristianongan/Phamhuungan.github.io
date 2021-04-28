@@ -14,11 +14,11 @@ import com.evotek.qlns.model.User;
  * @author linhlh2
  */
 public interface UserPrincipal {
-    public Long getUserId();
+	public Collection<String> getRoles();
 
-    public String getUserName();
+	public User getUser();
 
-    public User getUser();
+	public Long getUserId();
 
-    public Collection<String> getRoles();
+	public String getUserName();
 }

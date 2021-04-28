@@ -17,22 +17,22 @@ import com.evotek.qlns.util.key.PermissionConstants;
  * @author linhlh2
  */
 public class PermissionUtil {
-    public static boolean isAdministrator(Collection<String> roles){
-        return roles.contains(PermissionConstants.ROLE_ADMIN);
-    }
+	public static String encodePassword(String password) {
 
-    public static boolean isAdministrator(Role role){
-        return PermissionConstants.ROLE_ADMIN.equals(role.getRoleName());
-    }
+		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(16);
 
-    public static String encodePassword(String password){
+		return bCryptPasswordEncoder.encode(password);
+	}
 
-        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(16);
-        
-        return bCryptPasswordEncoder.encode(password);
-    }
-    
-    public static void main(String[] args) {
-        System.err.println(PermissionUtil.encodePassword("123456a@"));
-    }
+	public static boolean isAdministrator(Collection<String> roles) {
+		return roles.contains(PermissionConstants.ROLE_ADMIN);
+	}
+
+	public static boolean isAdministrator(Role role) {
+		return PermissionConstants.ROLE_ADMIN.equals(role.getRoleName());
+	}
+
+	public static void main(String[] args) {
+		System.err.println(PermissionUtil.encodePassword("123456a@"));
+	}
 }

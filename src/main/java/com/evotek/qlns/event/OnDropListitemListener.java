@@ -14,17 +14,17 @@ import org.zkoss.zul.Listitem;
  *
  * @author linhlh2
  */
-public class OnDropListitemListener implements EventListener<DropEvent>{
-    private Listitem targetItem;
+public class OnDropListitemListener implements EventListener<DropEvent> {
+	private Listitem targetItem;
 
-    public OnDropListitemListener(Listitem targetItem) {
-        this.targetItem = targetItem;
-    }
+	public OnDropListitemListener(Listitem targetItem) {
+		this.targetItem = targetItem;
+	}
 
-    @Override
+	@Override
 	public void onEvent(DropEvent event) throws Exception {
-        Component dragged = event.getDragged();
+		Component dragged = event.getDragged();
 
-	this.targetItem.getParent().insertBefore(dragged, this.targetItem);
-    }
+		this.targetItem.getParent().insertBefore(dragged, this.targetItem);
+	}
 }

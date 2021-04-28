@@ -18,45 +18,41 @@ import com.evotek.qlns.model.User;
  * @author linhlh2
  */
 public interface RightDAO {
-    
-    public Right getNewRight();
 
-    public List<Right> getAllRights() throws Exception;
+	public void delete(Right right) throws DataAccessException;
 
-    public List<Right> getAllRights(Long type) throws Exception;
+	public void deleteByCategoryId(Long categoryId) throws Exception;
 
-    public List<Right> getAllRights(List<Long> types) throws Exception;
+	public List<Right> getAllRights() throws Exception;
 
-    public Right getRightById(Long rightId) throws Exception;
+	public List<Right> getAllRights(List<Long> types) throws Exception;
+
+	public List<Right> getAllRights(Long type) throws Exception;
 
 //    public List<Right> getRightsByGroupsRight(GroupsRight groupsRight)
 //            throws Exception;
 
-    public List<Right> getRightsByUser(User user) throws Exception;
+	public int getCountAllRights() throws Exception;
 
-    public List<RightView> getRightViewByUserId(Long userId) throws Exception;
+	public Right getNewRight();
 
-    public List<Right> getRightsByRN(String rightName)
-            throws Exception;
+	public List<Right> getRightByCategoryId(Long categoryId) throws Exception;
 
-    public List<Right> getRightsByRN_T(String rightName, Long type)
-            throws Exception;
+	public Right getRightByCI_RN(Long categoryId, String folderName);
 
-    public List<Right> getRightsByRN_T(String rightName, List<Long> types)
-            throws Exception;
+	public Right getRightById(Long rightId) throws Exception;
 
-    public int getCountAllRights() throws Exception;
+	public List<Right> getRightByName(String rightName, Long rightId) throws Exception;
 
-    public void saveOrUpdate(Right right) throws DataAccessException;
+	public List<Right> getRightsByRN(String rightName) throws Exception;
 
-    public void delete(Right right) throws DataAccessException;
+	public List<Right> getRightsByRN_T(String rightName, List<Long> types) throws Exception;
 
-    public List<Right> getRightByCategoryId(Long categoryId) throws Exception;
+	public List<Right> getRightsByRN_T(String rightName, Long type) throws Exception;
 
-    public void deleteByCategoryId(Long categoryId) throws Exception;
+	public List<Right> getRightsByUser(User user) throws Exception;
 
-    public List<Right> getRightByName(String rightName, Long rightId)
-            throws Exception;
+	public List<RightView> getRightViewByUserId(Long userId) throws Exception;
 
-    public Right getRightByCI_RN(Long categoryId, String folderName);
+	public void saveOrUpdate(Right right) throws DataAccessException;
 }

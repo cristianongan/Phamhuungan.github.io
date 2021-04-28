@@ -85,11 +85,11 @@ public class DocumentTypeDAOImpl extends AbstractDAO<DocumentType> implements Do
 			CriteriaQuery<DocumentType> criteria = builder.createQuery(DocumentType.class);
 
 			Root<DocumentType> root = criteria.from(DocumentType.class);
-			
+
 			Join<DocumentType, DocumentType> parentJoin = root.join("parentDocumentType", JoinType.INNER);
 
 			criteria.select(root);
-			
+
 			if (Validator.isNull(parentId)) {
 				criteria.where(builder.isNull(parentJoin.get("documentTypeId")));
 			} else {

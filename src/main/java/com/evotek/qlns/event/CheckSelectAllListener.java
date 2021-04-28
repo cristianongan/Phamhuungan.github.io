@@ -15,50 +15,49 @@ import org.zkoss.zul.Checkbox;
  *
  * @author linhlh2
  */
-public class CheckSelectAllListener implements EventListener<Event>{
+public class CheckSelectAllListener implements EventListener<Event> {
 
-    private Checkbox masterChb;
-    private List<Checkbox> slaveChbs;
-    private Checkbox slaveChb;
+	private Checkbox masterChb;
+	private Checkbox slaveChb;
+	private List<Checkbox> slaveChbs;
 
-    public CheckSelectAllListener(Checkbox masterChb, List<Checkbox> slaveChbs) {
-        this.masterChb = masterChb;
-        this.slaveChbs = slaveChbs;
-    }
+	public CheckSelectAllListener(Checkbox masterChb, List<Checkbox> slaveChbs) {
+		this.masterChb = masterChb;
+		this.slaveChbs = slaveChbs;
+	}
 
-    public CheckSelectAllListener(Checkbox masterChb, List<Checkbox> slaveChbs, 
-            Checkbox slaveChb) {
-        this.masterChb = masterChb;
-        this.slaveChbs = slaveChbs;
-        this.slaveChb = slaveChb;
-    }
+	public CheckSelectAllListener(Checkbox masterChb, List<Checkbox> slaveChbs, Checkbox slaveChb) {
+		this.masterChb = masterChb;
+		this.slaveChbs = slaveChbs;
+		this.slaveChb = slaveChb;
+	}
 
-    @Override
+	@Override
 	public void onEvent(Event event) throws Exception {
-        if (this.slaveChb == null) {
-            for (Checkbox cb : this.slaveChbs) {
-                cb.setChecked(this.masterChb.isChecked());
-            }
+		if (this.slaveChb == null) {
+			for (Checkbox cb : this.slaveChbs) {
+				cb.setChecked(this.masterChb.isChecked());
+			}
 
-            return;
-        }
+			return;
+		}
 
-        if (!this.slaveChb.isChecked()) {
-            this.masterChb.setChecked(false);
+		if (!this.slaveChb.isChecked()) {
+			this.masterChb.setChecked(false);
 
-            return;
-        }
+			return;
+		}
 
-        boolean checkAll = true;
+		boolean checkAll = true;
 
-        for (Checkbox cb : this.slaveChbs) {
-            checkAll = checkAll && cb.isChecked();
+		for (Checkbox cb : this.slaveChbs) {
+			checkAll = checkAll && cb.isChecked();
 
-            if(!checkAll){
-                break;
-            }
-        }
+			if (!checkAll) {
+				break;
+			}
+		}
 
-        this.masterChb.setChecked(checkAll);
-    }
+		this.masterChb.setChecked(checkAll);
+	}
 }

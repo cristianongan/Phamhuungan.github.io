@@ -12,56 +12,57 @@ import java.io.Serializable;
  */
 public class SimpleModel implements Serializable {
 
-    private Object value;
-    private String label;
-    private Long id;
-    private Long parentId;
+	private Long id;
+	private String label;
+	private Long parentId;
+	private Object value;
 
-    public Long getId() {
-        return this.id;
-    }
+	public SimpleModel() {
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public SimpleModel(Long id) {
+		this.id = id;
+	}
 
-    public Long getParentId() {
-        return this.parentId;
-    }
+	public SimpleModel(Object value, String label) {
+		this.value = value;
+		this.label = label;
+	}
 
-    public void setParentId(Long parentId) {
-        this.parentId = parentId;
-    }
+	public SimpleModel(String label, Long id) {
+		this.label = label;
+		this.id = id;
+	}
 
-    public String getLabel() {
-        return this.label;
-    }
+	public Long getId() {
+		return this.id;
+	}
 
-    public void setLabel(String label) {
-        this.label = label;
-    }
+	public String getLabel() {
+		return this.label;
+	}
 
-    public Object getValue() {
-        return this.value;
-    }
+	public Long getParentId() {
+		return this.parentId;
+	}
 
-    public void setValue(Object value) {
-        this.value = value;
-    }
+	public Object getValue() {
+		return this.value;
+	}
 
-    public SimpleModel(Object value, String label) {
-        this.value = value;
-        this.label = label;
-    }
-    
-    public SimpleModel(Long id) {
-        this.id = id;
-    }
-    
-    public SimpleModel(String label, Long id) {
-        this.label = label;
-        this.id = id;
-    }
-    
-    public SimpleModel() {}
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public void setLabel(String label) {
+		this.label = label;
+	}
+
+	public void setParentId(Long parentId) {
+		this.parentId = parentId;
+	}
+
+	public void setValue(Object value) {
+		this.value = value;
+	}
 }

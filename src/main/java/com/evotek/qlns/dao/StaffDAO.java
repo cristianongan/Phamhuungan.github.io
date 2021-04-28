@@ -16,34 +16,32 @@ import com.evotek.qlns.model.Staff;
  */
 public interface StaffDAO {
 
-//    public List<HumanResource> getAll();
-    public Staff getStaff(Long staffId);
-    
-    public List<Staff> getStaff(String keyword,
-            int firstResult, int maxResult, String orderByColumn, String orderByType);
-    
-    public int getStaffCount(String keyword);
+	public void delete(Staff staff);
 
-    public List<Staff> getStaff(String staffName, Long yearOfBirth, Department dept, 
-            String email, Job job, String phone, int firstResult, int maxResult, 
-            String orderByColumn, String orderByType);
+	public void deleteAllStaff(List<Staff> staff) throws Exception;
 
-    public int getStaffCount(String staffName, Long yearOfBirth, Department dept, 
-            String email, Job job, String phone);
-    
-    public List<Staff> getStaffByIdList(List<Long> idList, int firstResult, 
-            int maxResult, String orderByColumn, String orderByType);
+	public List<Staff> getBirthDayNearlyStaff(int dayOfYear);
 
-    public int getStaffCountByIdList(List<Long> idList);
-    
-    public void saveOrUpdate(Staff staff);
+	public List<Staff> getContractExpiredStaff();
 
-    public void delete(Staff staff);
+	// public List<HumanResource> getAll();
+	public Staff getStaff(Long staffId);
 
-    public void deleteAllStaff(List<Staff> staff) throws Exception;    
+	public List<Staff> getStaff(String keyword, int firstResult, int maxResult, String orderByColumn,
+			String orderByType);
 
-    public List<Staff> getContractExpiredStaff();
+	public List<Staff> getStaff(String staffName, Long yearOfBirth, Department dept, String email, Job job,
+			String phone, int firstResult, int maxResult, String orderByColumn, String orderByType);
 
-    public List<Staff> getBirthDayNearlyStaff(int dayOfYear);
-    
+	public List<Staff> getStaffByIdList(List<Long> idList, int firstResult, int maxResult, String orderByColumn,
+			String orderByType);
+
+	public int getStaffCount(String keyword);
+
+	public int getStaffCount(String staffName, Long yearOfBirth, Department dept, String email, Job job, String phone);
+
+	public int getStaffCountByIdList(List<Long> idList);
+
+	public void saveOrUpdate(Staff staff);
+
 }

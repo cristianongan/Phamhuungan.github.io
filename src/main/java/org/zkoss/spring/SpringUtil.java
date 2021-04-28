@@ -41,7 +41,8 @@ public class SpringUtil {
 			throw new UiException("SpringUtil can be called only under ZK environment!");
 		}
 
-		return WebApplicationContextUtils.getRequiredWebApplicationContext((ServletContext) exec.getDesktop().getWebApp().getNativeContext());
+		return WebApplicationContextUtils
+				.getRequiredWebApplicationContext((ServletContext) exec.getDesktop().getWebApp().getNativeContext());
 	}
 
 	/**

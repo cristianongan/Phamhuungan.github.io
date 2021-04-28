@@ -16,8 +16,6 @@ import org.zkoss.zul.Window;
  * and open the template in the editor.
  */
 
-
-
 import com.evotek.qlns.model.FileEntry;
 import com.evotek.qlns.util.FileUtil;
 import com.evotek.qlns.util.StaticUtil;
@@ -30,54 +28,48 @@ import com.evotek.qlns.util.key.LanguageKeys;
  *
  * @author linhlh2
  */
-public class PreviewFileListener implements EventListener<Event>{
+public class PreviewFileListener implements EventListener<Event> {
 
-    private FileEntry entry;
+	private static final String PREVIEW_FILE_PAGE = "/html/pages/common/previewFile.zul";
 
-    public PreviewFileListener(FileEntry entry) {
-        this.entry = entry;
-    }
+	private FileEntry entry;
 
-    @Override
+	public PreviewFileListener(FileEntry entry) {
+		this.entry = entry;
+	}
+
+	@Override
 	public void onEvent(Event t) throws Exception {
-        StringBuilder sb = new StringBuilder();
+		StringBuilder sb = new StringBuilder();
 
-        sb.append(StaticUtil.SYSTEM_STORE_FILE_DIR);
-        sb.append(StringPool.SLASH);
-        sb.append(StaticUtil.FILE_UPLOAD_DIR);
-        sb.append(StringPool.SLASH);
-        sb.append(this.entry.getFolderId());
-        sb.append(StringPool.SLASH);
-        sb.append(this.entry.getFileId());
+		sb.append(StaticUtil.SYSTEM_STORE_FILE_DIR);
+		sb.append(StringPool.SLASH);
+		sb.append(StaticUtil.FILE_UPLOAD_DIR);
+		sb.append(StringPool.SLASH);
+		sb.append(this.entry.getFolderId());
+		sb.append(StringPool.SLASH);
+		sb.append(this.entry.getFileId());
 
-        File file = new File(sb.toString());
+		File file = new File(sb.toString());
 
-        if (file.exists()) {
-            String ext = FileUtil.getFileExtension(this.entry.getName());
+		if (file.exists()) {
+			String ext = FileUtil.getFileExtension(this.entry.getName());
 
-            if (Validator.isNotNull(ext)
-                    && Validator.isNotNull(FileUtil.FILE_TYPE_MAP.get(ext))) {
-                Map map = new HashMap();
+			if (Validator.isNotNull(ext) && Validator.isNotNull(FileUtil.FILE_TYPE_MAP.get(ext))) {
+				Map map = new HashMap();
 
-                map.put(Constants.OBJECT, file);
-                map.put(Constants.KEY, ext);
-                map.put(Constants.VALUE, FileUtil.FILE_TYPE_MAP.get(ext));
+				map.put(Constants.OBJECT, file);
+				map.put(Constants.KEY, ext);
+				map.put(Constants.VALUE, FileUtil.FILE_TYPE_MAP.get(ext));
 
-                Window win = (Window) Executions.createComponents(PREVIEW_FILE_PAGE,
-                        null, map);
-                win.doModal();
-            } else {
-                FileUtil.download(file, this.entry.getName());
-            }
-        } else {
-            Messagebox.show(Labels.getLabel(
-                    LanguageKeys.FILE_NOT_FOUND),
-                    Labels.getLabel(LanguageKeys.ERROR),
-                    Messagebox.OK, Messagebox.ERROR);
-        }
-    }
-
-    private static final String PREVIEW_FILE_PAGE
-            = "/html/pages/common/previewFile.zul";
+				Window win = (Window) Executions.createComponents(PREVIEW_FILE_PAGE, null, map);
+				win.doModal();
+			} else {
+				FileUtil.download(file, this.entry.getName());
+			}
+		} else {
+			Messagebox.show(Labels.getLabel(LanguageKeys.FILE_NOT_FOUND), Labels.getLabel(LanguageKeys.ERROR),
+					Messagebox.OK, Messagebox.ERROR);
+		}
+	}
 }
-

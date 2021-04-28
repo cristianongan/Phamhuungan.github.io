@@ -12,7 +12,8 @@ import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.zkoss.spring.SpringUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Event;
@@ -31,234 +32,205 @@ import com.evotek.qlns.util.ComponentUtil;
 import com.evotek.qlns.util.key.Constants;
 import com.evotek.qlns.util.key.LanguageKeys;
 
-
 /**
  *
  * @author linhlh2
  */
-public class RoleController extends BasicController<Div>
-        implements Serializable {
+@Controller
+public class RoleController extends BasicController<Div> implements Serializable {
 
-    private static final long serialVersionUID = 1371435022018L;
-    
-    private Div winRole;
+	private static final long serialVersionUID = 1371435022018L;
+
+	private static final Logger _log = LogManager.getLogger(RoleController.class);
+
+	private static final String EDIT_PAGE = "/html/pages/manager_role/edit.zul";
+
+	@Autowired
+	private RoleService roleService;
 
 //    private Textbox roleName;
 
 //    private Combobox status;
-    
-    private Listbox searchResultGrid;
 
-    private Include parent;
-    
-    private Map<String, Object> paramMap = new HashMap<String, Object>();
+	private Map<String, Object> paramMap = new HashMap<String, Object>();
 
-    @Override
-    public void doBeforeComposeChildren(Div comp) throws Exception {
-        super.doBeforeComposeChildren(comp);
+	private Include parent;
 
-        this.winRole = comp;
-    }
+	private Listbox searchResultGrid;
 
-    @Override
-    public void doAfterCompose(Div comp) throws Exception {
-        super.doAfterCompose(comp);
-        //Init data
-        this.initData();
+	private Div winRole;
 
-        this.search();
-    }
-
-    public void initData() throws Exception {
-        try {
-            this.parent = (Include) this.winRole.getParent();
-            
-//            List<SimpleModel> statusList = ComponentUtil.getComboboxStatusValue(
-//                    new String[]{Labels.getLabel(LanguageKeys.STATUS_ACTIVE),
-//                    Labels.getLabel(LanguageKeys.STATUS_NOT_ACTIVE)}, true);
-            
-//            status.setModel(new ListModelList<SimpleModel>(statusList));
-        } catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
-        }
-    }
-
-    //event method
+	// event method
 
 //    public void onAfterRender$status(){
 //        status.setSelectedIndex(Values.FIRST_INDEX);
 //    }
 
-    public void onClick$btnSearch() throws Exception{
-        this.search();
-    }
+	@Override
+	public void doAfterCompose(Div comp) throws Exception {
+		super.doAfterCompose(comp);
+		// Init data
+		this.initData();
 
-    public void onClick$btnCancel(){
-        this.winRole.detach();
-    }
+		this.search();
+	}
 
-    public void onLockRole(Event event) throws Exception {
-        final Role role = (Role) event.getData();
+	@Override
+	public void doBeforeComposeChildren(Div comp) throws Exception {
+		super.doBeforeComposeChildren(comp);
 
-        Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_LOCK),
-                Labels.getLabel(LanguageKeys.MESSAGE_INFOR_LOCK),
-                Messagebox.OK | Messagebox.CANCEL,
-                Messagebox.QUESTION,
-                new EventListener<Event>() {
+		this.winRole = comp;
+	}
 
-                    @Override
-					public void onEvent(Event e) throws Exception {
-                        if (Messagebox.ON_OK.equals(e.getName())) {
-                            try {
-                                RoleController.this.roleService.lockRole(role);
+	public List<Role> getRoles() throws Exception {
+		List<Role> _roles = new ArrayList<Role>();
 
-                               ComponentUtil.createSuccessMessageBox(
-                                       LanguageKeys.MESSAGE_LOCK_ITEM_SUCCESS);
-
-                                search();
-                            } catch (Exception ex) {
-                                _log.error(ex.getMessage(), ex);
-
-                                Messagebox.show(Labels.getLabel(
-                                        LanguageKeys.MESSAGE_LOCK_ITEM_FAIL));
-                            }
-                        }
-                    }
-                });
-    }
-
-    public void onUnlockRole(Event event) throws Exception {
-        final Role role = (Role) event.getData();
-
-        Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_UNLOCK),
-                Labels.getLabel(LanguageKeys.MESSAGE_INFOR_UNLOCK),
-                Messagebox.OK | Messagebox.CANCEL,
-                Messagebox.QUESTION,
-                new EventListener() {
-
-                    @Override
-					public void onEvent(Event e) throws Exception {
-                        if (Messagebox.ON_OK.equals(e.getName())) {
-                            try {
-                                RoleController.this.roleService.unlockRole(role);
-
-                                ComponentUtil.createSuccessMessageBox(
-                                        LanguageKeys.MESSAGE_UNLOCK_ITEM_SUCCESS);
-
-                                search();
-                            } catch (Exception ex) {
-                                _log.error(ex.getMessage(), ex);
-
-                                Messagebox.show(Labels.getLabel(
-                                        LanguageKeys.MESSAGE_UNLOCK_ITEM_FAIL));
-                            }
-                        }
-                    }
-                });
-    }
-
-    public void onDeleteRole(Event event) throws Exception {
-        final Role role = (Role) event.getData();
-
-        Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_DELETE),
-                Labels.getLabel(LanguageKeys.MESSAGE_INFOR_DELETE),
-                Messagebox.OK | Messagebox.CANCEL,
-                Messagebox.QUESTION,
-                new EventListener() {
-
-                    @Override
-					public void onEvent(Event e) throws Exception {
-                        if (Messagebox.ON_OK.equals(e.getName())) {
-                            try {
-                                RoleController.this.roleService.deleteRole(role);
-
-                                ComponentUtil.createSuccessMessageBox(
-                                        LanguageKeys.MESSAGE_DELETE_SUCCESS);
-
-                                search();
-                            } catch (Exception ex) {
-                                _log.error(ex.getMessage(), ex);
-
-                                Messagebox.show(Labels.getLabel(
-                                        LanguageKeys.MESSAGE_DELETE_FAIL));
-                            }
-                        }
-                    }
-                });
-    }
-
-    public void onClick$btnAdd() {
-        try {
-            Map<String, Object> parameters = new HashMap<String, Object>();
-            parameters.put(Constants.PARENT_WINDOW, this.winRole);
-            parameters.put(Constants.ID, 0L);
-
-            Window win = (Window) Executions.createComponents(EDIT_PAGE,
-                    this.winRole, parameters);
-            win.doModal();
-        } catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
-        }
-    }
-
-    public void onLoadRole(Event event) throws Exception{
-        this.search();
-    }
-    //event method
-
-    private void search() throws Exception {
-        try {
-            List<Role> roles = this.getRoles();
-
-            this.searchResultGrid.setItemRenderer(new RoleRender(this.winRole));
-            this.searchResultGrid.setModel(new ListModelList<Role>(roles));
-        } catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
-        }
-    }
-
-    public List<Role> getRoles() throws Exception {
-        List<Role> _roles = new ArrayList<Role>();
-
-        try {
+		try {
 //            String _roleName = GetterUtil.getString(roleName.getValue());
 //            Long _status = ComponentUtil.getComboboxValue(status);
 
-            //create param map
+			// create param map
 //            paramMap.put("roleName", _roleName);
 //            paramMap.put("status", _status);
 
-            _roles = this.roleService.getRoles(null, null);
-        } catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
-        }
+			_roles = this.roleService.getRoles(null, null);
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
 
-        return _roles;
-    }
+		return _roles;
+	}
 
-    public void onClick$adminPage(){
-        this.parent.setSrc("/html/pages/admin/default.zul");
-    }
-    //service
-    public RoleService getRoleService() {
-        if (this.roleService == null) {
-            this.roleService = (RoleService)
-                    SpringUtil.getBean("roleService");
-            setRoleService(this.roleService);
-        }
+	public void initData() throws Exception {
+		try {
+			this.parent = (Include) this.winRole.getParent();
 
-        return this.roleService;
-    }
+//            List<SimpleModel> statusList = ComponentUtil.getComboboxStatusValue(
+//                    new String[]{Labels.getLabel(LanguageKeys.STATUS_ACTIVE),
+//                    Labels.getLabel(LanguageKeys.STATUS_NOT_ACTIVE)}, true);
 
-    public void setRoleService(RoleService roleService) {
-        this.roleService = roleService;
-    }
+//            status.setModel(new ListModelList<SimpleModel>(statusList));
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+	}
 
-    private transient RoleService roleService;
+	public void onClick$adminPage() {
+		this.parent.setSrc("/html/pages/admin/default.zul");
+	}
 
-    private static final String EDIT_PAGE =
-            "/html/pages/manager_role/edit.zul";
+	public void onClick$btnAdd() {
+		try {
+			Map<String, Object> parameters = new HashMap<String, Object>();
+			parameters.put(Constants.PARENT_WINDOW, this.winRole);
+			parameters.put(Constants.ID, 0L);
 
-    private static final Logger _log =
-            LogManager.getLogger(RoleController.class);
+			Window win = (Window) Executions.createComponents(EDIT_PAGE, this.winRole, parameters);
+			win.doModal();
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+	}
+
+	public void onClick$btnCancel() {
+		this.winRole.detach();
+	}
+
+	public void onClick$btnSearch() throws Exception {
+		this.search();
+	}
+
+	public void onDeleteRole(Event event) throws Exception {
+		final Role role = (Role) event.getData();
+
+		Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_DELETE),
+				Labels.getLabel(LanguageKeys.MESSAGE_INFOR_DELETE), Messagebox.OK | Messagebox.CANCEL,
+				Messagebox.QUESTION, new EventListener() {
+
+					@Override
+					public void onEvent(Event e) throws Exception {
+						if (Messagebox.ON_OK.equals(e.getName())) {
+							try {
+								RoleController.this.roleService.deleteRole(role);
+
+								ComponentUtil.createSuccessMessageBox(LanguageKeys.MESSAGE_DELETE_SUCCESS);
+
+								search();
+							} catch (Exception ex) {
+								_log.error(ex.getMessage(), ex);
+
+								Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_DELETE_FAIL));
+							}
+						}
+					}
+				});
+	}
+
+	public void onLoadRole(Event event) throws Exception {
+		this.search();
+	}
+	// event method
+
+	public void onLockRole(Event event) throws Exception {
+		final Role role = (Role) event.getData();
+
+		Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_LOCK),
+				Labels.getLabel(LanguageKeys.MESSAGE_INFOR_LOCK), Messagebox.OK | Messagebox.CANCEL,
+				Messagebox.QUESTION, new EventListener<Event>() {
+
+					@Override
+					public void onEvent(Event e) throws Exception {
+						if (Messagebox.ON_OK.equals(e.getName())) {
+							try {
+								RoleController.this.roleService.lockRole(role);
+
+								ComponentUtil.createSuccessMessageBox(LanguageKeys.MESSAGE_LOCK_ITEM_SUCCESS);
+
+								search();
+							} catch (Exception ex) {
+								_log.error(ex.getMessage(), ex);
+
+								Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_LOCK_ITEM_FAIL));
+							}
+						}
+					}
+				});
+	}
+
+	public void onUnlockRole(Event event) throws Exception {
+		final Role role = (Role) event.getData();
+
+		Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_UNLOCK),
+				Labels.getLabel(LanguageKeys.MESSAGE_INFOR_UNLOCK), Messagebox.OK | Messagebox.CANCEL,
+				Messagebox.QUESTION, new EventListener() {
+
+					@Override
+					public void onEvent(Event e) throws Exception {
+						if (Messagebox.ON_OK.equals(e.getName())) {
+							try {
+								RoleController.this.roleService.unlockRole(role);
+
+								ComponentUtil.createSuccessMessageBox(LanguageKeys.MESSAGE_UNLOCK_ITEM_SUCCESS);
+
+								search();
+							} catch (Exception ex) {
+								_log.error(ex.getMessage(), ex);
+
+								Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_UNLOCK_ITEM_FAIL));
+							}
+						}
+					}
+				});
+	}
+
+	private void search() throws Exception {
+		try {
+			List<Role> roles = this.getRoles();
+
+			this.searchResultGrid.setItemRenderer(new RoleRender(this.winRole));
+			this.searchResultGrid.setModel(new ListModelList<Role>(roles));
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
+	}
 }

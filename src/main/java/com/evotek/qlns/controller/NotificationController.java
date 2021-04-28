@@ -11,7 +11,8 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.zkoss.spring.SpringUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
@@ -31,89 +32,77 @@ import com.evotek.qlns.util.key.LanguageKeys;
 
 /**
  *
- * @author My PC
+ * @author LinhLH
  */
-public class NotificationController extends BasicController<Window>
-        implements Serializable{
-    private Window winNotify;
-    private Div parent;
-    private Listbox lbNotify;
+@Controller
+public class NotificationController extends BasicController<Window> implements Serializable {
 
-    private List<Notification> notifies;
-    
-    @Override
-    public void doBeforeComposeChildren(Window comp) throws Exception {
-        super.doBeforeComposeChildren(comp);
-        
-        this.winNotify = comp;
-    }
+	private static final long serialVersionUID = 4228531885399176712L;
 
-    @Override
-    public void doAfterCompose(Window comp) throws Exception {
-        super.doAfterCompose(comp);
-        
-        this.parent = (Div) this.arg.get(Constants.PARENT_WINDOW);
-        
-        this.refreshModel();
-    }
-    
-    public void refreshModel(){
-        this.notifies = this.startUpService.getNotifies();
-        
-        this.lbNotify.setModel(new ListModelList<Notification>(this.notifies));
-        this.lbNotify.setItemRenderer(new NotificationRender(this.winNotify));
-    }
-    
-    public void onDeleteNotify(Event event) {
-        final Notification notify = (Notification) event.getData();
+	private static final Logger _log = LogManager.getLogger(NotificationController.class);
 
-        Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_DELETE),
-                Labels.getLabel(LanguageKeys.MESSAGE_INFOR_DELETE),
-                Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION,
-                Messagebox.OK, new EventListener() {
+	@Autowired
+	private StartUpService startUpService;
 
-                    @Override
+	private Listbox lbNotify;
+	private List<Notification> notifies;
+
+	private Div parent;
+
+	private Window winNotify;
+
+	@Override
+	public void doAfterCompose(Window comp) throws Exception {
+		super.doAfterCompose(comp);
+
+		this.parent = (Div) this.arg.get(Constants.PARENT_WINDOW);
+
+		this.refreshModel();
+	}
+
+	@Override
+	public void doBeforeComposeChildren(Window comp) throws Exception {
+		super.doBeforeComposeChildren(comp);
+
+		this.winNotify = comp;
+	}
+
+	public void onClick$btnCancel() {
+		this.winNotify.detach();
+	}
+
+	public void onDeleteNotify(Event event) {
+		final Notification notify = (Notification) event.getData();
+
+		Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_DELETE),
+				Labels.getLabel(LanguageKeys.MESSAGE_INFOR_DELETE), Messagebox.OK | Messagebox.CANCEL,
+				Messagebox.QUESTION, Messagebox.OK, new EventListener() {
+
+					@Override
 					public void onEvent(Event e) throws Exception {
-                        if (Messagebox.ON_OK.equals(e.getName())) {
-                            try {
-                                NotificationController.this.startUpService.expired(notify);
+						if (Messagebox.ON_OK.equals(e.getName())) {
+							try {
+								NotificationController.this.startUpService.expired(notify);
 
-                                ComponentUtil.createSuccessMessageBox(
-                                        LanguageKeys.MESSAGE_DELETE_SUCCESS);
+								ComponentUtil.createSuccessMessageBox(LanguageKeys.MESSAGE_DELETE_SUCCESS);
 
-                                refreshModel();
-                                
-                                Events.sendEvent("onUpdateNotification", NotificationController.this.parent, null);
-                            } catch (Exception ex) {
-                                _log.error(ex.getMessage(), ex);
+								refreshModel();
 
-                                Messagebox.show(Labels.getLabel(
-                                                LanguageKeys.MESSAGE_DELETE_FAIL));
-                            }
-                        }
-                    }
-                });
-    }
-    
-    public void onClick$btnCancel(){
-        this.winNotify.detach();
-    }
-    //get set service
-    public StartUpService getStartUpService() {
-        if (this.startUpService == null) {
-            this.startUpService = (StartUpService) SpringUtil.getBean("startUpService");
-            setStartUpService(this.startUpService);
-        }
+								Events.sendEvent("onUpdateNotification", NotificationController.this.parent, null);
+							} catch (Exception ex) {
+								_log.error(ex.getMessage(), ex);
 
-        return this.startUpService;
-    }
+								Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_DELETE_FAIL));
+							}
+						}
+					}
+				});
+	}
 
-    public void setStartUpService(StartUpService startUpService) {
-        this.startUpService = startUpService;
-    }
-    
-    private StartUpService startUpService;
-    
-    private static final Logger _log =
-            LogManager.getLogger(NotificationController.class);
+	public void refreshModel() {
+		this.notifies = this.startUpService.getNotifies();
+
+		this.lbNotify.setModel(new ListModelList<Notification>(this.notifies));
+		this.lbNotify.setItemRenderer(new NotificationRender(this.winNotify));
+	}
 }

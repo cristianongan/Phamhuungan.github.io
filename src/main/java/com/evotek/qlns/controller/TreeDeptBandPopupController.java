@@ -11,7 +11,8 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.zkoss.spring.SpringUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.zkoss.zul.A;
 import org.zkoss.zul.Bandbox;
 import org.zkoss.zul.Include;
@@ -26,130 +27,110 @@ import com.evotek.qlns.util.Validator;
 
 /**
  *
- * @author My PC
+ * @author LinhLH
  */
-public class TreeDeptBandPopupController extends BasicController<Tree>
-        implements Serializable{
-    private Tree treeDocType;
+@Controller
+public class TreeDeptBandPopupController extends BasicController<Tree> implements Serializable {
 
-    private A btnClear;
-    private Bandbox bbDepartment;
-    private Department exclude;
+	private static final long serialVersionUID = 2563490789279781882L;
 
-    @Override
-    public void doBeforeComposeChildren(Tree comp) throws Exception {
-        super.doBeforeComposeChildren(comp); 
-    
-        this.treeDocType = comp;
-    }
+	private static final Logger _log = LogManager.getLogger(TreeDeptBandPopupController.class);
 
-    @Override
-    public void doAfterCompose(Tree comp) throws Exception {
-        super.doAfterCompose(comp);
-        
-        this.init();
-    }
-    
-    public void init(){
-        Include include = (Include) this.treeDocType.getParent();
-        
-        this.bbDepartment = (Bandbox) include.getAttribute(BANDBOX);
-        this.btnClear = (A) include.getAttribute(BTN_CLEAR);
-        this.exclude = (Department) include.getAttribute(EXCLUDE);
-        
-        this.onCreate();
-    }
-    
-    public void onCreate() {
-        TreeBasicModel treeConfigModel = 
-                new TreeBasicModel(_buildDeptTree(), false);
+	private static final String BANDBOX = "bandbox";
+	private static final String BTN_CLEAR = "btnclear";
+	private static final String EXCLUDE = "exclude";
 
-        this.treeDocType.setModel(treeConfigModel);
-        
-        this.treeDocType.setItemRenderer(new TreeDeptSearchRender(
-                this.bbDepartment, this.btnClear));
-    }
+	@Autowired
+	private DepartmentService departmentService;
 
-    public DepartmentTreeNode _buildDeptTree() {
-        //tạo cây menu không có gốc
-        DepartmentTreeNode rootNode = new DepartmentTreeNode(null,
-                new DepartmentTreeNode[]{});
+	private Bandbox bbDepartment;
 
-        rootNode.setOpen(true);
+	private A btnClear;
 
-        try {
-            //Lấy danh sách các menu category
-            List<Department> roots = this.departmentService.getDepartmentByParentId(null);
+	private Department exclude;
 
-            for (Department root : roots) {
+	private Tree treeDocType;
 
-                if (Validator.isNull(root) 
-                        || Validator.isNull(root.getDeptId()) 
-                        || root.equals(this.exclude)) {
-                    continue;
-                }
-                
-                addChildToParent(root, rootNode);
-            }
-        } catch (Exception ex) {
-            _log.error(ex.getMessage(), ex);
-        }
+	public DepartmentTreeNode _buildDeptTree() {
+		// tạo cây menu không có gốc
+		DepartmentTreeNode rootNode = new DepartmentTreeNode(null, new DepartmentTreeNode[] {});
 
-        return rootNode;
-    }
+		rootNode.setOpen(true);
 
-    public void addChildToParent(Department parent, DepartmentTreeNode treeNode) {
-        List<Department> childs
-                = this.departmentService.getDepartmentByParentId(parent.getDeptId());
+		try {
+			// Lấy danh sách các menu category
+			List<Department> roots = this.departmentService.getDepartmentByParentId(null);
 
-        if (Validator.isNotNull(childs)) {
-            //Tạo cây con tu parent
-            DepartmentTreeNode rootChilds = new DepartmentTreeNode(parent,
-                    new DepartmentTreeNode[]{});
+			for (Department root : roots) {
 
-            rootChilds.setOpen(true);
+				if (Validator.isNull(root) || Validator.isNull(root.getDeptId()) || root.equals(this.exclude)) {
+					continue;
+				}
 
-            //Gắn các menu item vào cây con vừa tạo
-            for (Department child : childs) {
-                if (Validator.isNull(child)
-                        || Validator.isNull(child.getDeptId())
-                        || child.equals(this.exclude)) {
-                    continue;
-                }
-                
-                addChildToParent(child, rootChilds);
-            }
+				addChildToParent(root, rootNode);
+			}
+		} catch (Exception ex) {
+			_log.error(ex.getMessage(), ex);
+		}
 
-            //gắn cấy menu category vào cây menu
-            treeNode.add(rootChilds);
-        } else {
-            treeNode.add(new DepartmentTreeNode(parent));
-        }
-    }
+		return rootNode;
+	}
 
-    public DepartmentService getDepartmentService() {
-        if (this.departmentService == null) {
-            this.departmentService = (DepartmentService) SpringUtil.getBean("departmentService");
-            
-            setDepartmentService(this.departmentService);
-        }
-        
-        return this.departmentService;
-    }
+	public void addChildToParent(Department parent, DepartmentTreeNode treeNode) {
+		List<Department> childs = this.departmentService.getDepartmentByParentId(parent.getDeptId());
 
-    public void setDepartmentService(DepartmentService departmentService) {
-        this.departmentService = departmentService;
-    }
-    
-    private transient DepartmentService departmentService;
-    
-    private static final String BANDBOX = "bandbox";
-    
-    private static final String BTN_CLEAR = "btnclear";
-    
-    private static final String EXCLUDE = "exclude";
-    
-    private static final Logger _log =
-            LogManager.getLogger(TreeDeptBandPopupController.class);
-    
+		if (Validator.isNotNull(childs)) {
+			// Tạo cây con tu parent
+			DepartmentTreeNode rootChilds = new DepartmentTreeNode(parent, new DepartmentTreeNode[] {});
+
+			rootChilds.setOpen(true);
+
+			// Gắn các menu item vào cây con vừa tạo
+			for (Department child : childs) {
+				if (Validator.isNull(child) || Validator.isNull(child.getDeptId()) || child.equals(this.exclude)) {
+					continue;
+				}
+
+				addChildToParent(child, rootChilds);
+			}
+
+			// gắn cấy menu category vào cây menu
+			treeNode.add(rootChilds);
+		} else {
+			treeNode.add(new DepartmentTreeNode(parent));
+		}
+	}
+
+	@Override
+	public void doAfterCompose(Tree comp) throws Exception {
+		super.doAfterCompose(comp);
+
+		this.init();
+	}
+
+	@Override
+	public void doBeforeComposeChildren(Tree comp) throws Exception {
+		super.doBeforeComposeChildren(comp);
+
+		this.treeDocType = comp;
+	}
+
+	public void init() {
+		Include include = (Include) this.treeDocType.getParent();
+
+		this.bbDepartment = (Bandbox) include.getAttribute(BANDBOX);
+		this.btnClear = (A) include.getAttribute(BTN_CLEAR);
+		this.exclude = (Department) include.getAttribute(EXCLUDE);
+
+		this.onCreate();
+	}
+
+	public void onCreate() {
+		TreeBasicModel treeConfigModel = new TreeBasicModel(_buildDeptTree(), false);
+
+		this.treeDocType.setModel(treeConfigModel);
+
+		this.treeDocType.setItemRenderer(new TreeDeptSearchRender(this.bbDepartment, this.btnClear));
+	}
+
 }

@@ -18,142 +18,138 @@ import org.apache.commons.lang.time.FastDateFormat;
  */
 public class FastDateFormatFactoryUtil {
 
-    public static final int FULL = 0;
-    public static final int LONG = 1;
-    public static final int MEDIUM = 2;
-    public static final int SHORT = 3;
+	private static Map<String, Format> _dateFormats = new ConcurrentHashMap<String, Format>();
+	private static Map<String, Format> _dateTimeFormats = new ConcurrentHashMap<String, Format>();
+	private static Locale _locale = new Locale("vi", "VN");
+	private static Map<String, Format> _simpleDateFormats = new ConcurrentHashMap<String, Format>();
 
-    public static Format getDate(int style, Locale locale, TimeZone timeZone) {
-        String key = getKey(style, locale, timeZone);
+	private static Map<String, Format> _timeFormats = new ConcurrentHashMap<String, Format>();
 
-        Format format = _dateFormats.get(key);
+	public static final int FULL = 0;
 
-        if (format == null) {
-            format = FastDateFormat.getDateInstance(style, timeZone, locale);
+	public static final int LONG = 1;
 
-            _dateFormats.put(key, format);
-        }
+	public static final int MEDIUM = 2;
 
-        return format;
-    }
+	public static final int SHORT = 3;
 
-    public static Format getDate(Locale locale) {
-        return getDate(locale, null);
-    }
+	public static Format getDate(int style, Locale locale, TimeZone timeZone) {
+		String key = getKey(style, locale, timeZone);
 
-    public static Format getDate(Locale locale, TimeZone timeZone) {
-        return getDate(SHORT, locale, timeZone);
-    }
+		Format format = _dateFormats.get(key);
 
-    public static Format getDate(TimeZone timeZone) {
-        return getDate(_locale, timeZone);
-    }
+		if (format == null) {
+			format = FastDateFormat.getDateInstance(style, timeZone, locale);
 
-    public static Format getDateTime(
-            int dateStyle, int timeStyle, Locale locale, TimeZone timeZone) {
+			_dateFormats.put(key, format);
+		}
 
-        String key = getKey(dateStyle, timeStyle, locale, timeZone);
+		return format;
+	}
 
-        Format format = _dateTimeFormats.get(key);
+	public static Format getDate(Locale locale) {
+		return getDate(locale, null);
+	}
 
-        if (format == null) {
-            format = FastDateFormat.getDateTimeInstance(
-                    dateStyle, timeStyle, timeZone, locale);
+	public static Format getDate(Locale locale, TimeZone timeZone) {
+		return getDate(SHORT, locale, timeZone);
+	}
 
-            _dateTimeFormats.put(key, format);
-        }
+	public static Format getDate(TimeZone timeZone) {
+		return getDate(_locale, timeZone);
+	}
 
-        return format;
-    }
+	public static Format getDateTime(int dateStyle, int timeStyle, Locale locale, TimeZone timeZone) {
 
-    public static Format getDateTime(Locale locale) {
-        return getDateTime(locale, null);
-    }
+		String key = getKey(dateStyle, timeStyle, locale, timeZone);
 
-    public static Format getDateTime(Locale locale, TimeZone timeZone) {
-        return getDateTime(
-                SHORT, SHORT,
-                locale, timeZone);
-    }
+		Format format = _dateTimeFormats.get(key);
 
-    public static Format getDateTime(TimeZone timeZone) {
-        return getDateTime(_locale, timeZone);
-    }
+		if (format == null) {
+			format = FastDateFormat.getDateTimeInstance(dateStyle, timeStyle, timeZone, locale);
 
-    public static Format getSimpleDateFormat(String pattern) {
-        return getSimpleDateFormat(pattern, _locale, null);
-    }
+			_dateTimeFormats.put(key, format);
+		}
 
-    public static Format getSimpleDateFormat(String pattern, Locale locale) {
-        return getSimpleDateFormat(pattern, locale, null);
-    }
+		return format;
+	}
 
-    public static Format getSimpleDateFormat(
-            String pattern, Locale locale, TimeZone timeZone) {
+	public static Format getDateTime(Locale locale) {
+		return getDateTime(locale, null);
+	}
 
-        String key = getKey(pattern, locale, timeZone);
+	public static Format getDateTime(Locale locale, TimeZone timeZone) {
+		return getDateTime(SHORT, SHORT, locale, timeZone);
+	}
 
-        Format format = _simpleDateFormats.get(key);
+	public static Format getDateTime(TimeZone timeZone) {
+		return getDateTime(_locale, timeZone);
+	}
 
-        if (format == null) {
-            format = FastDateFormat.getInstance(pattern, timeZone, locale);
+	protected static String getKey(Object... arguments) {
+		StringBuilder sb = new StringBuilder(arguments.length * 2 - 1);
 
-            _simpleDateFormats.put(key, format);
-        }
+		for (int i = 0; i < arguments.length; i++) {
+			sb.append(arguments[i]);
 
-        return format;
-    }
+			if ((i + 1) < arguments.length) {
+				sb.append(StringPool.UNDERLINE);
+			}
+		}
 
-    public static Format getSimpleDateFormat(String pattern, TimeZone timeZone) {
-        return getSimpleDateFormat(pattern, _locale, timeZone);
-    }
+		return sb.toString();
+	}
 
-    public static Format getTime(int style, Locale locale, TimeZone timeZone) {
-        String key = getKey(style, locale, timeZone);
+	public static Format getSimpleDateFormat(String pattern) {
+		return getSimpleDateFormat(pattern, _locale, null);
+	}
 
-        Format format = _timeFormats.get(key);
+	public static Format getSimpleDateFormat(String pattern, Locale locale) {
+		return getSimpleDateFormat(pattern, locale, null);
+	}
 
-        if (format == null) {
-            format = FastDateFormat.getTimeInstance(style, timeZone, locale);
+	public static Format getSimpleDateFormat(String pattern, Locale locale, TimeZone timeZone) {
 
-            _timeFormats.put(key, format);
-        }
+		String key = getKey(pattern, locale, timeZone);
 
-        return format;
-    }
+		Format format = _simpleDateFormats.get(key);
 
-    public static Format getTime(Locale locale) {
-        return getTime(locale, null);
-    }
+		if (format == null) {
+			format = FastDateFormat.getInstance(pattern, timeZone, locale);
 
-    public static Format getTime(Locale locale, TimeZone timeZone) {
-        return getTime(SHORT, locale, timeZone);
-    }
+			_simpleDateFormats.put(key, format);
+		}
 
-    public static Format getTime(TimeZone timeZone) {
-        return getTime(_locale, timeZone);
-    }
+		return format;
+	}
 
-    protected static String getKey(Object... arguments) {
-        StringBuilder sb = new StringBuilder(arguments.length * 2 - 1);
+	public static Format getSimpleDateFormat(String pattern, TimeZone timeZone) {
+		return getSimpleDateFormat(pattern, _locale, timeZone);
+	}
 
-        for (int i = 0; i < arguments.length; i++) {
-            sb.append(arguments[i]);
+	public static Format getTime(int style, Locale locale, TimeZone timeZone) {
+		String key = getKey(style, locale, timeZone);
 
-            if ((i + 1) < arguments.length) {
-                sb.append(StringPool.UNDERLINE);
-            }
-        }
+		Format format = _timeFormats.get(key);
 
-        return sb.toString();
-    }
-    private static Map<String, Format> _dateFormats =
-            new ConcurrentHashMap<String, Format>();
-    private static Map<String, Format> _dateTimeFormats =
-            new ConcurrentHashMap<String, Format>();
-    private static Map<String, Format> _simpleDateFormats =
-            new ConcurrentHashMap<String, Format>();
-    private static Map<String, Format> _timeFormats =
-            new ConcurrentHashMap<String, Format>();
-    private static Locale _locale = new Locale("vi", "VN");
+		if (format == null) {
+			format = FastDateFormat.getTimeInstance(style, timeZone, locale);
+
+			_timeFormats.put(key, format);
+		}
+
+		return format;
+	}
+
+	public static Format getTime(Locale locale) {
+		return getTime(locale, null);
+	}
+
+	public static Format getTime(Locale locale, TimeZone timeZone) {
+		return getTime(SHORT, locale, timeZone);
+	}
+
+	public static Format getTime(TimeZone timeZone) {
+		return getTime(_locale, timeZone);
+	}
 }

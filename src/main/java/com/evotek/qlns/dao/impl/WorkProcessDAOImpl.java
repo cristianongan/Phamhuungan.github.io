@@ -27,87 +27,86 @@ import com.evotek.qlns.util.Validator;
  * @author LinhLH
  */
 @Repository
-public class WorkProcessDAOImpl extends AbstractDAO<WorkProcess>
-        implements WorkProcessDAO{
-    private static final Logger _log = LogManager.getLogger(WorkProcessDAOImpl.class);
-    
-    @Override
-	public List<String> getCompanyName(){
-        List<String> results = new ArrayList<String>();
+public class WorkProcessDAOImpl extends AbstractDAO<WorkProcess> implements WorkProcessDAO {
+	private static final Logger _log = LogManager.getLogger(WorkProcessDAOImpl.class);
 
-        try {
-        	Session session = getCurrentSession();
+	@Override
+	public List<String> getCompanyName() {
+		List<String> results = new ArrayList<String>();
+
+		try {
+			Session session = getCurrentSession();
 
 			CriteriaBuilder builder = session.getCriteriaBuilder();
 
 			CriteriaQuery<String> criteria = builder.createQuery(String.class);
 
 			Root<WorkProcess> root = criteria.from(WorkProcess.class);
-			
+
 			criteria.distinct(true).select(root.get("company"));
-			
+
 			criteria.orderBy(builder.asc(root.get("company")));
-            
-            results = session.createQuery(criteria).getResultList();
-        } catch (Exception e) {
-            _log.error(e.getMessage(), e);
-        }
 
-        return results;
-    }
-    
-    @Override
+			results = session.createQuery(criteria).getResultList();
+		} catch (Exception e) {
+			_log.error(e.getMessage(), e);
+		}
+
+		return results;
+	}
+
+	@Override
 	public List<String> getJobTitle() {
-        List<String> results = new ArrayList<String>();
+		List<String> results = new ArrayList<String>();
 
-        try {
-        	Session session = getCurrentSession();
+		try {
+			Session session = getCurrentSession();
 
 			CriteriaBuilder builder = session.getCriteriaBuilder();
 
 			CriteriaQuery<String> criteria = builder.createQuery(String.class);
 
 			Root<WorkProcess> root = criteria.from(WorkProcess.class);
-			
+
 			criteria.distinct(true).select(root.get("jobTitle"));
-			
+
 			criteria.orderBy(builder.asc(root.get("jobTitle")));
-            
-            results = session.createQuery(criteria).getResultList();
-        } catch (Exception e) {
-            _log.error(e.getMessage(), e);
-        }
 
-        return results;
-    }
-    
-    @Override
-	public List<WorkProcess> getWorkProcessByStaffId(Long staffId){
-        List<WorkProcess> results = new ArrayList<WorkProcess>();
+			results = session.createQuery(criteria).getResultList();
+		} catch (Exception e) {
+			_log.error(e.getMessage(), e);
+		}
 
-        try {
-        	Session session = getCurrentSession();
+		return results;
+	}
+
+	@Override
+	public List<WorkProcess> getWorkProcessByStaffId(Long staffId) {
+		List<WorkProcess> results = new ArrayList<WorkProcess>();
+
+		try {
+			Session session = getCurrentSession();
 
 			CriteriaBuilder builder = session.getCriteriaBuilder();
 
 			CriteriaQuery<WorkProcess> criteria = builder.createQuery(WorkProcess.class);
 
 			Root<WorkProcess> root = criteria.from(WorkProcess.class);
-        	
+
 			criteria.select(root);
 
-            if (Validator.isNotNull(staffId)) {
-            	criteria.where(builder.equal(root.get("staffId"), staffId));
-            	
-            }
+			if (Validator.isNotNull(staffId)) {
+				criteria.where(builder.equal(root.get("staffId"), staffId));
 
-            criteria.orderBy(builder.desc(root.get("fromDate")), builder.desc(root.get("toDate")));
-            
-            results = session.createQuery(criteria).getResultList();
-        } catch (Exception e) {
-            _log.error(e.getMessage(), e);
-        }
+			}
 
-        return results;
-    }
+			criteria.orderBy(builder.desc(root.get("fromDate")), builder.desc(root.get("toDate")));
+
+			results = session.createQuery(criteria).getResultList();
+		} catch (Exception e) {
+			_log.error(e.getMessage(), e);
+		}
+
+		return results;
+	}
 }

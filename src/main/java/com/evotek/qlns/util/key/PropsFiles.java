@@ -10,5 +10,5 @@ package com.evotek.qlns.util.key;
  * @author linhlh2
  */
 public class PropsFiles {
-    public static final String CONFIG = "config";
+	public static final String CONFIG = "config";
 }

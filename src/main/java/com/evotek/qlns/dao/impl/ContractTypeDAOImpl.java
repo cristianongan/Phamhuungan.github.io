@@ -26,34 +26,33 @@ import com.evotek.qlns.model.ContractType;
  * @author LinhLH
  */
 @Repository
-public class ContractTypeDAOImpl extends AbstractDAO<ContractType> implements 
-        ContractTypeDAO{
+public class ContractTypeDAOImpl extends AbstractDAO<ContractType> implements ContractTypeDAO {
 
-    @Override
+	private static final Logger _log = LogManager.getLogger(ContractTypeDAOImpl.class);
+
+	@Override
 	public List<ContractType> getContract() {
-        List<ContractType> results = new ArrayList<ContractType>();
+		List<ContractType> results = new ArrayList<ContractType>();
 
-        try {
-            Session session = getCurrentSession();
-            
-            CriteriaBuilder builder = session.getCriteriaBuilder();
+		try {
+			Session session = getCurrentSession();
+
+			CriteriaBuilder builder = session.getCriteriaBuilder();
 
 			CriteriaQuery<ContractType> criteria = builder.createQuery(ContractType.class);
 
 			Root<ContractType> root = criteria.from(ContractType.class);
 
 			criteria.select(root);
-			
+
 			criteria.orderBy(builder.asc(root.get("contractTypeName")));
 
-            results = session.createQuery(criteria).getResultList();
+			results = session.createQuery(criteria).getResultList();
 
-        } catch (Exception e) {
-            _log.error(e.getMessage(), e);
-        }
+		} catch (Exception e) {
+			_log.error(e.getMessage(), e);
+		}
 
-        return results;
-    }
-    
-    private static final Logger _log = LogManager.getLogger(ContractTypeDAOImpl.class);
+		return results;
+	}
 }

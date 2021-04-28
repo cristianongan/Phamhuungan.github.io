@@ -21,23 +21,22 @@ import com.evotek.qlns.util.key.Constants;
  */
 public class AssignPermissionRender implements ListitemRenderer<Object> {
 
-    Set<Group> groups;
+	Set<Group> groups;
 
-    public AssignPermissionRender(Set<Group> groups) {
-        this.groups = groups;
-    }
+	public AssignPermissionRender(Set<Group> groups) {
+		this.groups = groups;
+	}
 
-    @Override
+	@Override
 	public void render(Listitem items, Object obj, int index) throws Exception {
-        Group group = (Group) obj;
+		Group group = (Group) obj;
 
-        items.appendChild(ComponentUtil.createListcell(StringPool.BLANK,
-                Constants.STYLE_TEXT_ALIGN_CENTER));
-        items.appendChild(new Listcell(group.getGroupName()));
-        items.appendChild(new Listcell(group.getDescription()));
+		items.appendChild(ComponentUtil.createListcell(StringPool.BLANK, Constants.STYLE_TEXT_ALIGN_CENTER));
+		items.appendChild(new Listcell(group.getGroupName()));
+		items.appendChild(new Listcell(group.getDescription()));
 
-        items.setSelected(this.groups.contains(group));
+		items.setSelected(this.groups.contains(group));
 
-        items.setValue(group);
-    }
+		items.setValue(group);
+	}
 }

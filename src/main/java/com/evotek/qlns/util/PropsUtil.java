@@ -16,52 +16,51 @@ import com.evotek.qlns.util.key.PropsFiles;
  */
 public class PropsUtil {
 
-    public static void addProperties(Properties properties) {
-        _instance._configuration.addProperties(properties);
-    }
+	private static PropsUtil _instance = new PropsUtil();
 
-    public static boolean contains(String key) {
-        return _instance._configuration.contains(key);
-    }
+	public static void addProperties(Properties properties) {
+		_instance._configuration.addProperties(properties);
+	}
 
-    public static String get(String key) {
-        return _instance._configuration.get(key);
-    }
+	public static boolean contains(String key) {
+		return _instance._configuration.contains(key);
+	}
 
-    public static String[] getArray(String key) {
-        return _instance._configuration.getArray(key);
-    }
-    
-    public static boolean contains(String key, boolean encrypt) {
-        return _instance._configuration.contains(key, encrypt);
-    }
+	public static boolean contains(String key, boolean encrypt) {
+		return _instance._configuration.contains(key, encrypt);
+	}
 
-    public static String get(String key, boolean encrypt) {
-        return _instance._configuration.get(key, encrypt);
-    }
+	public static String get(String key) {
+		return _instance._configuration.get(key);
+	}
 
-    public static String[] getArray(String key, boolean encrypt) {
-        return _instance._configuration.getArray(key, encrypt);
-    }
+	public static String get(String key, boolean encrypt) {
+		return _instance._configuration.get(key, encrypt);
+	}
 
-    public static Properties getProperties() {
-        return _instance._configuration.getProperties();
-    }
+	public static String[] getArray(String key) {
+		return _instance._configuration.getArray(key);
+	}
 
-    public static void removeProperties(Properties properties) {
-        _instance._configuration.removeProperties(properties);
-    }
+	public static String[] getArray(String key, boolean encrypt) {
+		return _instance._configuration.getArray(key, encrypt);
+	}
 
-    public static void set(String key, String value) {
-        _instance._configuration.set(key, value);
-    }
+	public static Properties getProperties() {
+		return _instance._configuration.getProperties();
+	}
 
-    private PropsUtil() {
-        this._configuration = new ConfigurationImpl(
-			PropsUtil.class.getClassLoader(), PropsFiles.CONFIG);
-    }
+	public static void removeProperties(Properties properties) {
+		_instance._configuration.removeProperties(properties);
+	}
 
-    private static PropsUtil _instance = new PropsUtil();
+	public static void set(String key, String value) {
+		_instance._configuration.set(key, value);
+	}
 
-    private Configuration _configuration;
+	private Configuration _configuration;
+
+	private PropsUtil() {
+		this._configuration = new ConfigurationImpl(PropsUtil.class.getClassLoader(), PropsFiles.CONFIG);
+	}
 }

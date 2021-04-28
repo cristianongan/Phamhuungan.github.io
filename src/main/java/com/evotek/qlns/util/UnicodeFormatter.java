@@ -14,20 +14,19 @@ import org.apache.logging.log4j.Logger;
  * @author linhlh2
  */
 public class UnicodeFormatter {
-    public static char HEX_DIGIT[] = {
-		'0', '1', '2', '3', '4', '5', '6', '7',
-		'8', '9', 'a', 'b', 'c', 'd', 'e', 'f'
-	};
+	private static Logger _log = LogManager.getLogger(UnicodeFormatter.class);
+
+	public static char HEX_DIGIT[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 
 	public static String byteToHex(byte b) {
-		char[] array = {HEX_DIGIT[(b >> 4) & 0x0f], HEX_DIGIT[b & 0x0f]};
+		char[] array = { HEX_DIGIT[(b >> 4) & 0x0f], HEX_DIGIT[b & 0x0f] };
 
 		return new String(array);
 	}
 
 	public static String charToHex(char c) {
-		byte hi = (byte)(c >>> 8);
-		byte lo = (byte)(c & 0xff);
+		byte hi = (byte) (c >>> 8);
+		byte lo = (byte) (c & 0xff);
 
 		return byteToHex(hi) + byteToHex(lo);
 	}
@@ -47,11 +46,10 @@ public class UnicodeFormatter {
 			String s = hexString.substring(i, i + 4);
 
 			try {
-				char c = (char)Integer.parseInt(s, 16);
+				char c = (char) Integer.parseInt(s, 16);
 
 				sb.append(c);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				_log.error(e, e);
 
 				return hexString;
@@ -79,7 +77,5 @@ public class UnicodeFormatter {
 
 		return toString(s.toCharArray());
 	}
-
-	private static Logger _log = LogManager.getLogger(UnicodeFormatter.class);
 
 }

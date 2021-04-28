@@ -29,31 +29,11 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 public class HibernateConfiguration {
 
 	private static final Logger _log = LogManager.getLogger(HibernateConfiguration.class);
-	// database connection information
-	@Value("${jdbc.url}")
-	private String jdbcUrl;
+	@Value("${hibernate.c3p0.acquire_increment}")
+	private int acquireIncrement;
 
-	@Value("${jdbc.driverClassName}")
-	private String jdbcDriverClassName;
-
-	@Value("${jdbc.user}")
-	private String jdbcUser;
-
-	@Value("${jdbc.pass}")
-	private String jdbcPass;
-
-	// hibernate configuration
-	@Value("${hibernate.dialect}")
-	private String dialect;
-
-	@Value("${hibernate.show_sql}")
-	private String showSql;
-
-	@Value("${hibernate.format_sql}")
-	private String formatSql;
-
-	@Value("${hibernate.current_session_context_class}")
-	private String currentSessionContextClass;
+	@Value("${hibernate.connection.charSet}")
+	private String connectionCharSet;
 
 	@Value("${hibernate.connection.provider_class}")
 	private String connectionProviderClass;
@@ -61,37 +41,57 @@ public class HibernateConfiguration {
 	@Value("${hibernate.connection.release_mode}")
 	private String connectionReleaseMode;
 
-	@Value("${hibernate.connection.charSet}")
-	private String connectionCharSet;
+	@Value("${hibernate.current_session_context_class}")
+	private String currentSessionContextClass;
+
+	// hibernate configuration
+	@Value("${hibernate.dialect}")
+	private String dialect;
+
+	@Value("${spring.datasource.driverClassName}")
+	private String driverClassName;
+
+	@Value("${hibernate.format_sql}")
+	private String formatSql;
+
+	@Value("${hibernate.c3p0.idle_test_period}")
+	private int idleTestPeriod;
+
+	@Value("${hibernate.c3p0.max_size}")
+	private int maxSize;
+
+	@Value("${hibernate.c3p0.max_statements}")
+	private int maxStatements;
 
 	// c3p0
 	@Value("${hibernate.c3p0.min_size}")
 	private int minSize;
 
-	@Value("${hibernate.c3p0.max_size}")
-	private int maxSize;
+	@Value("${spring.datasource.password}")
+	private String password;
 
-	@Value("${hibernate.c3p0.acquire_increment}")
-	private int acquireIncrement;
+	@Value("${hibernate.show_sql}")
+	private String showSql;
 
 	@Value("${hibernate.c3p0.timeout}")
 	private int timeout;
 
-	@Value("${hibernate.c3p0.max_statements}")
-	private int maxStatements;
+	// database connection information
+	@Value("${spring.datasource.url}")
+	private String url;
 
-	@Value("${hibernate.c3p0.idle_test_period}")
-	private int idleTestPeriod;
+	@Value("${spring.datasource.username}")
+	private String username;
 
 	@Bean
 	public DataSource dataSource() {
 		ComboPooledDataSource pooledDataSource = new ComboPooledDataSource();
 		// database information
 		try {
-			pooledDataSource.setDriverClass(this.jdbcDriverClassName);
-			pooledDataSource.setUser(this.jdbcUser);
-			pooledDataSource.setPassword(this.jdbcPass);
-			pooledDataSource.setJdbcUrl(this.jdbcUrl);
+			pooledDataSource.setDriverClass(this.driverClassName);
+			pooledDataSource.setUser(this.username);
+			pooledDataSource.setPassword(this.password);
+			pooledDataSource.setJdbcUrl(this.url);
 
 			// c3p0
 			pooledDataSource.setMaxPoolSize(this.maxSize);
@@ -110,16 +110,12 @@ public class HibernateConfiguration {
 	}
 
 	@Bean
-	public LocalSessionFactoryBean sessionFactory() {
-		LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
+	public HibernateTransactionManager getTransactionManager() {
+		HibernateTransactionManager transactionManager = new HibernateTransactionManager();
 
-		sessionFactory.setDataSource(dataSource());
+		transactionManager.setSessionFactory(sessionFactory().getObject());
 
-		sessionFactory.setPackagesToScan(new String[] { "com.evotek.qlns.model" });
-
-		sessionFactory.setHibernateProperties(hibernateProperties());
-
-		return sessionFactory;
+		return transactionManager;
 	}
 
 	private Properties hibernateProperties() {
@@ -131,15 +127,15 @@ public class HibernateConfiguration {
 		properties.put("hibernate.current_session_context_class", this.currentSessionContextClass);
 		properties.put("hibernate.connection.provider_class", this.connectionProviderClass);
 
-		properties.put("hibernate.connection.driver_class", this.jdbcDriverClassName);
-		properties.put("hibernate.connection.url", this.jdbcUrl);
-		properties.put("hibernate.connection.username", this.jdbcUser);
-		properties.put("hibernate.connection.password", this.jdbcPass);
+		properties.put("hibernate.connection.driver_class", this.driverClassName);
+		properties.put("hibernate.connection.url", this.url);
+		properties.put("hibernate.connection.username", this.username);
+		properties.put("hibernate.connection.password", this.password);
 
 		properties.put("hibernate.connection.release_mode", this.connectionReleaseMode);
 		properties.put("hibernate.connection.charSet", this.connectionCharSet);
-		
-		//c3po
+
+		// c3po
 		properties.put("hibernate.c3p0.min_size", this.minSize);
 		properties.put("hibernate.c3p0.max_size", this.maxSize);
 		properties.put("hibernate.c3p0.timeout", this.timeout);
@@ -149,11 +145,15 @@ public class HibernateConfiguration {
 	}
 
 	@Bean
-	public HibernateTransactionManager getTransactionManager() {
-		HibernateTransactionManager transactionManager = new HibernateTransactionManager();
+	public LocalSessionFactoryBean sessionFactory() {
+		LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
 
-		transactionManager.setSessionFactory(sessionFactory().getObject());
+		sessionFactory.setDataSource(dataSource());
 
-		return transactionManager;
+		sessionFactory.setPackagesToScan(new String[] { "com.evotek.qlns.model" });
+
+		sessionFactory.setHibernateProperties(hibernateProperties());
+
+		return sessionFactory;
 	}
 }

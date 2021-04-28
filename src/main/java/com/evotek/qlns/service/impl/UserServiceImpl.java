@@ -314,8 +314,8 @@ public class UserServiceImpl implements UserService {
 	public List<User> getUsers(String userName, String email, Long gender, String birthPlace, Date birthdayFrom,
 			Date birthdayTo, String phone, String mobile, String account, Long status, int itemStartNumber,
 			int pageSize, String orderByColumn, String orderByType) {
-		return this.userDAO.getUsers(userName, email, gender, birthPlace, birthdayFrom, birthdayTo, phone, mobile, account,
-				status, itemStartNumber, pageSize, orderByColumn, orderByType);
+		return this.userDAO.getUsers(userName, email, gender, birthPlace, birthdayFrom, birthdayTo, phone, mobile,
+				account, status, itemStartNumber, pageSize, orderByColumn, orderByType);
 	}
 
 	@Override

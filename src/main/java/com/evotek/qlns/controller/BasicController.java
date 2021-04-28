@@ -9,7 +9,9 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.stereotype.Controller;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.CreateEvent;
 import org.zkoss.zk.ui.event.Event;
@@ -25,122 +27,116 @@ import com.evotek.qlns.model.User;
  *
  * @author linhlh2
  */
-public class BasicController<T extends Component> extends GenericForwardComposer<T>
-        implements Serializable {
+@Controller
+public class BasicController<T extends Component> extends GenericForwardComposer<T> implements Serializable {
 
-    
+	private static final long serialVersionUID = -1171206258809472640L;
 
-    /**
-     * Get the params map that are overhanded at creation time. <br>
-     * Reading the params that are binded to the createEvent.<br>
-     *
-     * @param event
-     * @return params map
-     */
-    @SuppressWarnings("unchecked")
-    public Map getCreationArgsMap(Event event) {
-        final CreateEvent ce = (CreateEvent) ((ForwardEvent) event).getOrigin();
+	protected Map<?, ?> args;
 
-        return ce.getArg();
-    }
+	private User user;
 
-    @SuppressWarnings("unchecked")
-    public void doOnCreateCommon(Window w, Event fe) throws Exception {
-        final CreateEvent ce = (CreateEvent) ((ForwardEvent) fe).getOrigin();
+	@Autowired
+	private UserWorkspace userWorkspace;
 
-        this.args = ce.getArg();
-    }
-    
-    
+	public void doOnCreateCommon(Window w, Event fe) throws Exception {
+		final CreateEvent ce = (CreateEvent) ((ForwardEvent) fe).getOrigin();
 
-    /**
-     * Workaround! Do not use it otherwise!
-     */
-    @Override
-    public void onEvent(Event evt) throws Exception {
-        final Object controller = getController();
+		this.args = ce.getArg();
+	}
 
-        final Method mtd = ComponentsCtrl.getEventMethod(controller.getClass(),
-                evt.getName());
+	/**
+	 * Get the params map that are overhanded at creation time. <br>
+	 * Reading the params that are binded to the createEvent.<br>
+	 *
+	 * @param event
+	 * @return params map
+	 */
+	public Map<?, ?> getCreationArgsMap(Event event) {
+		final CreateEvent ce = (CreateEvent) ((ForwardEvent) event).getOrigin();
 
-        if (mtd != null) {
-            isAllowed(mtd);
-        }
-        
-        super.onEvent(evt);
-    }
+		return ce.getArg();
+	}
 
-    /**
-     * With this method we get the @Secured Annotation for a method.<br>
-     * Captured the method call and check if it's allowed. <br>
-     * sample: @Secured({"rightName"}) <br>
-     * <pre>
-     * @Secured({ "button_BranchMain_btnNew" })
-     * public void onClick$btnNew(Event event) throws Exception {
-     *   [...]
-     * }
-     * </pre>
-     *
-     * @param mtd
-     * @exception SecurityException
-     */
-    private void isAllowed(Method mtd) {
-        final Annotation[] annotations = mtd.getAnnotations();
+	public Long getDeptId() {
+		return getUser().getDeptId();
+	}
 
-        for (final Annotation annotation : annotations) {
-            if (annotation instanceof Secured) {
-                final Secured secured = (Secured) annotation;
+	public User getUser() {
+		if (this.user != null) {
+			return this.user;
+		} else {
+			return this.userWorkspace.getUserPrincipal().getUser();
+		}
+	}
 
-                for (final String rightName : secured.value()) {
-                    if (!this.userWorkspace.isAllowed(rightName)) {
-                        throw new SecurityException("Call of this method is not allowed! Missing right: \n\n" + "needed RightName: " + rightName + "\n\n" + "Method: " + mtd);
-                    }
-                }
-                
-                return;
-            }
-        }
-    }
+	public Long getUserId() {
+		return getUser().getUserId();
+	}
 
-    final public UserWorkspace getUserWorkspace() {
-        return this.userWorkspace;
-    }
+	public String getUserName() {
+		return getUser().getUserName();
+	}
 
-    public void setUserWorkspace(UserWorkspace userWorkspace) {
-        this.userWorkspace = userWorkspace;
-    }
+	final public UserWorkspace getUserWorkspace() {
+		return this.userWorkspace;
+	}
 
-    public User getUser() {
-        if(this.user!=null){
-            return this.user;
-        } else {
-            return this.userWorkspace.getUserPrincipal().getUser();
-        }
-    }
+	/**
+	 * With this method we get the @Secured Annotation for a method.<br>
+	 * Captured the method call and check if it's allowed. <br>
+	 * sample: @Secured({"rightName"}) <br>
+	 * 
+	 * <pre>
+	 * &#64;Secured({ "button_BranchMain_btnNew" })
+	 * public void onClick$btnNew(Event event) throws Exception {
+	 *   [...]
+	 * }
+	 * </pre>
+	 *
+	 * @param mtd
+	 * @exception SecurityException
+	 */
+	private void isAllowed(Method mtd) {
+		final Annotation[] annotations = mtd.getAnnotations();
 
-    public void setUser(User user) {
-        this.user = user;
-    }
+		for (final Annotation annotation : annotations) {
+			if (annotation instanceof Secured) {
+				final Secured secured = (Secured) annotation;
 
-    public Long getUserId(){
-        return getUser().getUserId();
-    }
+				for (final String rightName : secured.value()) {
+					if (!this.userWorkspace.isAllowed(rightName)) {
+						throw new SecurityException("Call of this method is not allowed! Missing right: \n\n"
+								+ "needed RightName: " + rightName + "\n\n" + "Method: " + mtd);
+					}
+				}
 
-    public String getUserName(){
-        return getUser().getUserName();
-    }
+				return;
+			}
+		}
+	}
 
-    public Long getDeptId(){
-        return getUser().getDeptId();
-    }
+	/**
+	 * Workaround! Do not use it otherwise!
+	 */
+	@Override
+	public void onEvent(Event evt) throws Exception {
+		final Object controller = getController();
 
-    private static final long serialVersionUID = -1171206258809472640L;
-    
-    private transient UserWorkspace userWorkspace;
+		final Method mtd = ComponentsCtrl.getEventMethod(controller.getClass(), evt.getName());
 
-    private transient User user;
+		if (mtd != null) {
+			isAllowed(mtd);
+		}
 
-    protected transient Map args;
+		super.onEvent(evt);
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public void setUserWorkspace(UserWorkspace userWorkspace) {
+		this.userWorkspace = userWorkspace;
+	}
 }
-
-

@@ -6,10 +6,11 @@ package com.evotek.qlns.controller;
 
 import java.io.Serializable;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.zkoss.spring.SpringUtil;
+import org.springframework.stereotype.Controller;
 import org.zkoss.zhtml.Div;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
@@ -26,81 +27,65 @@ import com.evotek.qlns.util.Validator;
  *
  * @author linhlh2
  */
-public class LoginController extends GenericForwardComposer
-        implements Serializable {
+@Controller
+public class LoginController extends GenericForwardComposer implements Serializable {
 
-    private static final long serialVersionUID = 1368611560949L;
+	private static final long serialVersionUID = 1368611560949L;
 
-    private Div container;
-    private org.zkoss.zul.Div divVerify;
+	@Autowired
+	private UserService userService;
 
-    private Captcha cpa;
+	private Textbox captcha;
+	private Div container;
 
-    private Textbox captcha;
+	private Captcha cpa;
 
-    private boolean requireCaptcha = StaticUtil.LOGIN_POLICY_REQUIRE_VERIFY_PRIVATE_LOGIN;
+	private org.zkoss.zul.Div divVerify;
 
-    @Override
-    public void doBeforeComposeChildren(Component comp) throws Exception {
-        super.doBeforeComposeChildren(comp);
+	private boolean requireCaptcha = StaticUtil.LOGIN_POLICY_REQUIRE_VERIFY_PRIVATE_LOGIN;
 
-        String ip = Executions.getCurrent().getRemoteAddr();
+	@Override
+	public void doAfterCompose(Component comp) throws Exception {
+		super.doAfterCompose(comp);
 
-        if(!this.requireCaptcha && Validator.isIPAddress(ip)){
-            this.requireCaptcha = this.userService.isIpAdrRequireCaptcha(ip);
-        }
-    }
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-    @Override
-    public void doAfterCompose(Component comp) throws Exception {
-        super.doAfterCompose(comp);
+		if (!(auth instanceof AnonymousAuthenticationToken)) {
+			Executions.sendRedirect("/index.zul");
+		} else {
+			this.container.setVisible(true);
 
-        Authentication auth = SecurityContextHolder.getContext().
-                getAuthentication();
+			if (!this.requireCaptcha) {
+				this.divVerify.getParent().removeChild(this.divVerify);
+			} else {
+				this.cpa.setLength(StaticUtil.LOGIN_POLICY_CAPTCHA_LENGTH);
 
-        if(!(auth instanceof AnonymousAuthenticationToken)){
-            Executions.sendRedirect("/index.zul");
-        } else {
-            this.container.setVisible(true);
+				this.divVerify.setVisible(true);
+			}
+		}
+	}
 
-            if(!this.requireCaptcha){
-                this.divVerify.getParent().removeChild(this.divVerify);
-            } else {
-                this.cpa.setLength(StaticUtil.LOGIN_POLICY_CAPTCHA_LENGTH);
+	@Override
+	public void doBeforeComposeChildren(Component comp) throws Exception {
+		super.doBeforeComposeChildren(comp);
 
-                this.divVerify.setVisible(true);
-            }
-        }
-    }
+		String ip = Executions.getCurrent().getRemoteAddr();
 
-    public void onClick$btnReCaptcha(){
-        this.cpa.randomValue();
-    }
+		if (!this.requireCaptcha && Validator.isIPAddress(ip)) {
+			this.requireCaptcha = this.userService.isIpAdrRequireCaptcha(ip);
+		}
+	}
 
-    public void onOK(){
-        if(this.requireCaptcha
-                && (!this.cpa.getValue().equals(this.captcha.getValue()))){
-            Executions.sendRedirect("/login.zul?login_error=3");
-        } else {
-            Clients.submitForm("f");
-        }
-    }
-    // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-    // ++++++++++++++++ Setter/Getter ++++++++++++++++++ //
-    // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-    public UserService getUserService() {
-        if (this.userService == null) {
-            this.userService = (UserService)
-                    SpringUtil.getBean("userService");
-            setUserService(this.userService);
-        }
+	public void onClick$btnReCaptcha() {
+		this.cpa.randomValue();
+	}
 
-        return this.userService;
-    }
+	public void onOK() {
+		if (this.requireCaptcha && (!this.cpa.getValue().equals(this.captcha.getValue()))) {
+			Executions.sendRedirect("/login.zul?login_error=3");
+		} else {
+			Clients.submitForm("f");
+		}
+	}
 
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
-
-    private transient UserService userService;
 }
