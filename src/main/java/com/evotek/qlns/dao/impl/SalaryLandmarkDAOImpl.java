@@ -14,10 +14,8 @@ import javax.persistence.criteria.Root;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
+import org.springframework.stereotype.Repository;
 
 import com.evotek.qlns.dao.SalaryLandmarkDAO;
 import com.evotek.qlns.model.SalaryLandmark;
@@ -27,6 +25,7 @@ import com.evotek.qlns.util.Validator;
  *
  * @author linhlh2
  */
+@Repository
 public class SalaryLandmarkDAOImpl extends AbstractDAO<SalaryLandmark> implements SalaryLandmarkDAO {
 
 	private static final Logger _log = LogManager.getLogger(SalaryLandmarkDAOImpl.class);

@@ -16,14 +16,16 @@ import javax.persistence.criteria.Root;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
+import org.springframework.stereotype.Repository;
 
 import com.evotek.qlns.dao.ContractTypeDAO;
 import com.evotek.qlns.model.ContractType;
 
 /**
  *
- * @author My PC
+ * @author LinhLH
  */
+@Repository
 public class ContractTypeDAOImpl extends AbstractDAO<ContractType> implements 
         ContractTypeDAO{
 

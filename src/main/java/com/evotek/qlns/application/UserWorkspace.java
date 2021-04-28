@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Zksample2.  If not, see <http://www.gnu.org/licenses/gpl.html>.
  */
-package com.evotek.qlns.common;
+package com.evotek.qlns.application;
 
 import java.io.Serializable;
 import java.util.ArrayList;

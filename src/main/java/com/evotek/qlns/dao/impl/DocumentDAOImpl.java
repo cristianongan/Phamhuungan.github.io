@@ -23,6 +23,7 @@ import org.hibernate.type.DateType;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
 import org.hibernate.type.TimestampType;
+import org.springframework.stereotype.Repository;
 
 import com.evotek.qlns.dao.DocumentDAO;
 import com.evotek.qlns.model.Document;
@@ -34,6 +35,7 @@ import com.evotek.qlns.util.Validator;
  *
  * @author LinhLH
  */
+@Repository
 public class DocumentDAOImpl extends AbstractDAO<Document> implements DocumentDAO {
 
 	private static final Logger _log = LogManager.getLogger(DocumentDAOImpl.class);

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -59,29 +60,28 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 		// Khi người dùng đã login, với vai trò XX.
 		// Nhưng truy cập vào trang yêu cầu vai trò YY,
 		// Ngoại lệ AccessDeniedException sẽ ném ra.
-		http.authorizeRequests().and().exceptionHandling().accessDeniedPage("/error/access_denied.zul");
+		http.authorizeRequests().and().exceptionHandling().accessDeniedPage("/error/access_denied");
 
 		http.sessionManagement()
 			.sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
 			.sessionFixation().newSession()
-			.invalidSessionUrl("/login.zul")
+			.invalidSessionUrl("/login")
 			.maximumSessions(1)
 			.maxSessionsPreventsLogin(false);
 		// Cấu hình cho Login Form.
 		http.authorizeRequests()
-			.antMatchers("/zkau/**").permitAll()
-			.antMatchers("/static/js/**", "/web/js/**").permitAll()
-			.antMatchers("/static/css/**", "/web/css/**").permitAll()
-			.antMatchers("/static/images/**", "/web/images/**").permitAll()
-			.antMatchers("/**").fullyAuthenticated()
+			.antMatchers(ZUL_FILES).denyAll() // block direct access to zul files
+			.antMatchers(HttpMethod.GET, ZK_RESOURCES).permitAll() // allow zk resources
+			.mvcMatchers("/","/login","/logout").permitAll()
+			.anyRequest().authenticated()
 			.and()
 				.formLogin()
 				.failureHandler(authenticationFailureHandler())
 				.successHandler(authenticationSuccessHandler())
 				.loginProcessingUrl("/j_spring_security_check") // Submit URL
-				.loginPage("/login.zul")//
-				.defaultSuccessUrl("/index.zul")//
-				.failureUrl("/login.zul?login_error=1")//
+				.loginPage("/login")//
+				.defaultSuccessUrl("/index")//
+				.failureUrl("/login?login_error=1")//
 				.usernameParameter("userName")//
 				.passwordParameter("password")
 				.permitAll()
@@ -98,4 +98,14 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .permitAll();
 
 	}
+	
+	private static final String ZUL_FILES = "/zkau/web/**/*.zul";
+    private static final String[] ZK_RESOURCES = {
+            "/zkau/web/**/js/**",
+            "/zkau/web/**/zul/css/**",
+            "/zkau/web/**/img/**",
+            "/zkau/static/**/js/**",
+            "/zkau/static/**/zul/css/**",
+            "/zkau/static/**/img/**"
+    };
 }

@@ -16,6 +16,7 @@ import javax.persistence.criteria.Root;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
+import org.springframework.stereotype.Repository;
 
 import com.evotek.qlns.dao.WorkProcessDAO;
 import com.evotek.qlns.model.WorkProcess;
@@ -23,8 +24,9 @@ import com.evotek.qlns.util.Validator;
 
 /**
  *
- * @author My PC
+ * @author LinhLH
  */
+@Repository
 public class WorkProcessDAOImpl extends AbstractDAO<WorkProcess>
         implements WorkProcessDAO{
     private static final Logger _log = LogManager.getLogger(WorkProcessDAOImpl.class);

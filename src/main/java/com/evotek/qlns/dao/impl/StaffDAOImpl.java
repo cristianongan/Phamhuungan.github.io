@@ -20,6 +20,7 @@ import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.hibernate.type.IntegerType;
+import org.springframework.stereotype.Repository;
 
 import com.evotek.qlns.dao.StaffDAO;
 import com.evotek.qlns.model.ContractType;
@@ -36,8 +37,9 @@ import com.evotek.qlns.util.key.Values;
 
 /**
  *
- * @author PC
+ * @author LinhLH
  */
+@Repository
 public class StaffDAOImpl extends AbstractDAO<Staff> implements StaffDAO {
 
 	private static final Logger _log = LogManager.getLogger(StaffDAOImpl.class);

@@ -14,6 +14,7 @@ import javax.persistence.criteria.Root;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
+import org.springframework.stereotype.Repository;
 
 import com.evotek.qlns.dao.GroupDAO;
 import com.evotek.qlns.model.Group;
@@ -22,6 +23,7 @@ import com.evotek.qlns.model.Group;
  *
  * @author linhlh2
  */
+@Repository
 public class GroupDAOImpl extends AbstractDAO<Group> implements GroupDAO {
 
     private static final Logger _log = LogManager.getLogger(GroupDAOImpl.class);

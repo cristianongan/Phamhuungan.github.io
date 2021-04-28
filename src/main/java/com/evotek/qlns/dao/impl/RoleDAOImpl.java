@@ -15,6 +15,7 @@ import javax.persistence.criteria.Root;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
+import org.springframework.stereotype.Repository;
 
 import com.evotek.qlns.dao.RoleDAO;
 import com.evotek.qlns.model.Role;
@@ -27,6 +28,7 @@ import com.evotek.qlns.util.key.Values;
  *
  * @author linhlh2
  */
+@Repository
 public class RoleDAOImpl extends AbstractDAO<Role> implements RoleDAO {
 
 	private static final Logger _log = LogManager.getLogger(RoleDAOImpl.class);

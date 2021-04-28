@@ -27,7 +27,7 @@ import org.zkoss.zul.Label;
 import org.zkoss.zul.Menu;
 import org.zkoss.zul.Window;
 
-import com.evotek.qlns.common.UserWorkspace;
+import com.evotek.qlns.application.UserWorkspace;
 import com.evotek.qlns.event.MenuSelectedEventListener;
 import com.evotek.qlns.model.Category;
 import com.evotek.qlns.service.MainService;

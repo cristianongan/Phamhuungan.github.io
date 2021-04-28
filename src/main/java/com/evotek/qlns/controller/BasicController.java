@@ -18,7 +18,7 @@ import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.util.GenericForwardComposer;
 import org.zkoss.zul.Window;
 
-import com.evotek.qlns.common.UserWorkspace;
+import com.evotek.qlns.application.UserWorkspace;
 import com.evotek.qlns.model.User;
 
 /**

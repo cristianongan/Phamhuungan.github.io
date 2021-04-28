@@ -17,6 +17,7 @@ import javax.persistence.criteria.Root;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
+import org.springframework.stereotype.Repository;
 
 import com.evotek.qlns.dao.DocumentTypeDAO;
 import com.evotek.qlns.model.DocumentType;
@@ -24,8 +25,9 @@ import com.evotek.qlns.util.Validator;
 
 /**
  *
- * @author MRHOT
+ * @author LinhLH
  */
+@Repository
 public class DocumentTypeDAOImpl extends AbstractDAO<DocumentType> implements DocumentTypeDAO {
 
 	private static final Logger _log = LogManager.getLogger(DocumentTypeDAOImpl.class);

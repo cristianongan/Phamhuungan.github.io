@@ -13,6 +13,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.springframework.stereotype.Repository;
 
 import com.evotek.qlns.dao.UserDAO;
 import com.evotek.qlns.model.User;
@@ -24,8 +25,9 @@ import com.evotek.qlns.util.key.Values;
 
 /**
  *
- * @author hungnt1 LinhLH2 fixed
+ * @author LinhLH2
  */
+@Repository
 public class UserDAOImpl extends AbstractDAO<User> implements UserDAO {
 
 	private static final Logger _log = LogManager.getLogger(UserDAOImpl.class);

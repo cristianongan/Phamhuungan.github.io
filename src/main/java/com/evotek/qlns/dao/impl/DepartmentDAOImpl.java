@@ -20,6 +20,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.springframework.stereotype.Repository;
 
 import com.evotek.qlns.dao.DepartmentDAO;
 import com.evotek.qlns.model.Department;
@@ -27,8 +28,9 @@ import com.evotek.qlns.util.Validator;
 
 /**
  *
- * @author My PC
+ * @author LinhLH
  */
+@Repository
 public class DepartmentDAOImpl extends AbstractDAO<Department> implements DepartmentDAO {
 	private static final Logger _log = LogManager.getLogger(DepartmentDAOImpl.class);
 

@@ -17,6 +17,7 @@ import javax.persistence.criteria.Root;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
+import org.springframework.stereotype.Repository;
 
 import com.evotek.qlns.dao.FileEntryDAO;
 import com.evotek.qlns.model.Document;
@@ -26,6 +27,7 @@ import com.evotek.qlns.model.FileEntry;
  *
  * @author linhlh2
  */
+@Repository
 public class FileEntryDAOImpl extends AbstractDAO<FileEntry> implements FileEntryDAO {
 
 	private static final Logger _log = LogManager.getLogger(FileEntryDAOImpl.class);

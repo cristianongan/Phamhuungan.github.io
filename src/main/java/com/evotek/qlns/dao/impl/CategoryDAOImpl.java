@@ -18,7 +18,6 @@ import org.springframework.stereotype.Repository;
 import com.evotek.qlns.dao.CategoryDAO;
 import com.evotek.qlns.model.Category;
 import com.evotek.qlns.model.User;
-import com.evotek.qlns.util.QueryUtil;
 import com.evotek.qlns.util.Validator;
 import com.evotek.qlns.util.key.Values;
 
