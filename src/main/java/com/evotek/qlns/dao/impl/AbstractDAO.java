@@ -9,11 +9,13 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.evotek.qlns.dao.Operations;
 import com.google.common.base.Preconditions;
 
 @SuppressWarnings("unchecked")
+@Repository
 public abstract class AbstractDAO<T extends Serializable> implements Operations<T> {
 
 	@Autowired

@@ -55,6 +55,7 @@ import com.evotek.qlns.util.key.PermissionConstants;
  * @author Stephan Gerth
  * 
  */
+
 public class UserWorkspace implements Serializable, DisposableBean {
 
 	private static final long serialVersionUID = -3936210543827830197L;
