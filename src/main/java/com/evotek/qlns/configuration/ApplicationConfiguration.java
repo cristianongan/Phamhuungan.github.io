@@ -18,9 +18,5 @@ import com.evotek.qlns.application.UserWorkspace;
 
 @Configuration
 public class ApplicationConfiguration {
-	@Bean
-	@Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
-	public UserWorkspace userWorkspace() {
-		return new UserWorkspace();
-	}
+
 }

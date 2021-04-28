@@ -29,9 +29,11 @@ import java.util.Set;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.DisposableBean;
+import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.zkoss.spring.SpringUtil;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Session;
@@ -55,7 +57,8 @@ import com.evotek.qlns.util.key.PermissionConstants;
  * @author Stephan Gerth
  * 
  */
-
+@Component
+@Scope("session")
 public class UserWorkspace implements Serializable, DisposableBean {
 
 	private static final Logger _log = LogManager.getLogger(UserWorkspace.class);
