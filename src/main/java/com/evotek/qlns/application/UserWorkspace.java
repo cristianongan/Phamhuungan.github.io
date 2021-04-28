@@ -69,17 +69,6 @@ public class UserWorkspace implements Serializable, DisposableBean {
 		return SecurityContextHolder.getContext().getAuthentication();
 	}
 
-	/**
-	 * Get a logged-in users WorkSpace which holds all necessary vars. <br>
-	 *
-	 * @return the users WorkSpace
-	 * @deprecated
-	 */
-	@Deprecated
-	public static UserWorkspace getInstance() {
-		return SpringUtil.getBean("userWorkspace", UserWorkspace.class);
-	}
-
 	private String browserType;
 	/**
 	 * Not used yet.
@@ -100,8 +89,6 @@ public class UserWorkspace implements Serializable, DisposableBean {
 	 * true = init.
 	 */
 	private boolean treeMenu = true;
-
-	private String userLanguage;
 
 	private UserPrincipalImpl userPrincipal;
 
@@ -204,10 +191,6 @@ public class UserWorkspace implements Serializable, DisposableBean {
 		return this.roles;
 	}
 
-	public String getUserLanguage() {
-		return this.userLanguage;
-	}
-
 	public Properties getUserLanguageProperty() {
 
 		// // TODO only for testing. we must get the language from
@@ -271,17 +254,6 @@ public class UserWorkspace implements Serializable, DisposableBean {
 
 	public void setTreeMenu(boolean treeMenu) {
 		this.treeMenu = treeMenu;
-	}
-
-	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
-	// ++++++++++++++++ Setter/Getter ++++++++++++++++++ //
-	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
-	public void setUserLanguage(String userLanguage) {
-		this.userLanguage = userLanguage;
-	}
-
-	public void setUserPrincipal(UserPrincipalImpl userPrincipal) {
-		this.userPrincipal = userPrincipal;
 	}
 
 }
