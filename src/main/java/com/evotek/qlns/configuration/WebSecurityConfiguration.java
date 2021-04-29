@@ -23,8 +23,16 @@ import com.evotek.qlns.policy.impl.UserDetailsServiceImpl;
 @EnableWebSecurity
 @EnableAutoConfiguration
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
-	private static final String[] ZK_RESOURCES = { "/zkau/web/**/js/**", "/zkau/web/**/zul/css/**",
-			"/zkau/web/**/img/**", "/zkau/static/**/js/**", "/zkau/static/**/zul/css/**", "/zkau/static/**/img/**" };
+	private static final String[] ZK_RESOURCES = { 
+			"*.ico",
+			"/zkau/web/**/js/**",
+			"/zkau/web/**/*.ttf",
+			"/zkau/web/**/*.woff",
+			"/zkau/web/**/css/**",
+			"/zkau/web/**/images/**", 
+			"/zkau/static/js/**", 
+			"/zkau/static/css/**", 
+			"/zkau/static/images/**" };
 
 	private static final String ZUL_FILES = "/zkau/web/**/*.zul";
 
@@ -54,10 +62,18 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS).sessionFixation().newSession()
 				.invalidSessionUrl("/login").maximumSessions(1).maxSessionsPreventsLogin(false);
 		// Cấu hình cho Login Form.
-		http.authorizeRequests().antMatchers(ZUL_FILES).denyAll() // block direct access to zul files
+		http.authorizeRequests()
+				.antMatchers(ZUL_FILES).denyAll() // block direct access to zul files
 				.antMatchers(HttpMethod.GET, ZK_RESOURCES).permitAll() // allow zk resources
-				.mvcMatchers("/", "/login", "/logout").permitAll().anyRequest().authenticated().and().formLogin()
-				.failureHandler(authenticationFailureHandler()).successHandler(authenticationSuccessHandler())
+				.mvcMatchers("/", "/login", "/j_spring_logout").permitAll()
+				.mvcMatchers("/j_spring_security_check").anonymous()
+				.mvcMatchers("/index").authenticated()
+				.mvcMatchers("/**").denyAll()
+				.anyRequest().authenticated()
+			.and()
+				.formLogin()
+				.failureHandler(authenticationFailureHandler())
+				.successHandler(authenticationSuccessHandler())
 				.loginProcessingUrl("/j_spring_security_check") // Submit URL
 				.loginPage("/login")//
 				.defaultSuccessUrl("/index")//
@@ -67,7 +83,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 				// Cấu hình cho trang Logout.
 				// (Sau khi logout, chuyển tới trang home)
-				.and().logout().logoutUrl("/j_spring_logout").logoutSuccessUrl("/").clearAuthentication(true)
+			.and()
+				.logout()
+				.logoutUrl("/j_spring_logout").logoutSuccessUrl("/login").clearAuthentication(true)
 				.invalidateHttpSession(true).deleteCookies("JSESSIONID", "remember-me").permitAll();
 
 	}

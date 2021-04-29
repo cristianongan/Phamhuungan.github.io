@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--openshift-->
 <!--<?page id="loginZul" title="Tech4"?>-->
-<?page id="mainPage" title="Yên Bình Corp"?>
+<?page id="mainPage" title="Evotek"?>
 <?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
-<?taglib uri="/WEB-INF/tld/security.tld" prefix="sec"?>
+<?taglib uri="http://evotek.vn/security" prefix="sec"?>
 <?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
 
-<!--<?link rel="shortcut icon" type="image/png" href="/html/images/favicon/favicon.png"?>
-<?link rel="icon" type="image/png" href="/html/images/favicon/favicon.png"?>-->
+<!--<?link rel="shortcut icon" type="image/png" href="/web/images/favicon/favicon.png"?>
+<?link rel="icon" type="image/png" href="/web/images/favicon/favicon.png"?>-->
 
-<!--<?link rel="stylesheet" type="text/css"	href="/html/css/themes/bootstrap-${param.theme}.min.css" if="${not empty param.theme}"?>-->
-<?link rel="stylesheet" type="text/css"	href="/html/css/themes/bootstrap-cerulean.min.css"?>
-<?link rel="stylesheet" type="text/css"	href="/html/css/ace/ace.min.css" ?>
-<?link rel="stylesheet" type="text/css"	href="/html/css/ace/ace-rtl.min.css" ?>
-<?link rel="stylesheet" type="text/css"	href="/html/css/ace/ace-skins.min.css" ?>
-<?link rel="stylesheet" type="text/css"	href="/html/css/index.css.dsp"?>
-<?link rel="stylesheet" type="text/css"	href="/html/css/docs.css" ?>
-<?link rel="stylesheet" type="text/css"	href="/html/css/pygments-manni.css" ?>
+<!--<?link rel="stylesheet" type="text/css"	href="/static/css/themes/bootstrap-${param.theme}.min.css" if="${not empty param.theme}"?>-->
+<?link rel="stylesheet" type="text/css"	href="/static/css/themes/bootstrap-cerulean.min.css"?>
+<?link rel="stylesheet" type="text/css"	href="/static/css/ace/ace.min.css" ?>
+<?link rel="stylesheet" type="text/css"	href="/static/css/ace/ace-rtl.min.css" ?>
+<?link rel="stylesheet" type="text/css"	href="/static/css/ace/ace-skins.min.css" ?>
+<?link rel="stylesheet" type="text/css"	href="/web/css/index.css.dsp"?>
+<?link rel="stylesheet" type="text/css"	href="/web/css/docs.css" ?>
+<?link rel="stylesheet" type="text/css"	href="/web/css/pygments-manni.css" ?>
 
 
 <zk xmlns="http://www.zkoss.org/2005/zul"
@@ -30,7 +30,7 @@
             
             <div class="container" style="float:left">
                 <a label=" Smart Office " sclass="navbar-brand" 
-                   iconSclass="z-icon-leaf" onClick='Executions.sendRedirect("/index.zul")'/>
+                   iconSclass="z-icon-leaf" onClick='Executions.sendRedirect("/index")'/>
                 <navbar mold="bs-pills" sclass="navbar-nav" id="mainMenu">
 
                 </navbar>

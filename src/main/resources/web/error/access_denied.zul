@@ -1,5 +1,5 @@
 <?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
-<?taglib uri="/WEB-INF/tld/security.tld" prefix="sec"?>
+<?taglib uri="http://evotek.vn/security" prefix="sec"?>
 <?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
 
 <?link rel="shortcut icon" type="image/png" href="/html/images/favicon/favicon.png"?>

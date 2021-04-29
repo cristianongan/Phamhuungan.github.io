@@ -19,11 +19,14 @@
 
 	<name>QLNS_ZK</name>
 
-	<description>Phần mềm quản lý nhân sự, tiền lương, chấm công, tuyển dụng sử dụng zk</description>
+	<description>Phần mềm quản lý nhân sự, tiền lương, chấm công, tuyển
+		dụng sử dụng zk
+	</description>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<project.reporting.outputEncoding>UTF-8
+		</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
 		<!-- <zk.version>7.0.1</zk.version> -->
 		<zk.version>9.5.0</zk.version>
@@ -39,6 +42,8 @@
 		<jasypt.version>1.9.2</jasypt.version>
 		<mail.version>1.4.7</mail.version>
 		<poi.version>3.9</poi.version>
+		<cglib.version>3.0</cglib.version>
+		<start-class>com.evotek.qlns.QlnsApplication</start-class>
 	</properties>
 
 	<dependencies>
@@ -67,6 +72,11 @@
 					<artifactId>spring-boot-starter-logging</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-aop</artifactId>
 		</dependency>
 
 		<dependency>
@@ -352,6 +362,13 @@
 			<version>${poi.version}</version>
 		</dependency>
 		<!-- poi -->
+
+		<dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib</artifactId>
+			<version>${cglib.version}</version>
+		</dependency>
+
 
 		<dependency>
 			<groupId>easyconf</groupId>

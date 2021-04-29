@@ -39,7 +39,7 @@
             <div sclass="breadcrumbs">
                 <div sclass="breadcrumb">
                     <span sclass="home-icon z-icon-home"/>
-                    <a label="${c:l('menu.main')}" onClick='Executions.sendRedirect("/index.zul")'/>
+                    <a label="${c:l('menu.main')}" onClick='Executions.sendRedirect("/index")'/>
                     <label value="${c:l('menu.item.human.resource')}"/>
                 </div>
                 

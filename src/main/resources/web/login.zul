@@ -1,19 +1,19 @@
 <!--openshift-->
 <!--<?page id="loginZul" title="Tech4"?>-->
-<?page id="loginZul" title="Yên Bình Corp"?>
+<?page id="loginZul" title="Evotek Corp"?>
 <?page automaticTimeout="false"?>
 <?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
 <?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
 
 <!--
-<?link rel="shortcut icon" type="image/png" href="/html/images/favicon/favicon.png"?>
-<?link rel="icon" type="image/png" href="/html/images/favicon/favicon.png"?>
+<?link rel="shortcut icon" type="image/png" href="/web/images/favicon/favicon.png"?>
+<?link rel="icon" type="image/png" href="/web/images/favicon/favicon.png"?>
 -->
-<?link rel="stylesheet" type="text/css"	href="/html/css/login.css" ?>
-<?link rel="stylesheet" type="text/css"	href="/html/css/themes/bootstrap-cerulean.min.css"?>
-<?link rel="stylesheet" type="text/css"	href="/html/css/ace/ace.min.css" ?>
-<?link rel="stylesheet" type="text/css"	href="/html/css/ace/ace-rtl.min.css" ?>
-<?link rel="stylesheet" type="text/css"	href="/html/css/ace/ace-skins.min.css" ?>
+<?link rel="stylesheet" type="text/css"	href="/web/css/login.css" ?>
+<?link rel="stylesheet" type="text/css"	href="/static/css/themes/bootstrap-cerulean.min.css"?>
+<?link rel="stylesheet" type="text/css"	href="/static/css/ace/ace.min.css" ?>
+<?link rel="stylesheet" type="text/css"	href="/static/css/ace/ace-rtl.min.css" ?>
+<?link rel="stylesheet" type="text/css"	href="/static/css/ace/ace-skins.min.css" ?>
 
 
 <zk xmlns="http://www.zkoss.org/2005/zul"
@@ -34,7 +34,7 @@
                             </h:h1>
                             
                             <a href="http://tech4.vn" target="_blank" sclass="bolder">
-                                <h:h4 class="blue">© Tech4 Việt Nam</h:h4>
+                                <h:h4 class="blue">© Evotek</h:h4>
                             </a>
                         </div>
                         

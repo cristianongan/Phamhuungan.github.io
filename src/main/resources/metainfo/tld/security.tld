@@ -9,7 +9,7 @@
   <!--           -->
   <function>
     <name>isNoneGranted</name>
-    <function-class>com.tech4.corp.util.SecurityUtil</function-class>
+    <function-class>com.evotek.qlns.util.SecurityUtil</function-class>
     <function-signature>
 	boolean isNoneGranted(java.lang.String authorities) {
 		</function-signature>
@@ -20,7 +20,7 @@
   </function>
   <function>
     <name>isAllGranted</name>
-    <function-class>com.tech4.corp.util.SecurityUtil</function-class>
+    <function-class>com.evotek.qlns.util.SecurityUtil</function-class>
     <function-signature>
 	boolean isAllGranted(java.lang.String authorities) {
 		</function-signature>
@@ -31,7 +31,7 @@
   </function>
   <function>
     <name>isAnyGranted</name>
-    <function-class>com.tech4.corp.util.SecurityUtil</function-class>
+    <function-class>com.evotek.qlns.util.SecurityUtil</function-class>
     <function-signature>
 	boolean isAnyGranted(java.lang.String authorities) {
 		</function-signature>

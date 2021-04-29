@@ -5,7 +5,7 @@
         <div sclass="breadcrumbs">
             <div sclass="breadcrumb">
                 <span sclass="home-icon z-icon-home"/>
-                <a label="${c:l('menu.main')}" onClick='Executions.sendRedirect("/index.zul")'/>
+                <a label="${c:l('menu.main')}" onClick='Executions.sendRedirect("/index")'/>
                 <span/>
                 <a id="adminPage" label="${c:l('menu.admin')}"/>
                 <label value="${c:l('menu.item.manager.user')}"/>

@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
-import org.springframework.web.context.WebApplicationContext;
 
 import com.evotek.qlns.application.UserWorkspace;
 
@@ -18,5 +17,9 @@ import com.evotek.qlns.application.UserWorkspace;
 
 @Configuration
 public class ApplicationConfiguration {
-
+	@Bean(name = "userWorkspace")
+	@Scope(value = "session",  proxyMode = ScopedProxyMode.TARGET_CLASS)
+	public UserWorkspace userWorkspace() {
+		return new UserWorkspace();
+	}
 }

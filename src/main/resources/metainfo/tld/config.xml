@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <config-name>customer-taglib</config-name> <!-- required since ZK 8 -->
+    <taglib>
+        <taglib-uri>http://evotek.vn/security</taglib-uri>
+        <taglib-location>/metainfo/tld/security.tld</taglib-location>
+    </taglib>
+</config>

@@ -14,7 +14,7 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 -->
 <window title="${arg.title}" sclass="z-messagebox-window ${arg.sclass}"
         border="none" width="260pt" closable="true"
-        use="com.tech4.corp.extend.MessageboxDlg" xmlns:w="client">
+        use="com.evotek.qlns.extend.MessageboxDlg" xmlns:w="client">
     <hbox>
         <div sclass="icon">
             <a iconSclass="${arg.icon}"/>

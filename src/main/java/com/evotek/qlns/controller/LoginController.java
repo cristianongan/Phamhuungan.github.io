@@ -11,12 +11,12 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.zkoss.zhtml.Div;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.ui.util.GenericForwardComposer;
 import org.zkoss.zul.Captcha;
+import org.zkoss.zul.Div;
 import org.zkoss.zul.Textbox;
 
 import com.evotek.qlns.service.UserService;
@@ -27,8 +27,8 @@ import com.evotek.qlns.util.Validator;
  *
  * @author linhlh2
  */
-@Controller
-public class LoginController extends GenericForwardComposer implements Serializable {
+@Controller("loginController")
+public class LoginController extends GenericForwardComposer<Div> implements Serializable {
 
 	private static final long serialVersionUID = 1368611560949L;
 
@@ -36,27 +36,34 @@ public class LoginController extends GenericForwardComposer implements Serializa
 	private UserService userService;
 
 	private Textbox captcha;
-	private Div container;
+	private org.zkoss.zhtml.Div container;
 
 	private Captcha cpa;
 
-	private org.zkoss.zul.Div divVerify;
+	private Div divVerify;
 
 	private boolean requireCaptcha = StaticUtil.LOGIN_POLICY_REQUIRE_VERIFY_PRIVATE_LOGIN;
 
 	@Override
-	public void doAfterCompose(Component comp) throws Exception {
+	public void doAfterCompose(Div comp) throws Exception {
 		super.doAfterCompose(comp);
 
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
 		if (!(auth instanceof AnonymousAuthenticationToken)) {
-			Executions.sendRedirect("/index.zul");
+			Executions.sendRedirect("/index");
 		} else {
 			this.container.setVisible(true);
 
 			if (!this.requireCaptcha) {
-				this.divVerify.getParent().removeChild(this.divVerify);
+				Component parent = this.divVerify.getParent();
+				
+				if (parent != null) {
+					parent.removeChild(this.divVerify);
+				} else {
+					this.divVerify.setVisible(false);
+				}
+				
 			} else {
 				this.cpa.setLength(StaticUtil.LOGIN_POLICY_CAPTCHA_LENGTH);
 
@@ -66,7 +73,7 @@ public class LoginController extends GenericForwardComposer implements Serializa
 	}
 
 	@Override
-	public void doBeforeComposeChildren(Component comp) throws Exception {
+	public void doBeforeComposeChildren(Div comp) throws Exception {
 		super.doBeforeComposeChildren(comp);
 
 		String ip = Executions.getCurrent().getRemoteAddr();
@@ -82,7 +89,7 @@ public class LoginController extends GenericForwardComposer implements Serializa
 
 	public void onOK() {
 		if (this.requireCaptcha && (!this.cpa.getValue().equals(this.captcha.getValue()))) {
-			Executions.sendRedirect("/login.zul?login_error=3");
+			Executions.sendRedirect("/login?login_error=3");
 		} else {
 			Clients.submitForm("f");
 		}

@@ -10,6 +10,7 @@ import java.lang.reflect.Method;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.zkoss.zk.ui.Component;
@@ -22,6 +23,7 @@ import org.zkoss.zul.Window;
 
 import com.evotek.qlns.application.UserWorkspace;
 import com.evotek.qlns.model.User;
+import com.evotek.qlns.policy.impl.UserPrincipalImpl;
 
 /**
  *
@@ -37,6 +39,7 @@ public class BasicController<T extends Component> extends GenericForwardComposer
 	private User user;
 
 	@Autowired
+	@Qualifier("userWorkspace")
 	private UserWorkspace userWorkspace;
 
 	public void doOnCreateCommon(Window w, Event fe) throws Exception {
@@ -66,7 +69,9 @@ public class BasicController<T extends Component> extends GenericForwardComposer
 		if (this.user != null) {
 			return this.user;
 		} else {
-			return this.userWorkspace.getUserPrincipal().getUser();
+			UserPrincipalImpl userPrincipalImpl = this.userWorkspace.getUserPrincipal();
+
+			return userPrincipalImpl != null ? userPrincipalImpl.getUser() : null;
 		}
 	}
 
