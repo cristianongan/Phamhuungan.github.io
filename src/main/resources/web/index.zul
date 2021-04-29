@@ -6,23 +6,23 @@
 <?taglib uri="http://evotek.vn/security" prefix="sec"?>
 <?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
 
-<!--<?link rel="shortcut icon" type="image/png" href="~./zkau/web/images/favicon/favicon.png"?>
-<?link rel="icon" type="image/png" href="~./zkau/web/images/favicon/favicon.png"?>-->
+<!--<?link rel="shortcut icon" type="image/png" href="~./images/favicon/favicon.png"?>
+<?link rel="icon" type="image/png" href="~./images/favicon/favicon.png"?>-->
 
-<!--<?link rel="stylesheet" type="text/css"	href="~./zkau/web/static/css/themes/bootstrap-${param.theme}.min.css" if="${not empty param.theme}"?>-->
-<?link rel="stylesheet" type="text/css"	href="~./zkau/web/static/css/themes/bootstrap-cerulean.min.css"?>
-<?link rel="stylesheet" type="text/css"	href="~./zkau/web/static/css/ace/ace.min.css" ?>
-<?link rel="stylesheet" type="text/css"	href="~./zkau/web/static/css/ace/ace-rtl.min.css" ?>
-<?link rel="stylesheet" type="text/css"	href="~./zkau/web/static/css/ace/ace-skins.min.css" ?>
-<?link rel="stylesheet" type="text/css"	href="~./zkau/web/css/index.css.dsp"?>
-<?link rel="stylesheet" type="text/css"	href="~./zkau/web/css/docs.css" ?>
-<?link rel="stylesheet" type="text/css"	href="~./zkau/web/css/pygments-manni.css" ?>
+<!--<?link rel="stylesheet" type="text/css"	href="~./static/css/themes/bootstrap-${param.theme}.min.css" if="${not empty param.theme}"?>-->
+<?link rel="stylesheet" type="text/css"	href="~./static/css/themes/bootstrap-cerulean.min.css"?>
+<?link rel="stylesheet" type="text/css"	href="~./static/css/ace/ace.min.css" ?>
+<?link rel="stylesheet" type="text/css"	href="~./static/css/ace/ace-rtl.min.css" ?>
+<?link rel="stylesheet" type="text/css"	href="~./static/css/ace/ace-skins.min.css" ?>
+<?link rel="stylesheet" type="text/css"	href="~./css/index.css.dsp"?>
+<?link rel="stylesheet" type="text/css"	href="~./css/docs.css" ?>
+<?link rel="stylesheet" type="text/css"	href="~./css/pygments-manni.css" ?>
 
 
 <zk xmlns="http://www.zkoss.org/2005/zul"
     xmlns:h="http://www.w3.org/1999/xhtml"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+    xsi:schemaLocation="http://www.zkoss.org/2005/zul https://www.zkoss.org/2005/zul/zul.xsd">
 
     <div apply="${mainController}" width="100%" style="margin:auto;" sclass="main-container">
 

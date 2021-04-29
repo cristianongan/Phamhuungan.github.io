@@ -6,14 +6,14 @@
 <?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
 
 <!--
-<?link rel="shortcut icon" type="image/png" href="~./zkau/web/images/favicon/favicon.png"?>
-<?link rel="icon" type="image/png" href="/web/images/favicon/favicon.png"?>
+<?link rel="shortcut icon" type="image/png" href="~./images/favicon/favicon.png"?>
+<?link rel="icon" type="image/png" href="~./images/favicon/favicon.png"?>
 -->
-<?link rel="stylesheet" type="text/css"	href="~./zkau/web/css/login.css" ?>
-<?link rel="stylesheet" type="text/css"	href="~./zkau/web/static/css/themes/bootstrap-cerulean.min.css"?>
-<?link rel="stylesheet" type="text/css"	href="~./zkau/web/static/css/ace/ace.min.css" ?>
-<?link rel="stylesheet" type="text/css"	href="~./zkau/web/static/css/ace/ace-rtl.min.css" ?>
-<?link rel="stylesheet" type="text/css"	href="~./zkau/web/static/css/ace/ace-skins.min.css" ?>
+<?link rel="stylesheet" type="text/css"	href="~./css/login.css" ?>
+<?link rel="stylesheet" type="text/css"	href="~./static/css/themes/bootstrap-cerulean.min.css"?>
+<?link rel="stylesheet" type="text/css"	href="~./static/css/ace/ace.min.css" ?>
+<?link rel="stylesheet" type="text/css"	href="~./static/css/ace/ace-rtl.min.css" ?>
+<?link rel="stylesheet" type="text/css"	href="~./static/css/ace/ace-skins.min.css" ?>
 
 
 <zk xmlns="http://www.zkoss.org/2005/zul"

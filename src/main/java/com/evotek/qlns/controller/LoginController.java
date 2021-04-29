@@ -28,7 +28,7 @@ import com.evotek.qlns.util.Validator;
  * @author linhlh2
  */
 @Controller("loginController")
-public class LoginController extends GenericForwardComposer<Div> implements Serializable {
+public class LoginController extends GenericForwardComposer<Component> implements Serializable {
 
 	private static final long serialVersionUID = 1368611560949L;
 
@@ -45,7 +45,7 @@ public class LoginController extends GenericForwardComposer<Div> implements Seri
 	private boolean requireCaptcha = StaticUtil.LOGIN_POLICY_REQUIRE_VERIFY_PRIVATE_LOGIN;
 
 	@Override
-	public void doAfterCompose(Div comp) throws Exception {
+	public void doAfterCompose(Component comp) throws Exception {
 		super.doAfterCompose(comp);
 
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -73,7 +73,7 @@ public class LoginController extends GenericForwardComposer<Div> implements Seri
 	}
 
 	@Override
-	public void doBeforeComposeChildren(Div comp) throws Exception {
+	public void doBeforeComposeChildren(Component comp) throws Exception {
 		super.doBeforeComposeChildren(comp);
 
 		String ip = Executions.getCurrent().getRemoteAddr();

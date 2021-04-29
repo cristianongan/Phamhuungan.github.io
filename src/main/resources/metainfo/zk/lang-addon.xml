@@ -59,8 +59,8 @@
         </property>
     </component>
 
-    <javascript src="~./zkau/web/static/js/processing_box.js"/>
-    <javascript src="~./zkau/web/static/js/jquery.highlight-4.js"/>
+    <javascript src="~./static/js/processing_box.js"/>
+    <javascript src="~./static/js/jquery.highlight-4.js"/>
 
 	<!-- zk gritter -->
 	<!-- <javascript src="~./jawwa/ext/gritter/js/jquery.gritter.min.js" /> <stylesheet href="~./jawwa/ext/gritter/css/jquery.gritter.css" 

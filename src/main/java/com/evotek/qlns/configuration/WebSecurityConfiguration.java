@@ -24,12 +24,20 @@ import com.evotek.qlns.policy.impl.UserDetailsServiceImpl;
 @EnableAutoConfiguration
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	private static final String[] ZK_RESOURCES = { 
-			"*.ico",
-			"/zkau/web/**/js/**",
+			"/**/*.ico",
+			"/**/*.png",
+			"/zkwm/**",
+			"/zkau/**/*.png",
 			"/zkau/web/**/*.ttf",
 			"/zkau/web/**/*.woff",
+			"/zkau/web/**/*.woff2",
+			"/zkau/web/**/js/**",
 			"/zkau/web/**/css/**",
-			"/zkau/web/**/images/**" };
+			"/zkau/web/**/images/**",
+			"/zkau/web/**/static/js/**",
+			"/zkau/web/**/static/css/**",
+			"/zkau/web/**/static/images/**"
+			};
 
 	private static final String ZUL_FILES = "/zkau/web/**/*.zul";
 
