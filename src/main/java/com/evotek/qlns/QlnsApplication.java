@@ -36,10 +36,10 @@ public class QlnsApplication extends SpringBootServletInitializer {
 		return application.sources(QlnsApplication.class);
 	}
 	
-//	@GetMapping("/")
-//	public String index() {
-//		return "index";
-//	}
+	@GetMapping("/index")
+	public String index() {
+		return "index";
+	}
 	
 	@GetMapping("/login")
 	public String loginPage() {
