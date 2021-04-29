@@ -64,7 +64,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers(HttpMethod.GET, ZK_RESOURCES).permitAll() // allow zk resources
 				.mvcMatchers("/", "/login", "/j_spring_logout").permitAll()
 				.mvcMatchers("/j_spring_security_check").anonymous()
-				//.mvcMatchers("/index").authenticated()
+				.mvcMatchers("/index").authenticated()
 				.mvcMatchers("/**").denyAll()
 				.anyRequest().authenticated()
 			.and()
