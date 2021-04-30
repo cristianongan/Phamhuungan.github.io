@@ -43,7 +43,7 @@ public class RoleController extends BasicController<Div> implements Serializable
 
 	private static final Logger _log = LogManager.getLogger(RoleController.class);
 
-	private static final String EDIT_PAGE = "/html/pages/manager_role/edit.zul";
+	private static final String EDIT_PAGE = "~./pages/manager_role/edit.zul";
 
 	@Autowired
 	private RoleService roleService;
@@ -116,7 +116,7 @@ public class RoleController extends BasicController<Div> implements Serializable
 	}
 
 	public void onClick$adminPage() {
-		this.parent.setSrc("/html/pages/admin/default.zul");
+		this.parent.setSrc("~./pages/admin/default.zul");
 	}
 
 	public void onClick$btnAdd() {

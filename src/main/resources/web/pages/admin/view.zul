@@ -32,7 +32,7 @@
             </div>
         </div>
         <vlayout spacing="0" hflex="1">
-            <include id="contentLayout" src="/html/pages/admin/default.zul"/>
+            <include id="contentLayout" src="~./pages/admin/default.zul"/>
         </vlayout>
     </hlayout>
 </zk>

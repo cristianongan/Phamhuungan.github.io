@@ -300,7 +300,7 @@
         
         <script><![CDATA[
 	zk.afterMount(function () {
-		$.getScript("./html/js/application.js", function () {
+		$.getScript(".~./js/application.js", function () {
 			  if (location.hash && (!zk.ie || zk.ie > 8)) {
 			  setTimeout(function () {
 				$('.bs-sidebar a[href*=#]')[0].click();

@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package com.evotek.qlns.common.impl;
+package com.evotek.qlns.security.handler;
 
 import java.io.IOException;
 
@@ -16,7 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
 import com.evotek.qlns.model.User;
-import com.evotek.qlns.policy.impl.UserPrincipalImpl;
+import com.evotek.qlns.security.policy.impl.UserPrincipalImpl;
 import com.evotek.qlns.service.UserService;
 import com.evotek.qlns.util.SecurityUtil;
 import com.evotek.qlns.util.Validator;
@@ -51,7 +51,7 @@ public class AuthenticationSuccessHandlerImpl extends SimpleUrlAuthenticationSuc
 			this.userService.remove(ip);
 		}
 
-		setDefaultTargetUrl("/index.zul");
+		setDefaultTargetUrl("/index");
 
 		super.onAuthenticationSuccess(request, response, authentication);
 	}

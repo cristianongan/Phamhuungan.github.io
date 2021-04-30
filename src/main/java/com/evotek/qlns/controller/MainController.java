@@ -49,9 +49,9 @@ public class MainController extends BasicController<Div> implements Serializable
 	// get set method
 	private static final long serialVersionUID = 1366774306343L;
 
-	// private static final String HOME_PAGE = "/html/pages/home/home.zul";
-	private static final String USER_DETAIL_PAGE = "/html/pages/manager_user/edit.zul";
-	private static final String VIEW_ALL_NOTIFICATION = "/html/pages/notification/view.zul";
+	// private static final String HOME_PAGE = "~./pages/home/home.zul";
+	private static final String USER_DETAIL_PAGE = "~./pages/manager_user/edit.zul";
+	private static final String VIEW_ALL_NOTIFICATION = "~./pages/notification/view.zul";
 
 	@Autowired
 	private MainService mainService;

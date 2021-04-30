@@ -10,6 +10,7 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +38,7 @@ public class MainServiceImpl implements MainService {
 	private transient NotificationDAO notificationDAO;
 
 	@Override
+	@Cacheable(value="category", keyGenerator="customKeyGenerator")
 	public List<Category> getAllCategory() throws Exception {
 		return this.categoryDAO.getAllCategory();
 	}

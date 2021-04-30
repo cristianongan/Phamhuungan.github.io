@@ -19,7 +19,7 @@ public class Constants {
 	public static final String BTN_INFO = "btn-info";
 	public static final String BTN_PRIMARY = "btn-primary";
 	public static final String BTN_SUCCESS = "btn-success";
-	public static final String CATEGORY_FOLDER = "/html/pages/";
+	public static final String CATEGORY_FOLDER = "~./pages/";
 	/**
 	 * Class
 	 */
@@ -81,12 +81,12 @@ public class Constants {
 	public static final String TEXT_WML = "text/wml";
 	public static final String TEXT_XML = "text/xml";
 	public static final String TITLE = "title";
-	public static final String TREE_DEPARTMENT_PAGE = "/html/pages/common/departmentTree.zul";
+	public static final String TREE_DEPARTMENT_PAGE = "~./pages/common/departmentTree.zul";
 	/**
 	 * Page
 	 */
 
-	public static final String TREE_DOCUMENT_TYPE_PAGE = "/html/pages/common/documentTypeTree.zul";
+	public static final String TREE_DOCUMENT_TYPE_PAGE = "~./pages/common/documentTypeTree.zul";
 	/**
 	 * Authentication type
 	 */

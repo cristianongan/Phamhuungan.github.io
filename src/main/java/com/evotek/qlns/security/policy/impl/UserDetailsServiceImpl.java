@@ -1,4 +1,4 @@
-package com.evotek.qlns.policy.impl;
+package com.evotek.qlns.security.policy.impl;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -15,6 +15,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -105,7 +106,7 @@ public class UserDetailsServiceImpl implements UserDetailsService, Serializable 
 			if (user == null) {
 				saveLoginFailure(userName);
 
-				return null;
+				throw new UsernameNotFoundException("User not exist with name :" + userName);
 			}
 
 			roles = getRolesByUser(user);

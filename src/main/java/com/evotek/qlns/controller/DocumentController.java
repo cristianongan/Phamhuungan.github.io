@@ -73,9 +73,9 @@ public class DocumentController extends BasicController<Hlayout> implements Seri
 
 	private static final Logger _log = LogManager.getLogger(DocumentController.class);
 
-	private static final String DOCUMENT_TYPE_PAGE = "/html/pages/document_type/view.zul";
+	private static final String DOCUMENT_TYPE_PAGE = "~./pages/document_type/view.zul";
 
-	private static final String EDIT_PAGE = "/html/pages/manager_document/edit.zul";
+	private static final String EDIT_PAGE = "~./pages/manager_document/edit.zul";
 
 	@Autowired
 	private DocumentService documentService;

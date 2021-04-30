@@ -61,8 +61,8 @@ public class AddEditStaffController extends BasicController<Window> implements S
 	@Autowired
 	private StaffService staffService;
 
-	private static final String ADD_EDIT_CONTRACT_TYPE_URL = "/html/pages/manager_human_resource/editContractType.zul";
-	private static final String ADD_EDIT_JOB_URL = "/html/pages/manager_human_resource/editJob.zul";
+	private static final String ADD_EDIT_CONTRACT_TYPE_URL = "~./pages/manager_human_resource/editContractType.zul";
+	private static final String ADD_EDIT_JOB_URL = "~./pages/manager_human_resource/editJob.zul";
 
 	// Bandbox Department
 	private Bandbox bbDepartment;

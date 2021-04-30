@@ -54,7 +54,7 @@ public class DepartmentController extends BasicController<Window> implements Ser
 	@Autowired
 	private DepartmentService departmentService;
 
-	private static final String ADD_EDIT_PAGE = "/html/pages/department/edit.zul";
+	private static final String ADD_EDIT_PAGE = "~./pages/department/edit.zul";
 
 	private Button btnDelete;
 

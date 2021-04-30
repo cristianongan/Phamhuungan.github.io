@@ -51,7 +51,7 @@ public class DocumentTypeController extends BasicController<Window> {
 
 	public static final Logger _log = LogManager.getLogger(DocumentTypeController.class);
 
-	private static final String ADD_EDIT_PAGE = "/html/pages/document_type/edit.zul";
+	private static final String ADD_EDIT_PAGE = "~./pages/document_type/edit.zul";
 
 	@Autowired
 	private DocumentTypeService documentTypeService;

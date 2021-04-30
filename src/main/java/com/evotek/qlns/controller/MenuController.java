@@ -45,7 +45,7 @@ public class MenuController extends BasicController<Div> implements Serializable
 
 	private static final Logger _log = LogManager.getLogger(MenuController.class);
 
-	private static final String EDIT_PAGE = "/html/pages/manager_menu/edit.zul";
+	private static final String EDIT_PAGE = "~./pages/manager_menu/edit.zul";
 
 	@Autowired
 	private CategoryService categoryService;
@@ -145,7 +145,7 @@ public class MenuController extends BasicController<Div> implements Serializable
 	}
 
 	public void onClick$adminPage() {
-		this.parent.setSrc("/html/pages/admin/default.zul");
+		this.parent.setSrc("~./pages/admin/default.zul");
 	}
 
 	/**

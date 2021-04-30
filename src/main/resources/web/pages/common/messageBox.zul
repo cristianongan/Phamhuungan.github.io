@@ -5,7 +5,7 @@
             width="auto" closable="true" mode="overlapped" sclass="${arg.type}-box"
             action="show: slideDown;hide: slideUp">
         <hbox style="vertical-align: middle">
-            <image src="/html/images/message/${arg.type}.png"/>
+            <image src="~./images/message/${arg.type}.png"/>
             <label value="${arg.notice}" style="padding: 10px;"/>
         </hbox>
         <timer onTimer="notice.detach()" delay="2000"/>

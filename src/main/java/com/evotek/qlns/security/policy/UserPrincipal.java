@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package com.evotek.qlns.policy;
+package com.evotek.qlns.security.policy;
 
 import java.util.Collection;
 

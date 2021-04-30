@@ -58,7 +58,7 @@
                 </row>
                 <row>
                     <cell colspan="2" align="center">
-                        <button  id="btnClose" label="Đóng" image="/html/images/icons/cancel.png"/>
+                        <button  id="btnClose" label="Đóng" image="~./images/icons/cancel.png"/>
                     </cell>
                 </row>
             </rows>

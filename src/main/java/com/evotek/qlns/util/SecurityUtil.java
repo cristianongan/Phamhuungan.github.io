@@ -18,7 +18,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.zkoss.zk.ui.Sessions;
 
-import com.evotek.qlns.policy.impl.UserPrincipalImpl;
+import com.evotek.qlns.security.policy.impl.UserPrincipalImpl;
 
 /**
  *

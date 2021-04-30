@@ -36,11 +36,11 @@ public class TreeCategoryRender<Component> implements TreeitemRenderer<CategoryT
 	// Mảng các loại menu lấy từ file cấu hình vsm.config.properties
 	private static final String[] _type = StaticUtil.MENU_TYPE;
 
-	private static final String EDIT_PAGE = "/html/pages/manager_menu/edit.zul";
+	private static final String EDIT_PAGE = "~./pages/manager_menu/edit.zul";
 
-	private static final String RESOURCE_ACTION_PAGE = "/html/pages/manager_menu/resource_action.zul";
+	private static final String RESOURCE_ACTION_PAGE = "~./pages/manager_menu/resource_action.zul";
 
-	private static final String RIGHT_PAGE = "/html/pages/manager_menu/right.zul";
+	private static final String RIGHT_PAGE = "~./pages/manager_menu/right.zul";
 
 	public Div winTemp;
 

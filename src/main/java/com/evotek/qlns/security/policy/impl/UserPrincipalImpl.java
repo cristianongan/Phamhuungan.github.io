@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.evotek.qlns.policy.impl;
+package com.evotek.qlns.security.policy.impl;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -11,7 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.util.DigestUtils;
 
 import com.evotek.qlns.model.User;
-import com.evotek.qlns.policy.UserPrincipal;
+import com.evotek.qlns.security.policy.UserPrincipal;
 import com.evotek.qlns.util.StringPool;
 import com.evotek.qlns.util.Validator;
 

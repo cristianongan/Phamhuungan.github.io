@@ -42,7 +42,7 @@ import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zul.Window;
 
-import com.evotek.qlns.policy.impl.UserPrincipalImpl;
+import com.evotek.qlns.security.policy.impl.UserPrincipalImpl;
 import com.evotek.qlns.util.PermissionUtil;
 import com.evotek.qlns.util.key.PermissionConstants;
 

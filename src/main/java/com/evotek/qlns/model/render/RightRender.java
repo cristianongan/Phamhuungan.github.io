@@ -34,7 +34,7 @@ public class RightRender implements RowRenderer<Right> {
 
 	private static final String[] _type = StaticUtil.MENU_RIGHT_TYPE;
 
-	private static final String EDIT_RIGHT_PAGE = "/html/pages/manager_menu/edit_right.zul";
+	private static final String EDIT_RIGHT_PAGE = "~./pages/manager_menu/edit_right.zul";
 
 	public Window winTemp;
 

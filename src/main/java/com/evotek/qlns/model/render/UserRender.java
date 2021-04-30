@@ -30,8 +30,8 @@ import com.evotek.qlns.util.key.Values;
  */
 public class UserRender implements ListitemRenderer<User> {
 
-	private static final String ASSIGNED_ROLE_PAGE = "/html/pages/manager_user/assigned_role.zul";
-	private static final String EDIT_PAGE = "/html/pages/manager_user/edit.zul";
+	private static final String ASSIGNED_ROLE_PAGE = "~./pages/manager_user/assigned_role.zul";
+	private static final String EDIT_PAGE = "~./pages/manager_user/edit.zul";
 
 	private boolean isAdmin;
 

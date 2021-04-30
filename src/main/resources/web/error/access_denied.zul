@@ -2,8 +2,8 @@
 <?taglib uri="http://evotek.vn/security" prefix="sec"?>
 <?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
 
-<?link rel="shortcut icon" type="image/png" href="/html/images/favicon/favicon.png"?>
-<?link rel="icon" type="image/png" href="/html/images/favicon/favicon.png"?>
+<?link rel="shortcut icon" type="image/png" href="~./images/favicon/favicon.png"?>
+<?link rel="icon" type="image/png" href="~./images/favicon/favicon.png"?>
 <zk xmlns="http://www.zkoss.org/2005/zul"
     xmlns:h="http://www.w3.org/1999/xhtml"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -13,15 +13,15 @@
             action="show: slideDown;hide: slideUp" border="normal" position = "center" >
         <div>
             <hbox>
-                <image src="/html/images/message/error.png" style="vertical-align:middle"/>
+                <image src="~./images/message/error.png" style="vertical-align:middle"/>
                 <label value="${c:l('message.you.are.not.authorized.to.access.this.page')}"
                        multiline="true"/>
             </hbox>
         </div>
         <div style="margin-top:10px" align="center">
             <button label="${c:l('button.back.to.home.page')}"
-                    image="/html/images/icons/back.png"
-                    onClick='Executions.sendRedirect("/index.zul")' />
+                    image="~./images/icons/back.png"
+                    onClick='Executions.sendRedirect("/index")' />
         </div>
 
     </window>

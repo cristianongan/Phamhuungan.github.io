@@ -42,7 +42,7 @@
                     <label id="lbNotiBag" sclass="badge badge-success"/>
                 </a>
                 <menubar sclass="user-menu light-blue">
-                    <menu id="mniUsername" image="/html/images/icons/medium/user.png">
+                    <menu id="mniUsername" image="~./images/icons/medium/user.png">
                         <menupopup>
                             <menuitem label="Settings" iconSclass="z-icon-cog"/>
                             <menuitem id="userDetail" label="${c:l('common.user.infomation')}" iconSclass="z-icon-user"/>
@@ -81,7 +81,7 @@
                     <div zclass="footer-content">
                         <label value="© Copyright"/>
                         <label id="lbCurrentYear"/>
-                        <a href="http://tech4.vn" target="_blank" label="tech4.vn" sclass="bolder"/><label value=", All rights reserved"/>
+                        <a href="http://evotek.vn" target="_blank" label="evotek.vn" sclass="bolder"/><label value=", All rights reserved"/>
                     </div>
                 </div>
             </div>

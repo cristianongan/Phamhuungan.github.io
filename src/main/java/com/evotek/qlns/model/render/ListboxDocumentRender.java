@@ -34,8 +34,8 @@ import com.evotek.qlns.util.key.LanguageKeys;
  */
 public class ListboxDocumentRender implements ListitemRenderer<Document> {
 
-	private static final String DETAIL_PAGE = "/html/pages/manager_document/detail.zul";
-	private static final String EDIT_PAGE = "/html/pages/manager_document/edit.zul";
+	private static final String DETAIL_PAGE = "~./pages/manager_document/detail.zul";
+	private static final String EDIT_PAGE = "~./pages/manager_document/edit.zul";
 	private DocumentService _documentService;
 
 	private ListModel _model;

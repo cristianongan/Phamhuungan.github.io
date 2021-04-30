@@ -31,7 +31,7 @@ import com.evotek.qlns.util.key.LanguageKeys;
  */
 public class SalaryLandmarkRender implements ListitemRenderer<SalaryLandmark> {
 
-	private static final String ADD_EDIT_SALARY_LANDMARK_PAGE = "/html/pages/manager_human_resource/editSalaryLandmark.zul";
+	private static final String ADD_EDIT_SALARY_LANDMARK_PAGE = "~./pages/manager_human_resource/editSalaryLandmark.zul";
 	private Staff _staff;
 
 	private Window _winParent;

@@ -46,7 +46,7 @@ public class UserRoleController extends BasicController<Window> implements Seria
 
 	private static final Logger _log = LogManager.getLogger(UserRoleController.class);
 
-	private static final String ADD_ROLE_PAGE = "/html/pages/manager_user/add_role.zul";
+	private static final String ADD_ROLE_PAGE = "~./pages/manager_user/add_role.zul";
 
 	@Autowired
 	private UserService userService;

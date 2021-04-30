@@ -28,9 +28,9 @@ import com.evotek.qlns.util.key.Values;
  */
 public class GroupRender implements RowRenderer<Group> {
 
-	private static final String ASSIGN_RIGHT_PAGE = "/html/pages/manager_menu/assign_right.zul";
+	private static final String ASSIGN_RIGHT_PAGE = "~./pages/manager_menu/assign_right.zul";
 
-	private static final String EDIT_GROUP_PAGE = "/html/pages/manager_menu/edit_group.zul";
+	private static final String EDIT_GROUP_PAGE = "~./pages/manager_menu/edit_group.zul";
 
 	public Window winTemp;
 

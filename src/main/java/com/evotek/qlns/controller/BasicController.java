@@ -23,7 +23,7 @@ import org.zkoss.zul.Window;
 
 import com.evotek.qlns.application.UserWorkspace;
 import com.evotek.qlns.model.User;
-import com.evotek.qlns.policy.impl.UserPrincipalImpl;
+import com.evotek.qlns.security.policy.impl.UserPrincipalImpl;
 
 /**
  *

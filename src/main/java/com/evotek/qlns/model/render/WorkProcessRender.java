@@ -31,7 +31,7 @@ import com.evotek.qlns.util.key.LanguageKeys;
  */
 public class WorkProcessRender implements ListitemRenderer<WorkProcess> {
 
-	private static final String ADD_EDIT_WORK_PROCESS_PAGE = "/html/pages/manager_human_resource/editWorkProcess.zul";
+	private static final String ADD_EDIT_WORK_PROCESS_PAGE = "~./pages/manager_human_resource/editWorkProcess.zul";
 	private Staff _staff;
 
 	private Window _winParent;

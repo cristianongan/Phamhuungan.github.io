@@ -31,8 +31,8 @@ import com.evotek.qlns.util.key.Values;
  */
 public class StaffRender implements ListitemRenderer<Staff> {
 
-	private static final String DETAIL_PAGE = "/html/pages/manager_human_resource/detail.zul";
-	private static final String EDIT_PAGE = "/html/pages/manager_human_resource/edit.zul";
+	private static final String DETAIL_PAGE = "~./pages/manager_human_resource/detail.zul";
+	private static final String EDIT_PAGE = "~./pages/manager_human_resource/edit.zul";
 
 	private ListModel _model;
 

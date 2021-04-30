@@ -1,4 +1,4 @@
-package com.evotek.qlns.application;
+package com.evotek.qlns.listener;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -15,7 +15,7 @@ import com.evotek.qlns.service.DocumentTypeService;
  * configuration file. <br>
  */
 @WebListener // no need for declaration in web.xml
-public class InitApplicationWorkspace implements ServletContextListener {
+public class InitApplicationListener implements ServletContextListener {
 
 	// Scheduler for periodically starts a db cleaning job
 	private ServletContext context;

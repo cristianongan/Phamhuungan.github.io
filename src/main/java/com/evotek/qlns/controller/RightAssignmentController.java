@@ -46,9 +46,9 @@ public class RightAssignmentController extends BasicController<Window> implement
 
 	private static final Logger _log = LogManager.getLogger(RightAssignmentController.class);
 
-	private static final String EDIT_GROUP_PAGE = "/html/pages/manager_menu/edit_group.zul";
+	private static final String EDIT_GROUP_PAGE = "~./pages/manager_menu/edit_group.zul";
 
-	private static final String EDIT_RIGHT_PAGE = "/html/pages/manager_menu/edit_right.zul";
+	private static final String EDIT_RIGHT_PAGE = "~./pages/manager_menu/edit_right.zul";
 
 	@Autowired
 	private CategoryService categoryService;

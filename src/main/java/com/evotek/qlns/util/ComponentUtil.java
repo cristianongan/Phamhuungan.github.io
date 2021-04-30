@@ -76,45 +76,45 @@ import com.evotek.qlns.util.key.ZkKeys;
  */
 public class ComponentUtil {
 
-	public static String ADD_ICON = "/html/images/icons/add.png";
-	public static String ASSIGN_ICON = "/html/images/icons/assign.png";
+	public static String ADD_ICON = "~./images/icons/add.png";
+	public static String ASSIGN_ICON = "~./images/icons/assign.png";
 	public static String ASSIGN_RIGHT_TOOLTIP = "assignRightTooltip";
 	public static String ASSIGN_ROLE_TOOLTIP = "assignRoleTooltip";
-	public static String ATTACH_ICON = "/html/images/icons/attach.png";
+	public static String ATTACH_ICON = "~./images/icons/attach.png";
 	public static String CALCEL_TOOLTIP = "calcelTooltip";
 	public static String DEL_TOOLTIP = "delTooltip";
-	public static String DELETE_ICON = "/html/images/icons/delete.png";
-	public static String DEPT_TREE_PAGE = "/html/pages/common/commonDepartment.zul";
+	public static String DELETE_ICON = "~./images/icons/delete.png";
+	public static String DEPT_TREE_PAGE = "~./pages/common/commonDepartment.zul";
 	public static String DETAIL_TOOLTIP = "detailTooltip";
-	public static String DOWNLOAD_ICON = "/html/images/icons/download.png";
-	public static String EDIT_ADD_ICON = "/html/images/icons/edit_add.png";
-	public static String EDIT_ICON = "/html/images/icons/edit.png";
+	public static String DOWNLOAD_ICON = "~./images/icons/download.png";
+	public static String EDIT_ADD_ICON = "~./images/icons/edit_add.png";
+	public static String EDIT_ICON = "~./images/icons/edit.png";
 	public static String EDIT_TOOLTIP = "editTooltip";
-	public static String KEY_ICON = "/html/images/icons/key.png";
-	public static String LOCK_ICON = "/html/images/icons/lock.png";
+	public static String KEY_ICON = "~./images/icons/key.png";
+	public static String LOCK_ICON = "~./images/icons/lock.png";
 	public static String LOCK_TOOLTIP = "lockTooltip";
-	private static final String MESSAGE_BOX_PAGE = "/html/pages/common/messageBox.zul";
+	private static final String MESSAGE_BOX_PAGE = "~./pages/common/messageBox.zul";
 	private static final String MSG_ERROR = "error";
 
 	private static final String MSG_INFORMATION = "information";
 	private static final String MSG_SUCCESS = "success";
 	private static final String MSG_WARNING = "warning";
-	public static String OK_ICON = "/html/images/icons/ok.png";
-	public static String PENDING_ICON = "/html/images/icons/pending.png";
-	public static String PUBLIC_ICON = "/html/images/icons/public.png";
-	public static String REFERENCE_ICON = "/html/images/icons/reference.png";
-	public static String REMOVE_ICON = "/html/images/icons/remove.png";
-	public static String RESOURCE_ICON = "/html/images/icons/resource.png";
+	public static String OK_ICON = "~./images/icons/ok.png";
+	public static String PENDING_ICON = "~./images/icons/pending.png";
+	public static String PUBLIC_ICON = "~./images/icons/public.png";
+	public static String REFERENCE_ICON = "~./images/icons/reference.png";
+	public static String REMOVE_ICON = "~./images/icons/remove.png";
+	public static String RESOURCE_ICON = "~./images/icons/resource.png";
 
 	public static String RIGHT_TOOLTIP = "rightTooltip";
 
-	public static String STAR_ICON = "/html/images/icons/star.png";
+	public static String STAR_ICON = "~./images/icons/star.png";
 
-	public static String UNLOCK_ICON = "/html/images/icons/unlock.png";
+	public static String UNLOCK_ICON = "~./images/icons/unlock.png";
 
 	public static String UNLOCK_TOOLTIP = "unlockTooltip";
 
-	public static String USER_TREE_PAGE = "/html/pages/common/commonGridUser.zul";
+	public static String USER_TREE_PAGE = "~./pages/common/commonGridUser.zul";
 
 	public static void clear(Component comp) {
 		if (comp.getChildren() != null) {

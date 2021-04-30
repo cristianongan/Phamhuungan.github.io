@@ -36,7 +36,7 @@ public class NotificationRender implements ListitemRenderer<Notification> {
 
 	private static final String DATE_S_CLASS = "btn btn-xs no-hover btn-success z-icon-calendar";
 
-	private static final String EDIT_STAFF_PAGE = "/html/pages/manager_human_resource/edit.zul";
+	private static final String EDIT_STAFF_PAGE = "~./pages/manager_human_resource/edit.zul";
 
 	private Window _window;
 

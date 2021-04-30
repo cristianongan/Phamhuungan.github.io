@@ -53,8 +53,8 @@ public class DetailStaffController extends BasicController<Window> implements Se
 	@Autowired
 	private StaffService staffService;
 
-	private static final String ADD_EDIT_SALARY_LANDMARK_PAGE = "/html/pages/manager_human_resource/editSalaryLandmark.zul";
-	private static final String ADD_EDIT_WORK_PROCESS_PAGE = "/html/pages/manager_human_resource/editWorkProcess.zul";
+	private static final String ADD_EDIT_SALARY_LANDMARK_PAGE = "~./pages/manager_human_resource/editSalaryLandmark.zul";
+	private static final String ADD_EDIT_WORK_PROCESS_PAGE = "~./pages/manager_human_resource/editWorkProcess.zul";
 
 	private Integer index;
 	private Label lbCollege;

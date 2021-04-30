@@ -67,9 +67,9 @@ public class StaffController extends BasicController<Hlayout> implements Seriali
 
 	private static final Logger _log = LogManager.getLogger(StaffController.class);
 
-	private static final String ADD_EDIT_HUMAN_RESOURCE_URL = "/html/pages/manager_human_resource/edit.zul";
+	private static final String ADD_EDIT_HUMAN_RESOURCE_URL = "~./pages/manager_human_resource/edit.zul";
 
-	private static final String DEPARTMENT_PAGE = "/html/pages/department/view.zul";
+	private static final String DEPARTMENT_PAGE = "~./pages/department/view.zul";
 
 	@Autowired
 	private DepartmentService departmentService;

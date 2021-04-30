@@ -41,7 +41,7 @@
 		<commons.net.version>3.8.0</commons.net.version>
 		<jasypt.version>1.9.2</jasypt.version>
 		<mail.version>1.4.7</mail.version>
-		<poi.version>3.9</poi.version>
+		<poi.version>3.16</poi.version>
 		<cglib.version>3.0</cglib.version>
 		<start-class>com.evotek.qlns.QlnsApplication</start-class>
 	</properties>
@@ -204,6 +204,12 @@
 		<dependency>
 			<groupId>org.zkoss.zk</groupId>
 			<artifactId>zkplus</artifactId>
+			<version>${zk.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.zkoss.common</groupId>
+			<artifactId>zweb-dsp</artifactId>
 			<version>${zk.version}</version>
 		</dependency>
 

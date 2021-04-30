@@ -111,7 +111,7 @@ public class Messagebox {
 		}
 	}
 
-	private static String _templ = "/html/common/messagebox.zul";
+	private static String _templ = "~./common/messagebox.zul";
 	/** A Abort button. */
 	public static final int ABORT = 0x0100;
 	/** A Cancel button. */
@@ -213,7 +213,7 @@ public class Messagebox {
 	 * Sets the template used to create the message dialog.
 	 *
 	 * <p>
-	 * The template must follow the default template: ~./zul/html/messagebox.zul
+	 * The template must follow the default template: ~./zul~./messagebox.zul
 	 *
 	 * <p>
 	 * In other words, just adjust the label and layout and don't change the

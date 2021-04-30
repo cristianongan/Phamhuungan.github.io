@@ -30,7 +30,7 @@ import com.evotek.qlns.util.key.LanguageKeys;
  */
 public class PreviewFileListener implements EventListener<Event> {
 
-	private static final String PREVIEW_FILE_PAGE = "/html/pages/common/previewFile.zul";
+	private static final String PREVIEW_FILE_PAGE = "~./pages/common/previewFile.zul";
 
 	private FileEntry entry;
 

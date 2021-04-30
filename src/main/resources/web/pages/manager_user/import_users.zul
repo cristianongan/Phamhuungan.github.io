@@ -13,14 +13,14 @@
                    </columns>
                    <rows>
                        <row>
-                           <toolbarbutton id="btDownload" image="/html/images/icons/download.png" tooltiptext="${c:l('download.template')}"/>
+                           <toolbarbutton id="btDownload" image="~./images/icons/download.png" tooltiptext="${c:l('download.template')}"/>
                            <textbox id="txtFileDirection" readonly="true" hflex="1"/>
                         <button id="btBrowse" upload="true" label="${c:l('button.browse')}"/>
                        </row>
                        <row>
                            <cell colspan="3" align="center">
                                <button id="btnImport" label = "${c:l('button.import')}"
-                                        image="/html/images/icons/import-icon.png"   />
+                                        image="~./images/icons/import-icon.png"   />
                            </cell>
                        </row>
                    </rows>

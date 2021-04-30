@@ -33,7 +33,7 @@
                                 <h:span class="grey"> Smart Office</h:span>
                             </h:h1>
                             
-                            <a href="http://tech4.vn" target="_blank" sclass="bolder">
+                            <a href="http://evotek.vn" target="_blank" sclass="bolder">
                                 <h:h4 class="blue">© Evotek</h:h4>
                             </a>
                         </div>
@@ -88,7 +88,7 @@
                                             </div>
                                                 
                                             <div if="${not empty param.login_error}" style="text-align:center" height="20px">
-                                                <image src="/html/images/icons/error.png" style="vertical-align:middle"/>
+                                                <image src="~./images/icons/error.png" style="vertical-align:middle"/>
                                                 <label if="${param.login_error=='1'}" style="color:red;font-weight: bold;vertical-align:middle" value="${c:l('username.or.password.is.incorrect')}"/>
                                                 <label if="${param.login_error=='2'}" style="color:red;font-weight: bold;vertical-align:middle" value="${c:l('user.is.already.logged.in')}"/>
                                                 <label if="${param.login_error=='3'}" style="color:red;font-weight: bold;vertical-align:middle" value="${c:l('message.verify.code.incorrect')}"/>

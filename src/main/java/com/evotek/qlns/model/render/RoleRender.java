@@ -28,9 +28,9 @@ import com.evotek.qlns.util.key.Values;
  */
 public class RoleRender<Component> implements ListitemRenderer<Role> {
 
-	private static final String EDIT_PAGE = "/html/pages/manager_role/edit.zul";
+	private static final String EDIT_PAGE = "~./pages/manager_role/edit.zul";
 
-	private static final String PERMISSION_PAGE = "/html/pages/manager_role/permission.zul";
+	private static final String PERMISSION_PAGE = "~./pages/manager_role/permission.zul";
 
 	private Div winTemp;
 

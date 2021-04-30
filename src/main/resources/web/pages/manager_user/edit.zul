@@ -117,7 +117,7 @@
             <button id="btnSave" type="button" label="${c:l('button.save')}" 
                     iconSclass="z-icon-check" class="btn-success"/>
             <!--            <button id="btnSaveAndContinue" label="${c:l('button.save.and.continue')}"
-            image="/html/images/icons/save_and_add.png"
+            image="~./images/icons/save_and_add.png"
             if="${sec:isAllGranted('manager_user_btnSave')}"/>-->
             <button id="btnCancel" type="button" label="${c:l('button.cancel')}"
                     iconSclass="z-icon-times" class="btn-default"/>

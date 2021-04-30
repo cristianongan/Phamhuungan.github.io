@@ -12,8 +12,8 @@
                 <textbox id="tbKeyword" mold ="rounded" hflex="1"
                          placeholder="${c:l('user.login.name')}, ${c:l('full.name')}, ${c:l('common.email')}, ${c:l('common.mobile')}"/>
                 <div>
-                    <toolbarbutton id="btnSearch" image="/html/images/icons/search.png"/>
-                    <toolbarbutton id="btnClear" image="/html/images/icons/delete.png"/>
+                    <toolbarbutton id="btnSearch" image="~./images/icons/search.png"/>
+                    <toolbarbutton id="btnClear" image="~./images/icons/delete.png"/>
                 </div>
             </row>
         </rows>
