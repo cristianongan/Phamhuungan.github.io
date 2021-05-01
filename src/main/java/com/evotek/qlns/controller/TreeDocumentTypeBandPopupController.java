@@ -15,6 +15,7 @@ import javax.servlet.ServletContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zul.A;
@@ -34,6 +35,7 @@ import com.evotek.qlns.util.Validator;
  * @author linhlh2
  */
 @Controller
+@Scope("prototype")
 public class TreeDocumentTypeBandPopupController extends BasicController<Tree> implements Serializable {
 
 	private static final long serialVersionUID = -8308900492651966056L;

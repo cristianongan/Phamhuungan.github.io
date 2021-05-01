@@ -32,8 +32,11 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	private static final String[] ZK_RESOURCES = { 
 			"/**/*.ico",
 			"/**/*.png",
-			"/zkwm/**",
+			"/zkwm*",
+			"/js/**",
+			"/zkau/**",
 			"/zkau/**/*.png",
+			"/zkau/**/*.gif",
 			"/zkau/web/**/*.ttf",
 			"/zkau/web/**/*.woff",
 			"/zkau/web/**/*.woff2",
@@ -46,6 +49,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 			};
 
 	private static final String ZUL_FILES = "/zkau/web/**/*.zul";
+	
+	public static final String REMOVE_DESKTOP_REGEX = "/zkau\\?dtid=.*&cmd_0=rmDesktop&.*";
 
 	@Autowired
 	private UserDetailsServiceImpl userDetailsService;
@@ -86,9 +91,11 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()
 				.antMatchers(ZUL_FILES).denyAll() // block direct access to zul files
 				.antMatchers(HttpMethod.GET, ZK_RESOURCES).permitAll() // allow zk resources
-				.mvcMatchers("/", "/login", "/j_spring_security_check").permitAll()
+				.regexMatchers(HttpMethod.GET, REMOVE_DESKTOP_REGEX).permitAll() // allow desktop cleanup
+	            .requestMatchers(req -> "rmDesktop".equals(req.getParameter("cmd_0"))).permitAll() // allow desktop cleanup from ZATS
+				.mvcMatchers("/", "/login", "/j_spring_security_check", "/error*", "/access_denied").permitAll()
 //				.mvcMatchers("/j_spring_security_check").anonymous()
-				//.mvcMatchers("/index").authenticated()
+				.mvcMatchers("/index").authenticated()
 				.mvcMatchers("/**").denyAll()
 				.anyRequest().authenticated()
 			.and()
@@ -128,7 +135,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(16);
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(11);
 
 		return passwordEncoder;
 	}

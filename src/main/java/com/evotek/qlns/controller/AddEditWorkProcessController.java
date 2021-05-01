@@ -11,6 +11,7 @@ import java.util.Date;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.event.Events;
@@ -37,6 +38,7 @@ import com.evotek.qlns.util.key.Values;
  */
 
 @Controller
+@Scope("prototype")
 public class AddEditWorkProcessController extends BasicController<Window> {
 	private static final long serialVersionUID = 3135047225106309087L;
 

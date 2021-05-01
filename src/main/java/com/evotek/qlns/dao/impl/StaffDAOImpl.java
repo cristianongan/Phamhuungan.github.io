@@ -61,16 +61,16 @@ public class StaffDAOImpl extends AbstractDAO<Staff> implements StaffDAO {
 
 			sb.append("select staff.* from staff where date_of_birth is not null and status = 1 and ");
 			sb.append("((MOD(YEAR(date_of_birth),4)=0 or MOD(YEAR(date_of_birth),400)=0) ");
-			sb.append(" and DAYOFYEAR(date_of_birth)>=? and DAYOFYEAR(date_of_birth)<=?) ");
+			sb.append(" and DAYOFYEAR(date_of_birth)>=:dob1 and DAYOFYEAR(date_of_birth)<=:dob2) ");
 			sb.append(" or ((MOD(YEAR(date_of_birth),4)>0 and MOD(YEAR(date_of_birth),400)>0) ");
-			sb.append(" and DAYOFYEAR(date_of_birth)>=? and DAYOFYEAR(date_of_birth)<=?) ");
+			sb.append(" and DAYOFYEAR(date_of_birth)>=:dob3 and DAYOFYEAR(date_of_birth)<=:dob4) ");
 
 			Query<Staff> q = session.createNativeQuery(sb.toString(), Staff.class);
 
-			q.setParameter(0, dayOfYear + _day - 1, IntegerType.INSTANCE);
-			q.setParameter(1, dayOfYear + _day + 1, IntegerType.INSTANCE);
-			q.setParameter(2, dayOfYear, IntegerType.INSTANCE);
-			q.setParameter(3, dayOfYear + _day, IntegerType.INSTANCE);
+			q.setParameter("dob1", dayOfYear + _day - 1, IntegerType.INSTANCE);
+			q.setParameter("dob2", dayOfYear + _day + 1, IntegerType.INSTANCE);
+			q.setParameter("dob3", dayOfYear, IntegerType.INSTANCE);
+			q.setParameter("dob4", dayOfYear + _day, IntegerType.INSTANCE);
 
 			results = q.list();
 		} catch (Exception ex) {

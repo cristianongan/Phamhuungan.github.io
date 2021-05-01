@@ -17,6 +17,7 @@ import javax.servlet.ServletContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
@@ -68,6 +69,7 @@ import com.evotek.qlns.util.key.ZkKeys;
  * @author LinhLH
  */
 @Controller
+@Scope("prototype")
 public class DocumentController extends BasicController<Hlayout> implements Serializable {
 	private static final long serialVersionUID = -3106857813427291244L;
 

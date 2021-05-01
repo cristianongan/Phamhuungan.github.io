@@ -75,8 +75,8 @@ public class ApplicationConfiguration {
 		return new HttpSessionEventPublisher();
 	}
 
-	@Bean
-	public RequestContextListener requestContextListener() {
-		return new RequestContextListener();
-	}
+//	@Bean
+//	public RequestContextListener requestContextListener() {
+//		return new RequestContextListener();
+//	}
 }

@@ -8,7 +8,9 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -19,6 +21,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
+import org.hibernate.transform.AliasToBeanResultTransformer;
 import org.hibernate.type.DateType;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
@@ -73,42 +76,42 @@ public class DocumentDAOImpl extends AbstractDAO<Document> implements DocumentDA
 
 			sb.append(" from document a join document_type b on a.document_type_id = b.document_type_id where 1=1 ");
 
-			List<Object> params = new ArrayList<Object>();
+			Map<String, Object> params = new HashMap<>();
 
 			if (Validator.isNotNull(documentNumber)) {
-				sb.append(" and lower(a.document_number) like ? ");
+				sb.append(" and lower(a.document_number) like :documentNumber ");
 
-				params.add(QueryUtil.getFullStringParam(documentNumber.toLowerCase()));
+				params.put("documentNumber",  QueryUtil.getFullStringParam(documentNumber.toLowerCase()));
 			}
 
 			if (Validator.isNotNull(documentContent)) {
-				sb.append(" and lower(a.content) like ?");
+				sb.append(" and lower(a.content) like :content");
 
-				params.add(QueryUtil.getFullStringParam(documentContent.toLowerCase()));
+				params.put("content", QueryUtil.getFullStringParam(documentContent.toLowerCase()));
 			}
 
 			if (Validator.isNotNull(documentType)) {
-				sb.append(" and a.document_type_id = ? ");
+				sb.append(" and a.document_type_id = :documentTypeId ");
 
-				params.add(documentType);
+				params.put("documentTypeId", documentType);
 			}
 
 			if (Validator.isNotNull(department)) {
-				sb.append(" and lower(a.promulgation_dept) like ? ");
+				sb.append(" and lower(a.promulgation_dept) like :promulgationDept ");
 
-				params.add(QueryUtil.getFullStringParam(department.toLowerCase()));
+				params.put("promulgationDept", QueryUtil.getFullStringParam(department.toLowerCase()));
 			}
 
 			if (Validator.isNotNull(fromDate)) {
-				sb.append(" and a.promulgation_date >= ?");
+				sb.append(" and a.promulgation_date >= :fromDate");
 
-				params.add(fromDate);
+				params.put("fromDate", fromDate);
 			}
 
 			if (Validator.isNotNull(toDate)) {
-				sb.append(" and a.promulgation_date <= ?");
+				sb.append(" and a.promulgation_date <= :toDate");
 
-				params.add(toDate);
+				params.put("toDate", toDate);
 			}
 
 			if (Validator.isNotNull(orderByColumn) && Validator.isNotNull(orderByType)) {
@@ -117,7 +120,7 @@ public class DocumentDAOImpl extends AbstractDAO<Document> implements DocumentDA
 				sb.append(" order by a.promulgation_date desc, a.document_number desc");
 			}
 
-			NativeQuery<?> sql = session.createSQLQuery(sb.toString());
+			NativeQuery<?> sql =  session.createNativeQuery(sb.toString());
 
 			if (!count) {
 				sql.addScalar("documentId", LongType.INSTANCE);
@@ -135,8 +138,8 @@ public class DocumentDAOImpl extends AbstractDAO<Document> implements DocumentDA
 				sql.addScalar("typeName", StringType.INSTANCE);
 			}
 
-			for (int i = 0; i < params.size(); i++) {
-				sql.setParameter(i, params.get(i));
+			for (Map.Entry<String, Object> entry: params.entrySet()) {
+				sql.setParameter(entry.getKey(), entry.getValue());
 			}
 
 			return sql;
@@ -170,18 +173,18 @@ public class DocumentDAOImpl extends AbstractDAO<Document> implements DocumentDA
 			sb.append(
 					" from document a left join document_type b on a.document_type_id = b.document_type_id where 1=1 ");
 
-			List<Object> params = new ArrayList<Object>();
+			Map<String, Object> params = new HashMap<>();
 
 			if (Validator.isNotNull(textSearch)) {
-				sb.append(" and (lower(a.content) like ? ");
-				sb.append(" or lower(a.document_number) like ? ");
-				sb.append(" or lower(a.promulgation_dept) like ? ");
-				sb.append(" or lower(b.type_name) like ?)");
+				sb.append(" and (lower(a.content) like :content ");
+				sb.append(" or lower(a.document_number) like :documentNumber ");
+				sb.append(" or lower(a.promulgation_dept) like :promulgationDept ");
+				sb.append(" or lower(b.type_name) like :typeName)");
 
-				params.add(QueryUtil.getFullStringParam(textSearch.toLowerCase()));
-				params.add(QueryUtil.getFullStringParam(textSearch.toLowerCase()));
-				params.add(QueryUtil.getFullStringParam(textSearch.toLowerCase()));
-				params.add(QueryUtil.getFullStringParam(textSearch.toLowerCase()));
+				params.put("content", QueryUtil.getFullStringParam(textSearch.toLowerCase()));
+				params.put("documentNumber", QueryUtil.getFullStringParam(textSearch.toLowerCase()));
+				params.put("promulgationDept", QueryUtil.getFullStringParam(textSearch.toLowerCase()));
+				params.put("typeName", QueryUtil.getFullStringParam(textSearch.toLowerCase()));
 			}
 
 			if (Validator.isNotNull(orderByColumn) && Validator.isNotNull(orderByType)) {
@@ -190,7 +193,7 @@ public class DocumentDAOImpl extends AbstractDAO<Document> implements DocumentDA
 				sb.append(" order by a.promulgation_date desc, a.document_number desc");
 			}
 
-			NativeQuery<?> sql = session.createSQLQuery(sb.toString());
+			NativeQuery<?> sql = session.createNativeQuery(sb.toString());
 
 			if (!count) {
 				sql.addScalar("documentId", LongType.INSTANCE);
@@ -208,8 +211,8 @@ public class DocumentDAOImpl extends AbstractDAO<Document> implements DocumentDA
 				sql.addScalar("typeName", StringType.INSTANCE);
 			}
 
-			for (int i = 0; i < params.size(); i++) {
-				sql.setParameter(i, params.get(i));
+			for (Map.Entry<String, Object> entry: params.entrySet()) {
+				sql.setParameter(entry.getKey(), entry.getValue());
 			}
 
 			return sql;
@@ -421,7 +424,7 @@ public class DocumentDAOImpl extends AbstractDAO<Document> implements DocumentDA
 				q.setMaxResults(maxResult);
 			}
 
-			q.addSynchronizedEntityClass(Document.class);
+			q.setResultTransformer(new AliasToBeanResultTransformer(Document.class));
 
 			results = (List<Document>) q.list();
 
@@ -446,7 +449,7 @@ public class DocumentDAOImpl extends AbstractDAO<Document> implements DocumentDA
 				q.setMaxResults(maxResult);
 			}
 
-			q.addSynchronizedEntityClass(Document.class);
+			q.setResultTransformer(new AliasToBeanResultTransformer(Document.class));
 
 			results = (List<Document>) q.list();
 
@@ -471,9 +474,9 @@ public class DocumentDAOImpl extends AbstractDAO<Document> implements DocumentDA
 				q.setMaxResults(maxResult);
 			}
 
-			q.addSynchronizedEntityClass(Document.class);
+			q.setResultTransformer(new AliasToBeanResultTransformer(Document.class));
 
-			results = (List<Document>) q.list();
+			results = (List<Document>) q.getResultList();
 
 		} catch (Exception ex) {
 			_log.error(ex.getMessage(), ex);

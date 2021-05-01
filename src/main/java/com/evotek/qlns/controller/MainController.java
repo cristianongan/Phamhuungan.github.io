@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Executions;
@@ -44,6 +45,7 @@ import com.evotek.qlns.util.key.Values;
  * @author linhlh2
  */
 @Controller
+@Scope("prototype")
 public class MainController extends BasicController<Div> implements Serializable {
 
 	// get set method

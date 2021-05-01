@@ -11,6 +11,7 @@ import java.io.Serializable;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.zkoss.util.media.AMedia;
 import org.zkoss.zul.Iframe;
@@ -24,6 +25,7 @@ import com.evotek.qlns.util.key.Constants;
  * @author LinhLH
  */
 @Controller
+@Scope("prototype")
 public class PreviewFileController extends BasicController<Window> implements Serializable {
 
 	private static final long serialVersionUID = 8095093259223337416L;

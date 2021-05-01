@@ -7,6 +7,7 @@ package com.evotek.qlns.controller;
 import java.io.Serializable;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,6 +29,7 @@ import com.evotek.qlns.util.Validator;
  * @author linhlh2
  */
 @Controller("loginController")
+@Scope("prototype")
 public class LoginController extends GenericForwardComposer<Component> implements Serializable {
 
 	private static final long serialVersionUID = 1368611560949L;

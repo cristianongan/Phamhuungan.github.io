@@ -3,7 +3,9 @@
  */
 package com.evotek.qlns.configuration;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
@@ -27,8 +29,13 @@ public class ApplicationCacheConfig extends CachingConfigurerSupport {
 	@Bean
 	public CacheManager cacheManager() {
 		SimpleCacheManager cacheManager = new SimpleCacheManager();
-		Cache booksCache = new ConcurrentMapCache("books");
-		cacheManager.setCaches(Arrays.asList(booksCache));
+		
+		List<Cache> caches = new ArrayList<Cache>();
+		
+	    caches.add(new ConcurrentMapCache("category"));
+	    
+	    cacheManager.setCaches(caches);
+		
 		return cacheManager;
 	}
 

@@ -30,7 +30,7 @@ import com.evotek.qlns.util.key.LanguageKeys;
 
 /**
  *
- * @author MRHOT
+ * @author LinhLH
  */
 public class ListboxDocumentRender implements ListitemRenderer<Document> {
 

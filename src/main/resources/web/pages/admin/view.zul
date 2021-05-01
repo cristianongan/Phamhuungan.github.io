@@ -31,7 +31,7 @@
                 <a id="toggler" iconSclass="z-icon-angle-double-left"/>
             </div>
         </div>
-        <vlayout spacing="0" hflex="1">
+        <vlayout spacing="0">
             <include id="contentLayout" src="~./pages/admin/default.zul"/>
         </vlayout>
     </hlayout>

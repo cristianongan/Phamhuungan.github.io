@@ -13,6 +13,7 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.event.Event;
@@ -40,6 +41,7 @@ import com.evotek.qlns.util.key.Values;
  * @author linhlh2
  */
 @Controller
+@Scope("prototype")
 public class AddEditJobController extends BasicController<Window> implements Serializable {
 
 	private static final long serialVersionUID = -2598959786950022235L;

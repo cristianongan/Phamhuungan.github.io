@@ -146,12 +146,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<!-- ====================================================== -->
     <error-page>
         <exception-type>org.springframework.security.access.AccessDeniedException</exception-type>
-        <location>/error/access_denied.zul</location>
+        <location>error/access_denied.zul</location>
     </error-page>
 
     <error-page>
         <exception-type>java.lang.Throwable</exception-type>
-        <location>/error/error.zul</location>
+        <location>error/error.zul</location>
     </error-page>
     
     <!-- ====================================================== -->
@@ -182,6 +182,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
         <name>org.zkoss.zul.Panel.mold</name>
         <value>bs</value>
     </library-property>
+
+	<library-property>
+		<name>org.zkoss.zkmax.au.websocket.WebSocketEndPoint.urlPattern</name>
+		<value>/zkwm</value>
+	</library-property>
     <!-- ========================================================== -->
 	<!-- Grid and Listbox Render on demand -->
 	<!-- ========================================================== -->

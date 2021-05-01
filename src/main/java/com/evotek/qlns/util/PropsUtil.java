@@ -26,25 +26,25 @@ public class PropsUtil {
 		return _instance._configuration.contains(key);
 	}
 
-	public static boolean contains(String key, boolean encrypt) {
-		return _instance._configuration.contains(key, encrypt);
-	}
+//	public static boolean contains(String key, boolean encrypt) {
+//		return _instance._configuration.contains(key, encrypt);
+//	}
 
 	public static String get(String key) {
 		return _instance._configuration.get(key);
 	}
 
-	public static String get(String key, boolean encrypt) {
-		return _instance._configuration.get(key, encrypt);
-	}
+//	public static String get(String key, boolean encrypt) {
+//		return _instance._configuration.get(key, encrypt);
+//	}
 
 	public static String[] getArray(String key) {
 		return _instance._configuration.getArray(key);
 	}
 
-	public static String[] getArray(String key, boolean encrypt) {
-		return _instance._configuration.getArray(key, encrypt);
-	}
+//	public static String[] getArray(String key, boolean encrypt) {
+//		return _instance._configuration.getArray(key, encrypt);
+//	}
 
 	public static Properties getProperties() {
 		return _instance._configuration.getProperties();

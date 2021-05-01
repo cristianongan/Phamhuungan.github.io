@@ -19,7 +19,7 @@ import com.evotek.qlns.util.key.PermissionConstants;
 public class PermissionUtil {
 	public static String encodePassword(String password) {
 
-		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(16);
+		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(11);
 
 		return bCryptPasswordEncoder.encode(password);
 	}

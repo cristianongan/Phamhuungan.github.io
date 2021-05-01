@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.util.Clients;
@@ -37,6 +38,7 @@ import com.evotek.qlns.util.key.Values;
  * @author LinhLH
  */
 @Controller
+@Scope("prototype")
 public class RegisterController extends BasicController<Div> implements Serializable {
 
 	private static final long serialVersionUID = 1368611560951L;

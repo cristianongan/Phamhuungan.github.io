@@ -14,6 +14,7 @@ import javax.servlet.ServletContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Sessions;
@@ -40,6 +41,7 @@ import com.evotek.qlns.util.key.Values;
  * @author LinhLH
  */
 @Controller
+@Scope("prototype")
 public class AddEditDocumentTypeController extends BasicController<Window> implements Serializable {
 
 	private static final long serialVersionUID = -6515082727563393176L;

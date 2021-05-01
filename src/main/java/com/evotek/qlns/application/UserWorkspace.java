@@ -29,18 +29,12 @@ import java.util.Set;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.DisposableBean;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
-import org.zkoss.zul.Window;
 
 import com.evotek.qlns.security.policy.impl.UserPrincipalImpl;
 import com.evotek.qlns.util.PermissionUtil;
@@ -119,7 +113,7 @@ public class UserWorkspace implements Serializable, DisposableBean {
 		}
 
 		// speed up the ModalDialogs while disabling the animation
-		Window.setDefaultActionOnShow("");
+		//Window.setDefaultActionOnShow("");
 	}
 
 	public Session currentSession() {

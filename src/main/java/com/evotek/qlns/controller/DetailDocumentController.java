@@ -15,6 +15,7 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.zkoss.util.media.AMedia;
 import org.zkoss.zk.ui.Component;
@@ -40,6 +41,7 @@ import com.evotek.qlns.util.key.Constants;
  * @author LinhLH
  */
 @Controller
+@Scope("prototype")
 public class DetailDocumentController extends BasicController<Component> implements Serializable {
 
 	private static final long serialVersionUID = -5515799787719843436L;

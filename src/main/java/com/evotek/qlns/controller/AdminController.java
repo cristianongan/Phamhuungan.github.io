@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.TreeSet;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
@@ -36,6 +37,7 @@ import com.evotek.qlns.util.key.Constants;
  * @author linhlh2
  */
 @Controller
+@Scope("prototype")
 public class AdminController extends BasicController<Hlayout> implements Serializable {
 	private static final long serialVersionUID = 8550094636173048300L;
 

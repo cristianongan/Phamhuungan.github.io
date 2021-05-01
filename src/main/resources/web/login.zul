@@ -19,7 +19,7 @@
 <zk xmlns="http://www.zkoss.org/2005/zul"
     xmlns:h="http://www.w3.org/1999/xhtml"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+    xsi:schemaLocation="http://www.zkoss.org/2005/zul https://www.zkoss.org/2005/zul/zul.xsd">
 
     <div class="main-container" xmlns:ca="client/attribute" xmlns:w="client">
         <h:div class="main-content" visible = "false" id="container">
@@ -89,9 +89,9 @@
                                                 
                                             <div if="${not empty param.login_error}" style="text-align:center" height="20px">
                                                 <image src="~./images/icons/error.png" style="vertical-align:middle"/>
-                                                <label if="${param.login_error=='1'}" style="color:red;font-weight: bold;vertical-align:middle" value="${c:l('username.or.password.is.incorrect')}"/>
-                                                <label if="${param.login_error=='2'}" style="color:red;font-weight: bold;vertical-align:middle" value="${c:l('user.is.already.logged.in')}"/>
-                                                <label if="${param.login_error=='3'}" style="color:red;font-weight: bold;vertical-align:middle" value="${c:l('message.verify.code.incorrect')}"/>
+                                                <label if="${param.login_error=='1'}" style="color:red;font-weight: bold;vertical-align:middle;font-size: 13px;" value="${c:l('username.or.password.is.incorrect')}"/>
+                                                <label if="${param.login_error=='2'}" style="color:red;font-weight: bold;vertical-align:middle;font-size: 13px;" value="${c:l('user.is.already.logged.in')}"/>
+                                                <label if="${param.login_error=='3'}" style="color:red;font-weight: bold;vertical-align:middle;font-size: 13px;" value="${c:l('message.verify.code.incorrect')}"/>
                                             </div>
                                                 
                                             <div class="space"></div>
@@ -102,7 +102,7 @@
                                                     <h:span class="lbl">${c:l('remember.me')}</h:span>
                                                 </h:label>
 
-                                                <h:button class="width-35 pull-right btn btn-sm btn-primary"
+                                                <h:button class="width-45 pull-right btn btn-sm btn-primary"
                                                           type="submit" forward="loginWin.onOK">
                                                     <h:i class="ace-icon fa z-icon-key"></h:i>
                                                     <h:span class="bigger-110">${c:l('button.login')}</h:span>

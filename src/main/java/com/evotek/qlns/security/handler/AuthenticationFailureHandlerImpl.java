@@ -26,9 +26,9 @@ public class AuthenticationFailureHandlerImpl extends SimpleUrlAuthenticationFai
 			AuthenticationException exception) throws IOException, ServletException {
 
 		if (exception instanceof SessionAuthenticationException) {
-			setDefaultFailureUrl("/login.zul?login_error=2");
+			setDefaultFailureUrl("/login?login_error=2");
 		} else {
-			setDefaultFailureUrl("/login.zul?login_error=1");
+			setDefaultFailureUrl("/login?login_error=1");
 		}
 
 		super.onAuthenticationFailure(request, response, exception);
