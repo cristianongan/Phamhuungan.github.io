@@ -42,7 +42,7 @@
             <listhead>
                 <listheader width="53px" label="${c:l('common.column.number')}"/>
                 <listheader label="${c:l('contract.type')}" hflex="2"/>
-                <listheader width="70px" label="${c:l('contract.duration')}"/>
+                <listheader width="70px" label="${c:l('contract.duration')}" hflex="1"/>
                 <listheader width="70px" align="center"/>
             </listhead>
         </listbox>

@@ -48,15 +48,14 @@ public class AddEditWorkProcessController extends BasicController<Window> {
 	private StaffService staffService;
 
 	private Combobox cbCompany;
-
 	private Combobox cbJobTitle;
-	private Datebox dbFromDate;
 
+	private Datebox dbFromDate;
 	private Datebox dbToDate;
+
 	private Staff staff;
 
 	private Window winEditWp;
-
 	private Window winTemp;
 
 	private WorkProcess wp;

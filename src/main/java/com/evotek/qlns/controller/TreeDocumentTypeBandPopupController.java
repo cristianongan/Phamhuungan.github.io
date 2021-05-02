@@ -44,19 +44,18 @@ public class TreeDocumentTypeBandPopupController extends BasicController<Tree> i
 
 	@Autowired
 	private DocumentTypeService documentTypeService;
-	
+
 	private static final String BANDBOX = "bandbox";
 	private static final String BTN_CLEAR = "btnclear";
 	private static final String EXCLUDE = "exclude";
 
-	private Bandbox bbDocumentType;
 	private A btnClear;
 
-	private Map<Long, List<DocumentType>> docTypeMap;
-
-	
+	private Bandbox bbDocumentType;
 
 	private DocumentType exclude;
+	
+	private Map<Long, List<DocumentType>> docTypeMap;
 
 	private Tree treeDocType;
 
@@ -115,9 +114,7 @@ public class TreeDocumentTypeBandPopupController extends BasicController<Tree> i
 	public void doAfterCompose(Tree comp) throws Exception {
 		super.doAfterCompose(comp);
 
-		ServletContext context = Sessions.getCurrent().getWebApp().getServletContext();
-
-		this.docTypeMap = this.documentTypeService.getDocTypeMap(context);
+		this.docTypeMap = this.documentTypeService.getDocTypeMap();
 
 		this.init();
 	}

@@ -11,8 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.servlet.ServletContext;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +18,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
@@ -59,24 +56,23 @@ public class DocumentTypeController extends BasicController<Window> {
 	private DocumentTypeService documentTypeService;
 
 	private Button btnDelete;
-
 	private Button btnDown;
 	private Button btnInsert;
 	private Button btnReset;
 	private Button btnSave;
 	private Button btnUp;
-	private Set<DocumentTypeTreeNode> changedTypeNode = new HashSet<DocumentTypeTreeNode>();
 
-	private ServletContext context;
+	private Hlayout winParent;
+
 	private Map<Long, List<DocumentType>> docTypeMap;
 
-	private boolean doReload = false;
+	private Set<DocumentTypeTreeNode> changedTypeNode = new HashSet<DocumentTypeTreeNode>();
 
 	private Tree tree;
 
 	private Window windowDocumentType;
 
-	private Hlayout winParent;
+	private boolean doReload = false;
 
 	private DocumentTypeTreeNode _buildCategoryTree() {
 		// tạo cây menu không có gốc
@@ -154,9 +150,7 @@ public class DocumentTypeController extends BasicController<Window> {
 
 		this.windowDocumentType = comp;
 
-		this.context = Sessions.getCurrent().getWebApp().getServletContext();
-
-		this.docTypeMap = this.documentTypeService.getDocTypeMap(this.context);
+		this.docTypeMap = this.documentTypeService.getDocTypeMap();
 	}
 
 	private List<Long> getDocumentTypeGroup(Long rootId, List<Long> docTypeGroupIds) {
@@ -214,7 +208,7 @@ public class DocumentTypeController extends BasicController<Window> {
 		} else {
 			Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_DELETE),
 					Labels.getLabel(LanguageKeys.MESSAGE_INFOR_DELETE), Messagebox.OK | Messagebox.CANCEL,
-					Messagebox.QUESTION, new EventListener() {
+					Messagebox.QUESTION, new EventListener<Event>() {
 						@Override
 						public void onEvent(Event e) throws Exception {
 							if (Messagebox.ON_OK.equals(e.getName())) {
@@ -226,8 +220,7 @@ public class DocumentTypeController extends BasicController<Window> {
 									getDocumentTypeGroup(docType.getDocumentTypeId(), docTypeGroupIds);
 
 									// xoa
-									DocumentTypeController.this.documentTypeService.delete(docType, docTypeGroupIds,
-											DocumentTypeController.this.context);
+									DocumentTypeController.this.documentTypeService.delete(docType, docTypeGroupIds);
 
 									ComponentUtil.createSuccessMessageBox(LanguageKeys.MESSAGE_DELETE_SUCCESS);
 									// refresh lai cay
@@ -291,7 +284,7 @@ public class DocumentTypeController extends BasicController<Window> {
 	public void onClick$btnSave() {
 		Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_SAVE_CHANGE),
 				Labels.getLabel(LanguageKeys.MESSAGE_INFOR_SAVE_CHANGE), Messagebox.OK | Messagebox.CANCEL,
-				Messagebox.QUESTION, new EventListener() {
+				Messagebox.QUESTION, new EventListener<Event>() {
 					@Override
 					public void onEvent(Event e) throws Exception {
 						if (Messagebox.ON_OK.equals(e.getName())) {

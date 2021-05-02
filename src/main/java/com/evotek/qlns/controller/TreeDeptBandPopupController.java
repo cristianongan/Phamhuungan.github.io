@@ -45,9 +45,9 @@ public class TreeDeptBandPopupController extends BasicController<Tree> implement
 	@Autowired
 	private DepartmentService departmentService;
 
-	private Bandbox bbDepartment;
-
 	private A btnClear;
+
+	private Bandbox bbDepartment;
 
 	private Department exclude;
 

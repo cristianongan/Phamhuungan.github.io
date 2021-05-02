@@ -64,12 +64,13 @@ public class RolePermissionController extends BasicController<Window> {
 
 	private Category categorySelected;
 
-	private Set<Group> groups;
+	private Listbox searchResult;
+
 	private Map<Long, List<Group>> mapGroups = new HashMap<Long, List<Group>>();
 
 	private Role role;
 
-	private Listbox searchResult;
+	private Set<Group> groups;
 
 	private Tree treeMenu;
 

@@ -2,8 +2,8 @@
 <?taglib uri="http://evotek.vn/security" prefix="sec"?>
 <?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
 
-<?link rel="shortcut icon" type="image/png" href="~./images/favicon/favicon.png"?>
-<?link rel="icon" type="image/png" href="~./images/favicon/favicon.png"?>
+<?link rel="shortcut icon" type="image/x-icon" href="~./images/favicon/favicon.ico"?>
+
 <zk xmlns="http://www.zkoss.org/2005/zul"
     xmlns:h="http://www.w3.org/1999/xhtml"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"

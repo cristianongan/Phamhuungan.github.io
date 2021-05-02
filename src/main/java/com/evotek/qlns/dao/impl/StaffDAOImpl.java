@@ -9,10 +9,10 @@ import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,7 +22,6 @@ import org.hibernate.type.IntegerType;
 import org.springframework.stereotype.Repository;
 
 import com.evotek.qlns.dao.StaffDAO;
-import com.evotek.qlns.model.ContractType;
 import com.evotek.qlns.model.Department;
 import com.evotek.qlns.model.Job;
 import com.evotek.qlns.model.Staff;
@@ -39,6 +38,7 @@ import com.evotek.qlns.util.key.Values;
  * @author LinhLH
  */
 @Repository
+@Transactional
 public class StaffDAOImpl extends AbstractDAO<Staff> implements StaffDAO {
 
 	private static final Logger _log = LogManager.getLogger(StaffDAOImpl.class);
@@ -152,6 +152,10 @@ public class StaffDAOImpl extends AbstractDAO<Staff> implements StaffDAO {
 
 			Root<Staff> root = criteria.from(Staff.class);
 
+			root.fetch("department", JoinType.LEFT);
+			root.fetch("job", JoinType.LEFT);
+			root.fetch("contractType", JoinType.LEFT);
+			
 			List<Predicate> predicates = getStaffPredicates(builder, root, keyword);
 
 			criteria.select(root);
@@ -200,6 +204,10 @@ public class StaffDAOImpl extends AbstractDAO<Staff> implements StaffDAO {
 			CriteriaQuery<Staff> criteria = builder.createQuery(Staff.class);
 
 			Root<Staff> root = criteria.from(Staff.class);
+			
+			root.fetch("department", JoinType.LEFT);
+			root.fetch("job", JoinType.LEFT);
+			root.fetch("contractType", JoinType.LEFT);
 
 			List<Predicate> predicates = getStaffPredicates(builder, root, staffName, yearOfBirth, dept, email, job,
 					phone);
@@ -252,6 +260,10 @@ public class StaffDAOImpl extends AbstractDAO<Staff> implements StaffDAO {
 
 			Root<Staff> root = criteria.from(Staff.class);
 
+			root.fetch("department", JoinType.LEFT);
+			root.fetch("job", JoinType.LEFT);
+			root.fetch("contractType", JoinType.LEFT);
+			
 			List<Predicate> predicates = getStaffPredicatesByIdList(builder, root, idList);
 
 			criteria.select(root);
@@ -392,22 +404,12 @@ public class StaffDAOImpl extends AbstractDAO<Staff> implements StaffDAO {
 		List<Predicate> predicates = new ArrayList<>();
 
 		try {
-			Join<Staff, Department> departmentJoin = root.join("department", JoinType.LEFT);
-
-			Join<Staff, Job> jobJoin = root.join("job", JoinType.LEFT);
-
-			Join<Staff, ContractType> contractTypeJoin = root.join("contractType", JoinType.LEFT);
-
-//			root.fetch("department", JoinType.LEFT);
-//			root.fetch("job", JoinType.LEFT);
-//			root.fetch("contractType", JoinType.LEFT);
-
 			if (Validator.isNotNull(keyword)) {
 				predicates.add(builder.like(builder.lower(root.get("staffName")),
 						QueryUtil.getFullStringParam(keyword, true), CharPool.BACK_SLASH));
-				predicates.add(builder.like(builder.lower(departmentJoin.get("deptName")),
+				predicates.add(builder.like(builder.lower(root.get("department").get("deptName")),
 						QueryUtil.getFullStringParam(keyword, true), CharPool.BACK_SLASH));
-				predicates.add(builder.like(builder.lower(jobJoin.get("jobTitle")),
+				predicates.add(builder.like(builder.lower(root.get("job").get("jobTitle")),
 						QueryUtil.getFullStringParam(keyword, true), CharPool.BACK_SLASH));
 				predicates.add(builder.like(builder.lower(root.get("permanentResidence")),
 						QueryUtil.getFullStringParam(keyword, true), CharPool.BACK_SLASH));
@@ -415,7 +417,7 @@ public class StaffDAOImpl extends AbstractDAO<Staff> implements StaffDAO {
 						QueryUtil.getFullStringParam(keyword, true), CharPool.BACK_SLASH));
 				predicates.add(builder.like(builder.lower(root.get("note")),
 						QueryUtil.getFullStringParam(keyword, true), CharPool.BACK_SLASH));
-				predicates.add(builder.like(builder.lower(contractTypeJoin.get("contractTypeName")),
+				predicates.add(builder.like(builder.lower(root.get("contractType").get("contractTypeName")),
 						QueryUtil.getFullStringParam(keyword, true), CharPool.BACK_SLASH));
 				predicates.add(builder.like(builder.lower(root.get("contractNumber")),
 						QueryUtil.getFullStringParam(keyword, true), CharPool.BACK_SLASH));
@@ -453,13 +455,6 @@ public class StaffDAOImpl extends AbstractDAO<Staff> implements StaffDAO {
 		List<Predicate> predicates = new ArrayList<>();
 
 		try {
-			Join<Staff, Department> departmentJoin = root.join("department", JoinType.LEFT);
-
-			Join<Staff, Job> jobJoin = root.join("job", JoinType.LEFT);
-
-			// Join<Staff, ContractType> contractTypeJoin = root.join("contractType",
-			// JoinType.LEFT);
-
 			if (Validator.isNotNull(staffName)) {
 				predicates.add(builder.like(builder.lower(root.get("staffName")),
 						QueryUtil.getFullStringParam(staffName, true), CharPool.BACK_SLASH));
@@ -471,7 +466,7 @@ public class StaffDAOImpl extends AbstractDAO<Staff> implements StaffDAO {
 			}
 
 			if (Validator.isNotNull(dept) && Validator.isNotNull(dept.getDeptId())) {
-				predicates.add(builder.equal(departmentJoin.get("deptId"), dept.getDeptId()));
+				predicates.add(builder.equal(root.get("department").get("deptId"), dept.getDeptId()));
 			}
 
 			if (Validator.isNotNull(email)) {
@@ -480,7 +475,7 @@ public class StaffDAOImpl extends AbstractDAO<Staff> implements StaffDAO {
 			}
 
 			if (Validator.isNotNull(job) && Validator.isNotNull(job.getJobId())) {
-				predicates.add(builder.equal(jobJoin.get("jobId"), job.getJobId()));
+				predicates.add(builder.equal(root.get("job").get("jobId"), job.getJobId()));
 			}
 
 			if (Validator.isNotNull(phone)) {
@@ -502,10 +497,8 @@ public class StaffDAOImpl extends AbstractDAO<Staff> implements StaffDAO {
 		List<Predicate> predicates = new ArrayList<>();
 
 		try {
-			Join<Staff, Department> departmentJoin = root.join("department", JoinType.LEFT);
-
 			if (Validator.isNotNull(idList)) {
-				predicates.add(departmentJoin.get("deptId").in(idList));
+				predicates.add(root.get("department") .get("deptId").in(idList));
 			}
 		} catch (Exception ex) {
 			_log.error(ex.getMessage(), ex);

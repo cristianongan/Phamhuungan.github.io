@@ -61,25 +61,28 @@ public class MainController extends BasicController<Div> implements Serializable
 	@Autowired
 	private UserWorkspace workspace;
 
-//notification
+	// private Borderlayout mainLayout;
 	private A aNotiTotal;
 	private A aSeeAll;
-	// private Borderlayout mainLayout;
+
+	private Div mainDiv;
+
 	private Include bodyLayout;
-	private List<Category> categorys = new ArrayList<Category>();
 
 	private Label lbBirthDay;
 	private Label lbContractEx;
 	private Label lbCurrentYear;
 	private Label lbNotiBag;
-	private Div mainDiv;
-	private Navbar mainMenu;
+
+	private List<Category> categorys = new ArrayList<Category>();
 
 	private Map<Long, TreeSet<Category>> menuItems = new HashMap<Long, TreeSet<Category>>();
 
-	private TreeSet<Category> menus = new TreeSet<Category>();
-
 	private Menu mniUsername;
+
+	private Navbar mainMenu;
+
+	private TreeSet<Category> menus = new TreeSet<Category>();
 
 	private void _buildMenu() {
 		// main

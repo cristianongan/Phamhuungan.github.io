@@ -41,6 +41,8 @@ public class AddEditRoleController extends BasicController<Window> {
 
 	private Checkbox chbShareable;
 
+	private Div winTemp;
+
 	private Role role;
 
 	private Textbox tbDescription;
@@ -48,8 +50,6 @@ public class AddEditRoleController extends BasicController<Window> {
 	private Textbox tbRoleName;
 
 	private Window winAddRole;
-
-	private Div winTemp;
 
 	private void _setEditForm() {
 		this.tbRoleName.setValue(this.role.getRoleName());

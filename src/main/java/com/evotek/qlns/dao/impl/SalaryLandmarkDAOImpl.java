@@ -11,6 +11,7 @@ import java.util.List;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,6 +27,7 @@ import com.evotek.qlns.util.Validator;
  * @author linhlh2
  */
 @Repository
+@Transactional
 public class SalaryLandmarkDAOImpl extends AbstractDAO<SalaryLandmark> implements SalaryLandmarkDAO {
 
 	private static final Logger _log = LogManager.getLogger(SalaryLandmarkDAOImpl.class);

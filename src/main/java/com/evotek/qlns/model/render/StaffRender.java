@@ -7,6 +7,8 @@ package com.evotek.qlns.model.render;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.transaction.Transactional;
+
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Hlayout;
@@ -27,8 +29,10 @@ import com.evotek.qlns.util.key.Values;
 
 /**
  *
- * @author PC
+ * @author LinhLH
  */
+
+@Transactional
 public class StaffRender implements ListitemRenderer<Staff> {
 
 	private static final String DETAIL_PAGE = "~./pages/manager_human_resource/detail.zul";

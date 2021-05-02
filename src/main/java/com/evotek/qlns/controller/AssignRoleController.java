@@ -45,19 +45,18 @@ public class AssignRoleController extends BasicController<Window> implements Ser
 	private static final Logger _log = LogManager.getLogger(AssignRoleController.class);
 
 	@Autowired
-	private  UserService userService;
-
-	private Set<Role> excludeRoles;
+	private UserService userService;
 
 	private Listbox gridRole;
 
-	private boolean isAdmin;
+	private Set<Role> excludeRoles;
 
 	private User user;
 
 	private Window winAssignRole;
-
 	private Window winParent;
+
+	private boolean isAdmin;
 
 	@Override
 	public void doAfterCompose(Window comp) throws Exception {

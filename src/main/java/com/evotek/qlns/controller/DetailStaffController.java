@@ -52,13 +52,14 @@ public class DetailStaffController extends BasicController<Window> implements Se
 
 	private static final Logger _log = LogManager.getLogger(DetailStaffController.class);
 
-	@Autowired
-	private StaffService staffService;
-
 	private static final String ADD_EDIT_SALARY_LANDMARK_PAGE = "~./pages/manager_human_resource/editSalaryLandmark.zul";
 	private static final String ADD_EDIT_WORK_PROCESS_PAGE = "~./pages/manager_human_resource/editWorkProcess.zul";
 
+	@Autowired
+	private StaffService staffService;
+
 	private Integer index;
+
 	private Label lbCollege;
 	private Label lbContractFromDate;
 	private Label lbContractNumber;
@@ -83,15 +84,14 @@ public class DetailStaffController extends BasicController<Window> implements Se
 	private Label lbPermanentResidence;
 	private Label lbSalaryBasic;
 	private Label lbStaffName;
-
 	private Label lbStatus;
 	private Label lbTaxCode;
-
 	private Label lbWorkDate;
-	private Listbox listSalaryLm;
-	private Listbox listWorkProcess;
 
 	private ListModel model;
+
+	private Listbox listSalaryLm;
+	private Listbox listWorkProcess;
 
 	private Staff staff;
 
@@ -185,7 +185,7 @@ public class DetailStaffController extends BasicController<Window> implements Se
 
 		Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_DELETE),
 				Labels.getLabel(LanguageKeys.MESSAGE_INFOR_DELETE), Messagebox.OK | Messagebox.CANCEL,
-				Messagebox.QUESTION, new EventListener() {
+				Messagebox.QUESTION, new EventListener<Event>() {
 
 					@Override
 					public void onEvent(Event e) throws Exception {
@@ -211,7 +211,7 @@ public class DetailStaffController extends BasicController<Window> implements Se
 
 		Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_DELETE),
 				Labels.getLabel(LanguageKeys.MESSAGE_INFOR_DELETE), Messagebox.OK | Messagebox.CANCEL,
-				Messagebox.QUESTION, new EventListener() {
+				Messagebox.QUESTION, new EventListener<Event>() {
 
 					@Override
 					public void onEvent(Event e) throws Exception {

@@ -65,41 +65,39 @@ public class UserController extends BasicController<Div> implements Serializable
 	@Autowired
 	private UserService userService;
 
-	private Popup advanceSearchPopup;
-	private Button btnActivate;
 	private A btnClearGender;
 	private A btnClearStatus;
+
+	private Button btnActivate;
 	private Button btnDel;
 	private Button btnEnableAdvSearch;
 	private Button btnLock;
-
 	private Button btnUnlock;
-	private Combobox cbGender;
 
+	private Combobox cbGender;
 	private Combobox cbStatus;
+
 	private Datebox dbBirthdayFrom;
 	private Datebox dbBirthdayTo;
-	private boolean isAdmin = false;
 
-	private boolean isAdvance = false;
-
-	private Map<String, Object> paramMap = new HashMap<String, Object>();
+	private Div winUser;
 
 	private Listbox searchResultGrid;
 
+	private Map<String, Object> paramMap = new HashMap<String, Object>();
+
+	private Popup advanceSearchPopup;
+
 	private Textbox tbAccount;
 	private Textbox tbBirthPlace;
-
 	private Textbox tbEmail;
-
 	private Textbox tbKeyword;
 	private Textbox tbMobile;
-
 	private Textbox tbPhone;
-
 	private Textbox tbUserName;
 
-	private Div winUser;
+	private boolean isAdmin = false;
+	private boolean isAdvance = false;
 
 	private Map<String, Object> _createParameterMap(User user) {
 		Map<String, Object> parameters = new HashMap<String, Object>();
@@ -285,7 +283,7 @@ public class UserController extends BasicController<Div> implements Serializable
 		} else {
 			Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_ACTIVATE),
 					Labels.getLabel(LanguageKeys.MESSAGE_INFOR_ACTIVATE), Messagebox.OK | Messagebox.CANCEL,
-					Messagebox.QUESTION, new EventListener() {
+					Messagebox.QUESTION, new EventListener<Event>() {
 						@Override
 						public void onEvent(Event e) throws Exception {
 							if (Messagebox.ON_OK.equals(e.getName())) {
@@ -348,7 +346,7 @@ public class UserController extends BasicController<Div> implements Serializable
 		} else {
 			Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_DELETE),
 					Labels.getLabel(LanguageKeys.MESSAGE_INFOR_DELETE), Messagebox.OK | Messagebox.CANCEL,
-					Messagebox.QUESTION, new EventListener() {
+					Messagebox.QUESTION, new EventListener<Event>() {
 						@Override
 						public void onEvent(Event e) throws Exception {
 							if (Messagebox.ON_OK.equals(e.getName())) {
@@ -422,7 +420,7 @@ public class UserController extends BasicController<Div> implements Serializable
 		} else {
 			Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_LOCK),
 					Labels.getLabel(LanguageKeys.MESSAGE_INFOR_LOCK), Messagebox.OK | Messagebox.CANCEL,
-					Messagebox.QUESTION, new EventListener() {
+					Messagebox.QUESTION, new EventListener<Event>() {
 						@Override
 						public void onEvent(Event e) throws Exception {
 							if (Messagebox.ON_OK.equals(e.getName())) {
@@ -452,7 +450,7 @@ public class UserController extends BasicController<Div> implements Serializable
 		} else {
 			Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_RESET),
 					Labels.getLabel(LanguageKeys.MESSAGE_INFOR_RESET), Messagebox.OK | Messagebox.CANCEL,
-					Messagebox.QUESTION, new EventListener() {
+					Messagebox.QUESTION, new EventListener<Event>() {
 						@Override
 						public void onEvent(Event e) throws Exception {
 							if (Messagebox.ON_OK.equals(e.getName())) {
@@ -480,7 +478,7 @@ public class UserController extends BasicController<Div> implements Serializable
 		} else {
 			Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_UNLOCK),
 					Labels.getLabel(LanguageKeys.MESSAGE_INFOR_UNLOCK), Messagebox.OK | Messagebox.CANCEL,
-					Messagebox.QUESTION, new EventListener() {
+					Messagebox.QUESTION, new EventListener<Event>() {
 						@Override
 						public void onEvent(Event e) throws Exception {
 							if (Messagebox.ON_OK.equals(e.getName())) {
@@ -533,7 +531,7 @@ public class UserController extends BasicController<Div> implements Serializable
 
 		Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_DELETE),
 				Labels.getLabel(LanguageKeys.MESSAGE_INFOR_DELETE), Messagebox.OK | Messagebox.CANCEL,
-				Messagebox.QUESTION, new EventListener() {
+				Messagebox.QUESTION, new EventListener<Event>() {
 					@Override
 					public void onEvent(Event e) throws Exception {
 						if (Messagebox.ON_OK.equals(e.getName())) {
@@ -580,7 +578,7 @@ public class UserController extends BasicController<Div> implements Serializable
 
 		Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_LOCK),
 				Labels.getLabel(LanguageKeys.MESSAGE_INFOR_LOCK), Messagebox.OK | Messagebox.CANCEL,
-				Messagebox.QUESTION, new EventListener() {
+				Messagebox.QUESTION, new EventListener<Event>() {
 					@Override
 					public void onEvent(Event e) throws Exception {
 						if (Messagebox.ON_OK.equals(e.getName())) {
@@ -647,7 +645,7 @@ public class UserController extends BasicController<Div> implements Serializable
 
 		Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_UNLOCK),
 				Labels.getLabel(LanguageKeys.MESSAGE_INFOR_UNLOCK), Messagebox.OK | Messagebox.CANCEL,
-				Messagebox.QUESTION, new EventListener() {
+				Messagebox.QUESTION, new EventListener<Event>() {
 					@Override
 					public void onEvent(Event e) throws Exception {
 						if (Messagebox.ON_OK.equals(e.getName())) {

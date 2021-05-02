@@ -15,11 +15,14 @@ import com.evotek.qlns.service.DocumentService;
 
 /**
  *
- * @author PC
+ * @author LinhLH
  */
 public class ManagerDocumentListModel extends AbstractModelList<Document> {
 
+	private static final long serialVersionUID = 3488184656876613925L;
+	
 	private static final Logger _log = LogManager.getLogger(ManagerDocumentListModel.class);
+	
 	private String _department;
 	private String _documentContent;
 	private String _documentNumber;

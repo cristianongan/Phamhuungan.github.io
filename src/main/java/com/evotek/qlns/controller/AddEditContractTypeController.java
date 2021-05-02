@@ -155,7 +155,7 @@ public class AddEditContractTypeController extends BasicController<Window> imple
 
 		Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_DELETE),
 				Labels.getLabel(LanguageKeys.MESSAGE_INFOR_DELETE), Messagebox.OK | Messagebox.CANCEL,
-				Messagebox.QUESTION, Messagebox.OK, new EventListener() {
+				Messagebox.QUESTION, Messagebox.OK, new EventListener<Event>() {
 
 					@Override
 					public void onEvent(Event e) throws Exception {

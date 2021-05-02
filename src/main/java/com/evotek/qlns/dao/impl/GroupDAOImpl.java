@@ -10,6 +10,7 @@ import java.util.List;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,6 +25,7 @@ import com.evotek.qlns.model.Group;
  * @author linhlh2
  */
 @Repository
+@Transactional
 public class GroupDAOImpl extends AbstractDAO<Group> implements GroupDAO {
 
 	private static final Logger _log = LogManager.getLogger(GroupDAOImpl.class);

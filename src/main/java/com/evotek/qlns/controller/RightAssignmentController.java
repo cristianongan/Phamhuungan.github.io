@@ -56,13 +56,12 @@ public class RightAssignmentController extends BasicController<Window> implement
 	private CategoryService categoryService;
 
 	private Category category;
-	private Long categoryId;
-
-	// get set service
 
 	private Grid groupsSearchResult;
 
 	private Grid rightSearchResult;
+
+	private Long categoryId;
 
 	private Window winRight;
 //    private Window winTemp;
@@ -144,7 +143,7 @@ public class RightAssignmentController extends BasicController<Window> implement
 
 		Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_DELETE),
 				Labels.getLabel(LanguageKeys.MESSAGE_INFOR_DELETE), Messagebox.OK | Messagebox.CANCEL,
-				Messagebox.QUESTION, new EventListener() {
+				Messagebox.QUESTION, new EventListener<Event>() {
 
 					@Override
 					public void onEvent(Event e) throws Exception {
@@ -170,7 +169,7 @@ public class RightAssignmentController extends BasicController<Window> implement
 
 		Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_DELETE),
 				Labels.getLabel(LanguageKeys.MESSAGE_INFOR_DELETE), Messagebox.OK | Messagebox.CANCEL,
-				Messagebox.QUESTION, new EventListener() {
+				Messagebox.QUESTION, new EventListener<Event>() {
 
 					@Override
 					public void onEvent(Event e) throws Exception {
@@ -257,7 +256,7 @@ public class RightAssignmentController extends BasicController<Window> implement
 
 		Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_UNLOCK),
 				Labels.getLabel(LanguageKeys.MESSAGE_INFOR_UNLOCK), Messagebox.OK | Messagebox.CANCEL,
-				Messagebox.QUESTION, new EventListener() {
+				Messagebox.QUESTION, new EventListener<Event>() {
 
 					@Override
 					public void onEvent(Event e) throws Exception {
@@ -283,7 +282,7 @@ public class RightAssignmentController extends BasicController<Window> implement
 
 		Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_UNLOCK),
 				Labels.getLabel(LanguageKeys.MESSAGE_INFOR_UNLOCK), Messagebox.OK | Messagebox.CANCEL,
-				Messagebox.QUESTION, new EventListener() {
+				Messagebox.QUESTION, new EventListener<Event>() {
 
 					@Override
 					public void onEvent(Event e) throws Exception {

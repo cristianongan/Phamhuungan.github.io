@@ -52,13 +52,13 @@ public class MenuController extends BasicController<Div> implements Serializable
 	@Autowired
 	private CategoryService categoryService;
 
+	private Div winMenu;
+
 	private Include parent;
 
 	private TreeBasicModel treeCategoryModelUtil;
 
 	private Tree treeMenu;
-
-	private Div winMenu;
 
 	/**
 	 * Hàm tạo cây menu
@@ -200,7 +200,7 @@ public class MenuController extends BasicController<Div> implements Serializable
 
 		Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_DELETE),
 				Labels.getLabel(LanguageKeys.MESSAGE_INFOR_DELETE), Messagebox.OK | Messagebox.CANCEL,
-				Messagebox.QUESTION, new EventListener() {
+				Messagebox.QUESTION, new EventListener<Event>() {
 
 					@Override
 					public void onEvent(Event e) throws Exception {
@@ -244,7 +244,7 @@ public class MenuController extends BasicController<Div> implements Serializable
 
 		Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_LOCK),
 				Labels.getLabel(LanguageKeys.MESSAGE_INFOR_LOCK), Messagebox.OK | Messagebox.CANCEL,
-				Messagebox.QUESTION, new EventListener() {
+				Messagebox.QUESTION, new EventListener<Event>() {
 
 					@Override
 					public void onEvent(Event e) throws Exception {
@@ -277,7 +277,7 @@ public class MenuController extends BasicController<Div> implements Serializable
 
 		Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_UNLOCK),
 				Labels.getLabel(LanguageKeys.MESSAGE_INFOR_UNLOCK), Messagebox.OK | Messagebox.CANCEL,
-				Messagebox.QUESTION, new EventListener() {
+				Messagebox.QUESTION, new EventListener<Event>() {
 
 					@Override
 					public void onEvent(Event e) throws Exception {

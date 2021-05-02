@@ -9,6 +9,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,6 +27,7 @@ import com.evotek.qlns.util.key.Values;
  * @author LinhLH2
  */
 @Repository
+@Transactional
 public class CategoryDAOImpl extends AbstractDAO<Category> implements CategoryDAO {
 
 	private static final Logger _log = LogManager.getLogger(CategoryDAOImpl.class);

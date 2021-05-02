@@ -47,24 +47,21 @@ public class AddEditDeptController extends BasicController<Window> implements Se
 
 	@Autowired
 	private DepartmentService departmentService;
-	// Bandbox documentType
-	private Bandbox bbDept;
-
+	
 	private A btnClearDoc;
-	// Bandbox documentType
-
+	
+	private Bandbox bbDept;
+	
 	private Department dept;
-
-	private Include icDepartment;
-
 	private Department oldParentDept;
-
 	private Department parentDept;
+	
+	private Include icDepartment;
+	
 	private Textbox tbDeptName;
 	private Textbox tbDescription;
-
+	
 	private Window winEditDept;
-
 	private Window winParent;
 
 	private void _setEditForm() throws Exception {

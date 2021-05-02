@@ -38,7 +38,7 @@ public class MainServiceImpl implements MainService {
 	private transient NotificationDAO notificationDAO;
 
 	@Override
-	@Cacheable(value="category", keyGenerator="customKeyGenerator")
+	@Cacheable(value="allCategory", keyGenerator="customKeyGenerator", sync=true)
 	public List<Category> getAllCategory() throws Exception {
 		return this.categoryDAO.getAllCategory();
 	}

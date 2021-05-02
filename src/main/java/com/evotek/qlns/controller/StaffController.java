@@ -79,95 +79,83 @@ public class StaffController extends BasicController<Hlayout> implements Seriali
 	@Autowired
 	private StaffService staffService;
 
-	private Popup advanceSearchPopup;
+	private A btnClearDept;
+	private A btnClearJob;
+	private A toggler;
 
 	private Auxheader ahContact;
-
 	private Auxheader ahContract;
-
 	private Auxheader ahGeneral;
-
 	private Auxheader ahIdentification;
 	private Auxheader ahInsurance;
 	private Auxheader ahQualifications;
-	// Bandbox Department
+	private Auxheader[] firstAhGroupPage;
+	private Auxheader[] secondAhGroupPage;
+	private Auxheader[] thirdAhGroupPage;
+
 	private Bandbox bbDepartment;
-
-	private Include bodyLayout;
-
-	private A btnClearDept;
-	private A btnClearJob;
 
 	private Button btnEnableAdvSearch;
 	private Button btnNextPage;
-
 	private Button btnPreviousPage;
 
 	private Combobox cbJobTitle;
 
-	// group array
-	private Auxheader[] firstAhGroupPage;
-	private Listheader[] firstLhGroup;
-	private Include icDepartment;
-	private boolean isAdvance;
-	private Longbox lgbYearOfBirth;
-	private Listheader lhCollege;
+	private Div sidebar;
 
+	private Hlayout winStaff;
+
+	private Include bodyLayout;
+	private Include icDepartment;
+
+	private Listbox listboxResult;
+
+	private Listheader lhCollege;
 	private Listheader lhContractFromDate;
 	private Listheader lhContractNumber;
 	private Listheader lhContractToDate;
-	// hop dong
 	private Listheader lhContractType;
 	private Listheader lhCurrentResidence;
 	private Listheader lhDateOfBirth;
-	// thong tin chung
 	private Listheader lhDepartmentName;
 	private Listheader lhEmail;
 	private Listheader lhGrantDate;
 	private Listheader lhGrantPlace;
-	// CMND
 	private Listheader lhIdentityCard;
 	private Listheader lhInsuranceBookNumber;
 	private Listheader lhInsurancePaidDate;
 	private Listheader lhJobTitleName;
-	// Trinh do chuyen mon
 	private Listheader lhLevels;
 	private Listheader lhMajors;
 	private Listheader lhNote;
 	private Listheader lhPaidPlace;
 	private Listheader lhPermanentResidence;
-	// bao hiem
 	private Listheader lhSalaryBasic;
 	private Listheader lhStatus;
 	private Listheader lhTaxCode;
-	// Lien he
 	private Listheader lhTelephone;
 	private Listheader lhWorkDate;
-	private Listbox listboxResult;
-	private Navbar navbar;
+	private Listheader[] firstLhGroup;
+	private Listheader[] secondLhGroup;
+	private Listheader[] thirdLhGroup;
+
+	private Longbox lgbYearOfBirth;
+
 	private Map<Long, List<Department>> paramDept = new HashMap<Long, List<Department>>();
 	private Map<String, Object> paramMap = new HashMap<String, Object>();
 
-	private Auxheader[] secondAhGroupPage;
-	private Listheader[] secondLhGroup;
+	private Navbar navbar;
+
 	private Navitem selectedNavitem;
 
-	private Div sidebar;
+	private Popup advanceSearchPopup;
 
 	private Textbox tbEmail;
 	private Textbox tbKeyword;
-
 	private Textbox tbPhone;
-
 	private Textbox tbStaffName;
 
-	private Auxheader[] thirdAhGroupPage;
-
-	private Listheader[] thirdLhGroup;
-
-	private A toggler;
-
-	private Hlayout winStaff;
+	private boolean isAdvance;
 
 	private void _showHideAh(Auxheader[] ahGroup, boolean visible) {
 		for (Auxheader ah : ahGroup) {
@@ -513,7 +501,7 @@ public class StaffController extends BasicController<Hlayout> implements Seriali
 
 		Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_DELETE),
 				Labels.getLabel(LanguageKeys.MESSAGE_INFOR_DELETE), Messagebox.OK | Messagebox.CANCEL,
-				Messagebox.QUESTION, new EventListener() {
+				Messagebox.QUESTION, new EventListener<Event>() {
 
 					@Override
 					public void onEvent(Event e) throws Exception {
@@ -639,7 +627,7 @@ public class StaffController extends BasicController<Hlayout> implements Seriali
 
 		Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_UNLOCK),
 				Labels.getLabel(LanguageKeys.MESSAGE_INFOR_UNLOCK), Messagebox.OK | Messagebox.CANCEL,
-				Messagebox.QUESTION, new EventListener() {
+				Messagebox.QUESTION, new EventListener<Event>() {
 
 					@Override
 					public void onEvent(Event e) throws Exception {

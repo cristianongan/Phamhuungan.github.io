@@ -9,11 +9,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletContext;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,21 +42,29 @@ public class DocumentTypeServiceImpl implements DocumentTypeService {
 	@Autowired
 	private DocumentTypeDAO documentTypeDAO;
 
+//	@Autowired
+//	private ServletContext _context; 
+	
+//	@PostConstruct
+//	public void initDocumentType() {
+//		System.out.println("DocumentType init............");
+//		
+//		this.getDocTypeMap(this._context);
+//	}
+	
 	@Override
 	public void delete(DocumentType documentType) {
 		this.documentTypeDAO.deleteDocType(documentType);
 	}
 
 	@Override
-	public void delete(DocumentType root, List<Long> docTypeGroupIds, ServletContext context) throws Exception {
+	@CacheEvict(value = "allDocumentType", keyGenerator="customKeyGenerator")
+	public void delete(DocumentType root, List<Long> docTypeGroupIds) throws Exception {
 		try {
 			DocumentType parent = root.getParentDocumentType();
 			// xoa
-			updateDeleteOrdinal(context, parent, root);
+			updateDeleteOrdinal(parent, root);
 
-			// cap nhat lai map document type
-//            updateDelDocTypeMap(context, root, parent);
-			updateDelDocTypeMap(context, root, parent, docTypeGroupIds);
 			// get danh sach tai lieu
 			List<Document> docs = this.documentDAO.getDocumentListByIdList(docTypeGroupIds, QueryUtil.GET_ALL,
 					QueryUtil.GET_ALL, null, null);
@@ -74,6 +82,7 @@ public class DocumentTypeServiceImpl implements DocumentTypeService {
 	}
 
 	@Override
+	@Cacheable(value="allDocumentType", keyGenerator="customKeyGenerator", sync=true)
 	public List<DocumentType> getAllDocumentType() {
 		return this.documentTypeDAO.getAllDocumentType();
 	}
@@ -105,30 +114,20 @@ public class DocumentTypeServiceImpl implements DocumentTypeService {
 	}
 
 	@Override
-	public Map<Long, List<DocumentType>> getDocTypeMap(ServletContext context) {
-		return getDocTypeMap(context, false);
-	}
+	public Map<Long, List<DocumentType>> getDocTypeMap() {
+		Map<Long, List<DocumentType>> docTypeMap = new HashMap<>();
 
-	public Map<Long, List<DocumentType>> getDocTypeMap(ServletContext context, boolean doUpdate) {
-		Map<Long, List<DocumentType>> docTypeMap = (Map<Long, List<DocumentType>>) context.getAttribute("docTypeMap");
+		// get root
+		List<DocumentType> roots = getDocTypeByParentId(null);
 
-		if (Validator.isNull(docTypeMap) || doUpdate) {
-			docTypeMap = new HashMap<Long, List<DocumentType>>();
+		roots.add(new DocumentType(-1L, "Chưa phân loại", Constants.Z_ICON_RANDOM));
 
-			// get root
-			List<DocumentType> roots = getDocTypeByParentId(null);
+		docTypeMap.put(null, roots);
 
-			roots.add(new DocumentType(-1L, "Chưa phân loại", Constants.Z_ICON_RANDOM));
-
-			docTypeMap.put(null, roots);
-
-			for (DocumentType root : roots) {
-				if (Validator.isNotNull(root)) {
-					getDocTypeMap(root, docTypeMap);
-				}
+		for (DocumentType root : roots) {
+			if (Validator.isNotNull(root)) {
+				getDocTypeMap(root, docTypeMap);
 			}
-
-			context.setAttribute("docTypeMap", docTypeMap);
 		}
 
 		return docTypeMap;
@@ -144,76 +143,12 @@ public class DocumentTypeServiceImpl implements DocumentTypeService {
 		this.documentTypeDAO.saveOrUpdate(documentType, flush);
 	}
 
-	public void updateDelDocTypeMap(ServletContext context, DocumentType docType, DocumentType parentDocType) {
-		Map<Long, List<DocumentType>> docTypeMap = (Map<Long, List<DocumentType>>) context.getAttribute("docTypeMap");
-
-		if (Validator.isNull(docTypeMap)) {
-			docTypeMap = getDocTypeMap(context);
-		}
-
-		// xoa o nut cha
-		List<DocumentType> docTypes;
-		Long patentId = null;
-
-		if (Validator.isNotNull(parentDocType)) {
-			patentId = parentDocType.getDocumentTypeId();
-		}
-
-		docTypes = docTypeMap.get(patentId);
-
-		if (Validator.isNotNull(docTypes)) {
-			docTypes.remove(docType);
-
-			if (docTypes.isEmpty()) {
-				docTypeMap.remove(patentId);
-			}
-		}
-		// xoa trong docTypeMap
-		docTypeMap.remove(docType.getDocumentTypeId());
-
-		context.setAttribute("docTypeMap", docTypeMap);
-	}
-
 	@Override
-	public void updateDelDocTypeMap(ServletContext context, DocumentType docType, DocumentType parentDocType,
-			List<Long> docTypeGroupIds) {
-		Map<Long, List<DocumentType>> docTypeMap = (Map<Long, List<DocumentType>>) context.getAttribute("docTypeMap");
-
-		if (Validator.isNull(docTypeMap)) {
-			docTypeMap = getDocTypeMap(context);
-		}
-
-		// xoa o nut cha
-		List<DocumentType> docTypes;
-		Long patentId = null;
-
-		if (Validator.isNotNull(parentDocType)) {
-			patentId = parentDocType.getDocumentTypeId();
-		}
-
-		docTypes = docTypeMap.get(patentId);
-
-		if (Validator.isNotNull(docTypes)) {
-			docTypes.remove(docType);
-
-			if (docTypes.isEmpty()) {
-				docTypeMap.remove(patentId);
-			}
-		}
-		// xoa trong docTypeMap
-		for (Long docTypeId : docTypeGroupIds) {
-			docTypeMap.remove(docTypeId);
-		}
-
-		context.setAttribute("docTypeMap", docTypeMap);
-	}
-
-	@Override
-	public void updateDeleteOrdinal(ServletContext context, DocumentType parent, DocumentType remove) {
+	public void updateDeleteOrdinal(DocumentType parent, DocumentType remove) {
 		if (Validator.isNull(parent)) {
 			this.documentTypeDAO.delete(remove);
 
-			List<DocumentType> siblings = getDocTypeMap(context).get(null);
+			List<DocumentType> siblings = getDocTypeMap().get(null);
 
 			siblings.remove(remove);
 
@@ -241,17 +176,13 @@ public class DocumentTypeServiceImpl implements DocumentTypeService {
 		}
 	}
 
-	public void updateDocTypeMap(ServletContext context) {
-		this.getDocTypeMap(context, true);
+	public void updateDocTypeMap() {
+		this.getDocTypeMap();
 	}
 
 	@Override
-	public void updateDocTypeMap(ServletContext context, DocumentType docType, DocumentType parentDocType) {
-		Map<Long, List<DocumentType>> docTypeMap = (Map<Long, List<DocumentType>>) context.getAttribute("docTypeMap");
-
-		if (Validator.isNull(docTypeMap)) {
-			docTypeMap = getDocTypeMap(context);
-		}
+	public void updateDocTypeMap(DocumentType docType, DocumentType parentDocType) {
+		Map<Long, List<DocumentType>> docTypeMap = getDocTypeMap();;
 
 		Long patentId = null;
 
@@ -262,7 +193,7 @@ public class DocumentTypeServiceImpl implements DocumentTypeService {
 		List<DocumentType> childs = docTypeMap.get(patentId);
 
 		if (Validator.isNull(childs)) {
-			childs = new ArrayList<DocumentType>();
+			childs = new ArrayList<>();
 
 			docTypeMap.put(patentId, childs);
 		}
@@ -272,7 +203,6 @@ public class DocumentTypeServiceImpl implements DocumentTypeService {
 		}
 
 		if (Validator.isNotNull(parentDocType)) {
-//            childs.add(docType);
 
 			parentDocType.setChildDocumentTypes(childs);
 
@@ -280,12 +210,10 @@ public class DocumentTypeServiceImpl implements DocumentTypeService {
 		} else {
 			this.saveOrUpdate(docType, true);
 		}
-
-		context.setAttribute("docTypeMap", docTypeMap);
 	}
 
 	@Override
-	public void updateDocTypeMap(ServletContext context, DocumentType docType, DocumentType parentDocType,
+	public void updateDocTypeMap(DocumentType docType, DocumentType parentDocType,
 			DocumentType oldParentDocType) {
 
 		if ((parentDocType == null && oldParentDocType == null)
@@ -295,11 +223,7 @@ public class DocumentTypeServiceImpl implements DocumentTypeService {
 			return;
 		}
 
-		Map<Long, List<DocumentType>> docTypeMap = (Map<Long, List<DocumentType>>) context.getAttribute("docTypeMap");
-
-		if (Validator.isNull(docTypeMap)) {
-			docTypeMap = getDocTypeMap(context);
-		}
+		Map<Long, List<DocumentType>> docTypeMap = getDocTypeMap();
 
 		List<DocumentType> newDocTypes;
 		List<DocumentType> oldDocTypes;
@@ -360,8 +284,6 @@ public class DocumentTypeServiceImpl implements DocumentTypeService {
 		if (Validator.isNotNull(oldParentDocType)) {
 			this.saveOrUpdate(oldParentDocType, true);
 		}
-
-		context.setAttribute("docTypeMap", docTypeMap);
 	}
 
 	private void updateOrdinal(List<DocumentType> docTypes) {

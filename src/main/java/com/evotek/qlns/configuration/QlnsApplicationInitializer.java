@@ -12,8 +12,9 @@ import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.request.RequestContextListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.filter.DelegatingFilterProxy;
-import org.springframework.web.servlet.DispatcherServlet;
 import org.zkoss.web.servlet.dsp.InterpreterServlet;
+
+import com.evotek.qlns.listener.SessionCreatedListener;
 
 /**
  * @author LinhLH
@@ -29,24 +30,18 @@ public class QlnsApplicationInitializer implements WebApplicationInitializer {
 
 		servletContext.addListener(new ContextLoaderListener(context));
 		servletContext.addListener(new RequestContextListener());
+		servletContext.addListener(new SessionCreatedListener());
 
 		servletContext.addFilter("securityFilter", new DelegatingFilterProxy("springSecurityFilterChain"))
 				.addMappingForUrlPatterns(null, false, "/*");
 		
-		ServletRegistration.Dynamic dispatcher = servletContext.addServlet("dispatcher",
-				new DispatcherServlet(context));
-
-		dispatcher.setLoadOnStartup(1);
 		
-		dispatcher.addMapping("/");
+		ServletRegistration.Dynamic dspDispatcher = servletContext.addServlet("dspLoader",
+				new InterpreterServlet());
 		
+		dspDispatcher.setLoadOnStartup(1);
 		
-//		ServletRegistration.Dynamic dspDispatcher = servletContext.addServlet("dspLoader",
-//				new InterpreterServlet());
-//		
-//		dspDispatcher.setLoadOnStartup(1);
-//		
-//		dspDispatcher.addMapping("*.dsp");
+		dspDispatcher.addMapping("*.dsp");
 	}
 
 }

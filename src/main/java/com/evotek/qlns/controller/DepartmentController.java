@@ -65,17 +65,18 @@ public class DepartmentController extends BasicController<Window> implements Ser
 	private Button btnReset;
 	private Button btnSave;
 	private Button btnUp;
+
+	private Hlayout winParent;
+
 	private Set<DepartmentTreeNode> changedNode = new HashSet<DepartmentTreeNode>();
 
 	private Map<Long, List<Department>> deptMaps = new HashMap<Long, List<Department>>();
-
-	private boolean doReload = false;
 
 	private Tree tree;
 
 	private Window winDept;
 
-	private Hlayout winParent;
+	private boolean doReload = false;
 
 	public DepartmentTreeNode _buildDeptTree() {
 		// tạo cây menu không có gốc
@@ -203,7 +204,7 @@ public class DepartmentController extends BasicController<Window> implements Ser
 		} else {
 			Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_DELETE),
 					Labels.getLabel(LanguageKeys.MESSAGE_INFOR_DELETE), Messagebox.OK | Messagebox.CANCEL,
-					Messagebox.QUESTION, new EventListener() {
+					Messagebox.QUESTION, new EventListener<Event>() {
 						@Override
 						public void onEvent(Event e) throws Exception {
 							if (Messagebox.ON_OK.equals(e.getName())) {
@@ -282,7 +283,7 @@ public class DepartmentController extends BasicController<Window> implements Ser
 	public void onClick$btnSave() {
 		Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_SAVE_CHANGE),
 				Labels.getLabel(LanguageKeys.MESSAGE_INFOR_SAVE_CHANGE), Messagebox.OK | Messagebox.CANCEL,
-				Messagebox.QUESTION, new EventListener() {
+				Messagebox.QUESTION, new EventListener<Event>() {
 					@Override
 					public void onEvent(Event e) throws Exception {
 						if (Messagebox.ON_OK.equals(e.getName())) {

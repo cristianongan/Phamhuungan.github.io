@@ -51,27 +51,22 @@ public class AddEditDocumentTypeController extends BasicController<Window> imple
 	@Autowired
 	private DocumentTypeService documentTypeService;
 
-	// Bandbox documentType
-	private Bandbox bbDocumentType;
-
 	private A btnClearDoc;
-	// Bandbox documentType
-	private ServletContext context;
-
+	
+	private Bandbox bbDocumentType;
+	
 	private DocumentType docType;
-
-	private Map<Long, List<DocumentType>> docTypeMap;
-
-	private Include icDocumentType;
 	private DocumentType oldParentDocType;
 	private DocumentType parentDocType;
-
+	
+	private Include icDocumentType;
+	
+	private Map<Long, List<DocumentType>> docTypeMap;
+	
 	private Textbox tbDescription;
-
 	private Textbox tbTypeName;
-
+	
 	private Window winDocType;
-
 	private Window winTemp;
 
 	private void _setEditForm() throws Exception {
@@ -129,9 +124,7 @@ public class AddEditDocumentTypeController extends BasicController<Window> imple
 
 		this.winDocType = comp;
 
-		this.context = Sessions.getCurrent().getWebApp().getServletContext();
-
-		this.docTypeMap = this.documentTypeService.getDocTypeMap(this.context);
+		this.docTypeMap = this.documentTypeService.getDocTypeMap();
 	}
 
 	private Long getOrdinal() {
@@ -218,10 +211,9 @@ public class AddEditDocumentTypeController extends BasicController<Window> imple
 				this.docType.setParentDocumentType(this.parentDocType);
 
 				if (!update) {
-					this.documentTypeService.updateDocTypeMap(this.context, this.docType, this.parentDocType);
+					this.documentTypeService.updateDocTypeMap(this.docType, this.parentDocType);
 				} else {
-					this.documentTypeService.updateDocTypeMap(this.context, this.docType, this.parentDocType,
-							this.oldParentDocType);
+					this.documentTypeService.updateDocTypeMap(this.docType, this.parentDocType, this.oldParentDocType);
 				}
 
 				ComponentUtil.createSuccessMessageBox(ComponentUtil.getSuccessKey(update));

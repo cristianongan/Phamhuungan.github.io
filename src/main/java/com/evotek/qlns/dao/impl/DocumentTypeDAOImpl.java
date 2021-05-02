@@ -10,9 +10,8 @@ import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,6 +27,7 @@ import com.evotek.qlns.util.Validator;
  * @author LinhLH
  */
 @Repository
+@Transactional
 public class DocumentTypeDAOImpl extends AbstractDAO<DocumentType> implements DocumentTypeDAO {
 
 	private static final Logger _log = LogManager.getLogger(DocumentTypeDAOImpl.class);
@@ -86,14 +86,12 @@ public class DocumentTypeDAOImpl extends AbstractDAO<DocumentType> implements Do
 
 			Root<DocumentType> root = criteria.from(DocumentType.class);
 
-			Join<DocumentType, DocumentType> parentJoin = root.join("parentDocumentType", JoinType.INNER);
-
 			criteria.select(root);
 
 			if (Validator.isNull(parentId)) {
-				criteria.where(builder.isNull(parentJoin.get("documentTypeId")));
+				criteria.where(builder.isNull(root.get("parentDocumentType")));
 			} else {
-				criteria.where(builder.equal(parentJoin.get("documentTypeId"), parentId));
+				criteria.where(builder.equal(root.get("parentDocumentType").get("documentTypeId"), parentId));
 			}
 
 			criteria.orderBy(builder.asc(root.get("ordinal")));

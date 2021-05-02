@@ -29,9 +29,14 @@ import java.util.Set;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.DisposableBean;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
@@ -53,9 +58,9 @@ import com.evotek.qlns.util.key.PermissionConstants;
  * @author Stephan Gerth
  * 
  */
-//@Component("userWorkspace")
-//@Scope(value = "session",  proxyMode = ScopedProxyMode.INTERFACES)
-//@Order(Ordered.HIGHEST_PRECEDENCE)
+@Component("userWorkspace")
+@Scope(value = "session",  proxyMode = ScopedProxyMode.TARGET_CLASS)
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class UserWorkspace implements Serializable, DisposableBean {
 
 	private static final Logger _log = LogManager.getLogger(UserWorkspace.class);

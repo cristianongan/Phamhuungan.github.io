@@ -6,11 +6,16 @@ package com.evotek.qlns.configuration;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.DispatcherType;
+
+import org.apache.catalina.filters.HttpHeaderSecurityFilter;
+import org.apache.commons.fileupload.servlet.FileCleanerCleanup;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
@@ -18,7 +23,6 @@ import org.springframework.web.context.request.RequestContextListener;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import com.evotek.qlns.application.UserWorkspace;
 import com.evotek.qlns.excel.ExcelPOIHelper;
 
 /**
@@ -30,12 +34,6 @@ import com.evotek.qlns.excel.ExcelPOIHelper;
 @EnableWebMvc
 @ComponentScan(basePackages = "com.evotek.qlns.*")
 public class ApplicationConfiguration {
-	@Bean(name = "userWorkspace")
-	@Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
-	public UserWorkspace userWorkspace() {
-		return new UserWorkspace();
-	}
-
 	@Bean(name = "multipartResolver")
 	public CommonsMultipartResolver multipartResolver() {
 		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
@@ -75,8 +73,16 @@ public class ApplicationConfiguration {
 		return new HttpSessionEventPublisher();
 	}
 
-//	@Bean
-//	public RequestContextListener requestContextListener() {
-//		return new RequestContextListener();
-//	}
+	@Bean
+    public ServletListenerRegistrationBean fileCleanerCleanup() {
+        return new ServletListenerRegistrationBean<>(new FileCleanerCleanup());
+    }
+	
+	@Bean
+	@ConditionalOnMissingBean(RequestContextListener.class)
+	public RequestContextListener requestContextListener() {
+		return new RequestContextListener();
+	}
+	
+	
 }

@@ -4,7 +4,6 @@
 package com.evotek.qlns.configuration;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.cache.Cache;
@@ -25,14 +24,15 @@ import com.evotek.qlns.cache.CustomKeyGenerator;
  */
 @EnableCaching
 @Configuration
-public class ApplicationCacheConfig extends CachingConfigurerSupport {
+public class ApplicationCacheConfiguration extends CachingConfigurerSupport {
 	@Bean
 	public CacheManager cacheManager() {
 		SimpleCacheManager cacheManager = new SimpleCacheManager();
 		
 		List<Cache> caches = new ArrayList<Cache>();
 		
-	    caches.add(new ConcurrentMapCache("category"));
+	    caches.add(new ConcurrentMapCache("allCategory"));
+	    caches.add(new ConcurrentMapCache("allDocumentType"));
 	    
 	    cacheManager.setCaches(caches);
 		

@@ -43,14 +43,14 @@ public class AddEditSalaryLmController extends BasicController<Window> {
 	@Autowired
 	private StaffService staffService;
 
-	private Staff staff;
-	
 	private Datebox dbFromDate;
 
 	private Datebox dbToDate;
 	private Longbox lgbSalary;
 
 	private SalaryLandmark salaryLm;
+
+	private Staff staff;
 
 	private Window winEditSalaryLm;
 

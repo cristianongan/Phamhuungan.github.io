@@ -32,12 +32,12 @@ public class PreviewFileController extends BasicController<Window> implements Se
 
 	private static final Logger _log = LogManager.getLogger(PreviewFileController.class);
 
-	private String ctype;
+	private Iframe viewer;
 
 	private File file;
 
+	private String ctype;
 	private String format;
-	private Iframe viewer;
 
 	private Window win;
 

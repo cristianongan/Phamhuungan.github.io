@@ -9,14 +9,19 @@ import java.util.Date;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.evotek.qlns.model.User;
 import com.evotek.qlns.service.UserService;
 
 /**
  *
- * @author hungnt81
+ * @author LinhLH
  */
-public class UserListModel<User> extends AbstractModelList {
+public class UserListModel extends AbstractModelList<User> {
+
+	private static final long serialVersionUID = -1215672893558748330L;
+	
 	private static final Logger _log = LogManager.getLogger(UserListModel.class);
+	
 	private String _account;
 	private Date _birthdayFrom;
 	private Date _birthdayTo;

@@ -11,7 +11,7 @@ import com.evotek.qlns.model.DocumentType;
 
 /**
  *
- * @author MRHOT
+ * @author LinhLH
  */
 public interface DocumentTypeDAO {
 	public void delete(Collection<DocumentType> entities) throws Exception;

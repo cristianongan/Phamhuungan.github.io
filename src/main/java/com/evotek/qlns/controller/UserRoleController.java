@@ -53,17 +53,17 @@ public class UserRoleController extends BasicController<Window> implements Seria
 	@Autowired
 	private UserService userService;
 
-	private Set<Role> _roles;
+	private Div winParent;
 
 	private Listbox gridRole;
 
-	private boolean isAdmin;
+	private Set<Role> _roles;
 
 	private User user;
 
-	private Div winParent;
-
 	private Window winUserRole;
+
+	private boolean isAdmin;
 
 	@Override
 	public void doAfterCompose(Window comp) throws Exception {

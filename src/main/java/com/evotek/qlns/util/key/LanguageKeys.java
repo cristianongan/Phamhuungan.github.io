@@ -67,7 +67,7 @@ public class LanguageKeys {
 	public static final String ERROR = "common.error";
 	public static final String EXTEND_CONTRACT = "extend.contract";
 	public static final String FEMALE = "female";
-	public static final String FILE_NOT_FOUND = "common.fileNotFound";
+	public static final String FILE_NOT_FOUND = "common.file.not.found";
 	public static final String FIRST_NAME = "first.name";
 	public static final String FOLDER_NAME = "folder.name";
 	public static final String FULL_NAME = "full.name";

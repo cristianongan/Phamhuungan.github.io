@@ -41,19 +41,19 @@ import com.evotek.qlns.util.key.Constants;
 public class AdminController extends BasicController<Hlayout> implements Serializable {
 	private static final long serialVersionUID = 8550094636173048300L;
 
-	private Include contentLayout;
-
-	private TreeSet<Category> items;
-
-	private Navbar navbar;
-
-	private Map<String, Object> parameters;
+	private A toggler;
 
 	private Div sidebar;
 
-	private A toggler;
-
 	private Hlayout winAdmin;
+
+	private Include contentLayout;
+
+	private Map<String, Object> parameters;
+
+	private Navbar navbar;
+
+	private TreeSet<Category> items;
 
 	private void createNav(Category item, Component parentNode) {
 		final Navitem navItem = new Navitem();

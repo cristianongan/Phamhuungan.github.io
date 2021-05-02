@@ -62,32 +62,30 @@ public class AddEditDocumentController extends BasicController<Window> implement
 	@Autowired
 	private DocumentService documentService;
 
-	// Bandbox documentType
-	private Bandbox bbDocumentType;
-
 	private A btnClearDoc;
-	// Bandbox documentType
+	
+	private Bandbox bbDocumentType;
+	
 	private Combobox cbDepartment;
-
+	
 	private Datebox dbDate;
-
+	
 	private Div divUpload;
-
+	
 	private Document document;
-
-	private Include icDocumentType;
-
-	private Integer index;
-
-	private ListModel model;
-
-	private Textbox txtContent;
-
-	private Textbox txtDocumentNumber;
-
-	private Window winAddEditDocument;
-
+	
 	private Hlayout winParent;
+	
+	private Include icDocumentType;
+	
+	private Integer index;
+	
+	private ListModel model;
+	
+	private Textbox txtContent;
+	private Textbox txtDocumentNumber;
+	
+	private Window winAddEditDocument;
 
 	public boolean _validate(String documentNumber, Long documentTypeId, String content) {
 		Long documentId = Validator.isNull(this.document) ? null : this.document.getDocumentId();
@@ -292,6 +290,7 @@ public class AddEditDocumentController extends BasicController<Window> implement
 
 	public void onCreate$cbDepartment() {
 		ListModel dictModel = new SimpleListModel(this.documentService.getDepartment());
+		
 		this.cbDepartment.setModel(dictModel);
 	}
 

@@ -3,36 +3,35 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.evotek.qlns.thread;
+package com.evotek.qlns.schedule.impl;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.zkoss.spring.SpringUtil;
+import org.springframework.stereotype.Component;
 
+import com.evotek.qlns.schedule.Worker;
 import com.evotek.qlns.service.StartUpService;
 
 /**
  *
  * @author linhlh2
  */
-public class NotificationUpdate {
+@EnableAsync
+@Component
+public class NotificationUpdater implements Worker{
 
-	private static final Logger _log = LogManager.getLogger(NotificationUpdate.class);
+	private static final Logger _log = LogManager.getLogger(NotificationUpdater.class);
 
+	@Autowired
 	private StartUpService startUpService;
 
-	public StartUpService getStartUpService() {
-		if (this.startUpService == null) {
-			this.startUpService = (StartUpService) SpringUtil.getBean("startUpService");
-			setStartUpService(this.startUpService);
-		}
-
-		return this.startUpService;
-	}
-
-	// @Scheduled(cron="*/5 * * * * ?")
-	@Scheduled(fixedDelay = 3600000) // run each 1 hour
+	@Override
+    @Scheduled(cron = "${cron.notification.updater}")
+	@Async("qlnsScheduleExecutor")
 	public void run() {
 
 		try {
@@ -49,9 +48,5 @@ public class NotificationUpdate {
 		} catch (Exception ex) {
 			_log.error(ex.getMessage());
 		}
-	}
-
-	public void setStartUpService(StartUpService startUpService) {
-		this.startUpService = startUpService;
 	}
 }

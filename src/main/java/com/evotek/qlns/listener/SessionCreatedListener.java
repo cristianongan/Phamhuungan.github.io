@@ -15,7 +15,7 @@ import org.springframework.security.web.session.HttpSessionCreatedEvent;
  * @author LinhLH
  *
  */
-@WebListener
+//@WebListener
 public class SessionCreatedListener implements ApplicationListener<HttpSessionCreatedEvent> {
 
 	// as this is a bean, the listener code executes within the Spring

@@ -34,17 +34,18 @@ public class LoginController extends GenericForwardComposer<Component> implement
 
 	private static final long serialVersionUID = 1368611560949L;
 
+	private static boolean requireCaptcha = StaticUtil.LOGIN_POLICY_REQUIRE_VERIFY_PRIVATE_LOGIN;
+
 	@Autowired
 	private UserService userService;
-
-	private Textbox captcha;
-	private org.zkoss.zhtml.Div container;
 
 	private Captcha cpa;
 
 	private Div divVerify;
 
-	private boolean requireCaptcha = StaticUtil.LOGIN_POLICY_REQUIRE_VERIFY_PRIVATE_LOGIN;
+	private org.zkoss.zhtml.Div container;
+
+	private Textbox captcha;
 
 	@Override
 	public void doAfterCompose(Component comp) throws Exception {
@@ -59,13 +60,13 @@ public class LoginController extends GenericForwardComposer<Component> implement
 
 			if (!this.requireCaptcha) {
 				Component parent = this.divVerify.getParent();
-				
+
 				if (parent != null) {
 					parent.removeChild(this.divVerify);
 				} else {
 					this.divVerify.setVisible(false);
 				}
-				
+
 			} else {
 				this.cpa.setLength(StaticUtil.LOGIN_POLICY_CAPTCHA_LENGTH);
 

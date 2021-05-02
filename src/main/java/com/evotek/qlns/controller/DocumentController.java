@@ -12,8 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletContext;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +20,6 @@ import org.springframework.stereotype.Controller;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
@@ -85,44 +82,45 @@ public class DocumentController extends BasicController<Hlayout> implements Seri
 	@Autowired
 	private DocumentTypeService documentTypeService;
 
-	private Popup advanceSearchPopup;
+	private A btnClearDoc;
+	private A toggler;
+	private A togglerBack;
+
 	private Bandbox bbDocumentType;
 
-	private A btnClearDoc;
-
 	private Button btnEnableAdvSearch;
-	private Combobox cbDepartment;
-	private Datebox dbFromDate;
 
+	private Combobox cbDepartment;
+
+	private Datebox dbFromDate;
 	private Datebox dbToDate;
 
-	private Map<Long, List<DocumentType>> docTypeMap;
+	private Div sidebar;
+
+	private Hlayout winDocument;
+
+	private Include icDocumentType;
 
 	private List<DocumentType> docTypes;
 
-	private Include icDocumentType;
-	//
-	private boolean isAdvance;
 	private Listbox listboxResult;
-	private Navbar navbar;
-	private Navbar navbarSearch;
+
+	private Map<Long, List<DocumentType>> docTypeMap;
 	private Map<String, Object> paramMap = new HashMap<String, Object>();
 
+	private Navbar navbar;
+	private Navbar navbarSearch;
+
 	private Navitem selectedNavitem;
-	private Div sidebar;
+
+	private Popup advanceSearchPopup;
 
 	private Textbox tbKeyword;
 	private Textbox tbSearchDocType;
-
-	private A toggler;
-
-	private A togglerBack;
-
 	private Textbox txtDocumentContent;
-
 	private Textbox txtDocumentNumber;
 
-	private Hlayout winDocument;
+	private boolean isAdvance;
 
 	public void advanceSearch() {
 		String documentContent = GetterUtil.getString(this.txtDocumentContent.getValue());
@@ -252,9 +250,7 @@ public class DocumentController extends BasicController<Hlayout> implements Seri
 
 		this.winDocument = comp;
 
-		ServletContext context = Sessions.getCurrent().getWebApp().getServletContext();
-
-		this.docTypeMap = this.documentTypeService.getDocTypeMap(context);
+		this.docTypeMap = this.documentTypeService.getDocTypeMap();
 	}
 
 	public List<Object[]> getHeaderInfors() {
@@ -413,7 +409,7 @@ public class DocumentController extends BasicController<Hlayout> implements Seri
 		} else {
 			Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_DELETE),
 					Labels.getLabel(LanguageKeys.MESSAGE_INFOR_DELETE), Messagebox.OK | Messagebox.CANCEL,
-					Messagebox.QUESTION, Messagebox.OK, new EventListener() {
+					Messagebox.QUESTION, Messagebox.OK, new EventListener<Event>() {
 
 						@Override
 						public void onEvent(Event e) throws Exception {
@@ -536,7 +532,7 @@ public class DocumentController extends BasicController<Hlayout> implements Seri
 
 		Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_DELETE),
 				Labels.getLabel(LanguageKeys.MESSAGE_INFOR_DELETE), Messagebox.OK | Messagebox.CANCEL,
-				Messagebox.QUESTION, Messagebox.OK, new EventListener() {
+				Messagebox.QUESTION, Messagebox.OK, new EventListener<Event>() {
 
 					@Override
 					public void onEvent(Event e) throws Exception {

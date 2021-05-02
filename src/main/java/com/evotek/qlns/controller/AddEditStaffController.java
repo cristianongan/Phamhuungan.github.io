@@ -66,58 +66,59 @@ public class AddEditStaffController extends BasicController<Window> implements S
 	private static final String ADD_EDIT_CONTRACT_TYPE_URL = "~./pages/manager_human_resource/editContractType.zul";
 	private static final String ADD_EDIT_JOB_URL = "~./pages/manager_human_resource/editJob.zul";
 
-	// Bandbox Department
-	private Bandbox bbDepartment;
 	private A btnClearDept;
+
+	private Bandbox bbDepartment;
+
 	private Combobox cbContractType;
 	private Combobox cbJobTitle;
 	private Combobox cbStatus;
-	private int contractTypeIndex = 0;
+
 	private Datebox dbContractFromDate;
 	private Datebox dbContractToDate;
 	private Datebox dbDateOfBirth;
 	private Datebox dbGrantDate;
 	private Datebox dbInsurancePaidDate;
 	private Datebox dbWorkDate;
+
+	private Hlayout winParent;
+
 	private Include icDepartment;
+
 	private Integer index;
-	private int jobIndex = 0;
 
 	private List<Job> jobs;
 
-	private Longbox lgbSalaryBasic;
 	private ListModel model;
-	private Staff staff;
 
 	private Long staffId;
+
+	private Longbox lgbSalaryBasic;
+
+	private Staff staff;
 
 	private Textbox tbCollege;
 	private Textbox tbContractNumber;
 	private Textbox tbCurrentResidence;
 	private Textbox tbEmail;
 	private Textbox tbGrantPlace;
-
 	private Textbox tbHomePhone;
-
 	private Textbox tbIdentityCard;
-
 	private Textbox tbInsuranceBookNumber;
 	private Textbox tbLevels;
 	private Textbox tbMajors;
 	private Textbox tbMobile;
-
 	private Textbox tbNote;
-
 	private Textbox tbPaidPlace;
 	private Textbox tbPermanentResidence;
-
 	private Textbox tbStaffName;
-
 	private Textbox tbTaxCode;
 
 	private Window winEditStaff;
 
-	private Hlayout winParent;
+	private int contractTypeIndex = 0;
+	private int jobIndex = 0;
+// Bandbox Department
 
 	private boolean _validate(String staffName, String permanentResidence, String currentResidence, String note,
 			String contractNumber, String taxCode, String insuranceBookNumber, String paidPlace, String levels,

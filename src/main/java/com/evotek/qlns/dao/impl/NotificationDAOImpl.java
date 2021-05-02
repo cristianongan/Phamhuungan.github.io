@@ -15,6 +15,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -31,6 +32,7 @@ import com.evotek.qlns.util.Validator;
  * @author linhlh2
  */
 @Repository
+@Transactional
 public class NotificationDAOImpl extends AbstractDAO<Notification> implements NotificationDAO {
 	private static final Logger _log = LogManager.getLogger(NotificationDAOImpl.class);
 

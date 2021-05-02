@@ -46,38 +46,37 @@ public class AddEditMenuController extends BasicController<Window> implements Se
 
 	private static final Logger _log = LogManager.getLogger(AddEditMenuController.class);
 
-	@Autowired
-	private  CategoryService categoryService;
-
 	private static final Long MENU_CATEGORY = 0L;
 
 	private static final Long MENU_ITEM = 1L;
 
-	private Bandbox bbMenuParent;
-	private Category category;
+	@Autowired
+	private CategoryService categoryService;
 
-	private Combobox cbMenuType;
 	// private Row rowNameFolder;
-//    private Row rowViewPage;
+	private Bandbox bbMenuParent;
+	
+	private Category category;
+	private Combobox cbMenuType;
+	
+	private Div winTemp;
+	
 	private Row rowIconUrl;
 	private Row rowMenu;
+	
 	private Textbox tbDescription;
 	private Textbox tbFolderName;
-
 	private Textbox tbIcon;
 	private Textbox tbLanguageKey;
-
 	private Textbox tbViewPage;
-
 	private Textbox tbWeight;
-
-	private TreeBasicModel treeCategoryModelUtil;
-
+	
 	private Tree treeMenu;
-
+	
+	private TreeBasicModel treeCategoryModelUtil;
+	
 	private Window winAddMenu;
-
-	private Div winTemp;
+//    private Row rowViewPage;
 
 	private CategoryTreeNode _buildCategoryTree() throws Exception {
 		CategoryTreeNode menu = new CategoryTreeNode(null, new CategoryTreeNode[] {});

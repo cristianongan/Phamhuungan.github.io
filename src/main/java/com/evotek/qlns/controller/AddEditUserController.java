@@ -55,28 +55,27 @@ public class AddEditUserController extends BasicController<Window> implements Se
 	private A btnClearGender;
 
 	private Combobox cbGender;
+
 	private Datebox dbBirthday;
-	private boolean isManager;
+
+	private Div winParent;
+
 	private Textbox tbAddress;
 	private Textbox tbBirthplace;
 	private Textbox tbEmail;
 	private Textbox tbFirstName;
 	private Textbox tbLastName;
 	private Textbox tbMiddleName;
-
 	private Textbox tbMobile;
-
 	private Textbox tbPhone;
-
 	private Textbox tbUserName;
 
 	private User user;
 
-//    private String passwordEncode = StringPool.BLANK;
-
-	private Div winParent;
-
 	private Window winUpdateUser;
+
+	private boolean isManager;
+//    private String passwordEncode = StringPool.BLANK;
 
 	private Map<String, Object> _createParameterMap(boolean update) {
 		Map<String, Object> parameters = new HashMap<String, Object>();

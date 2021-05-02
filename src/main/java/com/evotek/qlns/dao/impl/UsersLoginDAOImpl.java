@@ -10,6 +10,7 @@ import java.util.List;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,6 +27,7 @@ import com.evotek.qlns.util.QueryUtil;
  * @author linhlh2
  */
 @Repository
+@Transactional
 public class UsersLoginDAOImpl extends AbstractDAO<UserLogin> implements UsersLoginDAO {
 
 	private static final Logger _log = LogManager.getLogger(UsersLoginDAOImpl.class);

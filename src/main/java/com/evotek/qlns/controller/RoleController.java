@@ -54,13 +54,13 @@ public class RoleController extends BasicController<Div> implements Serializable
 
 //    private Combobox status;
 
-	private Map<String, Object> paramMap = new HashMap<String, Object>();
+	private Div winRole;
 
 	private Include parent;
 
 	private Listbox searchResultGrid;
 
-	private Div winRole;
+	private Map<String, Object> paramMap = new HashMap<String, Object>();
 
 	// event method
 
@@ -147,7 +147,7 @@ public class RoleController extends BasicController<Div> implements Serializable
 
 		Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_DELETE),
 				Labels.getLabel(LanguageKeys.MESSAGE_INFOR_DELETE), Messagebox.OK | Messagebox.CANCEL,
-				Messagebox.QUESTION, new EventListener() {
+				Messagebox.QUESTION, new EventListener<Event>() {
 
 					@Override
 					public void onEvent(Event e) throws Exception {
@@ -204,7 +204,7 @@ public class RoleController extends BasicController<Div> implements Serializable
 
 		Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_QUESTION_UNLOCK),
 				Labels.getLabel(LanguageKeys.MESSAGE_INFOR_UNLOCK), Messagebox.OK | Messagebox.CANCEL,
-				Messagebox.QUESTION, new EventListener() {
+				Messagebox.QUESTION, new EventListener<Event>() {
 
 					@Override
 					public void onEvent(Event e) throws Exception {

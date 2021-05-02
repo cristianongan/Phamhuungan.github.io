@@ -10,9 +10,8 @@ import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,7 +19,6 @@ import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import com.evotek.qlns.dao.FileEntryDAO;
-import com.evotek.qlns.model.Document;
 import com.evotek.qlns.model.FileEntry;
 
 /**
@@ -28,6 +26,7 @@ import com.evotek.qlns.model.FileEntry;
  * @author linhlh2
  */
 @Repository
+@Transactional
 public class FileEntryDAOImpl extends AbstractDAO<FileEntry> implements FileEntryDAO {
 
 	private static final Logger _log = LogManager.getLogger(FileEntryDAOImpl.class);
@@ -70,10 +69,8 @@ public class FileEntryDAOImpl extends AbstractDAO<FileEntry> implements FileEntr
 
 			Root<FileEntry> root = criteria.from(FileEntry.class);
 
-			Join<FileEntry, Document> documentJoin = root.join("document", JoinType.INNER);
-
 			if (documentId != null) {
-				criteria.select(root).where(builder.equal(documentJoin.get("documentId"), documentId));
+				criteria.select(root).where(builder.equal(root.get("document").get("documentId"), documentId));
 
 				results = session.createQuery(criteria).getResultList();
 			}

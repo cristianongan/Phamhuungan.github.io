@@ -6,8 +6,7 @@
 <?taglib uri="http://evotek.vn/security" prefix="sec"?>
 <?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
 
-<!--<?link rel="shortcut icon" type="image/png" href="~./images/favicon/favicon.png"?>
-<?link rel="icon" type="image/png" href="~./images/favicon/favicon.png"?>-->
+<?link rel="shortcut icon" type="image/x-icon" href="~./images/favicon/favicon.ico"?>
 
 <!--<?link rel="stylesheet" type="text/css"	href="~./static/css/themes/bootstrap-${param.theme}.min.css" if="${not empty param.theme}"?>-->
 <?link rel="stylesheet" type="text/css"	href="~./static/css/themes/bootstrap-cerulean.min.css"?>

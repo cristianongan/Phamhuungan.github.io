@@ -139,7 +139,7 @@
                 <div sclass="table-responsive">
                     <listbox id="listboxResult" emptyMessage="${c:l('common.no.record.found')}"
                              mold="paging" pageSize="25" checkmark="true" multiple="true"
-                             hflex="min" width="100%" pagingPosition="both"
+                             hflex="1" width="100%" pagingPosition="both"
                              sclass="table table-striped table-bordered table-hover search-result-grid" nonselectableTags="*">
                         <listhead sizable="true">
                             <listheader width="40px" />

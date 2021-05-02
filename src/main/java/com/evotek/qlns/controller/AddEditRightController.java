@@ -49,11 +49,10 @@ public class AddEditRightController extends BasicController<Window> implements S
 
 	private Category category;
 
-	// get set service
-
 	private Combobox cbRightType;
 
 	private Right right;
+
 	private Textbox tbDescription;
 
 	private Textbox tbRightName;

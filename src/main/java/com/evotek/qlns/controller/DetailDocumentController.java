@@ -56,16 +56,15 @@ public class DetailDocumentController extends BasicController<Component> impleme
 	private Document documentTemp;
 
 	private Iframe iFrameDocPreview;
+
 	private Label lbContent;
-
 	private Label lbDate;
-
 	private Label lbDepartment;
-
 	private Label lbDocumentNumber;
-
 	private Label lbDocumentType;
+
 	private String title;
+
 	private Window winDetailDocument;
 	private Window winParent;
 

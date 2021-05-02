@@ -16,9 +16,11 @@ import com.evotek.qlns.service.StaffService;
 
 /**
  *
- * @author PC
+ * @author LinhLH
  */
 public class StaffListModel extends AbstractModelList<Staff> {
+	private static final long serialVersionUID = -1291502995857939565L;
+
 	private static final Logger _log = LogManager.getLogger(StaffListModel.class);
 
 	private Department _dept;

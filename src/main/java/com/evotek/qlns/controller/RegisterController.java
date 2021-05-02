@@ -45,32 +45,30 @@ public class RegisterController extends BasicController<Div> implements Serializ
 
 	private static final Logger _log = LogManager.getLogger(RegisterController.class);
 
-	@Autowired
-	private UserService userService;
-
-	public enum Result {
-		ERROR, SUCCESS, WARNING
-	}
-
 	private static final int pwdMaxlength = StaticUtil.PASSWORD_POLICY_MAX_LENGTH;
 
 	private static final int pwdMinlength = StaticUtil.PASSWORD_POLICY_MIN_LENGTH;
 
-	private Textbox captchaRegister;
-	private Checkbox chkAccept;
+	@Autowired
+	private UserService userService;
+
+	public static enum Result {
+		ERROR, SUCCESS, WARNING
+	}
+
 	private Captcha cpaRegister;
+
+	private Checkbox chkAccept;
+
+	private Div registerWin;
 
 	private Html htmlError;
 	private Html htmlSuccess;
 
-	private Div registerWin;
-
+	private Textbox captchaRegister;
 	private Textbox tbConfirmPassword;
-
 	private Textbox tbEmail;
-
 	private Textbox tbPassword;
-
 	private Textbox tbUserName;
 
 	private User user;
