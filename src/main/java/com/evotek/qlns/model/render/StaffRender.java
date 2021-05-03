@@ -67,31 +67,31 @@ public class StaffRender implements ListitemRenderer<Staff> {
 		hlayout.setSpacing("0");
 
 		hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.EDIT),
-				ComponentUtil.EDIT_TOOLTIP, Events.ON_CLICK, EDIT_PAGE,
+				Constants.Tooltip.EDIT, Events.ON_CLICK, EDIT_PAGE,
 				_createParameterMap(staff, Labels.getLabel(LanguageKeys.TITLE_EDIT_STAFF), index),
-				Constants.Z_ICON_PENCIL, Constants.BLUE));
+				Constants.Zicon.PENCIL, Constants.BLUE));
 
 		Long status = staff.getStatus();
 
 		if (Values.STATUS_ACTIVE.equals(status)) {
 			hlayout.appendChild(ComponentUtil.createButton(this._window, Labels.getLabel(LanguageKeys.BUTTON_LOCK),
-					ComponentUtil.LOCK_TOOLTIP, Events.ON_CLICK, "onLockStaff", staff, Constants.Z_ICON_LOCK,
+					Constants.Tooltip.LOCK, Events.ON_CLICK, "onLockStaff", staff, Constants.Zicon.LOCK,
 					Constants.ORANGE));
 		} else {
 			hlayout.appendChild(ComponentUtil.createButton(this._window, Labels.getLabel(LanguageKeys.BUTTON_UNLOCK),
-					ComponentUtil.UNLOCK_TOOLTIP, Events.ON_CLICK, "onUnlockStaff", staff, Constants.Z_ICON_UNLOCK,
+					Constants.Tooltip.UNLOCK, Events.ON_CLICK, "onUnlockStaff", staff, Constants.Zicon.UNLOCK,
 					Constants.ORANGE));
 
 			// Thêm action "Xóa"
 			hlayout.appendChild(ComponentUtil.createButton(this._window, Labels.getLabel(LanguageKeys.BUTTON_DELETE),
-					ComponentUtil.DEL_TOOLTIP, Events.ON_CLICK, "onDeleteStaff", staff, Constants.Z_ICON_TRASH_O,
+					Constants.Tooltip.DEL, Events.ON_CLICK, "onDeleteStaff", staff, Constants.Zicon.TRASH_O,
 					Constants.RED));
 		}
 
 		hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.DETAIL),
-				ComponentUtil.DETAIL_TOOLTIP, Events.ON_CLICK, DETAIL_PAGE,
+				Constants.Tooltip.DETAIL, Events.ON_CLICK, DETAIL_PAGE,
 				_createParameterMap(staff, Labels.getLabel(LanguageKeys.TITLE_STAFF_DETAIL), index),
-				Constants.Z_ICON_SEARCH_PLUS, Constants.PURPLE));
+				Constants.Zicon.SEARCH_PLUS, Constants.PURPLE));
 
 		action.appendChild(hlayout);
 

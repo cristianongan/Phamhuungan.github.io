@@ -353,6 +353,7 @@ public class MainController extends BasicController<Div> implements Serializable
 		parameters.put(Constants.PARENT_WINDOW, this.mainDiv);
 		parameters.put(Constants.TITLE, Labels.getLabel(LanguageKeys.USER_INFOMATION));
 		parameters.put(Constants.OBJECT, getUser());
+		parameters.put(Constants.SELF_UPDATE, true);
 
 		Window win = (Window) Executions.createComponents(USER_DETAIL_PAGE, this.mainDiv, parameters);
 

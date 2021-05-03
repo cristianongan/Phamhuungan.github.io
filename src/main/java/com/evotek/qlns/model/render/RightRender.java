@@ -57,25 +57,24 @@ public class RightRender implements RowRenderer<Right> {
 
 		hlayout.setSpacing("0");
 
-		hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.EDIT),
-				ComponentUtil.EDIT_TOOLTIP, Events.ON_CLICK, EDIT_RIGHT_PAGE, _createParameterMap(right),
-				Constants.Z_ICON_PENCIL, Constants.BLUE));
+		hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.EDIT), Constants.Tooltip.EDIT,
+				Events.ON_CLICK, EDIT_RIGHT_PAGE, _createParameterMap(right), Constants.Zicon.PENCIL, Constants.BLUE));
 
 		Long status = right.getStatus();
 
 		if (Values.STATUS_ACTIVE.equals(status)) {
 			// Thêm action "Khóa"
 			hlayout.appendChild(ComponentUtil.createButton(this.winTemp, Labels.getLabel(LanguageKeys.BUTTON_LOCK),
-					ComponentUtil.LOCK_TOOLTIP, Events.ON_CLICK, "onLockRight", right, Constants.Z_ICON_LOCK,
+					Constants.Tooltip.LOCK, Events.ON_CLICK, "onLockRight", right, Constants.Zicon.LOCK,
 					Constants.ORANGE));
 		} else {
 			hlayout.appendChild(ComponentUtil.createButton(this.winTemp, Labels.getLabel(LanguageKeys.BUTTON_UNLOCK),
-					ComponentUtil.UNLOCK_TOOLTIP, Events.ON_CLICK, "onUnlockRight", right, Constants.Z_ICON_UNLOCK,
+					Constants.Tooltip.UNLOCK, Events.ON_CLICK, "onUnlockRight", right, Constants.Zicon.UNLOCK,
 					Constants.ORANGE));
 
 			// Thêm action "Xóa"
 			hlayout.appendChild(ComponentUtil.createButton(this.winTemp, Labels.getLabel(LanguageKeys.BUTTON_DELETE),
-					ComponentUtil.DEL_TOOLTIP, Events.ON_CLICK, "onDeleteRight", right, Constants.Z_ICON_TRASH_O,
+					Constants.Tooltip.DEL, Events.ON_CLICK, "onDeleteRight", right, Constants.Zicon.TRASH_O,
 					Constants.RED));
 		}
 

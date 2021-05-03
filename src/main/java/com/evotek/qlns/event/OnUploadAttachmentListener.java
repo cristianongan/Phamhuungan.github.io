@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.zkoss.util.media.Media;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.event.Event;
@@ -36,6 +38,8 @@ import com.evotek.qlns.util.key.LanguageKeys;
  */
 public class OnUploadAttachmentListener implements EventListener<UploadEvent> {
 
+	private static final Logger _log = LogManager.getLogger(OnUploadAttachmentListener.class);
+	
 	private Div divFileList;
 	private List<Media> medium;
 
@@ -62,9 +66,12 @@ public class OnUploadAttachmentListener implements EventListener<UploadEvent> {
 
 			}
 		} catch (IOException ex) {
-		} finally {
-			return size;
+			_log.error(ex.getMessage(), ex);
+			
+			_log.error("Cannot get size of media file");
 		}
+		
+		return size;
 	}
 
 	private boolean isInstanceValidFileExtension(String extension) {
@@ -83,7 +90,7 @@ public class OnUploadAttachmentListener implements EventListener<UploadEvent> {
 	public void onEvent(UploadEvent event) throws Exception {
 		Media[] medias = event.getMedias();
 
-		Grid grid = ComponentUtil.createGrid(StringPool.BLANK, Constants.CLASS_NO_STYLE);
+		Grid grid = ComponentUtil.createGrid(StringPool.BLANK, Constants.Class.NO_STYLE);
 
 		grid.appendChild(ComponentUtil.createColumns(new String[] { "88%", "12%" }));
 
@@ -135,7 +142,7 @@ public class OnUploadAttachmentListener implements EventListener<UploadEvent> {
 				Button button = new Button();
 
 				button.setTooltiptext(Labels.getLabel(LanguageKeys.DELETE));
-				button.setIconSclass(Constants.Z_ICON_TRASH_O);
+				button.setIconSclass(Constants.Zicon.TRASH_O);
 				button.setSclass(Constants.RED);
 
 				button.addEventListener(Events.ON_CLICK, new EventListener<Event>() {

@@ -60,31 +60,31 @@ public class RoleRender<Component> implements ListitemRenderer<Role> {
 
 			if (Values.NOT_IMMUNE.equals(immune)) {
 				hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.EDIT),
-						ComponentUtil.EDIT_TOOLTIP, Events.ON_CLICK, EDIT_PAGE, _createParameterMap(role),
-						Constants.Z_ICON_PENCIL, Constants.BLUE));
+						Constants.Tooltip.EDIT, Events.ON_CLICK, EDIT_PAGE, _createParameterMap(role),
+						Constants.Zicon.PENCIL, Constants.BLUE));
 
 				Long status = role.getStatus();
 
 				if (Values.STATUS_ACTIVE.equals(status)) {
 					// Thêm action "Khóa"
 					hlayout.appendChild(ComponentUtil.createButton(this.winTemp,
-							Labels.getLabel(LanguageKeys.BUTTON_LOCK), ComponentUtil.LOCK_TOOLTIP, Events.ON_CLICK,
-							"onLockRole", role, Constants.Z_ICON_LOCK, Constants.ORANGE));
+							Labels.getLabel(LanguageKeys.BUTTON_LOCK), Constants.Tooltip.LOCK, Events.ON_CLICK,
+							"onLockRole", role, Constants.Zicon.LOCK, Constants.ORANGE));
 				} else {
 					hlayout.appendChild(ComponentUtil.createButton(this.winTemp,
-							Labels.getLabel(LanguageKeys.BUTTON_UNLOCK), ComponentUtil.UNLOCK_TOOLTIP, Events.ON_CLICK,
-							"onUnlockRole", role, Constants.Z_ICON_UNLOCK, Constants.ORANGE));
+							Labels.getLabel(LanguageKeys.BUTTON_UNLOCK), Constants.Tooltip.UNLOCK, Events.ON_CLICK,
+							"onUnlockRole", role, Constants.Zicon.UNLOCK, Constants.ORANGE));
 
 					// Thêm action "Xóa"
 					hlayout.appendChild(ComponentUtil.createButton(this.winTemp,
-							Labels.getLabel(LanguageKeys.BUTTON_DELETE), ComponentUtil.DEL_TOOLTIP, Events.ON_CLICK,
-							"onDeleteRole", role, Constants.Z_ICON_TRASH_O, Constants.RED));
+							Labels.getLabel(LanguageKeys.BUTTON_DELETE), Constants.Tooltip.DEL, Events.ON_CLICK,
+							"onDeleteRole", role, Constants.Zicon.TRASH_O, Constants.RED));
 				}
 			}
 
 			hlayout.appendChild(ComponentUtil.createButton(this.winTemp, Labels.getLabel(LanguageKeys.ASSIGN_RIGHT),
-					ComponentUtil.ASSIGN_RIGHT_TOOLTIP, Events.ON_CLICK, PERMISSION_PAGE, _createParameterMap(role),
-					Constants.Z_ICON_SHARE, Constants.PURPLE));
+					Constants.Tooltip.ASSIGN_RIGHT, Events.ON_CLICK, PERMISSION_PAGE, _createParameterMap(role),
+					Constants.Zicon.SHARE, Constants.PURPLE));
 
 			action.appendChild(hlayout);
 

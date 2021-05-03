@@ -19,8 +19,7 @@
 
 	<name>QLNS_ZK</name>
 
-	<description>Phần mềm quản lý nhân sự, tiền lương, chấm công, tuyển
-		dụng sử dụng zk
+	<description>Phần mềm quản lý nhân sự, tiền lương, chấm công, tuyển dụng sử dụng zk
 	</description>
 
 	<properties>

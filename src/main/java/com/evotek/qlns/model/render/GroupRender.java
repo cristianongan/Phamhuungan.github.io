@@ -54,31 +54,30 @@ public class GroupRender implements RowRenderer<Group> {
 
 		hlayout.setSpacing("0");
 
-		hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.EDIT),
-				ComponentUtil.EDIT_TOOLTIP, Events.ON_CLICK, EDIT_GROUP_PAGE, _createParameterMap(group),
-				Constants.Z_ICON_PENCIL, Constants.BLUE));
+		hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.EDIT), Constants.Tooltip.EDIT,
+				Events.ON_CLICK, EDIT_GROUP_PAGE, _createParameterMap(group), Constants.Zicon.PENCIL, Constants.BLUE));
 
 		Long status = group.getStatus();
 
 		if (Values.STATUS_ACTIVE.equals(status)) {
 			// Thêm action "Khóa"
 			hlayout.appendChild(ComponentUtil.createButton(this.winTemp, Labels.getLabel(LanguageKeys.BUTTON_LOCK),
-					ComponentUtil.LOCK_TOOLTIP, Events.ON_CLICK, "onLockGroups", group, Constants.Z_ICON_LOCK,
+					Constants.Tooltip.LOCK, Events.ON_CLICK, "onLockGroups", group, Constants.Zicon.LOCK,
 					Constants.ORANGE));
 		} else {
 			hlayout.appendChild(ComponentUtil.createButton(this.winTemp, Labels.getLabel(LanguageKeys.BUTTON_UNLOCK),
-					ComponentUtil.UNLOCK_TOOLTIP, Events.ON_CLICK, "onUnlockGroups", group, Constants.Z_ICON_UNLOCK,
+					Constants.Tooltip.UNLOCK, Events.ON_CLICK, "onUnlockGroups", group, Constants.Zicon.UNLOCK,
 					Constants.ORANGE));
 
 			// Thêm action "Xóa"
 			hlayout.appendChild(ComponentUtil.createButton(this.winTemp, Labels.getLabel(LanguageKeys.BUTTON_DELETE),
-					ComponentUtil.DEL_TOOLTIP, Events.ON_CLICK, "onDeleteGroups", group, Constants.Z_ICON_TRASH_O,
+					Constants.Tooltip.DEL, Events.ON_CLICK, "onDeleteGroups", group, Constants.Zicon.TRASH_O,
 					Constants.RED));
 		}
 
 		hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.ASSIGN_RIGHT),
-				ComponentUtil.ASSIGN_RIGHT_TOOLTIP, Events.ON_CLICK, ASSIGN_RIGHT_PAGE, _createParameterMap(group),
-				Constants.Z_ICON_SHARE, Constants.PURPLE));
+				Constants.Tooltip.ASSIGN_RIGHT, Events.ON_CLICK, ASSIGN_RIGHT_PAGE, _createParameterMap(group),
+				Constants.Zicon.SHARE, Constants.PURPLE));
 
 		return hlayout;
 	}

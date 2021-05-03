@@ -69,11 +69,11 @@ public class ListboxDocumentRender implements ListitemRenderer<Document> {
 		hlayout.setSpacing("0");
 
 		hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.EDIT),
-				ComponentUtil.EDIT_TOOLTIP, Events.ON_CLICK, EDIT_PAGE,
+				Constants.Tooltip.EDIT, Events.ON_CLICK, EDIT_PAGE,
 				_createParameterMap(document, Labels.getLabel(LanguageKeys.TITLE_EDIT_DOCUMENT), index),
-				Constants.Z_ICON_PENCIL, Constants.BLUE));
+				Constants.Zicon.PENCIL, Constants.BLUE));
 		hlayout.appendChild(ComponentUtil.createButton(this._window, Labels.getLabel(LanguageKeys.DELETE),
-				ComponentUtil.DEL_TOOLTIP, Events.ON_CLICK, "onDelete", document, Constants.Z_ICON_TRASH_O,
+				Constants.Tooltip.DEL, Events.ON_CLICK, "onDelete", document, Constants.Zicon.TRASH_O,
 				Constants.RED));
 
 		action.appendChild(hlayout);

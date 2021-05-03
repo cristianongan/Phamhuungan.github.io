@@ -9,29 +9,52 @@ package com.evotek.qlns.util.key;
  * @author linhlh2
  */
 public class Constants {
-	public static final String ACTION_ADD = "ACTION_ADD";
-	public static final String ACTION_EDIT = "ACTION_EDIT";
+	public static interface Action {
+		public static final String ADD = "ACTION_ADD";
+		
+		public static final String EDIT = "ACTION_EDIT";
+	}
+	
+	public static interface Sclass {
+		public static final String BTN_DANGER = "btn-danger";
+		
+		public static final String BTN_INFO = "btn-info";
+		
+		public static final String BTN_PRIMARY = "btn-primary";
+		
+		public static final String BTN_SUCCESS = "btn-success";
+		
+		public static final String NO_STYLE = "no-style";
+	}
+	
+	public static interface Class {
+		public static final String LINK_BUTTON = "link-button";
+		
+		public static final String LINK_BUTTON_CL = "link-button-cl";
+		
+		public static final String NO_STYLE = "no-style";
+		
+		public static final String PROCESS_MENU_BAR = "processMenuBar";
+		
+		public static final String TASK_DEFAULT = "task-default";
+		
+		public static final String TASK_GREEN = "task-green";
+		
+		public static final String TASK_ORANGE = "task-orange";
+		
+		public static final String TASK_PINK = "task-pink";
+	}
 	/**
 	 * sclass
 	 */
 	public static final String BLUE = "blue";
-	public static final String BTN_DANGER = "btn-danger";
-	public static final String BTN_INFO = "btn-info";
-	public static final String BTN_PRIMARY = "btn-primary";
-	public static final String BTN_SUCCESS = "btn-success";
+	
 	public static final String CATEGORY_FOLDER = "~./pages/";
 	/**
 	 * Class
 	 */
 
-	public static final String CLASS_LINK_BUTTON = "link-button";
-	public static final String CLASS_LINK_BUTTON_CL = "link-button-cl";
-	public static final String CLASS_NO_STYLE = "no-style";
-	public static final String CLASS_PROCESS_MENU_BAR = "processMenuBar";
-	public static final String CLASS_TASK_DEFAULT = "task-default";
-	public static final String CLASS_TASK_GREEN = "task-green";
-	public static final String CLASS_TASK_ORANGE = "task-orange";
-	public static final String CLASS_TASK_PINK = "task-pink";
+	
 	// manhnn1
 	public static final String CONTEXT_MENU_DOC_TYPE = "contextMenuDocType";
 	public static final String DATA = "data";
@@ -45,6 +68,7 @@ public class Constants {
 	public static final String MENU_WINDOW = "menu-window";
 	public static final String MODEL = "model";
 	public static final String OBJECT = "object";
+	public static final String SELF_UPDATE = "self_update";
 
 	public static final String OBJECT_ID = "object-id";
 	public static final String ORANGE = "orange";
@@ -52,7 +76,7 @@ public class Constants {
 	public static final String PURPLE = "purple";
 	public static final String RED = "red";
 	public static final String RESET_PASSWORD = "RESET_PASSWORD";
-	public static final String SCLASS_NO_STYLE = "no-style";
+	
 	public static final String SECOND_OBJECT = "second_object";
 	public static final String SSL = "ssl";
 	public static final Long START_COUNT = 0L;
@@ -101,27 +125,111 @@ public class Constants {
 	public static final String VERIFY_RESET_PASSWORD_USER_DEACTIVE = "VERIFY_RESET_PASSWORD_USER_DEACTIVE";
 
 	public static final String VIEW = "view";
-	public static final String Z_ICON_EDIT = "z-icon-edit";
-	public static final String Z_ICON_KEY = "z-icon-key";
+	
+	
+	public static interface Zicon {
+		public static final String EDIT = "z-icon-edit";
+		
+		public static final String Z_ICON_KEY = "z-icon-key";
 
-	public static final String Z_ICON_LEVEL_UP = "z-icon-level-up";
+		public static final String LEVEL_UP = "z-icon-level-up";
 
-	public static final String Z_ICON_LOCK = "z-icon-lock";
+		public static final String LOCK = "z-icon-lock";
 
-	// manhnn1_end
-	/**
-	 * z-icon
-	 */
-	public static final String Z_ICON_PAPERCLIP = "z-icon-paperclip";
+		public static final String PAPERCLIP = "z-icon-paperclip";
 
-	public static final String Z_ICON_PENCIL = "z-icon-pencil";
+		public static final String PENCIL = "z-icon-pencil";
 
-	public static final String Z_ICON_PLUS = "z-icon-plus";
-	public static final String Z_ICON_RANDOM = "z-icon-random";
-	public static final String Z_ICON_SAVE = "z-icon-save";
-	public static final String Z_ICON_SEARCH_PLUS = "z-icon-search-plus";
-	public static final String Z_ICON_SHARE = "z-icon-share";
-	public static final String Z_ICON_TIMES = "z-icon-times";
-	public static final String Z_ICON_TRASH_O = "z-icon-trash-o";
-	public static final String Z_ICON_UNLOCK = "z-icon-unlock";
+		public static final String PLUS = "z-icon-plus";
+		
+		public static final String RANDOM = "z-icon-random";
+		
+		public static final String SAVE = "z-icon-save";
+		
+		public static final String SEARCH_PLUS = "z-icon-search-plus";
+		
+		public static final String SHARE = "z-icon-share";
+		
+		public static final String TIMES = "z-icon-times";
+		
+		public static final String TRASH_O = "z-icon-trash-o";
+		
+		public static final String UNLOCK = "z-icon-unlock";
+	}
+	
+	public static interface Message {
+		public static final String MSG_ERROR = "error";
+		
+		public static final String MSG_INFORMATION = "information";
+		
+		public static final String MSG_SUCCESS = "success";
+		
+		public static final String MSG_WARNING = "warning";
+	}
+
+	public static interface Page {
+		public static interface Common {
+			public static final String MESSAGE_BOX_PAGE = "~./pages/common/messageBox.zul";
+
+			public static final String DEPT_TREE_PAGE = "~./pages/common/commonDepartment.zul";
+
+			public static final String USER_TREE_PAGE = "~./pages/common/commonGridUser.zul";
+		}
+	}
+
+	public static interface Icon {
+		public static final String ADD = "~./images/icons/add.png";
+
+		public static final String ASSIGN = "~./images/icons/assign.png";
+
+		public static final String ATTACH = "~./images/icons/attach.png";
+
+		public static final String DELETE = "~./images/icons/delete.png";
+
+		public static final String DOWNLOAD = "~./images/icons/download.png";
+
+		public static final String EDIT_ADD = "~./images/icons/edit_add.png";
+
+		public static final String EDIT = "~./images/icons/edit.png";
+
+		public static final String KEY_ICON = "~./images/icons/key.png";
+
+		public static final String LOCK = "~./images/icons/lock.png";
+
+		public static final String OK = "~./images/icons/ok.png";
+
+		public static final String PENDING = "~./images/icons/pending.png";
+
+		public static final String PUBLIC = "~./images/icons/public.png";
+
+		public static final String REFERENCE = "~./images/icons/reference.png";
+
+		public static final String REMOVE = "~./images/icons/remove.png";
+
+		public static final String RESOURCE = "~./images/icons/resource.png";
+
+		public static final String STAR = "~./images/icons/star.png";
+
+		public static final String UNLOCK = "~./images/icons/unlock.png";
+	}
+
+	public static interface Tooltip {
+		public static final String ASSIGN_RIGHT = "assignRightTooltip";
+
+		public static final String ASSIGN_ROLE = "assignRoleTooltip";
+
+		public static final String CALCEL = "calcelTooltip";
+
+		public static final String DEL = "delTooltip";
+
+		public static final String DETAIL = "detailTooltip";
+
+		public static final String EDIT = "editTooltip";
+
+		public static final String LOCK = "lockTooltip";
+
+		public static final String RIGHT = "rightTooltip";
+
+		public static final String UNLOCK = "unlockTooltip";
+	}
 }

@@ -76,45 +76,7 @@ import com.evotek.qlns.util.key.ZkKeys;
  */
 public class ComponentUtil {
 
-	public static String ADD_ICON = "~./images/icons/add.png";
-	public static String ASSIGN_ICON = "~./images/icons/assign.png";
-	public static String ASSIGN_RIGHT_TOOLTIP = "assignRightTooltip";
-	public static String ASSIGN_ROLE_TOOLTIP = "assignRoleTooltip";
-	public static String ATTACH_ICON = "~./images/icons/attach.png";
-	public static String CALCEL_TOOLTIP = "calcelTooltip";
-	public static String DEL_TOOLTIP = "delTooltip";
-	public static String DELETE_ICON = "~./images/icons/delete.png";
-	public static String DEPT_TREE_PAGE = "~./pages/common/commonDepartment.zul";
-	public static String DETAIL_TOOLTIP = "detailTooltip";
-	public static String DOWNLOAD_ICON = "~./images/icons/download.png";
-	public static String EDIT_ADD_ICON = "~./images/icons/edit_add.png";
-	public static String EDIT_ICON = "~./images/icons/edit.png";
-	public static String EDIT_TOOLTIP = "editTooltip";
-	public static String KEY_ICON = "~./images/icons/key.png";
-	public static String LOCK_ICON = "~./images/icons/lock.png";
-	public static String LOCK_TOOLTIP = "lockTooltip";
-	private static final String MESSAGE_BOX_PAGE = "~./pages/common/messageBox.zul";
-	private static final String MSG_ERROR = "error";
-
-	private static final String MSG_INFORMATION = "information";
-	private static final String MSG_SUCCESS = "success";
-	private static final String MSG_WARNING = "warning";
-	public static String OK_ICON = "~./images/icons/ok.png";
-	public static String PENDING_ICON = "~./images/icons/pending.png";
-	public static String PUBLIC_ICON = "~./images/icons/public.png";
-	public static String REFERENCE_ICON = "~./images/icons/reference.png";
-	public static String REMOVE_ICON = "~./images/icons/remove.png";
-	public static String RESOURCE_ICON = "~./images/icons/resource.png";
-
-	public static String RIGHT_TOOLTIP = "rightTooltip";
-
-	public static String STAR_ICON = "~./images/icons/star.png";
-
-	public static String UNLOCK_ICON = "~./images/icons/unlock.png";
-
-	public static String UNLOCK_TOOLTIP = "unlockTooltip";
-
-	public static String USER_TREE_PAGE = "~./pages/common/commonGridUser.zul";
+	
 
 	public static void clear(Component comp) {
 		if (comp.getChildren() != null) {
@@ -130,7 +92,7 @@ public class ComponentUtil {
 
 		Toolbarbutton btnAddRow = new Toolbarbutton();
 
-		btnAddRow.setImage(ADD_ICON);
+		btnAddRow.setImage(Constants.Icon.ADD);
 		btnAddRow.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
 			@Override
@@ -145,7 +107,7 @@ public class ComponentUtil {
 		if (allowRemoveOld) {
 			Toolbarbutton btnDeleteRow = new Toolbarbutton();
 
-			btnDeleteRow.setImage(REMOVE_ICON);
+			btnDeleteRow.setImage(Constants.Icon.REMOVE);
 			btnDeleteRow.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
 				@Override
@@ -182,7 +144,7 @@ public class ComponentUtil {
 		Button button = new Button(Labels.getLabel(LanguageKeys.DOCUMENT_ATTACH));
 
 		button.setUpload(config);
-		button.setIconSclass(Constants.Z_ICON_PAPERCLIP);
+		button.setIconSclass(Constants.Zicon.PAPERCLIP);
 		button.setSclass(Constants.BTN_SUCCESS);
 
 		List<Media> medium = new ArrayList<Media>();
@@ -681,11 +643,11 @@ public class ComponentUtil {
 	}
 
 	public static void createErrorMessageBox(String label) {
-		createMessageBox(MSG_ERROR, label);
+		createMessageBox(Constants.Message.MSG_ERROR, label);
 	}
 
 	public static void createErrorMessageBox(String label, Object[] args) {
-		createMessageBox(MSG_ERROR, label, args);
+		createMessageBox(Constants.Message.MSG_ERROR, label, args);
 	}
 
 	public static Grid createGrid(String emptyString) {
@@ -724,11 +686,11 @@ public class ComponentUtil {
 	}
 
 	public static void createInforMessageBox(String label) {
-		createMessageBox(MSG_INFORMATION, label);
+		createMessageBox(Constants.Message.MSG_INFORMATION, label);
 	}
 
 	public static void createInforMessageBox(String label, Object[] args) {
-		createMessageBox(MSG_INFORMATION, label, args);
+		createMessageBox(Constants.Message.MSG_INFORMATION, label, args);
 	}
 
 	public static Label createLabel(String value) {
@@ -945,7 +907,7 @@ public class ComponentUtil {
 		mapNotice.put("type", type);
 		mapNotice.put("notice", Labels.getLabel(label));
 
-		Executions.createComponents(MESSAGE_BOX_PAGE, null, mapNotice);
+		Executions.createComponents(Constants.Page.Common.MESSAGE_BOX_PAGE, null, mapNotice);
 	}
 
 	public static void createMessageBox(String type, String label, Object[] args) {
@@ -954,7 +916,7 @@ public class ComponentUtil {
 		mapNotice.put("type", type);
 		mapNotice.put("notice", Labels.getLabel(label, args));
 
-		Executions.createComponents(MESSAGE_BOX_PAGE, null, mapNotice);
+		Executions.createComponents(Constants.Page.Common.MESSAGE_BOX_PAGE, null, mapNotice);
 	}
 
 	public static Div createOldFileGrid(List<FileEntry> oldFiles, List<FileEntry> deleteFiles) {
@@ -978,7 +940,7 @@ public class ComponentUtil {
 
 		Toolbarbutton btnDeleteRow = new Toolbarbutton();
 
-		btnDeleteRow.setImage(REMOVE_ICON);
+		btnDeleteRow.setImage(Constants.Icon.REMOVE);
 		btnDeleteRow.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
 			@Override
@@ -1044,18 +1006,18 @@ public class ComponentUtil {
 		}
 
 		if (status.equals(Values.STATUS_ACTIVE)) {
-			return new Image(OK_ICON);
+			return new Image(Constants.Icon.OK);
 		}
 
-		return new Image(LOCK_ICON);
+		return new Image(Constants.Icon.LOCK);
 	}
 
 	public static void createSuccessMessageBox(String label) {
-		createMessageBox(MSG_SUCCESS, label);
+		createMessageBox(Constants.Message.MSG_SUCCESS, label);
 	}
 
 	public static void createSuccessMessageBox(String label, Object[] args) {
-		createMessageBox(MSG_SUCCESS, label, args);
+		createMessageBox(Constants.Message.MSG_SUCCESS, label, args);
 	}
 
 	public static Textbox createTextbox() {
@@ -1227,11 +1189,11 @@ public class ComponentUtil {
 	}
 
 	public static void createWarningMessageBox(String label) {
-		createMessageBox(MSG_WARNING, label);
+		createMessageBox(Constants.Message.MSG_WARNING, label);
 	}
 
 	public static void createWarningMessageBox(String label, Object[] args) {
-		createMessageBox(MSG_WARNING, label, args);
+		createMessageBox(Constants.Message.MSG_WARNING, label, args);
 	}
 
 	public static Long getBandboxValue(Bandbox bandbox) {

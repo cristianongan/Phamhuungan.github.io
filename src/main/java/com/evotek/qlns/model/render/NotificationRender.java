@@ -65,10 +65,10 @@ public class NotificationRender implements ListitemRenderer<Notification> {
 			hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.EXTEND_CONTRACT),
 					"extendContractTooltip", Events.ON_CLICK, EDIT_STAFF_PAGE,
 					_createParameterMap(notify, Labels.getLabel(LanguageKeys.TITLE_EDIT_STAFF)),
-					Constants.Z_ICON_LEVEL_UP, Constants.BLUE));
+					Constants.Zicon.LEVEL_UP, Constants.BLUE));
 		} else {
 			hlayout.appendChild(ComponentUtil.createButton(this._window, Labels.getLabel(LanguageKeys.DELETE),
-					ComponentUtil.DEL_TOOLTIP, Events.ON_CLICK, "onDeleteNotify", notify, Constants.Z_ICON_TRASH_O,
+					Constants.Tooltip.DEL, Events.ON_CLICK, "onDeleteNotify", notify, Constants.Zicon.TRASH_O,
 					Constants.RED));
 		}
 

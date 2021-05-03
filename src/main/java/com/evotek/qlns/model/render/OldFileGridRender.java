@@ -39,7 +39,7 @@ public class OldFileGridRender<Component> implements RowRenderer<FileEntry> {
 		Button button = new Button();
 
 		button.setTooltiptext(Labels.getLabel(LanguageKeys.DELETE));
-		button.setIconSclass(Constants.Z_ICON_TRASH_O);
+		button.setIconSclass(Constants.Zicon.TRASH_O);
 		button.setSclass(Constants.RED);
 
 		button.addEventListener(Events.ON_CLICK, new EventListener<Event>() {

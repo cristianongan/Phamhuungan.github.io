@@ -120,7 +120,7 @@ public class DocumentTypeServiceImpl implements DocumentTypeService {
 		// get root
 		List<DocumentType> roots = getDocTypeByParentId(null);
 
-		roots.add(new DocumentType(-1L, "Chưa phân loại", Constants.Z_ICON_RANDOM));
+		roots.add(new DocumentType(-1L, "Chưa phân loại", Constants.Zicon.RANDOM));
 
 		docTypeMap.put(null, roots);
 

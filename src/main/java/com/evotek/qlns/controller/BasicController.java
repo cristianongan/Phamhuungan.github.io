@@ -36,7 +36,7 @@ public class BasicController<T extends Component> extends GenericForwardComposer
 
 	protected Map<?, ?> args;
 
-	private User user;
+	private User _user;
 
 	@Autowired
 	@Qualifier("userWorkspace")
@@ -66,8 +66,8 @@ public class BasicController<T extends Component> extends GenericForwardComposer
 	}
 
 	public User getUser() {
-		if (this.user != null) {
-			return this.user;
+		if (this._user != null) {
+			return this._user;
 		} else {
 			UserPrincipalImpl userPrincipalImpl = this.userWorkspace.getUserPrincipal();
 
@@ -138,7 +138,7 @@ public class BasicController<T extends Component> extends GenericForwardComposer
 	}
 
 	public void setUser(User user) {
-		this.user = user;
+		this._user = user;
 	}
 
 	public void setUserWorkspace(UserWorkspace userWorkspace) {

@@ -366,7 +366,7 @@ public class UserDAOImpl extends AbstractDAO<User> implements UserDAO {
 				predicates.add(builder.notEqual(root.get("userId"), userId));
 			}
 
-			criteria.select(root).where(builder.or(predicates.toArray(new Predicate[predicates.size()])));
+			criteria.select(root).where(builder.and(predicates.toArray(new Predicate[predicates.size()])));
 
 			results = session.createQuery(criteria).getResultList();
 
@@ -400,7 +400,7 @@ public class UserDAOImpl extends AbstractDAO<User> implements UserDAO {
 				predicates.add(builder.notEqual(root.get("userId"), userId));
 			}
 
-			criteria.select(root).where(builder.or(predicates.toArray(new Predicate[predicates.size()])));
+			criteria.select(root).where(builder.and(predicates.toArray(new Predicate[predicates.size()])));
 
 			results = session.createQuery(criteria).getResultList();
 		} catch (Exception e) {
@@ -501,7 +501,7 @@ public class UserDAOImpl extends AbstractDAO<User> implements UserDAO {
 
 			predicates.add(builder.notEqual(root.get("status"), Values.STATUS_DEACTIVE));
 
-			criteria.select(root).where(builder.or(predicates.toArray(new Predicate[predicates.size()])));
+			criteria.select(root).where(builder.and(predicates.toArray(new Predicate[predicates.size()])));
 
 			results = session.createQuery(criteria).getResultList();
 
@@ -534,7 +534,7 @@ public class UserDAOImpl extends AbstractDAO<User> implements UserDAO {
 
 			predicates.add(builder.notEqual(root.get("status"), Values.STATUS_DEACTIVE));
 
-			criteria.select(root).where(builder.or(predicates.toArray(new Predicate[predicates.size()])));
+			criteria.select(root).where(builder.and(predicates.toArray(new Predicate[predicates.size()])));
 
 			results = session.createQuery(criteria).getResultList();
 
@@ -567,7 +567,7 @@ public class UserDAOImpl extends AbstractDAO<User> implements UserDAO {
 
 			predicates.add(builder.notEqual(root.get("status"), Values.STATUS_DEACTIVE));
 
-			criteria.select(root).where(builder.or(predicates.toArray(new Predicate[predicates.size()])));
+			criteria.select(root).where(builder.and(predicates.toArray(new Predicate[predicates.size()])));
 
 			results = session.createQuery(criteria).getResultList();
 

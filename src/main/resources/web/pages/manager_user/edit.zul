@@ -2,7 +2,7 @@
 
 <zk xmlns="http://www.zkoss.org/2005/zul">
     
-    <window title="${c:l('title.add.user')}" width="400px"
+    <window title="${c:l('title.add.user')}" width="500px"
             height="auto" mode="overlapped" closable="true"
             apply="${addEditUserController}" position="center, center"
             action="show: slideDown;hide: slideUp" border="none">
@@ -111,14 +111,14 @@
         
         <div align="center" sclass="z-button-action">
             <button id="btnPrevious" type="button" label="${c:l('button.previous')}" 
-                    iconSclass="z-icon-backward" class="btn-info" if="${not empty arg.object}"/>
+                    iconSclass="z-icon-backward" class="btn-info" if="${not empty arg.object and empty arg.self_update}"/>
             <button id="btnNext" type="button" label="${c:l('button.next')}" 
-                    iconSclass="z-icon-forward" class="btn-info" if="${not empty arg.object}"/>
+                    iconSclass="z-icon-forward" class="btn-info" if="${not empty arg.object and empty arg.self_update}"/>
             <button id="btnSave" type="button" label="${c:l('button.save')}" 
                     iconSclass="z-icon-check" class="btn-success"/>
-            <!--            <button id="btnSaveAndContinue" label="${c:l('button.save.and.continue')}"
-            image="~./images/icons/save_and_add.png"
-            if="${sec:isAllGranted('manager_user_btnSave')}"/>-->
+            <button id="btnSaveAndContinue" label="${c:l('button.save.and.continue')}"
+            		iconSclass="z-icon-check" class="btn-success"
+            		if="${sec:isAllGranted('manager_user_btnSave')}"/>
             <button id="btnCancel" type="button" label="${c:l('button.cancel')}"
                     iconSclass="z-icon-times" class="btn-default"/>
         </div>

@@ -15,7 +15,6 @@ import org.zkoss.zul.Window;
 
 import com.evotek.qlns.event.DownloadFileEntryListener;
 import com.evotek.qlns.model.FileEntry;
-import com.evotek.qlns.util.ComponentUtil;
 import com.evotek.qlns.util.key.Constants;
 import com.evotek.qlns.util.key.LanguageKeys;
 import com.evotek.qlns.util.key.ZkKeys;
@@ -38,7 +37,7 @@ public class DownloadFileGridRender<Component> implements RowRenderer<FileEntry>
 
 		A rm = new A();
 
-		rm.setImage(ComponentUtil.DOWNLOAD_ICON);
+		rm.setImage(Constants.Icon.DOWNLOAD);
 
 		rm.setTooltiptext(Labels.getLabel(LanguageKeys.DOWNLOAD));
 
@@ -47,7 +46,7 @@ public class DownloadFileGridRender<Component> implements RowRenderer<FileEntry>
 		row.appendChild(rm);
 
 		A rm1 = new A();
-		rm1.setImage(ComponentUtil.RESOURCE_ICON);
+		rm1.setImage(Constants.Icon.RESOURCE);
 
 		rm1.setTooltiptext(Labels.getLabel(LanguageKeys.PREVIEW));
 

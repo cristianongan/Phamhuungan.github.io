@@ -40,11 +40,11 @@ public class TreeDocumentTypeRender implements TreeitemRenderer<DocumentTypeTree
 		popup.setPage(treeRow.getPage());
 
 		popup.appendChild(ComponentUtil.createMenuitem(this.winparent, Labels.getLabel(LanguageKeys.ADD),
-				Events.ON_CLICK, "onAdd", documentType, Constants.Z_ICON_PLUS, Constants.BLUE));
+				Events.ON_CLICK, "onAdd", documentType, Constants.Zicon.PLUS, Constants.BLUE));
 
 //        if (documentType.getParentDocumentType() != null) { //neu khong phai la root
 		popup.appendChild(ComponentUtil.createMenuitem(this.winparent, Labels.getLabel(LanguageKeys.EDIT),
-				Events.ON_CLICK, "onEdit", documentType, Constants.Z_ICON_PENCIL, Constants.BLUE));
+				Events.ON_CLICK, "onEdit", documentType, Constants.Zicon.PENCIL, Constants.BLUE));
 //        popup.appendChild(ComponentUtil.createMenuitem(winparent,
 //                Labels.getLabel(LanguageKeys.BUTTON_DELETE),
 //                Events.ON_CLICK, "onDelete", documentType,

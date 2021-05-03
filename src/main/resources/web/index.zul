@@ -54,17 +54,17 @@
                 <popup id="notipp" sclass="menu menu-pink" width="240px">
                     <a id="aNotiTotal" sclass="header" iconSclass="z-icon-exclamation-triangle"/>
                     <vlayout spacing="0">
-                        <a iconSclass="btn btn-xs no-hover btn-pink z-icon-copy" href="#">
+                        <a iconSclass="btn btn-xs no-hover btn-pink z-icon-copy">
                             <label value="${c:l('contract.expired')}"/>
                             <label id="lbContractEx" class="badge badge-info pull-right"/>
                         </a>
 
-                        <a iconSclass="btn btn-xs no-hover btn-success z-icon-calendar" href="#">
+                        <a iconSclass="btn btn-xs no-hover btn-success z-icon-calendar">
                             <label value="${c:l('birth.day')}"/>
                             <label id="lbBirthDay" class="badge badge-info pull-right"/>
                         </a>
 
-                        <a id="aSeeAll" label="${c:l('see.all.notifications')}" href="#">
+                        <a id="aSeeAll" label="${c:l('see.all.notifications')}">
                             <span class="z-icon-arrow-right"/>
                         </a>
                     </vlayout>

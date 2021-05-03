@@ -26,6 +26,8 @@ import org.hibernate.annotations.FetchMode;
 @Table(name = "user_")
 public class User implements Serializable {
 
+	private static final long serialVersionUID = -5124221618445933395L;
+	
 	private String address;
 	private String birthPlace;
 	private Date createDate;

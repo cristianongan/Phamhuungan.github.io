@@ -78,8 +78,8 @@ public class TreeCategoryRender<Component> implements TreeitemRenderer<CategoryT
 		hlayout.setSpacing("0");
 
 		hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.EDIT),
-				ComponentUtil.EDIT_TOOLTIP, Events.ON_CLICK, EDIT_PAGE, _createParameterMap(category),
-				Constants.Z_ICON_PENCIL, Constants.BLUE));
+				Constants.Tooltip.EDIT, Events.ON_CLICK, EDIT_PAGE, _createParameterMap(category),
+				Constants.Zicon.PENCIL, Constants.BLUE));
 
 		Long status = category.getStatus();
 		Long immune = category.getImmune();
@@ -88,32 +88,32 @@ public class TreeCategoryRender<Component> implements TreeitemRenderer<CategoryT
 			if (Validator.isNotNull(status) && status.equals(Values.STATUS_ACTIVE)) {
 				// Thêm action "Khóa"
 				hlayout.appendChild(ComponentUtil.createButton(this.winTemp, Labels.getLabel(LanguageKeys.BUTTON_LOCK),
-						ComponentUtil.LOCK_TOOLTIP, Events.ON_CLICK, "onLockCategory", category, Constants.Z_ICON_LOCK,
-						Constants.ORANGE));
+						Constants.Tooltip.LOCK, Events.ON_CLICK, "onLockCategory", category,
+						Constants.Zicon.LOCK, Constants.ORANGE));
 
 			} else {
 				// Thêm action "Mở khóa"
 				hlayout.appendChild(ComponentUtil.createButton(this.winTemp,
-						Labels.getLabel(LanguageKeys.BUTTON_UNLOCK), ComponentUtil.UNLOCK_TOOLTIP, Events.ON_CLICK,
-						"onUnlockCategory", category, Constants.Z_ICON_UNLOCK, Constants.ORANGE));
+						Labels.getLabel(LanguageKeys.BUTTON_UNLOCK), Constants.Tooltip.UNLOCK,
+						Events.ON_CLICK, "onUnlockCategory", category, Constants.Zicon.UNLOCK, Constants.ORANGE));
 
 				// Thêm action "Xóa"
 				hlayout.appendChild(ComponentUtil.createButton(this.winTemp,
-						Labels.getLabel(LanguageKeys.BUTTON_DELETE), ComponentUtil.DEL_TOOLTIP, Events.ON_CLICK,
-						"onDeleteCategory", category, Constants.Z_ICON_TRASH_O, Constants.RED));
+						Labels.getLabel(LanguageKeys.BUTTON_DELETE), Constants.Tooltip.DEL, Events.ON_CLICK,
+						"onDeleteCategory", category, Constants.Zicon.TRASH_O, Constants.RED));
 			}
 		}
 
 		// Thêm action "Quyền" và "Resource" nếu là menu item
 		if (Values.MENU_TYPE_ITEM.equals(category.getType())) {
 			hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.BUTTON_RIGHT),
-					ComponentUtil.RIGHT_TOOLTIP, Events.ON_CLICK, RIGHT_PAGE, _createParameterMap(category),
-					Constants.Z_ICON_KEY, Constants.ORANGE));
+					Constants.Tooltip.RIGHT, Events.ON_CLICK, RIGHT_PAGE, _createParameterMap(category),
+					Constants.Zicon.Z_ICON_KEY, Constants.ORANGE));
 
 //            hlayout.appendChild(ComponentUtil.createButton(null,
 //                Labels.getLabel(LanguageKeys.BUTTON_RESOURCE), Events.ON_CLICK, 
 //                RESOURCE_ACTION_PAGE, _createParameterMap(category), 
-//                Constants.Z_ICON_KEY, Constants.ORANGE));
+//                Constants.ZICON.Z_ICON_KEY, Constants.ORANGE));
 		}
 
 		action.appendChild(hlayout);

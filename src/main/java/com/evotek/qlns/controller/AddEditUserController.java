@@ -327,6 +327,7 @@ public class AddEditUserController extends BasicController<Window> implements Se
 
 	public void onCreateGender() {
 		List<SimpleModel> genders = this.userService.getGenderType();
+		
 		this.cbGender.setModel(new ListModelList<SimpleModel>(genders));
 	}
 

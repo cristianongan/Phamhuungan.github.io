@@ -100,7 +100,7 @@ public class StaffDAOImpl extends AbstractDAO<Staff> implements StaffDAO {
 					DateUtil.getDateAfter(StaticUtil.NOTIFY_CONTRACT_EXPIRED_BEFORE_DAY)));
 			predicates.add(builder.equal(root.get("status"), Values.STATUS_ACTIVE));
 
-			criteria.select(root).where(builder.or(predicates.toArray(new Predicate[predicates.size()])));
+			criteria.select(root).where(builder.and(predicates.toArray(new Predicate[predicates.size()])));
 
 			results = session.createQuery(criteria).getResultList();
 
@@ -215,7 +215,7 @@ public class StaffDAOImpl extends AbstractDAO<Staff> implements StaffDAO {
 			criteria.select(root);
 
 			if (Validator.isNotNull(predicates)) {
-				criteria.where(builder.or(predicates.toArray(new Predicate[predicates.size()])));
+				criteria.where(builder.and(predicates.toArray(new Predicate[predicates.size()])));
 			}
 
 			Query<Staff> q = session.createQuery(criteria);
@@ -269,7 +269,7 @@ public class StaffDAOImpl extends AbstractDAO<Staff> implements StaffDAO {
 			criteria.select(root);
 
 			if (Validator.isNotNull(predicates)) {
-				criteria.where(builder.or(predicates.toArray(new Predicate[predicates.size()])));
+				criteria.where(builder.and(predicates.toArray(new Predicate[predicates.size()])));
 			}
 
 			Query<Staff> q = session.createQuery(criteria);
@@ -351,7 +351,7 @@ public class StaffDAOImpl extends AbstractDAO<Staff> implements StaffDAO {
 			criteria.select(builder.count(root));
 
 			if (Validator.isNotNull(predicates)) {
-				criteria.where(builder.or(predicates.toArray(new Predicate[predicates.size()])));
+				criteria.where(builder.and(predicates.toArray(new Predicate[predicates.size()])));
 			}
 
 			Long count = (Long) session.createQuery(criteria).uniqueResult();
@@ -384,7 +384,7 @@ public class StaffDAOImpl extends AbstractDAO<Staff> implements StaffDAO {
 			criteria.select(builder.count(root));
 
 			if (Validator.isNotNull(predicates)) {
-				criteria.where(builder.or(predicates.toArray(new Predicate[predicates.size()])));
+				criteria.where(builder.and(predicates.toArray(new Predicate[predicates.size()])));
 			}
 
 			Long count = (Long) session.createQuery(criteria).uniqueResult();

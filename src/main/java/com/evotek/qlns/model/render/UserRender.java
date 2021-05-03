@@ -65,31 +65,30 @@ public class UserRender implements ListitemRenderer<User> {
 
 		hlayout.setSpacing("0");
 
-		hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.EDIT),
-				ComponentUtil.EDIT_TOOLTIP, Events.ON_CLICK, EDIT_PAGE, _createParameterMap(user),
-				Constants.Z_ICON_PENCIL, Constants.BLUE));
+		hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.EDIT), Constants.Tooltip.EDIT,
+				Events.ON_CLICK, EDIT_PAGE, _createParameterMap(user), Constants.Zicon.PENCIL, Constants.BLUE));
 
 		Long status = user.getStatus();
 
 		if (Values.STATUS_ACTIVE.equals(status)) {
 			hlayout.appendChild(ComponentUtil.createButton(this.winParent, Labels.getLabel(LanguageKeys.BUTTON_LOCK),
-					ComponentUtil.LOCK_TOOLTIP, Events.ON_CLICK, "onLockUser", user, Constants.Z_ICON_LOCK,
+					Constants.Tooltip.LOCK, Events.ON_CLICK, "onLockUser", user, Constants.Zicon.LOCK,
 					Constants.ORANGE));
 		} else if (Values.STATUS_DEACTIVE.equals(status)) {
 			hlayout.appendChild(ComponentUtil.createButton(this.winParent, Labels.getLabel(LanguageKeys.BUTTON_UNLOCK),
-					ComponentUtil.UNLOCK_TOOLTIP, Events.ON_CLICK, "onUnlockUser", user, Constants.Z_ICON_UNLOCK,
+					Constants.Tooltip.UNLOCK, Events.ON_CLICK, "onUnlockUser", user, Constants.Zicon.UNLOCK,
 					Constants.ORANGE));
 		}
 
 		if (Values.STATUS_NOT_READY.equals(status)) {
 			hlayout.appendChild(ComponentUtil.createButton(this.winParent, Labels.getLabel(LanguageKeys.BUTTON_DELETE),
-					ComponentUtil.DEL_TOOLTIP, Events.ON_CLICK, "onDeleteUser", user, Constants.Z_ICON_TRASH_O,
+					Constants.Tooltip.DEL, Events.ON_CLICK, "onDeleteUser", user, Constants.Zicon.TRASH_O,
 					Constants.RED));
 		}
 
 		hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.ASSIGN_ROLE),
-				ComponentUtil.ASSIGN_ROLE_TOOLTIP, Events.ON_CLICK, ASSIGNED_ROLE_PAGE, _createParameterMap(user),
-				Constants.Z_ICON_SHARE, Constants.PURPLE));
+				Constants.Tooltip.ASSIGN_ROLE, Events.ON_CLICK, ASSIGNED_ROLE_PAGE, _createParameterMap(user),
+				Constants.Zicon.SHARE, Constants.PURPLE));
 
 		action.appendChild(hlayout);
 

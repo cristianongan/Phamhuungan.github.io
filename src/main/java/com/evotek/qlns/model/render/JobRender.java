@@ -45,8 +45,8 @@ public class JobRender implements ListitemRenderer<Job> {
 
 		hlayout.setSpacing("0");
 
-		Button btnSave = ComponentUtil.createButton(Labels.getLabel(LanguageKeys.BUTTON_SAVE),
-				ComponentUtil.EDIT_TOOLTIP, Constants.Z_ICON_SAVE, Constants.BLUE);
+		Button btnSave = ComponentUtil.createButton(Labels.getLabel(LanguageKeys.BUTTON_SAVE), Constants.Tooltip.EDIT,
+				Constants.Zicon.SAVE, Constants.BLUE);
 
 		btnSave.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
@@ -69,7 +69,7 @@ public class JobRender implements ListitemRenderer<Job> {
 		hlayout.appendChild(btnSave);
 
 		Button btnCancel = ComponentUtil.createButton(Labels.getLabel(LanguageKeys.BUTTON_CANCEL),
-				ComponentUtil.CALCEL_TOOLTIP, Constants.Z_ICON_TIMES, Constants.RED);
+				Constants.Tooltip.CALCEL, Constants.Zicon.TIMES, Constants.RED);
 
 		btnCancel.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
@@ -96,8 +96,8 @@ public class JobRender implements ListitemRenderer<Job> {
 
 		hlayout.setSpacing("0");
 
-		Button btnEdit = ComponentUtil.createButton(Labels.getLabel(LanguageKeys.EDIT), ComponentUtil.EDIT_TOOLTIP,
-				Constants.Z_ICON_PENCIL, Constants.BLUE);
+		Button btnEdit = ComponentUtil.createButton(Labels.getLabel(LanguageKeys.EDIT), Constants.Tooltip.EDIT,
+				Constants.Zicon.PENCIL, Constants.BLUE);
 
 		btnEdit.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
@@ -112,7 +112,7 @@ public class JobRender implements ListitemRenderer<Job> {
 		hlayout.appendChild(btnEdit);
 
 		hlayout.appendChild(ComponentUtil.createButton(this._window, Labels.getLabel(LanguageKeys.DELETE),
-				ComponentUtil.DEL_TOOLTIP, Events.ON_CLICK, "onDelete", job, Constants.Z_ICON_TRASH_O, Constants.RED));
+				Constants.Tooltip.DEL, Events.ON_CLICK, "onDelete", job, Constants.Zicon.TRASH_O, Constants.RED));
 
 		action.appendChild(hlayout);
 

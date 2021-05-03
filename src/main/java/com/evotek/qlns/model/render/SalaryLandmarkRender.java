@@ -60,13 +60,13 @@ public class SalaryLandmarkRender implements ListitemRenderer<SalaryLandmark> {
 		hlayout.setSpacing("0");
 
 		hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.EDIT),
-				ComponentUtil.EDIT_TOOLTIP, Events.ON_CLICK, ADD_EDIT_SALARY_LANDMARK_PAGE,
+				Constants.Tooltip.EDIT, Events.ON_CLICK, ADD_EDIT_SALARY_LANDMARK_PAGE,
 				_createParameterMap(salaryLm, Labels.getLabel(LanguageKeys.TITLE_EDIT_SALARY_LANDMARK)),
-				Constants.Z_ICON_PENCIL, Constants.BLUE));
+				Constants.Zicon.PENCIL, Constants.BLUE));
 
 		// Thêm action "Xóa"
 		hlayout.appendChild(ComponentUtil.createButton(this._winParent, Labels.getLabel(LanguageKeys.BUTTON_DELETE),
-				ComponentUtil.DEL_TOOLTIP, Events.ON_CLICK, "onDeleteSalaryLm", salaryLm, Constants.Z_ICON_TRASH_O,
+				Constants.Tooltip.DEL, Events.ON_CLICK, "onDeleteSalaryLm", salaryLm, Constants.Zicon.TRASH_O,
 				Constants.RED));
 
 		action.appendChild(hlayout);
