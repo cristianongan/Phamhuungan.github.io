@@ -35,9 +35,6 @@ import com.evotek.qlns.util.key.Values;
 @Transactional
 public class StaffRender implements ListitemRenderer<Staff> {
 
-	private static final String DETAIL_PAGE = "~./pages/manager_human_resource/detail.zul";
-	private static final String EDIT_PAGE = "~./pages/manager_human_resource/edit.zul";
-
 	private ListModel _model;
 
 	private Hlayout _window;
@@ -50,11 +47,11 @@ public class StaffRender implements ListitemRenderer<Staff> {
 	private Map<String, Object> _createParameterMap(Staff staff, String title, int index) {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 
-		parameters.put(Constants.PARENT_WINDOW, this._window);
-		parameters.put(Constants.TITLE, title);
-		parameters.put(Constants.OBJECT, staff);
-		parameters.put(Constants.MODEL, this._model);
-		parameters.put(Constants.INDEX, index);
+		parameters.put(Constants.Attr.PARENT_WINDOW, this._window);
+		parameters.put(Constants.Attr.TITLE, title);
+		parameters.put(Constants.Attr.OBJECT, staff);
+		parameters.put(Constants.Attr.MODEL, this._model);
+		parameters.put(Constants.Attr.INDEX, index);
 
 		return parameters;
 	}
@@ -66,32 +63,32 @@ public class StaffRender implements ListitemRenderer<Staff> {
 
 		hlayout.setSpacing("0");
 
-		hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.EDIT),
-				Constants.Tooltip.EDIT, Events.ON_CLICK, EDIT_PAGE,
+		hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.EDIT), Constants.Tooltip.EDIT,
+				Events.ON_CLICK, Constants.Page.ManagerHumanResource.ADD_EDIT,
 				_createParameterMap(staff, Labels.getLabel(LanguageKeys.TITLE_EDIT_STAFF), index),
-				Constants.Zicon.PENCIL, Constants.BLUE));
+				Constants.Zicon.PENCIL, Constants.Sclass.BLUE));
 
 		Long status = staff.getStatus();
 
 		if (Values.STATUS_ACTIVE.equals(status)) {
 			hlayout.appendChild(ComponentUtil.createButton(this._window, Labels.getLabel(LanguageKeys.BUTTON_LOCK),
 					Constants.Tooltip.LOCK, Events.ON_CLICK, "onLockStaff", staff, Constants.Zicon.LOCK,
-					Constants.ORANGE));
+					Constants.Sclass.ORANGE));
 		} else {
 			hlayout.appendChild(ComponentUtil.createButton(this._window, Labels.getLabel(LanguageKeys.BUTTON_UNLOCK),
 					Constants.Tooltip.UNLOCK, Events.ON_CLICK, "onUnlockStaff", staff, Constants.Zicon.UNLOCK,
-					Constants.ORANGE));
+					Constants.Sclass.ORANGE));
 
 			// Thêm action "Xóa"
 			hlayout.appendChild(ComponentUtil.createButton(this._window, Labels.getLabel(LanguageKeys.BUTTON_DELETE),
 					Constants.Tooltip.DEL, Events.ON_CLICK, "onDeleteStaff", staff, Constants.Zicon.TRASH_O,
-					Constants.RED));
+					Constants.Sclass.RED));
 		}
 
 		hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.DETAIL),
-				Constants.Tooltip.DETAIL, Events.ON_CLICK, DETAIL_PAGE,
+				Constants.Tooltip.DETAIL, Events.ON_CLICK, Constants.Page.ManagerHumanResource.DETAIL,
 				_createParameterMap(staff, Labels.getLabel(LanguageKeys.TITLE_STAFF_DETAIL), index),
-				Constants.Zicon.SEARCH_PLUS, Constants.PURPLE));
+				Constants.Zicon.SEARCH_PLUS, Constants.Sclass.PURPLE));
 
 		action.appendChild(hlayout);
 
@@ -118,18 +115,18 @@ public class StaffRender implements ListitemRenderer<Staff> {
 	public void render(Listitem item, Staff staff, int index) throws Exception {
 		item.setAttribute("data", staff);
 
-		item.appendChild(ComponentUtil.createListcell(StringPool.BLANK, Constants.STYLE_TEXT_ALIGN_CENTER));
-		item.appendChild(ComponentUtil.createListcell(Integer.toString(index + 1), Constants.STYLE_TEXT_ALIGN_CENTER));
+		item.appendChild(ComponentUtil.createListcell(StringPool.BLANK, Constants.Style.TEXT_ALIGN_CENTER));
+		item.appendChild(ComponentUtil.createListcell(Integer.toString(index + 1), Constants.Style.TEXT_ALIGN_CENTER));
 		item.appendChild(_getAction(staff, index));
 		item.appendChild(ComponentUtil.createListcell(staff.getStaffName()));
 		item.appendChild(ComponentUtil.createListcell(staff.getDepartment().getDeptName()));
 		item.appendChild(ComponentUtil.createListcell(staff.getJob().getJobTitle()));
 		item.appendChild(
 				ComponentUtil.createListcell(GetterUtil.getDate(staff.getWorkDate(), DateUtil.SHORT_DATE_PATTERN),
-						Constants.STYLE_TEXT_ALIGN_CENTER));
+						Constants.Style.TEXT_ALIGN_CENTER));
 		item.appendChild(
 				ComponentUtil.createListcell(GetterUtil.getDate(staff.getDateOfBirth(), DateUtil.SHORT_DATE_PATTERN),
-						Constants.STYLE_TEXT_ALIGN_CENTER));
+						Constants.Style.TEXT_ALIGN_CENTER));
 		item.appendChild(ComponentUtil.createListcell(staff.getPermanentResidence()));
 		item.appendChild(ComponentUtil.createListcell(staff.getCurrentResidence()));
 		item.appendChild(ComponentUtil.createListcell(Values.getStaffStatus(staff.getStatus())));
@@ -137,17 +134,17 @@ public class StaffRender implements ListitemRenderer<Staff> {
 		item.appendChild(ComponentUtil.createListcell(staff.getContractType().getContractTypeName()));
 		item.appendChild(ComponentUtil.createListcell(
 				GetterUtil.getDate(staff.getContractFromDate(), DateUtil.SHORT_DATE_PATTERN),
-				Constants.STYLE_TEXT_ALIGN_CENTER));
+				Constants.Style.TEXT_ALIGN_CENTER));
 		item.appendChild(
 				ComponentUtil.createListcell(GetterUtil.getDate(staff.getContractToDate(), DateUtil.SHORT_DATE_PATTERN),
-						Constants.STYLE_TEXT_ALIGN_CENTER));
+						Constants.Style.TEXT_ALIGN_CENTER));
 		item.appendChild(ComponentUtil.createListcell(staff.getContractNumber()));
 		item.appendChild(ComponentUtil.createListcell(staff.getTaxCode()));
 		item.appendChild(ComponentUtil.createListcell(GetterUtil.getFormat(staff.getSalaryBasic()),
-				Constants.STYLE_TEXT_ALIGN_CENTER));
+				Constants.Style.TEXT_ALIGN_CENTER));
 		item.appendChild(ComponentUtil.createListcell(
 				GetterUtil.getDate(staff.getInsurancePaidDate(), DateUtil.SHORT_DATE_PATTERN),
-				Constants.STYLE_TEXT_ALIGN_CENTER));
+				Constants.Style.TEXT_ALIGN_CENTER));
 		item.appendChild(ComponentUtil.createListcell(staff.getInsuranceBookNumber()));
 		item.appendChild(ComponentUtil.createListcell(staff.getPaidPlace()));
 		item.appendChild(ComponentUtil.createListcell(staff.getLevels()));
@@ -156,7 +153,7 @@ public class StaffRender implements ListitemRenderer<Staff> {
 		item.appendChild(ComponentUtil.createListcell(staff.getIdentityCard()));
 		item.appendChild(
 				ComponentUtil.createListcell(GetterUtil.getDate(staff.getGrantDate(), DateUtil.SHORT_DATE_PATTERN),
-						Constants.STYLE_TEXT_ALIGN_CENTER));
+						Constants.Style.TEXT_ALIGN_CENTER));
 		item.appendChild(ComponentUtil.createListcell(staff.getGrantPlace()));
 
 		item.appendChild(new Listcell(_getPhoneNumber(staff.getMobile(), staff.getHomePhone())));

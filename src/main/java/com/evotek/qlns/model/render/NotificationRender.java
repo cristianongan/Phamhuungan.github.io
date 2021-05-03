@@ -32,12 +32,6 @@ import com.evotek.qlns.util.key.Values;
  */
 public class NotificationRender implements ListitemRenderer<Notification> {
 
-	private static final String CONTRACT_S_CLASS = "btn btn-xs no-hover btn-pink z-icon-copy";
-
-	private static final String DATE_S_CLASS = "btn btn-xs no-hover btn-success z-icon-calendar";
-
-	private static final String EDIT_STAFF_PAGE = "~./pages/manager_human_resource/edit.zul";
-
 	private Window _window;
 
 	public NotificationRender(Window window) {
@@ -47,9 +41,9 @@ public class NotificationRender implements ListitemRenderer<Notification> {
 	private Map<String, Object> _createParameterMap(Notification notify, String title) {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 
-		parameters.put(Constants.PARENT_WINDOW, this._window);
-		parameters.put(Constants.TITLE, title);
-		parameters.put(Constants.OBJECT_ID, notify.getClassPk());
+		parameters.put(Constants.Attr.PARENT_WINDOW, this._window);
+		parameters.put(Constants.Attr.TITLE, title);
+		parameters.put(Constants.Attr.OBJECT_ID, notify.getClassPk());
 
 		return parameters;
 	}
@@ -63,13 +57,13 @@ public class NotificationRender implements ListitemRenderer<Notification> {
 
 		if (Values.NOTI_CONTRACT_EXPIRED.equals(type)) {
 			hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.EXTEND_CONTRACT),
-					"extendContractTooltip", Events.ON_CLICK, EDIT_STAFF_PAGE,
+					"extendContractTooltip", Events.ON_CLICK, Constants.Page.ManagerHumanResource.ADD_EDIT,
 					_createParameterMap(notify, Labels.getLabel(LanguageKeys.TITLE_EDIT_STAFF)),
-					Constants.Zicon.LEVEL_UP, Constants.BLUE));
+					Constants.Zicon.LEVEL_UP, Constants.Sclass.BLUE));
 		} else {
 			hlayout.appendChild(ComponentUtil.createButton(this._window, Labels.getLabel(LanguageKeys.DELETE),
 					Constants.Tooltip.DEL, Events.ON_CLICK, "onDeleteNotify", notify, Constants.Zicon.TRASH_O,
-					Constants.RED));
+					Constants.Sclass.RED));
 		}
 
 		action.appendChild(hlayout);
@@ -86,29 +80,26 @@ public class NotificationRender implements ListitemRenderer<Notification> {
 		StringBuilder sb = new StringBuilder();
 
 		if (Values.NOTI_CONTRACT_EXPIRED.equals(type)) {
-			item.setSclass(Constants.CLASS_TASK_PINK);
+			item.setSclass(Constants.Class.TASK_PINK);
 
 			sb.append(Labels.getLabel(LanguageKeys.CONTRACT_EXPIRED));
 			sb.append(StringPool.SPACE);
 			sb.append(StringPool.DASH);
 			sb.append(StringPool.SPACE);
 
-			item.appendChild(ComponentUtil.createListcell(ComponentUtil.createAIcon(CONTRACT_S_CLASS)));
-//            item.appendChild(ComponentUtil.createListcell(
-//                    Labels.getLabel(LanguageKeys.CONTRACT_EXPIRED)));
+			item.appendChild(ComponentUtil.createListcell(ComponentUtil.createAIcon(Constants.Sclass.CONTRACT)));
+
 		} else if (Values.NOTI_BIRTHDAY.equals(type)) {
-			item.setSclass(Constants.CLASS_TASK_GREEN);
+			item.setSclass(Constants.Class.TASK_GREEN);
 
 			sb.append(Labels.getLabel(LanguageKeys.BIRTH_DAY));
 			sb.append(StringPool.SPACE);
 			sb.append(StringPool.DASH);
 			sb.append(StringPool.SPACE);
 
-			item.appendChild(ComponentUtil.createListcell(ComponentUtil.createAIcon(DATE_S_CLASS)));
-//            item.appendChild(ComponentUtil.createListcell(
-//                Labels.getLabel(LanguageKeys.BIRTH_DAY)));
+			item.appendChild(ComponentUtil.createListcell(ComponentUtil.createAIcon(Constants.Sclass.DATE)));
 		} else {
-			item.setSclass(Constants.CLASS_TASK_DEFAULT);
+			item.setSclass(Constants.Class.TASK_DEFAULT);
 		}
 
 		sb.append(notify.getMessage());
@@ -116,7 +107,7 @@ public class NotificationRender implements ListitemRenderer<Notification> {
 		item.appendChild(ComponentUtil.createListcell(sb.toString()));
 		item.appendChild(
 				ComponentUtil.createListcell(GetterUtil.getDate(notify.getEventDate(), DateUtil.SHORT_DATE_PATTERN),
-						Constants.STYLE_TEXT_ALIGN_CENTER));
+						Constants.Style.TEXT_ALIGN_CENTER));
 
 		item.appendChild(_getAction(notify, type));
 	}

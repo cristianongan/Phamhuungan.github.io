@@ -69,10 +69,6 @@ public class StaffController extends BasicController<Hlayout> implements Seriali
 
 	private static final Logger _log = LogManager.getLogger(StaffController.class);
 
-	private static final String ADD_EDIT_HUMAN_RESOURCE_URL = "~./pages/manager_human_resource/edit.zul";
-
-	private static final String DEPARTMENT_PAGE = "~./pages/department/view.zul";
-
 	@Autowired
 	private DepartmentService departmentService;
 
@@ -176,7 +172,7 @@ public class StaffController extends BasicController<Hlayout> implements Seriali
 	public void advanceSearch() {
 		String staffName = GetterUtil.getString(this.tbStaffName.getValue());
 		Long yearOfBirth = GetterUtil.getLong(this.lgbYearOfBirth.getValue());
-		Department dept = (Department) this.bbDepartment.getAttribute(Constants.OBJECT);
+		Department dept = (Department) this.bbDepartment.getAttribute(Constants.Attr.OBJECT);
 		String email = GetterUtil.getString(this.tbEmail.getValue());
 		Job job = this.cbJobTitle.getSelectedItem() != null
 				? (Job) this.cbJobTitle.getSelectedItem().getAttribute("data")
@@ -332,12 +328,12 @@ public class StaffController extends BasicController<Hlayout> implements Seriali
 	}
 
 	public void onClick$btnAdd() {
-		Map map = new HashMap();
+		Map<String, Object> map = new HashMap<>();
 
-		map.put(Constants.PARENT_WINDOW, this.winStaff);
-		map.put(Constants.OBJECT, null);
+		map.put(Constants.Attr.PARENT_WINDOW, this.winStaff);
+		map.put(Constants.Attr.OBJECT, null);
 
-		Window win = (Window) Executions.createComponents(ADD_EDIT_HUMAN_RESOURCE_URL, null, map);
+		Window win = (Window) Executions.createComponents(Constants.Page.ManagerHumanResource.ADD_EDIT, null, map);
 
 		win.doModal();
 	}
@@ -355,7 +351,7 @@ public class StaffController extends BasicController<Hlayout> implements Seriali
 	// Bandbox documentType
 	public void onClick$btnClearDept() {
 		this.bbDepartment.setValue(StringPool.BLANK);
-		this.bbDepartment.setAttribute(Constants.ID, null);
+		this.bbDepartment.setAttribute(Constants.Attr.ID, null);
 
 		this.btnClearDept.setDisabled(true);
 		this.btnClearDept.setVisible(false);
@@ -367,11 +363,11 @@ public class StaffController extends BasicController<Hlayout> implements Seriali
 	}
 
 	public void onClick$btnDeptManager() {
-		Map map = new HashMap();
+		Map<String, Object> map = new HashMap<>();
 
-		map.put(Constants.PARENT_WINDOW, this.winStaff);
+		map.put(Constants.Attr.PARENT_WINDOW, this.winStaff);
 
-		Window win = (Window) Executions.createComponents(this.DEPARTMENT_PAGE, null, map);
+		Window win = (Window) Executions.createComponents(Constants.Page.Department.VIEW, null, map);
 
 		win.doModal();
 	}
@@ -580,7 +576,7 @@ public class StaffController extends BasicController<Hlayout> implements Seriali
 			this.icDepartment.setAttribute("bandbox", this.bbDepartment);
 			this.icDepartment.setAttribute("btnclear", this.btnClearDept);
 
-			this.icDepartment.setSrc(Constants.TREE_DEPARTMENT_PAGE);
+			this.icDepartment.setSrc(Constants.Page.Common.DEPT_TREE);
 		}
 	}
 

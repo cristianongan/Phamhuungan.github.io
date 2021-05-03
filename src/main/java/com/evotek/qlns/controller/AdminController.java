@@ -99,7 +99,7 @@ public class AdminController extends BasicController<Hlayout> implements Seriali
 	private String getPageSource(String folder, String pageView) {
 		StringBuilder sb = new StringBuilder(4);
 
-		sb.append(Constants.CATEGORY_FOLDER);
+		sb.append(Constants.Page.ROOT_FOLDER);
 
 		if (Validator.isNotNull(folder)) {
 			sb.append(folder);
@@ -113,10 +113,10 @@ public class AdminController extends BasicController<Hlayout> implements Seriali
 	}
 
 	public void init() {
-		this.parameters = (Map<String, Object>) Sessions.getCurrent().getAttribute(Constants.MAP_PARAMETER);
+		this.parameters = (Map<String, Object>) Sessions.getCurrent().getAttribute(Constants.Attr.MAP_PARAMETER);
 
 		if (Validator.isNotNull(this.parameters)) {
-			this.items = (TreeSet<Category>) this.parameters.get(Constants.MENU_ITEMS);
+			this.items = (TreeSet<Category>) this.parameters.get(Constants.Attr.DATA);
 		}
 	}
 

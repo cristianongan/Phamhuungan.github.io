@@ -30,8 +30,6 @@ import com.evotek.qlns.util.key.LanguageKeys;
  */
 public class PreviewFileListener implements EventListener<Event> {
 
-	private static final String PREVIEW_FILE_PAGE = "~./pages/common/previewFile.zul";
-
 	private FileEntry entry;
 
 	public PreviewFileListener(FileEntry entry) {
@@ -56,13 +54,14 @@ public class PreviewFileListener implements EventListener<Event> {
 			String ext = FileUtil.getFileExtension(this.entry.getName());
 
 			if (Validator.isNotNull(ext) && Validator.isNotNull(FileUtil.FILE_TYPE_MAP.get(ext))) {
-				Map map = new HashMap();
+				Map<String, Object> map = new HashMap<>();
 
-				map.put(Constants.OBJECT, file);
-				map.put(Constants.KEY, ext);
-				map.put(Constants.VALUE, FileUtil.FILE_TYPE_MAP.get(ext));
+				map.put(Constants.Attr.OBJECT, file);
+				map.put(Constants.Attr.KEY, ext);
+				map.put(Constants.Attr.VALUE, FileUtil.FILE_TYPE_MAP.get(ext));
 
-				Window win = (Window) Executions.createComponents(PREVIEW_FILE_PAGE, null, map);
+				Window win = (Window) Executions.createComponents(Constants.Page.Common.PREVIEW_FILE, null, map);
+				
 				win.doModal();
 			} else {
 				FileUtil.download(file, this.entry.getName());

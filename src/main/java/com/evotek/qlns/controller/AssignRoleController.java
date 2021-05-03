@@ -89,11 +89,11 @@ public class AssignRoleController extends BasicController<Window> implements Ser
 
 	public void initData() {
 		try {
-			this.winParent = (Window) this.arg.get(Constants.PARENT_WINDOW);
+			this.winParent = (Window) this.arg.get(Constants.Attr.PARENT_WINDOW);
 
-			this.user = (User) this.arg.get(Constants.OBJECT);
+			this.user = (User) this.arg.get(Constants.Attr.OBJECT);
 
-			this.excludeRoles = (Set<Role>) this.arg.get(Constants.SECOND_OBJECT);
+			this.excludeRoles = (Set<Role>) this.arg.get(Constants.Attr.SECOND_OBJECT);
 
 			this.isAdmin = this.getUserWorkspace().isAdministrator();
 

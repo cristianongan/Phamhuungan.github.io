@@ -41,11 +41,11 @@ public class TreeDeptRender implements TreeitemRenderer<DepartmentTreeNode> {
 		popup.setPage(treeRow.getPage());
 
 		popup.appendChild(ComponentUtil.createMenuitem(this.winparent, Labels.getLabel(LanguageKeys.ADD),
-				Events.ON_CLICK, "onAdd", dept, Constants.Zicon.PLUS, Constants.BLUE));
+				Events.ON_CLICK, "onAdd", dept, Constants.Zicon.PLUS, Constants.Sclass.BLUE));
 
 //        if (documentType.getParentDocumentType() != null) { //neu khong phai la root
 		popup.appendChild(ComponentUtil.createMenuitem(this.winparent, Labels.getLabel(LanguageKeys.EDIT),
-				Events.ON_CLICK, "onEdit", dept, Constants.Zicon.PENCIL, Constants.BLUE));
+				Events.ON_CLICK, "onEdit", dept, Constants.Zicon.PENCIL, Constants.Sclass.BLUE));
 
 		return popup;
 	}
@@ -60,7 +60,7 @@ public class TreeDeptRender implements TreeitemRenderer<DepartmentTreeNode> {
 
 		item.setValue(node);
 		item.setOpen(node.isOpen());
-		item.setAttribute(Constants.DATA, dept);
+		item.setAttribute(Constants.Attr.DATA, dept);
 		// name
 		treeRow.appendChild(ComponentUtil.createTreeCell(dept.getDeptName()));
 

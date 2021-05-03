@@ -50,8 +50,6 @@ public class DocumentTypeController extends BasicController<Window> {
 
 	public static final Logger _log = LogManager.getLogger(DocumentTypeController.class);
 
-	private static final String ADD_EDIT_PAGE = "~./pages/document_type/edit.zul";
-
 	@Autowired
 	private DocumentTypeService documentTypeService;
 
@@ -128,7 +126,7 @@ public class DocumentTypeController extends BasicController<Window> {
 	public void doAfterCompose(Window comp) throws Exception {
 		super.doAfterCompose(comp);
 
-		this.winParent = (Hlayout) this.arg.get(Constants.PARENT_WINDOW);
+		this.winParent = (Hlayout) this.arg.get(Constants.Attr.PARENT_WINDOW);
 
 		onCreateTree();
 
@@ -180,13 +178,14 @@ public class DocumentTypeController extends BasicController<Window> {
 	public void onAdd(Event event) {
 		DocumentType documentType = (DocumentType) event.getData();
 
-		Map map = new HashMap();
+		Map<String, Object> map = new HashMap<>();
 
-		map.put(Constants.TITLE, Labels.getLabel(LanguageKeys.ADD));
-		map.put(Constants.PARENT_WINDOW, this.windowDocumentType);
-		map.put(Constants.SECOND_OBJECT, documentType);
+		map.put(Constants.Attr.TITLE, Labels.getLabel(LanguageKeys.ADD));
+		map.put(Constants.Attr.PARENT_WINDOW, this.windowDocumentType);
+		map.put(Constants.Attr.SECOND_OBJECT, documentType);
 
-		Window win = (Window) Executions.createComponents(ADD_EDIT_PAGE, this.windowDocumentType, map);
+		Window win = (Window) Executions.createComponents(Constants.Page.DocumentType.ADD_EDIT, this.windowDocumentType,
+				map);
 
 		win.doModal();
 	}
@@ -385,13 +384,14 @@ public class DocumentTypeController extends BasicController<Window> {
 	public void onEdit(Event event) {
 		DocumentType documentType = (DocumentType) event.getData();
 
-		Map map = new HashMap();
+		Map<String, Object> map = new HashMap<>();
 
-		map.put(Constants.TITLE, Labels.getLabel(LanguageKeys.TITLE_EDIT_DOCUMENT_TYPE));
-		map.put(Constants.PARENT_WINDOW, this.windowDocumentType);
-		map.put(Constants.OBJECT, documentType);
+		map.put(Constants.Attr.TITLE, Labels.getLabel(LanguageKeys.TITLE_EDIT_DOCUMENT_TYPE));
+		map.put(Constants.Attr.PARENT_WINDOW, this.windowDocumentType);
+		map.put(Constants.Attr.OBJECT, documentType);
 
-		Window win = (Window) Executions.createComponents(ADD_EDIT_PAGE, this.windowDocumentType, map);
+		Window win = (Window) Executions.createComponents(Constants.Page.DocumentType.ADD_EDIT, this.windowDocumentType,
+				map);
 
 		win.doModal();
 	}

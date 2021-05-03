@@ -52,9 +52,6 @@ public class DetailStaffController extends BasicController<Window> implements Se
 
 	private static final Logger _log = LogManager.getLogger(DetailStaffController.class);
 
-	private static final String ADD_EDIT_SALARY_LANDMARK_PAGE = "~./pages/manager_human_resource/editSalaryLandmark.zul";
-	private static final String ADD_EDIT_WORK_PROCESS_PAGE = "~./pages/manager_human_resource/editWorkProcess.zul";
-
 	@Autowired
 	private StaffService staffService;
 
@@ -101,11 +98,11 @@ public class DetailStaffController extends BasicController<Window> implements Se
 	public void doAfterCompose(Window comp) throws Exception {
 		super.doAfterCompose(comp);
 
-		this.staff = (Staff) this.arg.get(Constants.OBJECT);
+		this.staff = (Staff) this.arg.get(Constants.Attr.OBJECT);
 
-		this.model = (ListModel) this.arg.get(Constants.MODEL);
+		this.model = (ListModel) this.arg.get(Constants.Attr.MODEL);
 
-		this.index = (Integer) this.arg.get(Constants.INDEX);
+		this.index = (Integer) this.arg.get(Constants.Attr.INDEX);
 
 		initData();
 	}
@@ -131,23 +128,25 @@ public class DetailStaffController extends BasicController<Window> implements Se
 	}
 
 	public void onClick$btnAddSalaryLm() {
-		Map map = new HashMap();
+		Map<String, Object> map = new HashMap<>();
 
-		map.put(Constants.PARENT_WINDOW, this.winDetailStaff);
-		map.put(Constants.OBJECT, this.staff);
+		map.put(Constants.Attr.PARENT_WINDOW, this.winDetailStaff);
+		map.put(Constants.Attr.OBJECT, this.staff);
 
-		Window win = (Window) Executions.createComponents(ADD_EDIT_SALARY_LANDMARK_PAGE, null, map);
+		Window win = (Window) Executions
+				.createComponents(Constants.Page.ManagerHumanResource.ADD_EDIT_SALARY_LANDMARK, null, map);
 
 		win.doModal();
 	}
 
 	public void onClick$btnAddWorkProcess() {
-		Map map = new HashMap();
+		Map<String, Object> map = new HashMap<>();
 
-		map.put(Constants.PARENT_WINDOW, this.winDetailStaff);
-		map.put(Constants.OBJECT, this.staff);
+		map.put(Constants.Attr.PARENT_WINDOW, this.winDetailStaff);
+		map.put(Constants.Attr.OBJECT, this.staff);
 
-		Window win = (Window) Executions.createComponents(ADD_EDIT_WORK_PROCESS_PAGE, null, map);
+		Window win = (Window) Executions.createComponents(Constants.Page.ManagerHumanResource.ADD_EDIT_WORK_PROCESS,
+				null, map);
 
 		win.doModal();
 	}

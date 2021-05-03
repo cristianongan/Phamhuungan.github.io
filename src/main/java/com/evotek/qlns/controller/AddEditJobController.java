@@ -97,7 +97,7 @@ public class AddEditJobController extends BasicController<Window> implements Ser
 	}
 
 	public void initData() {
-		this.winParent = (Window) this.arg.get(Constants.PARENT_WINDOW);
+		this.winParent = (Window) this.arg.get(Constants.Attr.PARENT_WINDOW);
 
 		refreshModel();
 	}

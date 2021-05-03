@@ -80,9 +80,9 @@ public class AddEditUserController extends BasicController<Window> implements Se
 	private Map<String, Object> _createParameterMap(boolean update) {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 
-		parameters.put(Constants.PARENT_WINDOW, this.winParent);
-		parameters.put(Constants.OBJECT, this.user);
-		parameters.put(Constants.SECOND_OBJECT, !update || this.isManager);
+		parameters.put(Constants.Attr.PARENT_WINDOW, this.winParent);
+		parameters.put(Constants.Attr.OBJECT, this.user);
+		parameters.put(Constants.Attr.SECOND_OBJECT, !update || this.isManager);
 
 		return parameters;
 	}
@@ -271,14 +271,14 @@ public class AddEditUserController extends BasicController<Window> implements Se
 	}
 
 	public void initData() {
-		this.winParent = (Div) this.arg.get(Constants.PARENT_WINDOW);
+		this.winParent = (Div) this.arg.get(Constants.Attr.PARENT_WINDOW);
 
-		this.user = (User) this.arg.get(Constants.OBJECT);
+		this.user = (User) this.arg.get(Constants.Attr.OBJECT);
 
-		this.isManager = GetterUtil.getBooleanValue(this.arg.get(Constants.SECOND_OBJECT), false);
+		this.isManager = GetterUtil.getBooleanValue(this.arg.get(Constants.Attr.SECOND_OBJECT), false);
 
 		if (Validator.isNotNull(this.user)) {
-			this.winUpdateUser.setTitle((String) this.arg.get(Constants.TITLE));
+			this.winUpdateUser.setTitle((String) this.arg.get(Constants.Attr.TITLE));
 
 			this._setEditForm();
 

@@ -26,7 +26,6 @@ import com.evotek.qlns.service.DocumentService;
 import com.evotek.qlns.util.FileUtil;
 import com.evotek.qlns.util.StaticUtil;
 import com.evotek.qlns.util.Validator;
-import com.evotek.qlns.util.key.Constants;
 
 /**
  *
@@ -70,7 +69,7 @@ public class DocumentServiceImpl implements DocumentService {
 		folder.setUserName(users.getUserName());
 		folder.setCreateDate(new Date());
 		folder.setModifiedDate(new Date());
-		folder.setFileCount(Constants.START_COUNT);
+		folder.setFileCount(0L);
 
 		this.folderEntryDAO.saveOrUpdate(folder);
 

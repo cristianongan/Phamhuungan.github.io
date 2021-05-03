@@ -76,9 +76,9 @@ public class DetailDocumentController extends BasicController<Component> impleme
 	}
 
 	public void initData() {
-		this.winParent = (Window) this.arg.get(Constants.PARENT_WINDOW);
-		this.title = (String) this.arg.get(Constants.TITLE);
-		this.documentTemp = (Document) this.arg.get(Constants.OBJECT);
+		this.winParent = (Window) this.arg.get(Constants.Attr.PARENT_WINDOW);
+		this.title = (String) this.arg.get(Constants.Attr.TITLE);
+		this.documentTemp = (Document) this.arg.get(Constants.Attr.OBJECT);
 
 		this.winDetailDocument.setTitle(this.title);
 

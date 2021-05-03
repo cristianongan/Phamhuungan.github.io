@@ -231,12 +231,12 @@ public class AddEditMenuController extends BasicController<Window> implements Se
 	// init data
 	public void initData() throws Exception {
 		try {
-			this.winTemp = (Div) this.arg.get(Constants.PARENT_WINDOW);
+			this.winTemp = (Div) this.arg.get(Constants.Attr.PARENT_WINDOW);
 
-			this.category = (Category) this.arg.get(Constants.OBJECT);
+			this.category = (Category) this.arg.get(Constants.Attr.OBJECT);
 
 			if (Validator.isNotNull(this.category)) {
-				this.winAddMenu.setTitle((String) this.arg.get(Constants.TITLE));
+				this.winAddMenu.setTitle((String) this.arg.get(Constants.Attr.TITLE));
 
 				this._setEditForm();
 			}

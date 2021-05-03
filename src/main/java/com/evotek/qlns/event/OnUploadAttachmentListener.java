@@ -143,7 +143,7 @@ public class OnUploadAttachmentListener implements EventListener<UploadEvent> {
 
 				button.setTooltiptext(Labels.getLabel(LanguageKeys.DELETE));
 				button.setIconSclass(Constants.Zicon.TRASH_O);
-				button.setSclass(Constants.RED);
+				button.setSclass(Constants.Sclass.RED);
 
 				button.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
@@ -157,7 +157,7 @@ public class OnUploadAttachmentListener implements EventListener<UploadEvent> {
 
 				row.appendChild(button);
 
-				row.setStyle(Constants.STYLE_NO_PADDING);
+				row.setStyle(Constants.Style.NO_PADDING);
 
 				OnUploadAttachmentListener.this.medium.add(media);
 

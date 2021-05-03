@@ -144,9 +144,9 @@ public class RolePermissionController extends BasicController<Window> {
 	}
 
 	public void initData() throws Exception {
-//        winTemp = (Window) arg.get(Constants.PARENT_WINDOW);
+//        winTemp = (Window) arg.get(Constants.Attr.PARENT_WINDOW);
 
-		this.role = (Role) this.arg.get(Constants.EDIT_OBJECT);
+		this.role = (Role) this.arg.get(Constants.Attr.EDIT_OBJECT);
 
 		this.groups = this.role.getGroups();
 

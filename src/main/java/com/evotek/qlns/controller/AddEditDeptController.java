@@ -70,8 +70,8 @@ public class AddEditDeptController extends BasicController<Window> implements Se
 
 		if (Validator.isNotNull(this.oldParentDept)) {
 			this.bbDept.setValue(this.oldParentDept.getDeptName());
-			this.bbDept.setAttribute(Constants.ID, this.oldParentDept.getDeptId());
-			this.bbDept.setAttribute(Constants.OBJECT, this.oldParentDept);
+			this.bbDept.setAttribute(Constants.Attr.ID, this.oldParentDept.getDeptId());
+			this.bbDept.setAttribute(Constants.Attr.OBJECT, this.oldParentDept);
 			this.btnClearDoc.setVisible(true);
 		}
 	}
@@ -129,19 +129,19 @@ public class AddEditDeptController extends BasicController<Window> implements Se
 	// init data
 	public void initData() throws Exception {
 		try {
-			this.winParent = (Window) this.arg.get(Constants.PARENT_WINDOW);
+			this.winParent = (Window) this.arg.get(Constants.Attr.PARENT_WINDOW);
 
-			this.dept = (Department) this.arg.get(Constants.OBJECT);
-			this.parentDept = (Department) this.arg.get(Constants.SECOND_OBJECT);
+			this.dept = (Department) this.arg.get(Constants.Attr.OBJECT);
+			this.parentDept = (Department) this.arg.get(Constants.Attr.SECOND_OBJECT);
 
 			if (Validator.isNotNull(this.parentDept)) {
 				this.bbDept.setValue(this.parentDept.getDeptName());
-				this.bbDept.setAttribute(Constants.ID, this.parentDept.getDeptId());
-				this.bbDept.setAttribute(Constants.OBJECT, this.parentDept);
+				this.bbDept.setAttribute(Constants.Attr.ID, this.parentDept.getDeptId());
+				this.bbDept.setAttribute(Constants.Attr.OBJECT, this.parentDept);
 			}
 
 			if (Validator.isNotNull(this.dept)) {
-				this.winEditDept.setTitle((String) this.arg.get(Constants.TITLE));
+				this.winEditDept.setTitle((String) this.arg.get(Constants.Attr.TITLE));
 
 				if (Validator.isNotNull(this.dept.getParentId())) {
 					this.oldParentDept = this.departmentService.getDeparment(this.dept.getParentId());
@@ -161,7 +161,7 @@ public class AddEditDeptController extends BasicController<Window> implements Se
 	// Bandbox documentType
 	public void onClick$btnClearDoc() {
 		this.bbDept.setValue(StringPool.BLANK);
-		this.bbDept.setAttribute(Constants.ID, null);
+		this.bbDept.setAttribute(Constants.Attr.ID, null);
 
 		this.btnClearDoc.setDisabled(true);
 		this.btnClearDoc.setVisible(false);
@@ -173,7 +173,7 @@ public class AddEditDeptController extends BasicController<Window> implements Se
 		try {
 			String deptName = GetterUtil.getString(this.tbDeptName.getValue());
 			String description = GetterUtil.getString(this.tbDescription.getValue());
-			this.parentDept = (Department) this.bbDept.getAttribute(Constants.OBJECT);
+			this.parentDept = (Department) this.bbDept.getAttribute(Constants.Attr.OBJECT);
 
 			if (this._validate(deptName, description)) {
 				if (Validator.isNull(this.dept)) {
@@ -216,7 +216,7 @@ public class AddEditDeptController extends BasicController<Window> implements Se
 				this.icDepartment.setAttribute("exclude", this.dept);
 			}
 
-			this.icDepartment.setSrc(Constants.TREE_DEPARTMENT_PAGE);
+			this.icDepartment.setSrc(Constants.Page.Common.DEPT_TREE);
 		}
 	}
 	// Bandbox documentType

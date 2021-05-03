@@ -56,8 +56,6 @@ public class DepartmentController extends BasicController<Window> implements Ser
 	@Autowired
 	private DepartmentService departmentService;
 
-	private static final String ADD_EDIT_PAGE = "~./pages/department/edit.zul";
-
 	private Button btnDelete;
 
 	private Button btnDown;
@@ -126,7 +124,7 @@ public class DepartmentController extends BasicController<Window> implements Ser
 	public void doAfterCompose(Window comp) throws Exception {
 		super.doAfterCompose(comp);
 
-		this.winParent = (Hlayout) this.arg.get(Constants.PARENT_WINDOW);
+		this.winParent = (Hlayout) this.arg.get(Constants.Attr.PARENT_WINDOW);
 
 		onCreateTree();
 
@@ -176,13 +174,13 @@ public class DepartmentController extends BasicController<Window> implements Ser
 	public void onAdd(Event event) {
 		Department dept = (Department) event.getData();
 
-		Map map = new HashMap();
+		Map<String, Object> map = new HashMap<>();
 
-		map.put(Constants.TITLE, Labels.getLabel(LanguageKeys.ADD));
-		map.put(Constants.PARENT_WINDOW, this.winDept);
-		map.put(Constants.SECOND_OBJECT, dept);
+		map.put(Constants.Attr.TITLE, Labels.getLabel(LanguageKeys.ADD));
+		map.put(Constants.Attr.PARENT_WINDOW, this.winDept);
+		map.put(Constants.Attr.SECOND_OBJECT, dept);
 
-		Window win = (Window) Executions.createComponents(ADD_EDIT_PAGE, this.winDept, map);
+		Window win = (Window) Executions.createComponents(Constants.Page.Department.ADD_EDIT, this.winDept, map);
 
 		win.doModal();
 	}
@@ -384,13 +382,13 @@ public class DepartmentController extends BasicController<Window> implements Ser
 	public void onEdit(Event event) {
 		Department dept = (Department) event.getData();
 
-		Map map = new HashMap();
+		Map<String, Object> map = new HashMap<>();
 
-		map.put(Constants.TITLE, Labels.getLabel(LanguageKeys.TITLE_EDIT_DEPARTMENT));
-		map.put(Constants.PARENT_WINDOW, this.winDept);
-		map.put(Constants.OBJECT, dept);
+		map.put(Constants.Attr.TITLE, Labels.getLabel(LanguageKeys.TITLE_EDIT_DEPARTMENT));
+		map.put(Constants.Attr.PARENT_WINDOW, this.winDept);
+		map.put(Constants.Attr.OBJECT, dept);
 
-		Window win = (Window) Executions.createComponents(ADD_EDIT_PAGE, this.winDept, map);
+		Window win = (Window) Executions.createComponents(Constants.Page.Department.ADD_EDIT, this.winDept, map);
 
 		win.doModal();
 	}

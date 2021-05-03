@@ -45,8 +45,6 @@ public class RoleController extends BasicController<Div> implements Serializable
 
 	private static final Logger _log = LogManager.getLogger(RoleController.class);
 
-	private static final String EDIT_PAGE = "~./pages/manager_role/edit.zul";
-
 	@Autowired
 	private RoleService roleService;
 
@@ -118,16 +116,17 @@ public class RoleController extends BasicController<Div> implements Serializable
 	}
 
 	public void onClick$adminPage() {
-		this.parent.setSrc("~./pages/admin/default.zul");
+		this.parent.setSrc(Constants.Page.Admin.DEFAULT);
 	}
 
 	public void onClick$btnAdd() {
 		try {
 			Map<String, Object> parameters = new HashMap<String, Object>();
-			parameters.put(Constants.PARENT_WINDOW, this.winRole);
-			parameters.put(Constants.ID, 0L);
+			parameters.put(Constants.Attr.PARENT_WINDOW, this.winRole);
+			parameters.put(Constants.Attr.ID, 0L);
 
-			Window win = (Window) Executions.createComponents(EDIT_PAGE, this.winRole, parameters);
+			Window win = (Window) Executions.createComponents(Constants.Page.ManagerRole.ADD_EDIT, this.winRole,
+					parameters);
 			win.doModal();
 		} catch (Exception ex) {
 			_log.error(ex.getMessage(), ex);

@@ -63,28 +63,28 @@ public class AddEditDocumentController extends BasicController<Window> implement
 	private DocumentService documentService;
 
 	private A btnClearDoc;
-	
+
 	private Bandbox bbDocumentType;
-	
+
 	private Combobox cbDepartment;
-	
+
 	private Datebox dbDate;
-	
+
 	private Div divUpload;
-	
+
 	private Document document;
-	
+
 	private Hlayout winParent;
-	
+
 	private Include icDocumentType;
-	
+
 	private Integer index;
-	
+
 	private ListModel model;
-	
+
 	private Textbox txtContent;
 	private Textbox txtDocumentNumber;
-	
+
 	private Window winAddEditDocument;
 
 	public boolean _validate(String documentNumber, Long documentTypeId, String content) {
@@ -149,13 +149,13 @@ public class AddEditDocumentController extends BasicController<Window> implement
 	public void doAfterCompose(Window comp) throws Exception {
 		super.doAfterCompose(comp);
 
-		this.winParent = (Hlayout) this.arg.get(Constants.PARENT_WINDOW);
+		this.winParent = (Hlayout) this.arg.get(Constants.Attr.PARENT_WINDOW);
 
-		this.document = (Document) this.arg.get(Constants.OBJECT);
+		this.document = (Document) this.arg.get(Constants.Attr.OBJECT);
 
-		this.model = (ListModel) this.arg.get(Constants.MODEL);
+		this.model = (ListModel) this.arg.get(Constants.Attr.MODEL);
 
-		this.index = (Integer) this.arg.get(Constants.INDEX);
+		this.index = (Integer) this.arg.get(Constants.Attr.INDEX);
 
 		initData();
 	}
@@ -169,7 +169,7 @@ public class AddEditDocumentController extends BasicController<Window> implement
 
 	public void initData() {
 		if (Validator.isNotNull(this.document)) {
-			this.winAddEditDocument.setTitle((String) this.arg.get(Constants.TITLE));
+			this.winAddEditDocument.setTitle((String) this.arg.get(Constants.Attr.TITLE));
 
 			onLoadForm(this.document);
 		} else {
@@ -200,7 +200,7 @@ public class AddEditDocumentController extends BasicController<Window> implement
 	// Bandbox documentType
 	public void onClick$btnClearDoc() {
 		this.bbDocumentType.setValue(StringPool.BLANK);
-		this.bbDocumentType.setAttribute(Constants.ID, null);
+		this.bbDocumentType.setAttribute(Constants.Attr.ID, null);
 
 		this.btnClearDoc.setDisabled(true);
 		this.btnClearDoc.setVisible(false);
@@ -290,7 +290,7 @@ public class AddEditDocumentController extends BasicController<Window> implement
 
 	public void onCreate$cbDepartment() {
 		ListModel dictModel = new SimpleListModel(this.documentService.getDepartment());
-		
+
 		this.cbDepartment.setModel(dictModel);
 	}
 
@@ -311,7 +311,7 @@ public class AddEditDocumentController extends BasicController<Window> implement
 
 			comp = ComponentUtil.createAttachment(config, oldFiles);
 
-			comp.setAttribute(Constants.ID, oldFiles);
+			comp.setAttribute(Constants.Attr.ID, oldFiles);
 
 			this.divUpload.appendChild(comp);
 		}
@@ -322,7 +322,7 @@ public class AddEditDocumentController extends BasicController<Window> implement
 
 		if (Validator.isNotNull(document.getDocumentTypeId())) {
 			this.bbDocumentType.setValue(document.getTypeName());
-			this.bbDocumentType.setAttribute(Constants.ID, document.getDocumentTypeId());
+			this.bbDocumentType.setAttribute(Constants.Attr.ID, document.getDocumentTypeId());
 			this.btnClearDoc.setVisible(true);
 		}
 
@@ -336,7 +336,7 @@ public class AddEditDocumentController extends BasicController<Window> implement
 			this.icDocumentType.setAttribute("bandbox", this.bbDocumentType);
 			this.icDocumentType.setAttribute("btnclear", this.btnClearDoc);
 
-			this.icDocumentType.setSrc(Constants.TREE_DOCUMENT_TYPE_PAGE);
+			this.icDocumentType.setSrc(Constants.Page.Common.TREE_DOCUMENT_TYPE);
 		}
 	}
 	// Bandbox documentType
@@ -351,10 +351,11 @@ public class AddEditDocumentController extends BasicController<Window> implement
 	public List<FileEntry> updateFileEntry(Document document) {
 		User users = getUser();
 
-		List<FileEntry> oldFiles = (List<FileEntry>) this.divUpload.getFirstChild().getAttribute(Constants.ID);
+		List<FileEntry> oldFiles = (List<FileEntry>) this.divUpload.getFirstChild().getAttribute(Constants.Attr.ID);
 
 		// Lay list cac file xoa di trong list file cu
-		List<FileEntry> deleteFiles = (List<FileEntry>) this.divUpload.getFirstChild().getAttribute(Constants.OBJECT);
+		List<FileEntry> deleteFiles = (List<FileEntry>) this.divUpload.getFirstChild()
+				.getAttribute(Constants.Attr.OBJECT);
 
 		List<FileEntry> deletedFiles = new ArrayList<FileEntry>();
 		List<FileEntry> addedFiles = new ArrayList<FileEntry>();
@@ -366,7 +367,7 @@ public class AddEditDocumentController extends BasicController<Window> implement
 			oldFiles.removeAll(deletedFiles);
 		}
 
-		List<Media> medium = (List<Media>) this.divUpload.getFirstChild().getAttribute(Constants.DATA);
+		List<Media> medium = (List<Media>) this.divUpload.getFirstChild().getAttribute(Constants.Attr.DATA);
 
 		if (medium != null && !medium.isEmpty()) {
 			addedFiles = this.documentService.saveMedia(users, medium, document);

@@ -36,12 +36,6 @@ public class TreeCategoryRender<Component> implements TreeitemRenderer<CategoryT
 	// Mảng các loại menu lấy từ file cấu hình vsm.config.properties
 	private static final String[] _type = StaticUtil.MENU_TYPE;
 
-	private static final String EDIT_PAGE = "~./pages/manager_menu/edit.zul";
-
-	private static final String RESOURCE_ACTION_PAGE = "~./pages/manager_menu/resource_action.zul";
-
-	private static final String RIGHT_PAGE = "~./pages/manager_menu/right.zul";
-
 	public Div winTemp;
 
 	public TreeCategoryRender(Component win) {
@@ -57,9 +51,9 @@ public class TreeCategoryRender<Component> implements TreeitemRenderer<CategoryT
 	private Map<String, Object> _createParameterMap(Category category) {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 
-		parameters.put(Constants.PARENT_WINDOW, this.winTemp);
-		parameters.put(Constants.TITLE, Labels.getLabel(LanguageKeys.TITLE_EDIT_MENU));
-		parameters.put(Constants.OBJECT, category);
+		parameters.put(Constants.Attr.PARENT_WINDOW, this.winTemp);
+		parameters.put(Constants.Attr.TITLE, Labels.getLabel(LanguageKeys.TITLE_EDIT_MENU));
+		parameters.put(Constants.Attr.OBJECT, category);
 
 		return parameters;
 	}
@@ -77,9 +71,9 @@ public class TreeCategoryRender<Component> implements TreeitemRenderer<CategoryT
 
 		hlayout.setSpacing("0");
 
-		hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.EDIT),
-				Constants.Tooltip.EDIT, Events.ON_CLICK, EDIT_PAGE, _createParameterMap(category),
-				Constants.Zicon.PENCIL, Constants.BLUE));
+		hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.EDIT), Constants.Tooltip.EDIT,
+				Events.ON_CLICK, Constants.Page.ManagerMenu.ADD_EDIT, _createParameterMap(category),
+				Constants.Zicon.PENCIL, Constants.Sclass.BLUE));
 
 		Long status = category.getStatus();
 		Long immune = category.getImmune();
@@ -88,27 +82,27 @@ public class TreeCategoryRender<Component> implements TreeitemRenderer<CategoryT
 			if (Validator.isNotNull(status) && status.equals(Values.STATUS_ACTIVE)) {
 				// Thêm action "Khóa"
 				hlayout.appendChild(ComponentUtil.createButton(this.winTemp, Labels.getLabel(LanguageKeys.BUTTON_LOCK),
-						Constants.Tooltip.LOCK, Events.ON_CLICK, "onLockCategory", category,
-						Constants.Zicon.LOCK, Constants.ORANGE));
+						Constants.Tooltip.LOCK, Events.ON_CLICK, "onLockCategory", category, Constants.Zicon.LOCK,
+						Constants.Sclass.ORANGE));
 
 			} else {
 				// Thêm action "Mở khóa"
 				hlayout.appendChild(ComponentUtil.createButton(this.winTemp,
-						Labels.getLabel(LanguageKeys.BUTTON_UNLOCK), Constants.Tooltip.UNLOCK,
-						Events.ON_CLICK, "onUnlockCategory", category, Constants.Zicon.UNLOCK, Constants.ORANGE));
+						Labels.getLabel(LanguageKeys.BUTTON_UNLOCK), Constants.Tooltip.UNLOCK, Events.ON_CLICK,
+						"onUnlockCategory", category, Constants.Zicon.UNLOCK, Constants.Sclass.ORANGE));
 
 				// Thêm action "Xóa"
 				hlayout.appendChild(ComponentUtil.createButton(this.winTemp,
 						Labels.getLabel(LanguageKeys.BUTTON_DELETE), Constants.Tooltip.DEL, Events.ON_CLICK,
-						"onDeleteCategory", category, Constants.Zicon.TRASH_O, Constants.RED));
+						"onDeleteCategory", category, Constants.Zicon.TRASH_O, Constants.Sclass.RED));
 			}
 		}
 
 		// Thêm action "Quyền" và "Resource" nếu là menu item
 		if (Values.MENU_TYPE_ITEM.equals(category.getType())) {
 			hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.BUTTON_RIGHT),
-					Constants.Tooltip.RIGHT, Events.ON_CLICK, RIGHT_PAGE, _createParameterMap(category),
-					Constants.Zicon.Z_ICON_KEY, Constants.ORANGE));
+					Constants.Tooltip.RIGHT, Events.ON_CLICK, Constants.Page.ManagerMenu.RIGHT,
+					_createParameterMap(category), Constants.Zicon.KEY, Constants.Sclass.ORANGE));
 
 //            hlayout.appendChild(ComponentUtil.createButton(null,
 //                Labels.getLabel(LanguageKeys.BUTTON_RESOURCE), Events.ON_CLICK, 

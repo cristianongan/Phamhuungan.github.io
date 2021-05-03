@@ -31,7 +31,7 @@ public class AssignPermissionRender implements ListitemRenderer<Object> {
 	public void render(Listitem items, Object obj, int index) throws Exception {
 		Group group = (Group) obj;
 
-		items.appendChild(ComponentUtil.createListcell(StringPool.BLANK, Constants.STYLE_TEXT_ALIGN_CENTER));
+		items.appendChild(ComponentUtil.createListcell(StringPool.BLANK, Constants.Style.TEXT_ALIGN_CENTER));
 		items.appendChild(new Listcell(group.getGroupName()));
 		items.appendChild(new Listcell(group.getDescription()));
 

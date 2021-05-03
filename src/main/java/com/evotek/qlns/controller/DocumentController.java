@@ -72,10 +72,6 @@ public class DocumentController extends BasicController<Hlayout> implements Seri
 
 	private static final Logger _log = LogManager.getLogger(DocumentController.class);
 
-	private static final String DOCUMENT_TYPE_PAGE = "~./pages/document_type/view.zul";
-
-	private static final String EDIT_PAGE = "~./pages/manager_document/edit.zul";
-
 	@Autowired
 	private DocumentService documentService;
 
@@ -370,12 +366,12 @@ public class DocumentController extends BasicController<Hlayout> implements Seri
 	}
 
 	public void onClick$btnAddDoc() {
-		Map map = new HashMap();
+		Map<String, Object> map = new HashMap<>();
 
-		map.put(Constants.PARENT_WINDOW, this.winDocument);
-		map.put(Constants.OBJECT, null);
+		map.put(Constants.Attr.PARENT_WINDOW, this.winDocument);
+		map.put(Constants.Attr.OBJECT, null);
 
-		Window win = (Window) Executions.createComponents(this.EDIT_PAGE, null, map);
+		Window win = (Window) Executions.createComponents(Constants.Page.ManagerDocument.ADD_EDIT, null, map);
 
 		win.doModal();
 	}
@@ -394,7 +390,7 @@ public class DocumentController extends BasicController<Hlayout> implements Seri
 	// Bandbox documentType
 	public void onClick$btnClearDoc() {
 		this.bbDocumentType.setValue(StringPool.BLANK);
-		this.bbDocumentType.setAttribute(Constants.ID, null);
+		this.bbDocumentType.setAttribute(Constants.Attr.ID, null);
 
 		this.btnClearDoc.setDisabled(true);
 		this.btnClearDoc.setVisible(false);
@@ -433,11 +429,11 @@ public class DocumentController extends BasicController<Hlayout> implements Seri
 	}
 
 	public void onClick$btnDocTypeManager() {
-		Map map = new HashMap();
+		Map<String, Object> map = new HashMap<>();
 
-		map.put(Constants.PARENT_WINDOW, this.winDocument);
+		map.put(Constants.Attr.PARENT_WINDOW, this.winDocument);
 
-		Window win = (Window) Executions.createComponents(this.DOCUMENT_TYPE_PAGE, null, map);
+		Window win = (Window) Executions.createComponents(Constants.Page.DocumentType.VIEW, null, map);
 
 		win.doModal();
 	}
@@ -661,7 +657,7 @@ public class DocumentController extends BasicController<Hlayout> implements Seri
 			this.icDocumentType.setAttribute("bandbox", this.bbDocumentType);
 			this.icDocumentType.setAttribute("btnclear", this.btnClearDoc);
 
-			this.icDocumentType.setSrc(Constants.TREE_DOCUMENT_TYPE_PAGE);
+			this.icDocumentType.setSrc(Constants.Page.Common.TREE_DOCUMENT_TYPE);
 		}
 	}
 

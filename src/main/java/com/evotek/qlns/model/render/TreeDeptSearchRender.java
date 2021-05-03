@@ -22,7 +22,7 @@ import com.evotek.qlns.util.key.Constants;
 
 /**
  *
- * @author My PC
+ * @author LinhLH
  */
 public class TreeDeptSearchRender implements TreeitemRenderer<DepartmentTreeNode> {
 
@@ -50,8 +50,8 @@ public class TreeDeptSearchRender implements TreeitemRenderer<DepartmentTreeNode
 
 				TreeDeptSearchRender.this.bbTemp.setValue(clickedNodeValue.getData().getDeptName());
 
-				TreeDeptSearchRender.this.bbTemp.setAttribute(Constants.OBJECT, clickedNodeValue.getData());
-				TreeDeptSearchRender.this.bbTemp.setAttribute(Constants.ID, clickedNodeValue.getData().getDeptId());
+				TreeDeptSearchRender.this.bbTemp.setAttribute(Constants.Attr.OBJECT, clickedNodeValue.getData());
+				TreeDeptSearchRender.this.bbTemp.setAttribute(Constants.Attr.ID, clickedNodeValue.getData().getDeptId());
 
 				TreeDeptSearchRender.this.bbTemp.close();
 
@@ -62,7 +62,7 @@ public class TreeDeptSearchRender implements TreeitemRenderer<DepartmentTreeNode
 
 		treeItem.appendChild(dataRow);
 
-		treeItem.setAttribute(Constants.DATA, dept);
+		treeItem.setAttribute(Constants.Attr.DATA, dept);
 		treeItem.setValue(t);
 		treeItem.setOpen(t.isOpen());
 	}

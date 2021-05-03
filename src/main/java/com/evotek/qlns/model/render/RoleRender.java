@@ -28,10 +28,6 @@ import com.evotek.qlns.util.key.Values;
  */
 public class RoleRender<Component> implements ListitemRenderer<Role> {
 
-	private static final String EDIT_PAGE = "~./pages/manager_role/edit.zul";
-
-	private static final String PERMISSION_PAGE = "~./pages/manager_role/permission.zul";
-
 	private Div winTemp;
 
 	public RoleRender(Div winTemp) {
@@ -41,9 +37,9 @@ public class RoleRender<Component> implements ListitemRenderer<Role> {
 	private Map<String, Object> _createParameterMap(Role role) {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 
-		parameters.put(Constants.PARENT_WINDOW, this.winTemp);
-		parameters.put(Constants.TITLE, Labels.getLabel(LanguageKeys.TITLE_EDIT_ROLE));
-		parameters.put(Constants.EDIT_OBJECT, role);
+		parameters.put(Constants.Attr.PARENT_WINDOW, this.winTemp);
+		parameters.put(Constants.Attr.TITLE, Labels.getLabel(LanguageKeys.TITLE_EDIT_ROLE));
+		parameters.put(Constants.Attr.EDIT_OBJECT, role);
 
 		return parameters;
 	}
@@ -60,8 +56,8 @@ public class RoleRender<Component> implements ListitemRenderer<Role> {
 
 			if (Values.NOT_IMMUNE.equals(immune)) {
 				hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.EDIT),
-						Constants.Tooltip.EDIT, Events.ON_CLICK, EDIT_PAGE, _createParameterMap(role),
-						Constants.Zicon.PENCIL, Constants.BLUE));
+						Constants.Tooltip.EDIT, Events.ON_CLICK, Constants.Page.ManagerRole.ADD_EDIT,
+						_createParameterMap(role), Constants.Zicon.PENCIL, Constants.Sclass.BLUE));
 
 				Long status = role.getStatus();
 
@@ -69,22 +65,22 @@ public class RoleRender<Component> implements ListitemRenderer<Role> {
 					// Thêm action "Khóa"
 					hlayout.appendChild(ComponentUtil.createButton(this.winTemp,
 							Labels.getLabel(LanguageKeys.BUTTON_LOCK), Constants.Tooltip.LOCK, Events.ON_CLICK,
-							"onLockRole", role, Constants.Zicon.LOCK, Constants.ORANGE));
+							"onLockRole", role, Constants.Zicon.LOCK, Constants.Sclass.ORANGE));
 				} else {
 					hlayout.appendChild(ComponentUtil.createButton(this.winTemp,
 							Labels.getLabel(LanguageKeys.BUTTON_UNLOCK), Constants.Tooltip.UNLOCK, Events.ON_CLICK,
-							"onUnlockRole", role, Constants.Zicon.UNLOCK, Constants.ORANGE));
+							"onUnlockRole", role, Constants.Zicon.UNLOCK, Constants.Sclass.ORANGE));
 
 					// Thêm action "Xóa"
 					hlayout.appendChild(ComponentUtil.createButton(this.winTemp,
 							Labels.getLabel(LanguageKeys.BUTTON_DELETE), Constants.Tooltip.DEL, Events.ON_CLICK,
-							"onDeleteRole", role, Constants.Zicon.TRASH_O, Constants.RED));
+							"onDeleteRole", role, Constants.Zicon.TRASH_O, Constants.Sclass.RED));
 				}
 			}
 
 			hlayout.appendChild(ComponentUtil.createButton(this.winTemp, Labels.getLabel(LanguageKeys.ASSIGN_RIGHT),
-					Constants.Tooltip.ASSIGN_RIGHT, Events.ON_CLICK, PERMISSION_PAGE, _createParameterMap(role),
-					Constants.Zicon.SHARE, Constants.PURPLE));
+					Constants.Tooltip.ASSIGN_RIGHT, Events.ON_CLICK, Constants.Page.ManagerRole.PERMISSION,
+					_createParameterMap(role), Constants.Zicon.SHARE, Constants.Sclass.PURPLE));
 
 			action.appendChild(hlayout);
 
@@ -95,7 +91,7 @@ public class RoleRender<Component> implements ListitemRenderer<Role> {
 
 	@Override
 	public void render(Listitem items, final Role role, int index) throws Exception {
-		items.appendChild(ComponentUtil.createListcell(Integer.toString(index + 1), Constants.STYLE_TEXT_ALIGN_CENTER));
+		items.appendChild(ComponentUtil.createListcell(Integer.toString(index + 1), Constants.Style.TEXT_ALIGN_CENTER));
 		items.appendChild(new Listcell(role.getRoleName()));
 		items.appendChild(new Listcell(Values.getLockStatus(role.getStatus())));
 		items.appendChild(new Listcell(role.getDescription()));

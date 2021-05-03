@@ -112,12 +112,12 @@ public class AddEditRoleController extends BasicController<Window> {
 
 	private void initData() throws Exception {
 		try {
-			this.winTemp = (Div) this.arg.get(Constants.PARENT_WINDOW);
+			this.winTemp = (Div) this.arg.get(Constants.Attr.PARENT_WINDOW);
 
-			this.role = (Role) this.arg.get(Constants.EDIT_OBJECT);
+			this.role = (Role) this.arg.get(Constants.Attr.EDIT_OBJECT);
 
 			if (Validator.isNotNull(this.role)) {
-				this.winAddRole.setTitle((String) this.arg.get(Constants.TITLE));
+				this.winAddRole.setTitle((String) this.arg.get(Constants.Attr.TITLE));
 
 				this._setEditForm();
 			}

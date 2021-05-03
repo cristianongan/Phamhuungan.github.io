@@ -40,7 +40,7 @@ public class OldFileGridRender<Component> implements RowRenderer<FileEntry> {
 
 		button.setTooltiptext(Labels.getLabel(LanguageKeys.DELETE));
 		button.setIconSclass(Constants.Zicon.TRASH_O);
-		button.setSclass(Constants.RED);
+		button.setSclass(Constants.Sclass.RED);
 
 		button.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
@@ -54,6 +54,6 @@ public class OldFileGridRender<Component> implements RowRenderer<FileEntry> {
 
 		row.appendChild(button);
 
-		row.setStyle(Constants.STYLE_NO_PADDING);
+		row.setStyle(Constants.Style.NO_PADDING);
 	}
 }

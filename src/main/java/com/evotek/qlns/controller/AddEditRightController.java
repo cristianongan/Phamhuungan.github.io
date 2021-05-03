@@ -114,18 +114,18 @@ public class AddEditRightController extends BasicController<Window> implements S
 	// init data
 	public void initData() throws Exception {
 		try {
-			this.winTemp = (Window) this.arg.get(Constants.PARENT_WINDOW);
+			this.winTemp = (Window) this.arg.get(Constants.Attr.PARENT_WINDOW);
 
-			this.category = (Category) this.arg.get(Constants.OBJECT);
+			this.category = (Category) this.arg.get(Constants.Attr.OBJECT);
 
 			if (Validator.isNull(this.category)) {
 				this.category = new Category();
 			}
 
-			this.right = (Right) this.arg.get(Constants.EDIT_OBJECT);
+			this.right = (Right) this.arg.get(Constants.Attr.EDIT_OBJECT);
 
 			if (Validator.isNotNull(this.right)) {
-				this.winEditRight.setTitle((String) this.arg.get(Constants.TITLE));
+				this.winEditRight.setTitle((String) this.arg.get(Constants.Attr.TITLE));
 
 				this._setEditForm();
 			} else {

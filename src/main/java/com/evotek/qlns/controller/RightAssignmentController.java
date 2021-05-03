@@ -48,10 +48,6 @@ public class RightAssignmentController extends BasicController<Window> implement
 
 	private static final Logger _log = LogManager.getLogger(RightAssignmentController.class);
 
-	private static final String EDIT_GROUP_PAGE = "~./pages/manager_menu/edit_group.zul";
-
-	private static final String EDIT_RIGHT_PAGE = "~./pages/manager_menu/edit_right.zul";
-
 	@Autowired
 	private CategoryService categoryService;
 
@@ -69,8 +65,8 @@ public class RightAssignmentController extends BasicController<Window> implement
 	private Map<String, Object> _createParameterMap() {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 
-		parameters.put(Constants.PARENT_WINDOW, this.winRight);
-		parameters.put(Constants.OBJECT, this.category);
+		parameters.put(Constants.Attr.PARENT_WINDOW, this.winRight);
+		parameters.put(Constants.Attr.OBJECT, this.category);
 
 		return parameters;
 	}
@@ -103,9 +99,9 @@ public class RightAssignmentController extends BasicController<Window> implement
 
 	public void initData() throws Exception {
 		try {
-//            winTemp = (Window) arg.get(Constants.PARENT_WINDOW);
+//            winTemp = (Window) arg.get(Constants.Attr.PARENT_WINDOW);
 
-			this.category = (Category) this.arg.get(Constants.OBJECT);
+			this.category = (Category) this.arg.get(Constants.Attr.OBJECT);
 
 			this.categoryId = this.category.getCategoryId();
 
@@ -123,13 +119,15 @@ public class RightAssignmentController extends BasicController<Window> implement
 
 	// event method
 	public void onClick$btnAddGroups() {
-		Window win = (Window) Executions.createComponents(EDIT_GROUP_PAGE, this.winRight, _createParameterMap());
+		Window win = (Window) Executions.createComponents(Constants.Page.ManagerUser.ADD_EDIT_GROUP, this.winRight,
+				_createParameterMap());
 
 		win.doModal();
 	}
 
 	public void onClick$btnAddRight() {
-		Window win = (Window) Executions.createComponents(EDIT_RIGHT_PAGE, this.winRight, _createParameterMap());
+		Window win = (Window) Executions.createComponents(Constants.Page.ManagerUser.ADD_EDIT_RIGHT, this.winRight,
+				_createParameterMap());
 
 		win.doModal();
 	}

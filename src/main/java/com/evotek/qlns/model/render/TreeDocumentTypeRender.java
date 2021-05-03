@@ -21,11 +21,12 @@ import com.evotek.qlns.util.key.LanguageKeys;
 
 /**
  *
- * @author MRHOT
+ * @author LinhLH
  */
 public class TreeDocumentTypeRender implements TreeitemRenderer<DocumentTypeTreeNode> {
 
 	private DocumentTypeService documentTypeService;
+	
 	private Window winparent;
 
 	public TreeDocumentTypeRender(Window win, DocumentTypeService _doDocumentTypeService) {
@@ -40,11 +41,11 @@ public class TreeDocumentTypeRender implements TreeitemRenderer<DocumentTypeTree
 		popup.setPage(treeRow.getPage());
 
 		popup.appendChild(ComponentUtil.createMenuitem(this.winparent, Labels.getLabel(LanguageKeys.ADD),
-				Events.ON_CLICK, "onAdd", documentType, Constants.Zicon.PLUS, Constants.BLUE));
+				Events.ON_CLICK, "onAdd", documentType, Constants.Zicon.PLUS, Constants.Sclass.BLUE));
 
 //        if (documentType.getParentDocumentType() != null) { //neu khong phai la root
 		popup.appendChild(ComponentUtil.createMenuitem(this.winparent, Labels.getLabel(LanguageKeys.EDIT),
-				Events.ON_CLICK, "onEdit", documentType, Constants.Zicon.PENCIL, Constants.BLUE));
+				Events.ON_CLICK, "onEdit", documentType, Constants.Zicon.PENCIL, Constants.Sclass.BLUE));
 //        popup.appendChild(ComponentUtil.createMenuitem(winparent,
 //                Labels.getLabel(LanguageKeys.BUTTON_DELETE),
 //                Events.ON_CLICK, "onDelete", documentType,
@@ -64,7 +65,7 @@ public class TreeDocumentTypeRender implements TreeitemRenderer<DocumentTypeTree
 
 		item.setValue(node);
 		item.setOpen(node.isOpen());
-		item.setAttribute(Constants.DATA, documentType);
+		item.setAttribute(Constants.Attr.DATA, documentType);
 		// name
 		treeRow.appendChild(ComponentUtil.createTreeCell(documentType.getTypeName()));
 		// status

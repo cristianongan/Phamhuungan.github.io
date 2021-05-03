@@ -76,8 +76,6 @@ import com.evotek.qlns.util.key.ZkKeys;
  */
 public class ComponentUtil {
 
-	
-
 	public static void clear(Component comp) {
 		if (comp.getChildren() != null) {
 			comp.getChildren().clear();
@@ -145,13 +143,13 @@ public class ComponentUtil {
 
 		button.setUpload(config);
 		button.setIconSclass(Constants.Zicon.PAPERCLIP);
-		button.setSclass(Constants.BTN_SUCCESS);
+		button.setSclass(Constants.Sclass.BTN_SUCCESS);
 
 		List<Media> medium = new ArrayList<Media>();
 
 		button.addEventListener(Events.ON_UPLOAD, new OnUploadAttachmentListener(medium, divFileList));
 
-		divContainer.setAttribute(Constants.DATA, medium);
+		divContainer.setAttribute(Constants.Attr.DATA, medium);
 
 		return button;
 	}
@@ -169,7 +167,7 @@ public class ComponentUtil {
 
 			divContainer.appendChild(createOldFileGrid(oldFiles, deleteFiles));
 
-			divContainer.setAttribute(Constants.OBJECT, deleteFiles);
+			divContainer.setAttribute(Constants.Attr.OBJECT, deleteFiles);
 		}
 
 		divContainer.appendChild(divFileList);
@@ -332,7 +330,7 @@ public class ComponentUtil {
 
 		cell.appendChild(new Label(label));
 
-		cell.setStyle(/* Constants.STYLE_BORDER_NONE + */style);
+		cell.setStyle(/* Constants.Style.BORDER_NONE + */style);
 
 		return cell;
 	}
@@ -399,7 +397,7 @@ public class ComponentUtil {
 		for (int i = 0; i < values.length; i++) {
 			Comboitem item = createComboitem(Long.valueOf(i), values[i]);
 
-			item.setAttribute(Constants.DATA, values[i]);
+			item.setAttribute(Constants.Attr.DATA, values[i]);
 
 			cb.appendChild(item);
 
@@ -449,7 +447,7 @@ public class ComponentUtil {
 //
 //            divContainer.appendChild(createOldFileGrid(oldFiles, deleteFiles));
 //
-//            divContainer.setAttribute(Constants.OBJECT, deleteFiles);
+//            divContainer.setAttribute(Constants.Attr.OBJECT, deleteFiles);
 //        }
 //
 //        divContainer.appendChild(divFileList);
@@ -573,7 +571,7 @@ public class ComponentUtil {
 
 		if (Validator.isNull(files)) {
 			Grid grid = ComponentUtil.createGrid(Labels.getLabel(LanguageKeys.MESSAGE_NO_DOCUMENT_WAS_FOUND),
-					Constants.SCLASS_NO_STYLE);
+					Constants.Sclass.NO_STYLE);
 
 			vbox.appendChild(grid);
 		} else {
@@ -593,7 +591,7 @@ public class ComponentUtil {
 		Div div = new Div();
 
 		Grid grid = ComponentUtil.createGrid(Labels.getLabel(LanguageKeys.MESSAGE_NO_DOCUMENT_WAS_FOUND),
-				Constants.SCLASS_NO_STYLE);
+				Constants.Sclass.NO_STYLE);
 
 		grid.setHflex("1");
 		grid.appendChild(ComponentUtil.createColumns(new String[] { "", "38px" }));
@@ -612,7 +610,7 @@ public class ComponentUtil {
 //        Div div = new Div();
 //
 //        Grid grid = ComponentUtil.createGrid(StringPool.BLANK,
-//                Constants.SCLASS_NO_STYLE);
+//                Constants.Sclass.NO_STYLE);
 //
 //        grid.appendChild(ComponentUtil.createColumns(
 //                new String[]{"90%", "10%"}));
@@ -629,7 +627,7 @@ public class ComponentUtil {
 		Div div = new Div();
 
 		Grid grid = ComponentUtil.createGrid(Labels.getLabel(LanguageKeys.MESSAGE_NO_DOCUMENT_WAS_FOUND),
-				Constants.SCLASS_NO_STYLE);
+				Constants.Sclass.NO_STYLE);
 
 		grid.appendChild(ComponentUtil.createColumns(new String[] { "80%", "10%", "10%" }));
 
@@ -657,7 +655,7 @@ public class ComponentUtil {
 			grid.setEmptyMessage(emptyString);
 		}
 
-		grid.setStyle(Constants.STYLE_BORDER_NONE);
+		grid.setStyle(Constants.Style.BORDER_NONE);
 
 		grid.appendChild(new Rows());
 
@@ -679,7 +677,7 @@ public class ComponentUtil {
 		gb.setTitle(title);
 
 		if (!border) {
-			gb.setStyle(Constants.STYLE_BORDER_NONE);
+			gb.setStyle(Constants.Style.BORDER_NONE);
 		}
 
 		return gb;
@@ -754,7 +752,7 @@ public class ComponentUtil {
 
 		Label lb = new Label(label);
 
-		lb.setZclass(Constants.CLASS_LINK_BUTTON);
+		lb.setZclass(Constants.Class.LINK_BUTTON);
 
 		cell.appendChild(lb);
 
@@ -788,7 +786,7 @@ public class ComponentUtil {
 
 		cell.appendChild(lb);
 		cell.setTooltiptext(label);
-		cell.setStyle(Constants.STYLE_BORDER_NONE);
+		cell.setStyle(Constants.Style.BORDER_NONE);
 
 		return cell;
 	}
@@ -807,7 +805,7 @@ public class ComponentUtil {
 		Listcell cell = new Listcell();
 
 		cell.appendChild(lb);
-		cell.setStyle(Constants.STYLE_BORDER_NONE);
+		cell.setStyle(Constants.Style.BORDER_NONE);
 		return cell;
 	}
 
@@ -838,7 +836,7 @@ public class ComponentUtil {
 	public static Listheader createListheader(String header, String width) {
 		Listheader listheader = new Listheader(header);
 
-		listheader.setStyle(Constants.STYLE_COLUMN_MULTILINE);
+		listheader.setStyle(Constants.Style.COLUMN_MULTILINE);
 
 		if (Validator.isNotNull(width)) {
 			listheader.setWidth(width);
@@ -907,7 +905,7 @@ public class ComponentUtil {
 		mapNotice.put("type", type);
 		mapNotice.put("notice", Labels.getLabel(label));
 
-		Executions.createComponents(Constants.Page.Common.MESSAGE_BOX_PAGE, null, mapNotice);
+		Executions.createComponents(Constants.Page.Common.MESSAGE_BOX, null, mapNotice);
 	}
 
 	public static void createMessageBox(String type, String label, Object[] args) {
@@ -916,13 +914,13 @@ public class ComponentUtil {
 		mapNotice.put("type", type);
 		mapNotice.put("notice", Labels.getLabel(label, args));
 
-		Executions.createComponents(Constants.Page.Common.MESSAGE_BOX_PAGE, null, mapNotice);
+		Executions.createComponents(Constants.Page.Common.MESSAGE_BOX, null, mapNotice);
 	}
 
 	public static Div createOldFileGrid(List<FileEntry> oldFiles, List<FileEntry> deleteFiles) {
 		Div div = new Div();
 
-		Grid grid = ComponentUtil.createGrid(StringPool.BLANK, Constants.SCLASS_NO_STYLE);
+		Grid grid = ComponentUtil.createGrid(StringPool.BLANK, Constants.Sclass.NO_STYLE);
 
 		grid.appendChild(ComponentUtil.createColumns(new String[] { "88%", "12%" }));
 
@@ -1131,7 +1129,7 @@ public class ComponentUtil {
 		Treecell cell = new Treecell();
 
 		cell.appendChild(label);
-		cell.setStyle(Constants.STYLE_BORDER_NONE);
+		cell.setStyle(Constants.Style.BORDER_NONE);
 
 		return cell;
 	}
@@ -1140,7 +1138,7 @@ public class ComponentUtil {
 		Treecell cell = new Treecell();
 
 		cell.appendChild(createStatusImage(status));
-		cell.setStyle(Constants.STYLE_BORDER_NONE + Constants.STYLE_TEXT_ALIGN_CENTER);
+		cell.setStyle(Constants.Style.BORDER_NONE + Constants.Style.TEXT_ALIGN_CENTER);
 
 		return cell;
 	}
@@ -1197,7 +1195,7 @@ public class ComponentUtil {
 	}
 
 	public static Long getBandboxValue(Bandbox bandbox) {
-		Long bbValue = GetterUtil.getLong(bandbox.getAttribute(Constants.ID));
+		Long bbValue = GetterUtil.getLong(bandbox.getAttribute(Constants.Attr.ID));
 
 		if (Validator.isNull(bbValue)) {
 			return null;
@@ -1271,7 +1269,7 @@ public class ComponentUtil {
 		Set<Treeitem> items = tree.getSelectedItems();
 
 		for (Treeitem item : items) {
-			Long id = (Long) item.getAttribute(Constants.OBJECT_ID);
+			Long id = (Long) item.getAttribute(Constants.Attr.OBJECT_ID);
 
 			if (Validator.isNotNull(id)) {
 				ids.add(id);

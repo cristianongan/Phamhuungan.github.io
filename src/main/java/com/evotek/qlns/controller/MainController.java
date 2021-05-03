@@ -51,10 +51,6 @@ public class MainController extends BasicController<Div> implements Serializable
 	// get set method
 	private static final long serialVersionUID = 1366774306343L;
 
-	// private static final String HOME_PAGE = "~./pages/home/home.zul";
-	private static final String USER_DETAIL_PAGE = "~./pages/manager_user/edit.zul";
-	private static final String VIEW_ALL_NOTIFICATION = "~./pages/notification/view.zul";
-
 	@Autowired
 	private MainService mainService;
 
@@ -122,7 +118,7 @@ public class MainController extends BasicController<Div> implements Serializable
 	private Navitem _createMenu(Category category, TreeSet<Category> items) {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 
-		parameters.put(Constants.MENU_ITEMS, items);
+		parameters.put(Constants.Attr.DATA, items);
 
 		Navitem menu = _createMenuItem(category.getLanguageKey(), category.getFolderName(), category.getViewPage(),
 				parameters);
@@ -263,7 +259,7 @@ public class MainController extends BasicController<Div> implements Serializable
 	private String getPageSource(String folder, String pageView) {
 		StringBuilder sb = new StringBuilder(4);
 
-		sb.append(Constants.CATEGORY_FOLDER);
+		sb.append(Constants.Page.ROOT_FOLDER);
 
 		if (Validator.isNotNull(folder)) {
 			sb.append(folder);
@@ -326,9 +322,9 @@ public class MainController extends BasicController<Div> implements Serializable
 	public void onClick$aSeeAll() {
 		Map<String, Object> params = new HashMap<String, Object>();
 
-		params.put(Constants.PARENT_WINDOW, this.mainDiv);
+		params.put(Constants.Attr.PARENT_WINDOW, this.mainDiv);
 
-		Window win = (Window) Executions.createComponents(VIEW_ALL_NOTIFICATION, null, params);
+		Window win = (Window) Executions.createComponents(Constants.Page.Notification.VIEW, null, params);
 
 		win.doModal();
 	}
@@ -350,12 +346,13 @@ public class MainController extends BasicController<Div> implements Serializable
 	public void onClick$userDetail() throws IOException {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 
-		parameters.put(Constants.PARENT_WINDOW, this.mainDiv);
-		parameters.put(Constants.TITLE, Labels.getLabel(LanguageKeys.USER_INFOMATION));
-		parameters.put(Constants.OBJECT, getUser());
-		parameters.put(Constants.SELF_UPDATE, true);
+		parameters.put(Constants.Attr.PARENT_WINDOW, this.mainDiv);
+		parameters.put(Constants.Attr.TITLE, Labels.getLabel(LanguageKeys.USER_INFOMATION));
+		parameters.put(Constants.Attr.OBJECT, getUser());
+		parameters.put(Constants.Attr.SELF_UPDATE, true);
 
-		Window win = (Window) Executions.createComponents(USER_DETAIL_PAGE, this.mainDiv, parameters);
+		Window win = (Window) Executions.createComponents(Constants.Page.ManagerUser.ADD_EDIT, this.mainDiv,
+				parameters);
 
 		win.doModal();
 	}

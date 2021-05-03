@@ -31,7 +31,6 @@ import com.evotek.qlns.util.key.LanguageKeys;
  */
 public class WorkProcessRender implements ListitemRenderer<WorkProcess> {
 
-	private static final String ADD_EDIT_WORK_PROCESS_PAGE = "~./pages/manager_human_resource/editWorkProcess.zul";
 	private Staff _staff;
 
 	private Window _winParent;
@@ -44,10 +43,10 @@ public class WorkProcessRender implements ListitemRenderer<WorkProcess> {
 	private Map<String, Object> _createParameterMap(WorkProcess wp, String title) {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 
-		parameters.put(Constants.PARENT_WINDOW, this._winParent);
-		parameters.put(Constants.TITLE, title);
-		parameters.put(Constants.OBJECT, this._staff);
-		parameters.put(Constants.EDIT_OBJECT, wp);
+		parameters.put(Constants.Attr.PARENT_WINDOW, this._winParent);
+		parameters.put(Constants.Attr.TITLE, title);
+		parameters.put(Constants.Attr.OBJECT, this._staff);
+		parameters.put(Constants.Attr.EDIT_OBJECT, wp);
 
 		return parameters;
 	}
@@ -59,19 +58,19 @@ public class WorkProcessRender implements ListitemRenderer<WorkProcess> {
 
 		hlayout.setSpacing("0");
 
-		hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.EDIT),
-				Constants.Tooltip.EDIT, Events.ON_CLICK, ADD_EDIT_WORK_PROCESS_PAGE,
+		hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.EDIT), Constants.Tooltip.EDIT,
+				Events.ON_CLICK, Constants.Page.ManagerHumanResource.ADD_EDIT_WORK_PROCESS,
 				_createParameterMap(wp, Labels.getLabel(LanguageKeys.TITLE_EDIT_WORK_PROCESS)), Constants.Zicon.PENCIL,
-				Constants.BLUE));
+				Constants.Sclass.BLUE));
 
 		// Thêm action "Xóa"
 		hlayout.appendChild(ComponentUtil.createButton(this._winParent, Labels.getLabel(LanguageKeys.BUTTON_DELETE),
 				Constants.Tooltip.DEL, Events.ON_CLICK, "onDeleteWorkProcess", wp, Constants.Zicon.TRASH_O,
-				Constants.RED));
+				Constants.Sclass.RED));
 
 		action.appendChild(hlayout);
 
-		action.setStyle(Constants.STYLE_TEXT_ALIGN_CENTER);
+		action.setStyle(Constants.Style.TEXT_ALIGN_CENTER);
 
 		return action;
 	}
@@ -81,9 +80,9 @@ public class WorkProcessRender implements ListitemRenderer<WorkProcess> {
 		item.setAttribute("data", wp);
 
 		item.appendChild(ComponentUtil.createListcell(GetterUtil.getDate(wp.getFromDate(), DateUtil.SHORT_DATE_PATTERN),
-				Constants.STYLE_TEXT_ALIGN_CENTER));
+				Constants.Style.TEXT_ALIGN_CENTER));
 		item.appendChild(ComponentUtil.createListcell(GetterUtil.getDate(wp.getToDate(), DateUtil.SHORT_DATE_PATTERN),
-				Constants.STYLE_TEXT_ALIGN_CENTER));
+				Constants.Style.TEXT_ALIGN_CENTER));
 		item.appendChild(ComponentUtil.createListcell(wp.getCompany()));
 		item.appendChild(ComponentUtil.createListcell(wp.getJobTitle()));
 

@@ -46,7 +46,7 @@ public class JobRender implements ListitemRenderer<Job> {
 		hlayout.setSpacing("0");
 
 		Button btnSave = ComponentUtil.createButton(Labels.getLabel(LanguageKeys.BUTTON_SAVE), Constants.Tooltip.EDIT,
-				Constants.Zicon.SAVE, Constants.BLUE);
+				Constants.Zicon.SAVE, Constants.Sclass.BLUE);
 
 		btnSave.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
@@ -69,7 +69,7 @@ public class JobRender implements ListitemRenderer<Job> {
 		hlayout.appendChild(btnSave);
 
 		Button btnCancel = ComponentUtil.createButton(Labels.getLabel(LanguageKeys.BUTTON_CANCEL),
-				Constants.Tooltip.CALCEL, Constants.Zicon.TIMES, Constants.RED);
+				Constants.Tooltip.CALCEL, Constants.Zicon.TIMES, Constants.Sclass.RED);
 
 		btnCancel.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
@@ -97,7 +97,7 @@ public class JobRender implements ListitemRenderer<Job> {
 		hlayout.setSpacing("0");
 
 		Button btnEdit = ComponentUtil.createButton(Labels.getLabel(LanguageKeys.EDIT), Constants.Tooltip.EDIT,
-				Constants.Zicon.PENCIL, Constants.BLUE);
+				Constants.Zicon.PENCIL, Constants.Sclass.BLUE);
 
 		btnEdit.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
@@ -111,8 +111,9 @@ public class JobRender implements ListitemRenderer<Job> {
 
 		hlayout.appendChild(btnEdit);
 
-		hlayout.appendChild(ComponentUtil.createButton(this._window, Labels.getLabel(LanguageKeys.DELETE),
-				Constants.Tooltip.DEL, Events.ON_CLICK, "onDelete", job, Constants.Zicon.TRASH_O, Constants.RED));
+		hlayout.appendChild(
+				ComponentUtil.createButton(this._window, Labels.getLabel(LanguageKeys.DELETE), Constants.Tooltip.DEL,
+						Events.ON_CLICK, "onDelete", job, Constants.Zicon.TRASH_O, Constants.Sclass.RED));
 
 		action.appendChild(hlayout);
 
@@ -128,13 +129,13 @@ public class JobRender implements ListitemRenderer<Job> {
 	}
 
 	private void renderEditing(Listitem item, Job job, int index) {
-		item.appendChild(ComponentUtil.createListcell(Integer.toString(index + 1), Constants.STYLE_TEXT_ALIGN_CENTER));
+		item.appendChild(ComponentUtil.createListcell(Integer.toString(index + 1), Constants.Style.TEXT_ALIGN_CENTER));
 		item.appendChild(ComponentUtil.createTextboxListcell(job.getJobTitle(), job.getJobId() + "-" + "job-title"));
 		item.appendChild(_getEditAction(item, job, index));
 	}
 
 	private void renderNoneEditing(Listitem item, Job job, int index) {
-		item.appendChild(ComponentUtil.createListcell(Integer.toString(index + 1), Constants.STYLE_TEXT_ALIGN_CENTER));
+		item.appendChild(ComponentUtil.createListcell(Integer.toString(index + 1), Constants.Style.TEXT_ALIGN_CENTER));
 		item.appendChild(ComponentUtil.createListcell(job.getJobTitle()));
 		item.appendChild(_getNoneEditAction(item, job, index));
 	}

@@ -54,7 +54,7 @@ public class DownloadFileGridRender<Component> implements RowRenderer<FileEntry>
 
 		row.appendChild(rm1);
 
-		row.setStyle(Constants.STYLE_NO_PADDING);
+		row.setStyle(Constants.Style.NO_PADDING);
 	}
 
 }

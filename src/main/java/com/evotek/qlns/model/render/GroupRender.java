@@ -28,10 +28,6 @@ import com.evotek.qlns.util.key.Values;
  */
 public class GroupRender implements RowRenderer<Group> {
 
-	private static final String ASSIGN_RIGHT_PAGE = "~./pages/manager_menu/assign_right.zul";
-
-	private static final String EDIT_GROUP_PAGE = "~./pages/manager_menu/edit_group.zul";
-
 	public Window winTemp;
 
 	public GroupRender(Window winTemp) {
@@ -41,9 +37,9 @@ public class GroupRender implements RowRenderer<Group> {
 	private Map<String, Object> _createParameterMap(Group group) {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 
-		parameters.put(Constants.PARENT_WINDOW, this.winTemp);
-		parameters.put(Constants.TITLE, Labels.getLabel(LanguageKeys.TITLE_EDIT_GROUP));
-		parameters.put(Constants.EDIT_OBJECT, group);
+		parameters.put(Constants.Attr.PARENT_WINDOW, this.winTemp);
+		parameters.put(Constants.Attr.TITLE, Labels.getLabel(LanguageKeys.TITLE_EDIT_GROUP));
+		parameters.put(Constants.Attr.EDIT_OBJECT, group);
 
 		return parameters;
 	}
@@ -55,7 +51,8 @@ public class GroupRender implements RowRenderer<Group> {
 		hlayout.setSpacing("0");
 
 		hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.EDIT), Constants.Tooltip.EDIT,
-				Events.ON_CLICK, EDIT_GROUP_PAGE, _createParameterMap(group), Constants.Zicon.PENCIL, Constants.BLUE));
+				Events.ON_CLICK, Constants.Page.ManagerUser.ADD_EDIT_GROUP, _createParameterMap(group),
+				Constants.Zicon.PENCIL, Constants.Sclass.BLUE));
 
 		Long status = group.getStatus();
 
@@ -63,33 +60,33 @@ public class GroupRender implements RowRenderer<Group> {
 			// Thêm action "Khóa"
 			hlayout.appendChild(ComponentUtil.createButton(this.winTemp, Labels.getLabel(LanguageKeys.BUTTON_LOCK),
 					Constants.Tooltip.LOCK, Events.ON_CLICK, "onLockGroups", group, Constants.Zicon.LOCK,
-					Constants.ORANGE));
+					Constants.Sclass.ORANGE));
 		} else {
 			hlayout.appendChild(ComponentUtil.createButton(this.winTemp, Labels.getLabel(LanguageKeys.BUTTON_UNLOCK),
 					Constants.Tooltip.UNLOCK, Events.ON_CLICK, "onUnlockGroups", group, Constants.Zicon.UNLOCK,
-					Constants.ORANGE));
+					Constants.Sclass.ORANGE));
 
 			// Thêm action "Xóa"
 			hlayout.appendChild(ComponentUtil.createButton(this.winTemp, Labels.getLabel(LanguageKeys.BUTTON_DELETE),
 					Constants.Tooltip.DEL, Events.ON_CLICK, "onDeleteGroups", group, Constants.Zicon.TRASH_O,
-					Constants.RED));
+					Constants.Sclass.RED));
 		}
 
 		hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.ASSIGN_RIGHT),
-				Constants.Tooltip.ASSIGN_RIGHT, Events.ON_CLICK, ASSIGN_RIGHT_PAGE, _createParameterMap(group),
-				Constants.Zicon.SHARE, Constants.PURPLE));
+				Constants.Tooltip.ASSIGN_RIGHT, Events.ON_CLICK, Constants.Page.ManagerUser.ASSIGN_RIGHT,
+				_createParameterMap(group), Constants.Zicon.SHARE, Constants.Sclass.PURPLE));
 
 		return hlayout;
 	}
 
 	@Override
 	public void render(Row row, Group group, int index) throws Exception {
-		row.appendChild(ComponentUtil.createCell(Integer.toString(index + 1), Constants.STYLE_TEXT_ALIGN_CENTER));
+		row.appendChild(ComponentUtil.createCell(Integer.toString(index + 1), Constants.Style.TEXT_ALIGN_CENTER));
 		row.appendChild(new Label(group.getGroupName()));
 //        row.appendChild(new Label(group.getUserName()));
 //        row.appendChild(ComponentUtil.createCell(GetterUtil.getDate(
 //                group.getModifiedDate(), DateUtil.SHORT_DATE_PATTERN),
-//                Constants.STYLE_TEXT_ALIGN_CENTER));
+//                Constants.Style.TEXT_ALIGN_CENTER));
 		row.appendChild(new Label(group.getDescription()));
 		row.appendChild(new Label(Values.getLockStatus(group.getStatus())));
 		row.appendChild(this._getAction(group));

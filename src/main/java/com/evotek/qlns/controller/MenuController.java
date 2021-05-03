@@ -47,8 +47,6 @@ public class MenuController extends BasicController<Div> implements Serializable
 
 	private static final Logger _log = LogManager.getLogger(MenuController.class);
 
-	private static final String EDIT_PAGE = "~./pages/manager_menu/edit.zul";
-
 	@Autowired
 	private CategoryService categoryService;
 
@@ -147,7 +145,7 @@ public class MenuController extends BasicController<Div> implements Serializable
 	}
 
 	public void onClick$adminPage() {
-		this.parent.setSrc("~./pages/admin/default.zul");
+		this.parent.setSrc(Constants.Page.Admin.DEFAULT);
 	}
 
 	/**
@@ -157,11 +155,12 @@ public class MenuController extends BasicController<Div> implements Serializable
 		// Tạo map để set các tham số truyền vào khi mở popup cập nhật/thêm mới
 		Map<String, Object> parameters = new HashMap<String, Object>();
 
-		parameters.put(Constants.PARENT_WINDOW, this.winMenu);
-		parameters.put(Constants.TITLE, Labels.getLabel(LanguageKeys.ADD));
-		parameters.put(Constants.ID, 0L);
+		parameters.put(Constants.Attr.PARENT_WINDOW, this.winMenu);
+		parameters.put(Constants.Attr.TITLE, Labels.getLabel(LanguageKeys.ADD));
+		parameters.put(Constants.Attr.ID, 0L);
 
-		Window win = (Window) Executions.createComponents(EDIT_PAGE, this.winMenu, parameters);
+		Window win = (Window) Executions.createComponents(Constants.Page.ManagerMenu.ADD_EDIT, this.winMenu,
+				parameters);
 
 		win.doModal();
 	}

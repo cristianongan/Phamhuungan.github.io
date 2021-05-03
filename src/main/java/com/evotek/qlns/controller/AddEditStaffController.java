@@ -63,9 +63,6 @@ public class AddEditStaffController extends BasicController<Window> implements S
 	@Autowired
 	private StaffService staffService;
 
-	private static final String ADD_EDIT_CONTRACT_TYPE_URL = "~./pages/manager_human_resource/editContractType.zul";
-	private static final String ADD_EDIT_JOB_URL = "~./pages/manager_human_resource/editJob.zul";
-
 	private A btnClearDept;
 
 	private Bandbox bbDepartment;
@@ -291,17 +288,17 @@ public class AddEditStaffController extends BasicController<Window> implements S
 	public void doAfterCompose(Window comp) throws Exception {
 		super.doAfterCompose(comp);
 
-		this.staffId = (Long) this.arg.get(Constants.OBJECT_ID);
+		this.staffId = (Long) this.arg.get(Constants.Attr.OBJECT_ID);
 
 		if (Validator.isNotNull(this.staffId)) {
 			this.staff = this.staffService.getStaff(this.staffId);
 		} else {
-			this.staff = (Staff) this.arg.get(Constants.OBJECT);
+			this.staff = (Staff) this.arg.get(Constants.Attr.OBJECT);
 		}
 
-		this.model = (ListModel) this.arg.get(Constants.MODEL);
+		this.model = (ListModel) this.arg.get(Constants.Attr.MODEL);
 
-		this.index = (Integer) this.arg.get(Constants.INDEX);
+		this.index = (Integer) this.arg.get(Constants.Attr.INDEX);
 
 		initData();
 	}
@@ -317,11 +314,11 @@ public class AddEditStaffController extends BasicController<Window> implements S
 		if ((Validator.isNull(this.index) || Validator.isNull(this.model)) && Validator.isNotNull(this.staff)) {
 			this.dbContractFromDate.setFocus(true);
 		} else {
-			this.winParent = (Hlayout) this.arg.get(Constants.PARENT_WINDOW);
+			this.winParent = (Hlayout) this.arg.get(Constants.Attr.PARENT_WINDOW);
 		}
 
 		if (Validator.isNotNull(this.staff)) {
-			this.winEditStaff.setTitle((String) this.arg.get(Constants.TITLE));
+			this.winEditStaff.setTitle((String) this.arg.get(Constants.Attr.TITLE));
 
 			this.onLoadEditForm();
 		}
@@ -363,23 +360,24 @@ public class AddEditStaffController extends BasicController<Window> implements S
 	}
 
 	public void onClick$btnAddContractType() {
-		Map map = new HashMap();
+		Map<String, Object> map = new HashMap<>();
 
-		map.put(Constants.PARENT_WINDOW, this.winEditStaff);
-		map.put(Constants.OBJECT, null);
+		map.put(Constants.Attr.PARENT_WINDOW, this.winEditStaff);
+		map.put(Constants.Attr.OBJECT, null);
 
-		Window win = (Window) Executions.createComponents(ADD_EDIT_CONTRACT_TYPE_URL, null, map);
+		Window win = (Window) Executions.createComponents(Constants.Page.ManagerHumanResource.ADD_EDIT_CONTRACT_TYPE,
+				null, map);
 
 		win.doModal();
 	}
 
 	public void onClick$btnAddJob() {
-		Map map = new HashMap();
+		Map<String, Object> map = new HashMap<>();
 
-		map.put(Constants.PARENT_WINDOW, this.winEditStaff);
-		map.put(Constants.OBJECT, null);
+		map.put(Constants.Attr.PARENT_WINDOW, this.winEditStaff);
+		map.put(Constants.Attr.OBJECT, null);
 
-		Window win = (Window) Executions.createComponents(ADD_EDIT_JOB_URL, null, map);
+		Window win = (Window) Executions.createComponents(Constants.Page.ManagerHumanResource.ADD_EDIT_JOB, null, map);
 
 		win.doModal();
 	}
@@ -391,7 +389,7 @@ public class AddEditStaffController extends BasicController<Window> implements S
 	// Bandbox documentType
 	public void onClick$btnClearDept() {
 		this.bbDepartment.setValue(StringPool.BLANK);
-		this.bbDepartment.setAttribute(Constants.ID, null);
+		this.bbDepartment.setAttribute(Constants.Attr.ID, null);
 
 		this.btnClearDept.setDisabled(true);
 		this.btnClearDept.setVisible(false);
@@ -439,7 +437,7 @@ public class AddEditStaffController extends BasicController<Window> implements S
 		try {
 			String staffName = GetterUtil.getString(this.tbStaffName.getValue());
 			// thong tin chung
-			Department dept = (Department) this.bbDepartment.getAttribute(Constants.OBJECT);
+			Department dept = (Department) this.bbDepartment.getAttribute(Constants.Attr.OBJECT);
 			Job job = (Job) this.cbJobTitle.getSelectedItem().getAttribute("data");
 			Date workDate = this.dbWorkDate.getValue();
 			Date dateOfBirth = this.dbDateOfBirth.getValue();
@@ -580,9 +578,9 @@ public class AddEditStaffController extends BasicController<Window> implements S
 		// thong tin chung
 		if (dept.getDeptId() != null) {
 			this.bbDepartment.setValue(dept.getDeptName());
-			this.bbDepartment.setAttribute(Constants.ID, dept.getDeptId());
+			this.bbDepartment.setAttribute(Constants.Attr.ID, dept.getDeptId());
 
-			this.bbDepartment.setAttribute(Constants.OBJECT, dept);
+			this.bbDepartment.setAttribute(Constants.Attr.OBJECT, dept);
 			this.btnClearDept.setVisible(true);
 		}
 
@@ -621,7 +619,7 @@ public class AddEditStaffController extends BasicController<Window> implements S
 			this.icDepartment.setAttribute("bandbox", this.bbDepartment);
 			this.icDepartment.setAttribute("btnclear", this.btnClearDept);
 
-			this.icDepartment.setSrc(Constants.TREE_DEPARTMENT_PAGE);
+			this.icDepartment.setSrc(Constants.Page.Common.DEPT_TREE);
 		}
 	}
 

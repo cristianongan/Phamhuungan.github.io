@@ -48,8 +48,6 @@ public class UserRoleController extends BasicController<Window> implements Seria
 
 	private static final Logger _log = LogManager.getLogger(UserRoleController.class);
 
-	private static final String ADD_ROLE_PAGE = "~./pages/manager_user/add_role.zul";
-
 	@Autowired
 	private UserService userService;
 
@@ -97,9 +95,9 @@ public class UserRoleController extends BasicController<Window> implements Seria
 
 	public void initData() throws Exception {
 		try {
-			this.winParent = (Div) this.arg.get(Constants.PARENT_WINDOW);
+			this.winParent = (Div) this.arg.get(Constants.Attr.PARENT_WINDOW);
 
-			this.user = (User) this.arg.get(Constants.OBJECT);
+			this.user = (User) this.arg.get(Constants.Attr.OBJECT);
 
 			this.winUserRole.setTitle(
 					Labels.getLabel(LanguageKeys.ROLE_ASSIGNED_TO_USER, new Object[] { this.user.getUserName() }));
@@ -115,11 +113,12 @@ public class UserRoleController extends BasicController<Window> implements Seria
 	public void onClick$btnAdd() {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 
-		parameters.put(Constants.PARENT_WINDOW, this.winUserRole);
-		parameters.put(Constants.OBJECT, this.user);
-		parameters.put(Constants.SECOND_OBJECT, this._roles);
+		parameters.put(Constants.Attr.PARENT_WINDOW, this.winUserRole);
+		parameters.put(Constants.Attr.OBJECT, this.user);
+		parameters.put(Constants.Attr.SECOND_OBJECT, this._roles);
 
-		Window win = (Window) Executions.createComponents(ADD_ROLE_PAGE, this.winUserRole, parameters);
+		Window win = (Window) Executions.createComponents(Constants.Page.ManagerUser.ADD_ROLE, this.winUserRole,
+				parameters);
 
 		win.doModal();
 	}

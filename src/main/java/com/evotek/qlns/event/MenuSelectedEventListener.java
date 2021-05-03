@@ -41,7 +41,7 @@ public class MenuSelectedEventListener implements EventListener<Event> {
 	}
 
 	private void setSelectedMenu(String url, Map<String, Object> parameters) {
-		Sessions.getCurrent().setAttribute(Constants.MAP_PARAMETER, parameters);
+		Sessions.getCurrent().setAttribute(Constants.Attr.MAP_PARAMETER, parameters);
 
 		this.bodyLayout.setSrc(url);
 

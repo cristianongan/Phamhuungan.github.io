@@ -180,7 +180,7 @@ public class MailUtil {
             properties.setProperty(transportPrefix + "user", smtpUser);
             
             if(smtpAuth){
-                if(Constants.SSL.equalsIgnoreCase(smtpAuthType)){
+                if(Constants.Email.SSL.equalsIgnoreCase(smtpAuthType)){
                     properties.setProperty(transportPrefix + "socketFactory.port", 
                             String.valueOf(smtpPort));
                     properties.setProperty(transportPrefix + "socketFactory.class", 
@@ -222,7 +222,7 @@ public class MailUtil {
             BodyPart bodyPart = new MimeBodyPart();
             
             if (htmlFormat) {
-                bodyPart.setContent(body, Constants.TEXT_HTML + "; charset=UTF-8");
+                bodyPart.setContent(body, Constants.ContentType.TEXT_HTML + "; charset=UTF-8");
             } else {
                 body = formatPlainText(body);
                 
@@ -317,7 +317,7 @@ public class MailUtil {
         params.put("$[PASSWORD]", password);
         params.put("$[VERIFY_URL]", verifyUrl);
         
-        sendTemplateEmail(toEmail, Constants.USER_CREATE, params);
+        sendTemplateEmail(toEmail, Constants.Email.USER_CREATE, params);
     }
     
     public static void sendUserRegisterEmail(String toEmail, String userName, 
@@ -335,7 +335,7 @@ public class MailUtil {
         params.put("$[PASSWORD]", password);
         params.put("$[VERIFY_URL]", verifyUrl);
         
-        sendTemplateEmail(toEmail, Constants.USER_REGISTER, params);
+        sendTemplateEmail(toEmail, Constants.Email.USER_REGISTER, params);
     }
     
     public static void sendPwdResetEmail(String toEmail, String userName, 
@@ -352,7 +352,7 @@ public class MailUtil {
         params.put("$[USER_NAME]", userName);
         params.put("$[PASSWORD]", password);
         
-        sendTemplateEmail(toEmail, Constants.RESET_PASSWORD, params);
+        sendTemplateEmail(toEmail, Constants.Email.RESET_PASSWORD, params);
     }
     
     public static void sendVerifyResetPwd(String toEmail, String userName, 
@@ -369,7 +369,7 @@ public class MailUtil {
         params.put("$[USER_NAME]", userName);
         params.put("$[VERIFY_CODE]", verifyCode);
         
-        sendTemplateEmail(toEmail, Constants.VERIFY_RESET_PASSWORD, params);
+        sendTemplateEmail(toEmail, Constants.Email.VERIFY_RESET_PASSWORD, params);
     }
     
     public static void sendVerifyResetPwd(String toEmail, String userName, 
@@ -385,7 +385,7 @@ public class MailUtil {
         params.put("$[HOST_ADDRESS]", hostAddress);
         params.put("$[USER_NAME]", userName);
         
-        sendTemplateEmail(toEmail, Constants.VERIFY_RESET_PASSWORD_USER_DEACTIVE, 
+        sendTemplateEmail(toEmail, Constants.Email.VERIFY_RESET_PASSWORD_USER_DEACTIVE, 
                 params);
     }
     

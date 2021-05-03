@@ -31,7 +31,6 @@ import com.evotek.qlns.util.key.LanguageKeys;
  */
 public class SalaryLandmarkRender implements ListitemRenderer<SalaryLandmark> {
 
-	private static final String ADD_EDIT_SALARY_LANDMARK_PAGE = "~./pages/manager_human_resource/editSalaryLandmark.zul";
 	private Staff _staff;
 
 	private Window _winParent;
@@ -44,10 +43,10 @@ public class SalaryLandmarkRender implements ListitemRenderer<SalaryLandmark> {
 	private Map<String, Object> _createParameterMap(SalaryLandmark salaryLm, String title) {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 
-		parameters.put(Constants.PARENT_WINDOW, this._winParent);
-		parameters.put(Constants.TITLE, title);
-		parameters.put(Constants.OBJECT, this._staff);
-		parameters.put(Constants.EDIT_OBJECT, salaryLm);
+		parameters.put(Constants.Attr.PARENT_WINDOW, this._winParent);
+		parameters.put(Constants.Attr.TITLE, title);
+		parameters.put(Constants.Attr.OBJECT, this._staff);
+		parameters.put(Constants.Attr.EDIT_OBJECT, salaryLm);
 
 		return parameters;
 	}
@@ -59,19 +58,19 @@ public class SalaryLandmarkRender implements ListitemRenderer<SalaryLandmark> {
 
 		hlayout.setSpacing("0");
 
-		hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.EDIT),
-				Constants.Tooltip.EDIT, Events.ON_CLICK, ADD_EDIT_SALARY_LANDMARK_PAGE,
+		hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.EDIT), Constants.Tooltip.EDIT,
+				Events.ON_CLICK, Constants.Page.ManagerHumanResource.ADD_EDIT_SALARY_LANDMARK,
 				_createParameterMap(salaryLm, Labels.getLabel(LanguageKeys.TITLE_EDIT_SALARY_LANDMARK)),
-				Constants.Zicon.PENCIL, Constants.BLUE));
+				Constants.Zicon.PENCIL, Constants.Sclass.BLUE));
 
 		// Thêm action "Xóa"
 		hlayout.appendChild(ComponentUtil.createButton(this._winParent, Labels.getLabel(LanguageKeys.BUTTON_DELETE),
 				Constants.Tooltip.DEL, Events.ON_CLICK, "onDeleteSalaryLm", salaryLm, Constants.Zicon.TRASH_O,
-				Constants.RED));
+				Constants.Sclass.RED));
 
 		action.appendChild(hlayout);
 
-		action.setStyle(Constants.STYLE_TEXT_ALIGN_CENTER);
+		action.setStyle(Constants.Style.TEXT_ALIGN_CENTER);
 
 		return action;
 	}
@@ -81,15 +80,15 @@ public class SalaryLandmarkRender implements ListitemRenderer<SalaryLandmark> {
 		item.setAttribute("data", salaryLm);
 
 //        item.appendChild(ComponentUtil.createListcell(Integer.toString(index + 1),
-//                Constants.STYLE_TEXT_ALIGN_CENTER));
+//                Constants.Style.TEXT_ALIGN_CENTER));
 		item.appendChild(
 				ComponentUtil.createListcell(GetterUtil.getDate(salaryLm.getFromDate(), DateUtil.SHORT_DATE_PATTERN),
-						Constants.STYLE_TEXT_ALIGN_CENTER));
+						Constants.Style.TEXT_ALIGN_CENTER));
 		item.appendChild(
 				ComponentUtil.createListcell(GetterUtil.getDate(salaryLm.getToDate(), DateUtil.SHORT_DATE_PATTERN),
-						Constants.STYLE_TEXT_ALIGN_CENTER));
+						Constants.Style.TEXT_ALIGN_CENTER));
 		item.appendChild(ComponentUtil.createListcell(GetterUtil.getFormat(salaryLm.getSalary()),
-				Constants.STYLE_TEXT_ALIGN_CENTER));
+				Constants.Style.TEXT_ALIGN_CENTER));
 
 		item.appendChild(_getAction(salaryLm));
 	}

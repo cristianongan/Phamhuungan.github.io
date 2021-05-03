@@ -48,8 +48,9 @@ public class TreeDocumentTypeSearchRender implements TreeitemRenderer<DocumentTy
 
 				TreeDocumentTypeSearchRender.this.bbTemp.setValue(clickedNodeValue.getData().getTypeName());
 
-				TreeDocumentTypeSearchRender.this.bbTemp.setAttribute(Constants.OBJECT, clickedNodeValue.getData());
-				TreeDocumentTypeSearchRender.this.bbTemp.setAttribute(Constants.ID,
+				TreeDocumentTypeSearchRender.this.bbTemp.setAttribute(Constants.Attr.OBJECT,
+						clickedNodeValue.getData());
+				TreeDocumentTypeSearchRender.this.bbTemp.setAttribute(Constants.Attr.ID,
 						clickedNodeValue.getData().getDocumentTypeId());
 
 				TreeDocumentTypeSearchRender.this.bbTemp.close();
@@ -61,7 +62,7 @@ public class TreeDocumentTypeSearchRender implements TreeitemRenderer<DocumentTy
 
 		treeItem.appendChild(dataRow);
 
-		treeItem.setAttribute(Constants.DATA, documentType);
+		treeItem.setAttribute(Constants.Attr.DATA, documentType);
 		treeItem.setValue(t);
 		treeItem.setOpen(t.isOpen());
 	}

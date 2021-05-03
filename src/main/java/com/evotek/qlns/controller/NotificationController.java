@@ -57,7 +57,7 @@ public class NotificationController extends BasicController<Window> implements S
 	public void doAfterCompose(Window comp) throws Exception {
 		super.doAfterCompose(comp);
 
-		this.parent = (Div) this.arg.get(Constants.PARENT_WINDOW);
+		this.parent = (Div) this.arg.get(Constants.Attr.PARENT_WINDOW);
 
 		this.refreshModel();
 	}

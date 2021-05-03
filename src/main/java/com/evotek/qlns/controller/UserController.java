@@ -59,7 +59,6 @@ public class UserController extends BasicController<Div> implements Serializable
 
 	private static final Logger _log = LogManager.getLogger(UserController.class);
 
-	private static final String EDIT_PAGE = "~./pages/manager_user/edit.zul";
 	private static final String EXPORT_USER = "export_user";
 
 	@Autowired
@@ -102,9 +101,9 @@ public class UserController extends BasicController<Div> implements Serializable
 	private Map<String, Object> _createParameterMap(User user) {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 
-		parameters.put(Constants.PARENT_WINDOW, this.winUser);
-		parameters.put(Constants.OBJECT, user);
-		parameters.put(Constants.SECOND_OBJECT, true);
+		parameters.put(Constants.Attr.PARENT_WINDOW, this.winUser);
+		parameters.put(Constants.Attr.OBJECT, user);
+		parameters.put(Constants.Attr.SECOND_OBJECT, true);
 
 		return parameters;
 	}
@@ -305,7 +304,8 @@ public class UserController extends BasicController<Div> implements Serializable
 	}
 
 	public void onClick$btnAdd() {
-		Window win = (Window) Executions.createComponents(EDIT_PAGE, this.winUser, _createParameterMap(null));
+		Window win = (Window) Executions.createComponents(Constants.Page.ManagerUser.ADD_EDIT, this.winUser,
+				_createParameterMap(null));
 
 		win.doModal();
 	}
@@ -405,7 +405,7 @@ public class UserController extends BasicController<Div> implements Serializable
 	}
 
 	public void onClick$btnImport() {
-		Window win = (Window) Executions.createComponents("~./pages/manager_user/import_users.zul", this.winUser,
+		Window win = (Window) Executions.createComponents(Constants.Page.ManagerUser.IMPORT_USERS, this.winUser,
 				_createParameterMap(null));
 
 		win.doModal();

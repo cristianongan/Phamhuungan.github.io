@@ -91,13 +91,13 @@ public class AddEditSalaryLmController extends BasicController<Window> {
 	// init data
 	public void initData() throws Exception {
 		try {
-			this.winTemp = (Window) this.arg.get(Constants.PARENT_WINDOW);
+			this.winTemp = (Window) this.arg.get(Constants.Attr.PARENT_WINDOW);
 
-			this.staff = (Staff) this.arg.get(Constants.OBJECT);
-			this.salaryLm = (SalaryLandmark) this.arg.get(Constants.EDIT_OBJECT);
+			this.staff = (Staff) this.arg.get(Constants.Attr.OBJECT);
+			this.salaryLm = (SalaryLandmark) this.arg.get(Constants.Attr.EDIT_OBJECT);
 
 			if (Validator.isNotNull(this.salaryLm)) {
-				this.winEditSalaryLm.setTitle((String) this.arg.get(Constants.TITLE));
+				this.winEditSalaryLm.setTitle((String) this.arg.get(Constants.Attr.TITLE));
 
 				this._setEditForm();
 			}

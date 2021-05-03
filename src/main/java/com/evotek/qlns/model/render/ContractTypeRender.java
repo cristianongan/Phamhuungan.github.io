@@ -48,7 +48,7 @@ public class ContractTypeRender implements ListitemRenderer<ContractType> {
 		hlayout.setSpacing("0");
 
 		Button btnSave = ComponentUtil.createButton(Labels.getLabel(LanguageKeys.BUTTON_SAVE), Constants.Zicon.SAVE,
-				Constants.BLUE);
+				Constants.Sclass.BLUE);
 
 		btnSave.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
@@ -73,7 +73,7 @@ public class ContractTypeRender implements ListitemRenderer<ContractType> {
 		hlayout.appendChild(btnSave);
 
 		Button btnCancel = ComponentUtil.createButton(Labels.getLabel(LanguageKeys.BUTTON_CANCEL),
-				Constants.Zicon.TIMES, Constants.RED);
+				Constants.Zicon.TIMES, Constants.Sclass.RED);
 
 		btnCancel.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
@@ -101,7 +101,7 @@ public class ContractTypeRender implements ListitemRenderer<ContractType> {
 		hlayout.setSpacing("0");
 
 		Button btnEdit = ComponentUtil.createButton(Labels.getLabel(LanguageKeys.EDIT),
-				Constants.Tooltip.EDIT, Constants.Zicon.PENCIL, Constants.BLUE);
+				Constants.Tooltip.EDIT, Constants.Zicon.PENCIL, Constants.Sclass.BLUE);
 
 		btnEdit.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
 
@@ -117,7 +117,7 @@ public class ContractTypeRender implements ListitemRenderer<ContractType> {
 
 		hlayout.appendChild(ComponentUtil.createButton(this._window, Labels.getLabel(LanguageKeys.DELETE),
 				Constants.Tooltip.DEL, Events.ON_CLICK, "onDelete", ct, Constants.Zicon.TRASH_O,
-				Constants.RED));
+				Constants.Sclass.RED));
 
 		action.appendChild(hlayout);
 
@@ -133,16 +133,16 @@ public class ContractTypeRender implements ListitemRenderer<ContractType> {
 	}
 
 	private void renderEditing(Listitem item, ContractType ct, int index) {
-		item.appendChild(ComponentUtil.createListcell(Integer.toString(index + 1), Constants.STYLE_TEXT_ALIGN_CENTER));
+		item.appendChild(ComponentUtil.createListcell(Integer.toString(index + 1), Constants.Style.TEXT_ALIGN_CENTER));
 		item.appendChild(ComponentUtil.createTextboxListcell(ct.getContractTypeName(),
 				ct.getContractTypeId() + "-" + "contract-type"));
 		item.appendChild(ComponentUtil.createSpinnerListcell(ct.getMonthDuration(),
-				ct.getContractTypeId() + "-" + "month-duration", Constants.STYLE_TEXT_ALIGN_CENTER));
+				ct.getContractTypeId() + "-" + "month-duration", Constants.Style.TEXT_ALIGN_CENTER));
 		item.appendChild(_getEditAction(item, ct, index));
 	}
 
 	private void renderNoneEditing(Listitem item, ContractType ct, int index) {
-		item.appendChild(ComponentUtil.createListcell(Integer.toString(index + 1), Constants.STYLE_TEXT_ALIGN_CENTER));
+		item.appendChild(ComponentUtil.createListcell(Integer.toString(index + 1), Constants.Style.TEXT_ALIGN_CENTER));
 		item.appendChild(ComponentUtil.createListcell(ct.getContractTypeName()));
 
 		if (ct.getMonthDuration() == null) {

@@ -39,7 +39,7 @@ public class TreeDocumentTypeViewRender implements TreeitemRenderer<DocumentType
 
 		treeItem.appendChild(dataRow);
 
-		treeItem.setAttribute(Constants.DATA, documentType);
+		treeItem.setAttribute(Constants.Attr.DATA, documentType);
 		treeItem.setValue(t);
 		treeItem.setOpen(t.isOpen());
 

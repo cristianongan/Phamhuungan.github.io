@@ -57,9 +57,9 @@ public class PreviewFileController extends BasicController<Window> implements Se
 
 	public void init() throws Exception {
 		try {
-			this.file = (File) this.arg.get(Constants.OBJECT);
-			this.format = (String) this.arg.get(Constants.KEY);
-			this.ctype = (String) this.arg.get(Constants.VALUE);
+			this.file = (File) this.arg.get(Constants.Attr.OBJECT);
+			this.format = (String) this.arg.get(Constants.Attr.KEY);
+			this.ctype = (String) this.arg.get(Constants.Attr.VALUE);
 
 			if (Validator.isNotNull(this.file)) {
 

@@ -9,15 +9,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletContext;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.zkoss.util.resource.Labels;
-import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.A;
 import org.zkoss.zul.Bandbox;
@@ -75,8 +72,8 @@ public class AddEditDocumentTypeController extends BasicController<Window> imple
 
 		if (Validator.isNotNull(this.oldParentDocType)) {
 			this.bbDocumentType.setValue(this.oldParentDocType.getTypeName());
-			this.bbDocumentType.setAttribute(Constants.ID, this.oldParentDocType.getDocumentTypeId());
-			this.bbDocumentType.setAttribute(Constants.OBJECT, this.oldParentDocType);
+			this.bbDocumentType.setAttribute(Constants.Attr.ID, this.oldParentDocType.getDocumentTypeId());
+			this.bbDocumentType.setAttribute(Constants.Attr.OBJECT, this.oldParentDocType);
 			this.btnClearDoc.setVisible(true);
 		}
 	}
@@ -148,19 +145,19 @@ public class AddEditDocumentTypeController extends BasicController<Window> imple
 	// init data
 	public void initData() throws Exception {
 		try {
-			this.winTemp = (Window) this.arg.get(Constants.PARENT_WINDOW);
+			this.winTemp = (Window) this.arg.get(Constants.Attr.PARENT_WINDOW);
 
-			this.docType = (DocumentType) this.arg.get(Constants.OBJECT);
-			this.parentDocType = (DocumentType) this.arg.get(Constants.SECOND_OBJECT);
+			this.docType = (DocumentType) this.arg.get(Constants.Attr.OBJECT);
+			this.parentDocType = (DocumentType) this.arg.get(Constants.Attr.SECOND_OBJECT);
 
 			if (Validator.isNotNull(this.parentDocType)) {
 				this.bbDocumentType.setValue(this.parentDocType.getTypeName());
-				this.bbDocumentType.setAttribute(Constants.ID, this.parentDocType.getDocumentTypeId());
-				this.bbDocumentType.setAttribute(Constants.OBJECT, this.parentDocType);
+				this.bbDocumentType.setAttribute(Constants.Attr.ID, this.parentDocType.getDocumentTypeId());
+				this.bbDocumentType.setAttribute(Constants.Attr.OBJECT, this.parentDocType);
 			}
 
 			if (Validator.isNotNull(this.docType)) {
-				this.winDocType.setTitle((String) this.arg.get(Constants.TITLE));
+				this.winDocType.setTitle((String) this.arg.get(Constants.Attr.TITLE));
 
 				this.oldParentDocType = this.docType.getParentDocumentType();
 
@@ -178,7 +175,7 @@ public class AddEditDocumentTypeController extends BasicController<Window> imple
 	// Bandbox documentType
 	public void onClick$btnClearDoc() {
 		this.bbDocumentType.setValue(StringPool.BLANK);
-		this.bbDocumentType.setAttribute(Constants.ID, null);
+		this.bbDocumentType.setAttribute(Constants.Attr.ID, null);
 
 		this.btnClearDoc.setDisabled(true);
 		this.btnClearDoc.setVisible(false);
@@ -190,7 +187,7 @@ public class AddEditDocumentTypeController extends BasicController<Window> imple
 		try {
 			String typeName = GetterUtil.getString(this.tbTypeName.getValue());
 			String description = GetterUtil.getString(this.tbDescription.getValue());
-			this.parentDocType = (DocumentType) this.bbDocumentType.getAttribute(Constants.OBJECT);
+			this.parentDocType = (DocumentType) this.bbDocumentType.getAttribute(Constants.Attr.OBJECT);
 
 			if (this._validate(typeName, description)) {
 				if (Validator.isNull(this.docType)) {
@@ -238,7 +235,7 @@ public class AddEditDocumentTypeController extends BasicController<Window> imple
 				this.icDocumentType.setAttribute("exclude", this.docType);
 			}
 
-			this.icDocumentType.setSrc(Constants.TREE_DOCUMENT_TYPE_PAGE);
+			this.icDocumentType.setSrc(Constants.Page.Common.TREE_DOCUMENT_TYPE);
 		}
 	}
 	// Bandbox documentType

@@ -34,8 +34,6 @@ public class RightRender implements RowRenderer<Right> {
 
 	private static final String[] _type = StaticUtil.MENU_RIGHT_TYPE;
 
-	private static final String EDIT_RIGHT_PAGE = "~./pages/manager_menu/edit_right.zul";
-
 	public Window winTemp;
 
 	public RightRender(Window winTemp) {
@@ -45,9 +43,9 @@ public class RightRender implements RowRenderer<Right> {
 	private Map<String, Object> _createParameterMap(Right right) {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 
-		parameters.put(Constants.PARENT_WINDOW, this.winTemp);
-		parameters.put(Constants.TITLE, Labels.getLabel(LanguageKeys.TITLE_EDIT_RIGHT));
-		parameters.put(Constants.EDIT_OBJECT, right);
+		parameters.put(Constants.Attr.PARENT_WINDOW, this.winTemp);
+		parameters.put(Constants.Attr.TITLE, Labels.getLabel(LanguageKeys.TITLE_EDIT_RIGHT));
+		parameters.put(Constants.Attr.EDIT_OBJECT, right);
 
 		return parameters;
 	}
@@ -58,7 +56,8 @@ public class RightRender implements RowRenderer<Right> {
 		hlayout.setSpacing("0");
 
 		hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.EDIT), Constants.Tooltip.EDIT,
-				Events.ON_CLICK, EDIT_RIGHT_PAGE, _createParameterMap(right), Constants.Zicon.PENCIL, Constants.BLUE));
+				Events.ON_CLICK, Constants.Page.ManagerMenu.EDIT_RIGHT, _createParameterMap(right),
+				Constants.Zicon.PENCIL, Constants.Sclass.BLUE));
 
 		Long status = right.getStatus();
 
@@ -66,16 +65,16 @@ public class RightRender implements RowRenderer<Right> {
 			// Thêm action "Khóa"
 			hlayout.appendChild(ComponentUtil.createButton(this.winTemp, Labels.getLabel(LanguageKeys.BUTTON_LOCK),
 					Constants.Tooltip.LOCK, Events.ON_CLICK, "onLockRight", right, Constants.Zicon.LOCK,
-					Constants.ORANGE));
+					Constants.Sclass.ORANGE));
 		} else {
 			hlayout.appendChild(ComponentUtil.createButton(this.winTemp, Labels.getLabel(LanguageKeys.BUTTON_UNLOCK),
 					Constants.Tooltip.UNLOCK, Events.ON_CLICK, "onUnlockRight", right, Constants.Zicon.UNLOCK,
-					Constants.ORANGE));
+					Constants.Sclass.ORANGE));
 
 			// Thêm action "Xóa"
 			hlayout.appendChild(ComponentUtil.createButton(this.winTemp, Labels.getLabel(LanguageKeys.BUTTON_DELETE),
 					Constants.Tooltip.DEL, Events.ON_CLICK, "onDeleteRight", right, Constants.Zicon.TRASH_O,
-					Constants.RED));
+					Constants.Sclass.RED));
 		}
 
 		return hlayout;
@@ -93,13 +92,13 @@ public class RightRender implements RowRenderer<Right> {
 
 	@Override
 	public void render(Row row, Right right, int index) throws Exception {
-		row.appendChild(ComponentUtil.createCell(Integer.toString(index + 1), Constants.STYLE_TEXT_ALIGN_CENTER));
+		row.appendChild(ComponentUtil.createCell(Integer.toString(index + 1), Constants.Style.TEXT_ALIGN_CENTER));
 		row.appendChild(new Label(right.getRightName()));
 		row.appendChild(new Label(getRightTypeName(right.getRightType())));
 //        row.appendChild(new Label(right.getUserName()));
 //        row.appendChild(ComponentUtil.createCell(GetterUtil.getDate(
 //                right.getModifiedDate(), DateUtil.SHORT_DATE_PATTERN),
-//                Constants.STYLE_TEXT_ALIGN_CENTER));
+//                Constants.Style.TEXT_ALIGN_CENTER));
 		row.appendChild(new Label(right.getDescription()));
 		row.appendChild(new Label(Values.getLockStatus(right.getStatus())));
 

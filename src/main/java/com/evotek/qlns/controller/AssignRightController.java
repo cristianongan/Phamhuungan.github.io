@@ -75,9 +75,9 @@ public class AssignRightController extends BasicController<Window> implements Se
 	// init data
 	public void initData() throws Exception {
 		try {
-			this.winTemp = (Window) this.arg.get(Constants.PARENT_WINDOW);
+			this.winTemp = (Window) this.arg.get(Constants.Attr.PARENT_WINDOW);
 
-			this.group = (Group) this.arg.get(Constants.EDIT_OBJECT);
+			this.group = (Group) this.arg.get(Constants.Attr.EDIT_OBJECT);
 		} catch (Exception ex) {
 			_log.error(ex.getMessage(), ex);
 		}

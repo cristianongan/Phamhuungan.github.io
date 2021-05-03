@@ -108,7 +108,7 @@ public class AddEditContractTypeController extends BasicController<Window> imple
 	}
 
 	public void initData() {
-		this.winParent = (Window) this.arg.get(Constants.PARENT_WINDOW);
+		this.winParent = (Window) this.arg.get(Constants.Attr.PARENT_WINDOW);
 
 		refreshModel();
 	}

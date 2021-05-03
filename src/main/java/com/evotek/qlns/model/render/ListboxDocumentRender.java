@@ -34,8 +34,6 @@ import com.evotek.qlns.util.key.LanguageKeys;
  */
 public class ListboxDocumentRender implements ListitemRenderer<Document> {
 
-	private static final String DETAIL_PAGE = "~./pages/manager_document/detail.zul";
-	private static final String EDIT_PAGE = "~./pages/manager_document/edit.zul";
 	private DocumentService _documentService;
 
 	private ListModel _model;
@@ -51,11 +49,11 @@ public class ListboxDocumentRender implements ListitemRenderer<Document> {
 	private Map<String, Object> _createParameterMap(Document document, String title, int index) {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 
-		parameters.put(Constants.PARENT_WINDOW, this._window);
-		parameters.put(Constants.TITLE, title);
-		parameters.put(Constants.OBJECT, document);
-		parameters.put(Constants.MODEL, this._model);
-		parameters.put(Constants.INDEX, index);
+		parameters.put(Constants.Attr.PARENT_WINDOW, this._window);
+		parameters.put(Constants.Attr.TITLE, title);
+		parameters.put(Constants.Attr.OBJECT, document);
+		parameters.put(Constants.Attr.MODEL, this._model);
+		parameters.put(Constants.Attr.INDEX, index);
 
 		return parameters;
 	}
@@ -68,13 +66,13 @@ public class ListboxDocumentRender implements ListitemRenderer<Document> {
 
 		hlayout.setSpacing("0");
 
-		hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.EDIT),
-				Constants.Tooltip.EDIT, Events.ON_CLICK, EDIT_PAGE,
+		hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.EDIT), Constants.Tooltip.EDIT,
+				Events.ON_CLICK, Constants.Page.ManagerDocument.ADD_EDIT,
 				_createParameterMap(document, Labels.getLabel(LanguageKeys.TITLE_EDIT_DOCUMENT), index),
-				Constants.Zicon.PENCIL, Constants.BLUE));
-		hlayout.appendChild(ComponentUtil.createButton(this._window, Labels.getLabel(LanguageKeys.DELETE),
-				Constants.Tooltip.DEL, Events.ON_CLICK, "onDelete", document, Constants.Zicon.TRASH_O,
-				Constants.RED));
+				Constants.Zicon.PENCIL, Constants.Sclass.BLUE));
+		hlayout.appendChild(
+				ComponentUtil.createButton(this._window, Labels.getLabel(LanguageKeys.DELETE), Constants.Tooltip.DEL,
+						Events.ON_CLICK, "onDelete", document, Constants.Zicon.TRASH_O, Constants.Sclass.RED));
 
 		action.appendChild(hlayout);
 
@@ -101,14 +99,14 @@ public class ListboxDocumentRender implements ListitemRenderer<Document> {
 	public void render(Listitem item, Document doc, int index) throws Exception {
 		item.setAttribute("data", doc);
 
-		item.appendChild(ComponentUtil.createListcell(StringPool.BLANK, Constants.STYLE_TEXT_ALIGN_CENTER));
-		item.appendChild(ComponentUtil.createListcell(Integer.toString(index + 1), Constants.STYLE_TEXT_ALIGN_CENTER));
+		item.appendChild(ComponentUtil.createListcell(StringPool.BLANK, Constants.Style.TEXT_ALIGN_CENTER));
+		item.appendChild(ComponentUtil.createListcell(Integer.toString(index + 1), Constants.Style.TEXT_ALIGN_CENTER));
 		item.appendChild(ComponentUtil.createListcell(doc.getDocumentNumber()));
 		item.appendChild(ComponentUtil.createListcell(doc.getTypeName()));
 		item.appendChild(ComponentUtil.createListcell(doc.getPromulgationDept()));
 		item.appendChild(
 				ComponentUtil.createListcell(GetterUtil.getDate(doc.getPromulgationDate(), DateUtil.SHORT_DATE_PATTERN),
-						Constants.STYLE_TEXT_ALIGN_CENTER));
+						Constants.Style.TEXT_ALIGN_CENTER));
 
 		item.appendChild(_getFile(doc));
 
