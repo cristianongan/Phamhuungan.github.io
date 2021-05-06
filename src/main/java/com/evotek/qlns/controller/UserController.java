@@ -23,6 +23,7 @@ import org.zkoss.zul.Button;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Div;
+import org.zkoss.zul.ListModel;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listitem;
@@ -132,10 +133,11 @@ public class UserController extends BasicController<Div> implements Serializable
 		this.paramMap.put("account", account);
 		this.paramMap.put("status", status);
 
-		this.searchResultGrid.setItemRenderer(new UserRender(this.winUser, this.isAdmin));
-		this.searchResultGrid
-				.setModel(new UserListModel(this.searchResultGrid.getPageSize(), userName, email, gender, birthplace,
-						birthdayFrom, birthdayTo, phone, mobile, account, status, this.isAdvance, this.userService));
+		ListModel model = new UserListModel(this.searchResultGrid.getPageSize(), userName, email, gender, birthplace,
+				birthdayFrom, birthdayTo, phone, mobile, account, status, this.isAdvance, this.userService);
+
+		this.searchResultGrid.setItemRenderer(new UserRender(this.winUser, model, this.isAdmin));
+		this.searchResultGrid.setModel(model);
 	}
 
 	public void basicSearch() {
@@ -143,10 +145,12 @@ public class UserController extends BasicController<Div> implements Serializable
 
 		this.paramMap.put("keyword", keyword);
 
-		this.searchResultGrid.setItemRenderer(new UserRender(this.winUser, this.isAdmin));
+		ListModel model = new UserListModel(this.searchResultGrid.getPageSize(), keyword, this.isAdvance,
+				this.userService);
 
-		this.searchResultGrid.setModel(
-				new UserListModel(this.searchResultGrid.getPageSize(), keyword, this.isAdvance, this.userService));
+		this.searchResultGrid.setModel(model);
+
+		this.searchResultGrid.setItemRenderer(new UserRender(this.winUser, model, this.isAdmin));
 
 		this.searchResultGrid.setMultiple(true);
 	}

@@ -20,6 +20,7 @@ import org.zkoss.zul.A;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Div;
+import org.zkoss.zul.ListModel;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Textbox;
@@ -60,6 +61,10 @@ public class AddEditUserController extends BasicController<Window> implements Se
 
 	private Div winParent;
 
+	private Integer index;
+	
+	private ListModel model;
+	
 	private Textbox tbAddress;
 	private Textbox tbBirthplace;
 	private Textbox tbEmail;
@@ -259,6 +264,16 @@ public class AddEditUserController extends BasicController<Window> implements Se
 	public void doAfterCompose(Window win) throws Exception {
 		super.doAfterCompose(win);
 
+		this.winParent = (Div) this.arg.get(Constants.Attr.PARENT_WINDOW);
+
+		this.user = (User) this.arg.get(Constants.Attr.OBJECT);
+
+		this.isManager = GetterUtil.getBooleanValue(this.arg.get(Constants.Attr.SECOND_OBJECT), false);
+		
+		this.model = (ListModel) this.arg.get(Constants.Attr.MODEL);
+
+		this.index = (Integer) this.arg.get(Constants.Attr.INDEX);
+		
 		// init data
 		this.initData();
 	}
@@ -271,11 +286,6 @@ public class AddEditUserController extends BasicController<Window> implements Se
 	}
 
 	public void initData() {
-		this.winParent = (Div) this.arg.get(Constants.Attr.PARENT_WINDOW);
-
-		this.user = (User) this.arg.get(Constants.Attr.OBJECT);
-
-		this.isManager = GetterUtil.getBooleanValue(this.arg.get(Constants.Attr.SECOND_OBJECT), false);
 
 		if (Validator.isNotNull(this.user)) {
 			this.winUpdateUser.setTitle((String) this.arg.get(Constants.Attr.TITLE));
@@ -445,6 +455,34 @@ public class AddEditUserController extends BasicController<Window> implements Se
 //        return Pattern.compile(sb.toString());
 //    }
 
+	public void onClick$btnNext() throws Exception {
+		if (Validator.isNotNull(this.user)) {
+			if (this.index == (this.model.getSize() - 1)) {
+				this.index = 0;
+			} else {
+				this.index++;
+			}
+
+			this.user = (User) this.model.getElementAt(this.index);
+
+			initData();
+		}
+	}
+
+	public void onClick$btnPrevious() throws Exception {
+		if (Validator.isNotNull(this.user)) {
+			if (this.index == 0) {
+				this.index = (this.model.getSize() - 1);
+			} else {
+				this.index--;
+			}
+
+			this.user = (User) this.model.getElementAt(this.index);
+
+			initData();
+		}
+	}
+	
 	public void onSelect$cbGender() {
 		this.btnClearGender.setVisible(true);
 	}

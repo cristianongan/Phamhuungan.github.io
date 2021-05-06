@@ -1,7 +1,3 @@
-/*
- * Copyright 2013 Viettel Telecom. All rights reserved.
- * VIETTEL PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- */
 package com.evotek.qlns.model.render;
 
 import java.util.HashMap;
@@ -11,6 +7,7 @@ import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Hlayout;
+import org.zkoss.zul.ListModel;
 import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zul.ListitemRenderer;
@@ -26,32 +23,38 @@ import com.evotek.qlns.util.key.Values;
 
 /**
  *
- * @author hungnt81
+ * @author LinhLH
  */
 public class UserRender implements ListitemRenderer<User> {
 
 	private boolean isAdmin;
+	
+	private ListModel model;
 
 	private Div winParent;
 
-	public UserRender(Div win, boolean isAdmin) {
+	public UserRender(Div win, ListModel model, boolean isAdmin) {
 		this.winParent = win;
+		
+		this.model = model;
 
 		this.isAdmin = isAdmin;
 	}
 
-	private Map<String, Object> _createParameterMap(User user) {
+	private Map<String, Object> _createParameterMap(User user, int index) {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 
 		parameters.put(Constants.Attr.PARENT_WINDOW, this.winParent);
 		parameters.put(Constants.Attr.TITLE, Labels.getLabel(LanguageKeys.TITLE_EDIT_USER));
 		parameters.put(Constants.Attr.OBJECT, user);
 		parameters.put(Constants.Attr.SECOND_OBJECT, true);
+		parameters.put(Constants.Attr.MODEL, this.model);
+		parameters.put(Constants.Attr.INDEX, index);
 
 		return parameters;
 	}
 
-	private Listcell _getAction(User user) {
+	private Listcell _getAction(User user, int index) {
 		if (!this.isAdmin) {
 			return new Listcell();
 		}
@@ -63,7 +66,7 @@ public class UserRender implements ListitemRenderer<User> {
 		hlayout.setSpacing("0");
 
 		hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.EDIT), Constants.Tooltip.EDIT,
-				Events.ON_CLICK, Constants.Page.ManagerUser.ADD_EDIT, _createParameterMap(user), Constants.Zicon.PENCIL,
+				Events.ON_CLICK, Constants.Page.ManagerUser.ADD_EDIT, _createParameterMap(user, index), Constants.Zicon.PENCIL,
 				Constants.Sclass.BLUE));
 
 		Long status = user.getStatus();
@@ -86,7 +89,7 @@ public class UserRender implements ListitemRenderer<User> {
 
 		hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.ASSIGN_ROLE),
 				Constants.Tooltip.ASSIGN_ROLE, Events.ON_CLICK, Constants.Page.ManagerUser.ASSIGNED_ROLE,
-				_createParameterMap(user), Constants.Zicon.SHARE, Constants.Sclass.PURPLE));
+				_createParameterMap(user, index), Constants.Zicon.SHARE, Constants.Sclass.PURPLE));
 
 		action.appendChild(hlayout);
 
@@ -133,6 +136,6 @@ public class UserRender implements ListitemRenderer<User> {
 //        items.appendChild(ComponentUtil.createListcell(GetterUtil.getDate(
 //                user.getModifiedDate(), DateUtil.LONG_DATE_PATTERN),
 //                Constants.Style.TEXT_ALIGN_CENTER));
-		items.appendChild(_getAction(user));
+		items.appendChild(_getAction(user, index));
 	}
 }
