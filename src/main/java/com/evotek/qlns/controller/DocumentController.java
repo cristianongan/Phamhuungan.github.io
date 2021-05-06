@@ -48,7 +48,7 @@ import com.evotek.qlns.extend.Messagebox;
 import com.evotek.qlns.model.Document;
 import com.evotek.qlns.model.DocumentType;
 import com.evotek.qlns.model.list.ManagerDocumentListModel;
-import com.evotek.qlns.model.render.ListboxDocumentRender;
+import com.evotek.qlns.model.render.DocumentRender;
 import com.evotek.qlns.service.DocumentService;
 import com.evotek.qlns.service.DocumentTypeService;
 import com.evotek.qlns.util.ComponentUtil;
@@ -140,7 +140,7 @@ public class DocumentController extends BasicController<Hlayout> implements Seri
 
 		this.listboxResult.setModel(model);
 
-		this.listboxResult.setItemRenderer(new ListboxDocumentRender(this.winDocument, model, this.documentService));
+		this.listboxResult.setItemRenderer(new DocumentRender(this.winDocument, model, this.documentService));
 
 		this.listboxResult.setMultiple(true);
 
@@ -157,7 +157,7 @@ public class DocumentController extends BasicController<Hlayout> implements Seri
 
 		this.listboxResult.setModel(model);
 
-		this.listboxResult.setItemRenderer(new ListboxDocumentRender(this.winDocument, model, this.documentService));
+		this.listboxResult.setItemRenderer(new DocumentRender(this.winDocument, model, this.documentService));
 
 		this.listboxResult.setMultiple(true);
 
@@ -616,7 +616,7 @@ public class DocumentController extends BasicController<Hlayout> implements Seri
 
 		this.listboxResult.setModel(model);
 
-		this.listboxResult.setItemRenderer(new ListboxDocumentRender(this.winDocument, model, this.documentService));
+		this.listboxResult.setItemRenderer(new DocumentRender(this.winDocument, model, this.documentService));
 
 		this.listboxResult.setMultiple(true);
 	}

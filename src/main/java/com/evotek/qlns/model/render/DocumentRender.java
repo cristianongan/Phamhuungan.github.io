@@ -32,7 +32,7 @@ import com.evotek.qlns.util.key.LanguageKeys;
  *
  * @author LinhLH
  */
-public class ListboxDocumentRender implements ListitemRenderer<Document> {
+public class DocumentRender implements ListitemRenderer<Document> {
 
 	private DocumentService _documentService;
 
@@ -40,7 +40,7 @@ public class ListboxDocumentRender implements ListitemRenderer<Document> {
 
 	private Hlayout _window;
 
-	public ListboxDocumentRender(Hlayout window, ListModel model, DocumentService documentService) {
+	public DocumentRender(Hlayout window, ListModel model, DocumentService documentService) {
 		this._window = window;
 		this._model = model;
 		this._documentService = documentService;
