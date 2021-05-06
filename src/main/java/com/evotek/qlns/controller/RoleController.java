@@ -23,7 +23,7 @@ import org.zkoss.zul.Div;
 import org.zkoss.zul.Include;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;
-import org.zkoss.zul.Messagebox;
+import com.evotek.qlns.extend.Messagebox;
 import org.zkoss.zul.Window;
 
 import com.evotek.qlns.model.Role;

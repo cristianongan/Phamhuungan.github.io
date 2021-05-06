@@ -8,7 +8,7 @@ import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zul.Messagebox;
+import com.evotek.qlns.extend.Messagebox;
 import org.zkoss.zul.Window;
 
 /*

@@ -22,7 +22,7 @@ import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.ListModel;
 import org.zkoss.zul.ListModelList;
-import org.zkoss.zul.Messagebox;
+import com.evotek.qlns.extend.Messagebox;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 

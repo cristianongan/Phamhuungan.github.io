@@ -16,7 +16,7 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listitem;
-import org.zkoss.zul.Messagebox;
+import com.evotek.qlns.extend.Messagebox;
 import org.zkoss.zul.SimpleListModel;
 import org.zkoss.zul.Window;
 

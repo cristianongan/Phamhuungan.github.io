@@ -5,7 +5,7 @@ import java.io.File;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zul.Messagebox;
+import com.evotek.qlns.extend.Messagebox;
 
 /*
  * To change this template, choose Tools | Templates

@@ -15,7 +15,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import org.zkoss.util.resource.Labels;
-import org.zkoss.zul.Messagebox;
+import com.evotek.qlns.extend.Messagebox;
 
 /**
  *

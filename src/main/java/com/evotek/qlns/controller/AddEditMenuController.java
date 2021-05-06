@@ -15,7 +15,7 @@ import org.zkoss.zul.Bandbox;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.ListModelList;
-import org.zkoss.zul.Messagebox;
+import com.evotek.qlns.extend.Messagebox;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Tree;

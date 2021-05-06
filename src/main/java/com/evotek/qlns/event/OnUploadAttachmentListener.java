@@ -104,9 +104,9 @@ public class OnUploadAttachmentListener implements EventListener<UploadEvent> {
 				int size = getSize(media);
 
 				if (size == 0) {
-					org.zkoss.zul.Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_FILE_IS_EMPTY),
-							Labels.getLabel(LanguageKeys.ERROR), org.zkoss.zul.Messagebox.OK,
-							org.zkoss.zul.Messagebox.ERROR);
+					com.evotek.qlns.extend.Messagebox.show(Labels.getLabel(LanguageKeys.MESSAGE_FILE_IS_EMPTY),
+							Labels.getLabel(LanguageKeys.ERROR), com.evotek.qlns.extend.Messagebox.OK,
+							com.evotek.qlns.extend.Messagebox.ERROR);
 
 					row.getParent().removeChild(row);
 
@@ -114,11 +114,11 @@ public class OnUploadAttachmentListener implements EventListener<UploadEvent> {
 				}
 
 				if (Validator.isNull(extension) || !isInstanceValidFileExtension(extension)) {
-					org.zkoss.zul.Messagebox.show(
+					com.evotek.qlns.extend.Messagebox.show(
 							Labels.getLabel(LanguageKeys.MESSAGE_INVALID_FILE_UPLOAD_EXTENSION,
 									new String[] { StaticUtil.ATTACH_FILE_UPLOAD_ALLOW_EXTENSION }),
-							Labels.getLabel(LanguageKeys.ERROR), org.zkoss.zul.Messagebox.OK,
-							org.zkoss.zul.Messagebox.ERROR);
+							Labels.getLabel(LanguageKeys.ERROR), com.evotek.qlns.extend.Messagebox.OK,
+							com.evotek.qlns.extend.Messagebox.ERROR);
 
 					row.getParent().removeChild(row);
 
@@ -126,11 +126,11 @@ public class OnUploadAttachmentListener implements EventListener<UploadEvent> {
 				}
 
 				if (!isInstanceValidMaxSize(size)) {
-					org.zkoss.zul.Messagebox.show(
+					com.evotek.qlns.extend.Messagebox.show(
 							Labels.getLabel(LanguageKeys.MESSAGE_INVALID_FILE_MAX_SIZE,
 									new Long[] { getInstanceValidMaxSizeMB() }),
-							Labels.getLabel(LanguageKeys.ERROR), org.zkoss.zul.Messagebox.OK,
-							org.zkoss.zul.Messagebox.ERROR);
+							Labels.getLabel(LanguageKeys.ERROR), com.evotek.qlns.extend.Messagebox.OK,
+							com.evotek.qlns.extend.Messagebox.ERROR);
 
 					row.getParent().removeChild(row);
 
