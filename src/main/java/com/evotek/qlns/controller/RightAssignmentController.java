@@ -105,7 +105,7 @@ public class RightAssignmentController extends BasicController<Window> implement
 
 			this.categoryId = this.category.getCategoryId();
 
-			this.winRight.setTitle(Labels.getLabel(LanguageKeys.TITLE_MANAGER_RIGHT,
+			this.winRight.setTitle(Labels.getLabel(LanguageKeys.TITLE_RIGHT_MANAGEMENT,
 					new String[] { Labels.getLabel(this.category.getLanguageKey()) }));
 
 			// seach
@@ -119,14 +119,14 @@ public class RightAssignmentController extends BasicController<Window> implement
 
 	// event method
 	public void onClick$btnAddGroups() {
-		Window win = (Window) Executions.createComponents(Constants.Page.ManagerUser.ADD_EDIT_GROUP, this.winRight,
+		Window win = (Window) Executions.createComponents(Constants.Page.Menu.ADD_EDIT_GROUP, this.winRight,
 				_createParameterMap());
 
 		win.doModal();
 	}
 
 	public void onClick$btnAddRight() {
-		Window win = (Window) Executions.createComponents(Constants.Page.ManagerUser.ADD_EDIT_RIGHT, this.winRight,
+		Window win = (Window) Executions.createComponents(Constants.Page.Menu.ADD_EDIT_RIGHT, this.winRight,
 				_createParameterMap());
 
 		win.doModal();

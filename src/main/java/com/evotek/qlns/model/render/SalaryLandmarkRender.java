@@ -59,7 +59,7 @@ public class SalaryLandmarkRender implements ListitemRenderer<SalaryLandmark> {
 		hlayout.setSpacing("0");
 
 		hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.EDIT), Constants.Tooltip.EDIT,
-				Events.ON_CLICK, Constants.Page.ManagerHumanResource.ADD_EDIT_SALARY_LANDMARK,
+				Events.ON_CLICK, Constants.Page.HumanResourceManagement.ADD_EDIT_SALARY_LANDMARK,
 				_createParameterMap(salaryLm, Labels.getLabel(LanguageKeys.TITLE_EDIT_SALARY_LANDMARK)),
 				Constants.Zicon.PENCIL, Constants.Sclass.BLUE));
 

@@ -51,7 +51,7 @@ public class GroupRender implements RowRenderer<Group> {
 		hlayout.setSpacing("0");
 
 		hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.EDIT), Constants.Tooltip.EDIT,
-				Events.ON_CLICK, Constants.Page.ManagerUser.ADD_EDIT_GROUP, _createParameterMap(group),
+				Events.ON_CLICK, Constants.Page.Menu.ADD_EDIT_GROUP, _createParameterMap(group),
 				Constants.Zicon.PENCIL, Constants.Sclass.BLUE));
 
 		Long status = group.getStatus();
@@ -73,7 +73,7 @@ public class GroupRender implements RowRenderer<Group> {
 		}
 
 		hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.ASSIGN_RIGHT),
-				Constants.Tooltip.ASSIGN_RIGHT, Events.ON_CLICK, Constants.Page.ManagerUser.ASSIGN_RIGHT,
+				Constants.Tooltip.ASSIGN_RIGHT, Events.ON_CLICK, Constants.Page.Menu.ASSIGN_RIGHT,
 				_createParameterMap(group), Constants.Zicon.SHARE, Constants.Sclass.PURPLE));
 
 		return hlayout;

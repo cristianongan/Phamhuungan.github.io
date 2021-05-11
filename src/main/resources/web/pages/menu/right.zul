@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <zk xmlns="http://www.zkoss.org/2005/zul">
-    <window title="${c:l('title.manager.right')}" width="750px"
+    <window title="${c:l('title.right.management')}" width="750px"
             height="auto"  mode="overlapped" closable="true"
             apply="${rightAssignmentController}"
             action="show: slideDown;hide: slideUp" border="none" 

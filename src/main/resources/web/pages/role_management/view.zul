@@ -8,12 +8,12 @@
                 <a label="${c:l('menu.main')}" onClick='Executions.sendRedirect("/index")'/>
                 <span/>
                 <a id="adminPage" label="${c:l('menu.admin')}"/>
-                <label value="${c:l('menu.item.manager.role')}"/>
+                <label value="${c:l('menu.item.role.management')}"/>
             </div>
         </div>    
         <vlayout sclass="page-content" xmlns:n="native" spacing="0">
             <div sclass="page-header">
-                <a label="${c:l('menu.item.manager.role')}" 
+                <a label="${c:l('menu.item.role.management')}" 
                        iconSclass="z-icon-list" sclass="lighter z-label"/>
             </div>
 

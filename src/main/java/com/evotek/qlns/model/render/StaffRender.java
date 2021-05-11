@@ -64,7 +64,7 @@ public class StaffRender implements ListitemRenderer<Staff> {
 		hlayout.setSpacing("0");
 
 		hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.EDIT), Constants.Tooltip.EDIT,
-				Events.ON_CLICK, Constants.Page.ManagerHumanResource.ADD_EDIT,
+				Events.ON_CLICK, Constants.Page.HumanResourceManagement.ADD_EDIT,
 				_createParameterMap(staff, Labels.getLabel(LanguageKeys.TITLE_EDIT_STAFF), index),
 				Constants.Zicon.PENCIL, Constants.Sclass.BLUE));
 
@@ -86,7 +86,7 @@ public class StaffRender implements ListitemRenderer<Staff> {
 		}
 
 		hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.DETAIL),
-				Constants.Tooltip.DETAIL, Events.ON_CLICK, Constants.Page.ManagerHumanResource.DETAIL,
+				Constants.Tooltip.DETAIL, Events.ON_CLICK, Constants.Page.HumanResourceManagement.DETAIL,
 				_createParameterMap(staff, Labels.getLabel(LanguageKeys.TITLE_STAFF_DETAIL), index),
 				Constants.Zicon.SEARCH_PLUS, Constants.Sclass.PURPLE));
 

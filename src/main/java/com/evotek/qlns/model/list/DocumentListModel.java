@@ -17,11 +17,11 @@ import com.evotek.qlns.service.DocumentService;
  *
  * @author LinhLH
  */
-public class ManagerDocumentListModel extends AbstractModelList<Document> {
+public class DocumentListModel extends AbstractModelList<Document> {
 
 	private static final long serialVersionUID = 3488184656876613925L;
 	
-	private static final Logger _log = LogManager.getLogger(ManagerDocumentListModel.class);
+	private static final Logger _log = LogManager.getLogger(DocumentListModel.class);
 	
 	private String _department;
 	private String _documentContent;
@@ -37,7 +37,7 @@ public class ManagerDocumentListModel extends AbstractModelList<Document> {
 
 	private boolean _view;
 
-	public ManagerDocumentListModel(int pageSize, String keyword, boolean isAdvance, List<Long> idList, boolean view,
+	public DocumentListModel(int pageSize, String keyword, boolean isAdvance, List<Long> idList, boolean view,
 			DocumentService documentService) {
 		this._pageSize = pageSize;
 		this._keyword = keyword;
@@ -49,7 +49,7 @@ public class ManagerDocumentListModel extends AbstractModelList<Document> {
 		setMultiple(true);
 	}
 
-	public ManagerDocumentListModel(int pageSize, String documentContent, String documentNumber, Long documentType,
+	public DocumentListModel(int pageSize, String documentContent, String documentNumber, Long documentType,
 			String department, Date fromDate, Date toDate, boolean isAdvance, List<Long> idList, boolean view,
 			DocumentService documentService) {
 		this._pageSize = pageSize;

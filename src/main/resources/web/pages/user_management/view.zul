@@ -8,7 +8,7 @@
                 <a label="${c:l('menu.main')}" onClick='Executions.sendRedirect("/index")'/>
                 <span/>
                 <a id="adminPage" label="${c:l('menu.admin')}"/>
-                <label value="${c:l('menu.item.manager.user')}"/>
+                <label value="${c:l('menu.item.user.management')}"/>
             </div>
             
             <!-- Search input-->
@@ -94,7 +94,7 @@
         </div>     
         <vlayout sclass="page-content" xmlns:n="native" spacing="0">
             <div sclass="page-header">
-                <a label="${c:l('menu.item.manager.user')}" 
+                <a label="${c:l('menu.item.user.management')}" 
                    iconSclass="z-icon-list" sclass="lighter z-label"/>
             </div>
                 
@@ -121,25 +121,25 @@
                     <listfoot>
                         <listfooter span="9">
                             <button id="btnAdd" sclass="blue" iconSclass="z-icon-plus-circle"
-                                    if="${sec:isAllGranted('manager_user_btnAdd')}"
+                                    if="${sec:isAllGranted('user_btnAdd')}"
                                     tooltip="addUserTooltip, position=after_center"/>
                             <button id="btnExport" sclass="orange" iconSclass="z-icon-table"
-                                    if="${sec:isAllGranted('manager_user_btnExport')}"
+                                    if="${sec:isAllGranted('user_btnExport')}"
                                     tooltip="exportTooltip, position=after_center"/>
                             <button id="btnResetPwd" sclass="purple" iconSclass="z-icon-repeat"
-                                    if="${sec:isAllGranted('manager_user_btnResetPwd')}"
+                                    if="${sec:isAllGranted('user_btnResetPwd')}"
                                     tooltip="resetPwdTooltip, position=after_center"/>
                             <button id="btnLock" sclass="orange" iconSclass="z-icon-lock"
-                                    if="${sec:isAllGranted('manager_user_btnLockUser')}"
+                                    if="${sec:isAllGranted('user_btnLockUser')}"
                                     tooltip="lockTooltip, position=after_center"/>
                             <button id="btnUnlock" sclass="orange" iconSclass="z-icon-unlock"
-                                    if="${sec:isAllGranted('manager_user_btnUnlockUser')}"
+                                    if="${sec:isAllGranted('user_btnUnlockUser')}"
                                     tooltip="unlockTooltip, position=after_center"/>
                             <button id="btnDel" sclass="red" iconSclass="z-icon-trash-o"
-                                    if="${sec:isAllGranted('manager_user_btnDel')}"
+                                    if="${sec:isAllGranted('user_btnDel')}"
                                     tooltip="delTooltip, position=after_center"/>
                             <button id="btnActivate" sclass="green" iconSclass="z-icon-check"
-                                    if="${sec:isAllGranted('manager_user_btnActivate')}"
+                                    if="${sec:isAllGranted('user_btnActivate')}"
                                     tooltip="activateTooltip, position=after_center"/>
                         </listfooter>
                     </listfoot>

@@ -177,7 +177,7 @@ public class Constants {
 		public static interface Department {
 
 			public static final String ADD_EDIT = "~./pages/department/edit.zul";
-			
+
 			public static final String VIEW = "~./pages/department/view.zul";
 		}
 
@@ -189,61 +189,61 @@ public class Constants {
 
 		}
 
-		public static interface ManagerDocument {
+		public static interface DocumentManagement {
 
-			public static final String ADD_EDIT = "~./pages/manager_document/edit.zul";
-			
-			public static final String DETAIL = "~./pages/manager_document/detail.zul";
+			public static final String ADD_EDIT = "~./pages/document_management/edit.zul";
+
+			public static final String DETAIL = "~./pages/document_management/detail.zul";
 		}
 
-		public static interface ManagerHumanResource {
+		public static interface HumanResourceManagement {
 
-			public static final String ADD_EDIT = "~./pages/manager_human_resource/edit.zul";
-			
-			public static final String ADD_EDIT_CONTRACT_TYPE = "~./pages/manager_human_resource/editContractType.zul";
-			
-			public static final String ADD_EDIT_JOB = "~./pages/manager_human_resource/editJob.zul";
+			public static final String ADD_EDIT = "~./pages/human_resource_management/edit.zul";
 
-			public static final String ADD_EDIT_SALARY_LANDMARK = "~./pages/manager_human_resource/editSalaryLandmark.zul";
+			public static final String ADD_EDIT_CONTRACT_TYPE = "~./pages/human_resource_management/editContractType.zul";
 
-			public static final String ADD_EDIT_WORK_PROCESS = "~./pages/manager_human_resource/editWorkProcess.zul";
+			public static final String ADD_EDIT_JOB = "~./pages/human_resource_management/editJob.zul";
 
-			public static final String DETAIL = "~./pages/manager_human_resource/detail.zul";
+			public static final String ADD_EDIT_SALARY_LANDMARK = "~./pages/human_resource_management/editSalaryLandmark.zul";
+
+			public static final String ADD_EDIT_WORK_PROCESS = "~./pages/human_resource_management/editWorkProcess.zul";
+
+			public static final String DETAIL = "~./pages/human_resource_management/detail.zul";
 		}
 
-		public static interface ManagerMenu {
+		public static interface Menu {
 
-			public static final String ADD_EDIT = "~./pages/manager_menu/edit.zul";
-			
-			public static final String EDIT_RIGHT = "~./pages/manager_menu/edit_right.zul";
-			
-			public static final String RESOURCE_ACTION = "~./pages/manager_menu/resource_action.zul";
+			public static final String ADD_EDIT = "~./pages/menu/edit.zul";
 
-			public static final String RIGHT = "~./pages/manager_menu/right.zul";
+			public static final String EDIT_RIGHT = "~./pages/menu/edit_right.zul";
+
+			public static final String RESOURCE_ACTION = "~./pages/menu/resource_action.zul";
+
+			public static final String RIGHT = "~./pages/menu/right.zul";
+
+			public static final String ASSIGN_RIGHT = "~./pages/menu/assign_right.zul";
+
+			public static final String ADD_EDIT_GROUP = "~./pages/menu/edit_group.zul";
+
+			public static final String ADD_EDIT_RIGHT = "~./pages/menu/edit_right.zul";
 		}
 
-		public static interface ManagerRole {
+		public static interface RoleManagement {
 
-			public static final String ADD_EDIT = "~./pages/manager_role/edit.zul";
-			
-			public static final String PERMISSION = "~./pages/manager_role/permission.zul";
+			public static final String ADD_EDIT = "~./pages/role_management/edit.zul";
+
+			public static final String PERMISSION = "~./pages/role_management/permission.zul";
 		}
 
-		public static interface ManagerUser {
+		public static interface UserManagement {
 
-			public static final String ADD_EDIT = "~./pages/manager_user/edit.zul";
-			
-			public static final String ADD_EDIT_GROUP = "~./pages/manager_menu/edit_group.zul";
+			public static final String ADD_EDIT = "~./pages/user_management/edit.zul";
 
-			public static final String ADD_EDIT_RIGHT = "~./pages/manager_menu/edit_right.zul";
+			public static final String ADD_ROLE = "~./pages/user_management/add_role.zul";
 
-			public static final String ADD_ROLE = "~./pages/manager_user/add_role.zul";
-			
-			public static final String ASSIGN_RIGHT = "~./pages/manager_menu/assign_right.zul";
-			
-			public static final String ASSIGNED_ROLE = "~./pages/manager_user/assigned_role.zul";
-			
-			public static final String IMPORT_USERS = "~./pages/manager_user/import_users.zul";
+			public static final String ASSIGNED_ROLE = "~./pages/user_management/assigned_role.zul";
+
+			public static final String IMPORT_USERS = "~./pages/user_management/import_users.zul";
 		}
 
 		public static interface Notification {
@@ -273,7 +273,7 @@ public class Constants {
 		public static final String NO_STYLE = "no-style";
 
 		public static final String ORANGE = "orange";
-		
+
 		public static final String PURPLE = "purple";
 
 		public static final String RED = "red";

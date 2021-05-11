@@ -17,10 +17,10 @@
                 <listfoot>
                     <listfooter span="4">
                         <button id="btnAdd" sclass="blue" iconSclass="z-icon-plus-circle"
-                                if="${sec:isAllGranted('manager_user_btnAssignRole')}"
+                                if="${sec:isAllGranted('user_btnAssignRole')}"
                                 tooltip="addRoleTooltip, position=after_center"/>
                         <button id="btnDelete" sclass="red" iconSclass="z-icon-trash-o"
-                                if="${sec:isAllGranted('manager_user_btnDelRole')}"
+                                if="${sec:isAllGranted('user_btnDelRole')}"
                                 tooltip="delTooltip, position=after_center"/>
                     </listfooter>
                 </listfoot>

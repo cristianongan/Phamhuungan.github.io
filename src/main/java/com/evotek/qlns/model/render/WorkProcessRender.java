@@ -59,7 +59,7 @@ public class WorkProcessRender implements ListitemRenderer<WorkProcess> {
 		hlayout.setSpacing("0");
 
 		hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.EDIT), Constants.Tooltip.EDIT,
-				Events.ON_CLICK, Constants.Page.ManagerHumanResource.ADD_EDIT_WORK_PROCESS,
+				Events.ON_CLICK, Constants.Page.HumanResourceManagement.ADD_EDIT_WORK_PROCESS,
 				_createParameterMap(wp, Labels.getLabel(LanguageKeys.TITLE_EDIT_WORK_PROCESS)), Constants.Zicon.PENCIL,
 				Constants.Sclass.BLUE));
 

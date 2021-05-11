@@ -333,7 +333,7 @@ public class StaffController extends BasicController<Hlayout> implements Seriali
 		map.put(Constants.Attr.PARENT_WINDOW, this.winStaff);
 		map.put(Constants.Attr.OBJECT, null);
 
-		Window win = (Window) Executions.createComponents(Constants.Page.ManagerHumanResource.ADD_EDIT, null, map);
+		Window win = (Window) Executions.createComponents(Constants.Page.HumanResourceManagement.ADD_EDIT, null, map);
 
 		win.doModal();
 	}

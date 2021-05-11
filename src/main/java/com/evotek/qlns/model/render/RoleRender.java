@@ -56,7 +56,7 @@ public class RoleRender<Component> implements ListitemRenderer<Role> {
 
 			if (Values.NOT_IMMUNE.equals(immune)) {
 				hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.EDIT),
-						Constants.Tooltip.EDIT, Events.ON_CLICK, Constants.Page.ManagerRole.ADD_EDIT,
+						Constants.Tooltip.EDIT, Events.ON_CLICK, Constants.Page.RoleManagement.ADD_EDIT,
 						_createParameterMap(role), Constants.Zicon.PENCIL, Constants.Sclass.BLUE));
 
 				Long status = role.getStatus();
@@ -79,7 +79,7 @@ public class RoleRender<Component> implements ListitemRenderer<Role> {
 			}
 
 			hlayout.appendChild(ComponentUtil.createButton(this.winTemp, Labels.getLabel(LanguageKeys.ASSIGN_RIGHT),
-					Constants.Tooltip.ASSIGN_RIGHT, Events.ON_CLICK, Constants.Page.ManagerRole.PERMISSION,
+					Constants.Tooltip.ASSIGN_RIGHT, Events.ON_CLICK, Constants.Page.RoleManagement.PERMISSION,
 					_createParameterMap(role), Constants.Zicon.SHARE, Constants.Sclass.PURPLE));
 
 			action.appendChild(hlayout);

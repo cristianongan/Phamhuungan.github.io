@@ -252,7 +252,7 @@
                 <!--pop up tooltip-->
                 <popup id="deptManager" zclass="tooltip" sclass="bottom bottom-left tooltip-success">
                     <span zclass="tooltip-arrow"/>
-                    <label zclass="tooltip-inner" value="${c:l('title.department.manager')}"/>
+                    <label zclass="tooltip-inner" value="${c:l('title.department.management')}"/>
                 </popup>
                 <popup id="exportStaff" zclass="tooltip" sclass="bottom tooltip-warning">
                     <span zclass="tooltip-arrow"/>

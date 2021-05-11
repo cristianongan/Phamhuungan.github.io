@@ -118,7 +118,7 @@
                     iconSclass="z-icon-check" class="btn-success"/>
             <button id="btnSaveAndContinue" label="${c:l('button.save.and.continue')}"
             		iconSclass="z-icon-check" class="btn-success"
-            		if="${sec:isAllGranted('manager_user_btnSave')}"/>
+            		if="${sec:isAllGranted('user_btnSave')}"/>
             <button id="btnCancel" type="button" label="${c:l('button.cancel')}"
                     iconSclass="z-icon-times" class="btn-default"/>
         </div>

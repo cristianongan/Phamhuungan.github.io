@@ -67,7 +67,7 @@
                 <div sclass="breadcrumb">
                     <span sclass="home-icon z-icon-home"/>
                     <a label="${c:l('menu.main')}" onClick='Executions.sendRedirect("/index")'/>
-                    <label value="${c:l('menu.item.manager.document')}"/>
+                    <label value="${c:l('menu.item.document.management')}"/>
                 </div>
   <!-- Search input-->
                 <div sclass="nav-search">
@@ -133,7 +133,7 @@
             <!-- document grid-->
             <vlayout sclass="page-content" xmlns:n="native" spacing="0">
                 <div sclass="page-header">
-                    <a label="${c:l('menu.item.manager.document')}" 
+                    <a label="${c:l('menu.item.document.management')}" 
                        iconSclass="z-icon-list" sclass="lighter z-label"/>
                 </div>
                 <div sclass="table-responsive">

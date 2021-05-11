@@ -134,7 +134,7 @@ public class DetailStaffController extends BasicController<Window> implements Se
 		map.put(Constants.Attr.OBJECT, this.staff);
 
 		Window win = (Window) Executions
-				.createComponents(Constants.Page.ManagerHumanResource.ADD_EDIT_SALARY_LANDMARK, null, map);
+				.createComponents(Constants.Page.HumanResourceManagement.ADD_EDIT_SALARY_LANDMARK, null, map);
 
 		win.doModal();
 	}
@@ -145,7 +145,7 @@ public class DetailStaffController extends BasicController<Window> implements Se
 		map.put(Constants.Attr.PARENT_WINDOW, this.winDetailStaff);
 		map.put(Constants.Attr.OBJECT, this.staff);
 
-		Window win = (Window) Executions.createComponents(Constants.Page.ManagerHumanResource.ADD_EDIT_WORK_PROCESS,
+		Window win = (Window) Executions.createComponents(Constants.Page.HumanResourceManagement.ADD_EDIT_WORK_PROCESS,
 				null, map);
 
 		win.doModal();

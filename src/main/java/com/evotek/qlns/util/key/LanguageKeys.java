@@ -90,7 +90,7 @@ public class LanguageKeys {
 	public static final String MALE = "male";
 	public static final String MENU_CONTROL_PANEl = "menu.control.panel";
 	public static final String MENU_ITEM_CATEGORY_MANAGEMENT = "menu.item.category.management";
-	public static final String MENU_ITEM_MANAGER_DOCUMENT = "menu.item.manager.document";
+	public static final String MENU_ITEM_DOCUMENT_MANAGEMENT = "menu.item.document.management";
 	/**
 	 * Name
 	 */
@@ -222,7 +222,7 @@ public class LanguageKeys {
 	public static final String TITLE_EDIT_STAFF = "title.edit.staff";
 	public static final String TITLE_EDIT_USER = "title.edit.user";
 	public static final String TITLE_EDIT_WORK_PROCESS = "title.edit.work.process";
-	public static final String TITLE_MANAGER_RIGHT = "title.manager.right";
+	public static final String TITLE_RIGHT_MANAGEMENT = "title.right.management";
 	public static final String TITLE_STAFF_DETAIL = "title.staff.detail";
 	public static final String UPPERCASE_LETTER = "common.uppercase.letter";
 	public static final String USER = "common.user";

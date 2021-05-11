@@ -125,7 +125,7 @@ public class RoleController extends BasicController<Div> implements Serializable
 			parameters.put(Constants.Attr.PARENT_WINDOW, this.winRole);
 			parameters.put(Constants.Attr.ID, 0L);
 
-			Window win = (Window) Executions.createComponents(Constants.Page.ManagerRole.ADD_EDIT, this.winRole,
+			Window win = (Window) Executions.createComponents(Constants.Page.RoleManagement.ADD_EDIT, this.winRole,
 					parameters);
 			win.doModal();
 		} catch (Exception ex) {

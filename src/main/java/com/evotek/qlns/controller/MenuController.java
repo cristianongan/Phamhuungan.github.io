@@ -159,7 +159,7 @@ public class MenuController extends BasicController<Div> implements Serializable
 		parameters.put(Constants.Attr.TITLE, Labels.getLabel(LanguageKeys.ADD));
 		parameters.put(Constants.Attr.ID, 0L);
 
-		Window win = (Window) Executions.createComponents(Constants.Page.ManagerMenu.ADD_EDIT, this.winMenu,
+		Window win = (Window) Executions.createComponents(Constants.Page.Menu.ADD_EDIT, this.winMenu,
 				parameters);
 
 		win.doModal();

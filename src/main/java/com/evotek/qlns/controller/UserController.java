@@ -308,7 +308,7 @@ public class UserController extends BasicController<Div> implements Serializable
 	}
 
 	public void onClick$btnAdd() {
-		Window win = (Window) Executions.createComponents(Constants.Page.ManagerUser.ADD_EDIT, this.winUser,
+		Window win = (Window) Executions.createComponents(Constants.Page.UserManagement.ADD_EDIT, this.winUser,
 				_createParameterMap(null));
 
 		win.doModal();
@@ -409,7 +409,7 @@ public class UserController extends BasicController<Div> implements Serializable
 	}
 
 	public void onClick$btnImport() {
-		Window win = (Window) Executions.createComponents(Constants.Page.ManagerUser.IMPORT_USERS, this.winUser,
+		Window win = (Window) Executions.createComponents(Constants.Page.UserManagement.IMPORT_USERS, this.winUser,
 				_createParameterMap(null));
 
 		win.doModal();

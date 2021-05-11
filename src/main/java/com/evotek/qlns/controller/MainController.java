@@ -351,7 +351,7 @@ public class MainController extends BasicController<Div> implements Serializable
 		parameters.put(Constants.Attr.OBJECT, getUser());
 		parameters.put(Constants.Attr.SELF_UPDATE, true);
 
-		Window win = (Window) Executions.createComponents(Constants.Page.ManagerUser.ADD_EDIT, this.mainDiv,
+		Window win = (Window) Executions.createComponents(Constants.Page.UserManagement.ADD_EDIT, this.mainDiv,
 				parameters);
 
 		win.doModal();

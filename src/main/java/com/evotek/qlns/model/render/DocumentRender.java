@@ -67,7 +67,7 @@ public class DocumentRender implements ListitemRenderer<Document> {
 		hlayout.setSpacing("0");
 
 		hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.EDIT), Constants.Tooltip.EDIT,
-				Events.ON_CLICK, Constants.Page.ManagerDocument.ADD_EDIT,
+				Events.ON_CLICK, Constants.Page.DocumentManagement.ADD_EDIT,
 				_createParameterMap(document, Labels.getLabel(LanguageKeys.TITLE_EDIT_DOCUMENT), index),
 				Constants.Zicon.PENCIL, Constants.Sclass.BLUE));
 		hlayout.appendChild(

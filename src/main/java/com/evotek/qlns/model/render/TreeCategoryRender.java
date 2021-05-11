@@ -72,7 +72,7 @@ public class TreeCategoryRender<Component> implements TreeitemRenderer<CategoryT
 		hlayout.setSpacing("0");
 
 		hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.EDIT), Constants.Tooltip.EDIT,
-				Events.ON_CLICK, Constants.Page.ManagerMenu.ADD_EDIT, _createParameterMap(category),
+				Events.ON_CLICK, Constants.Page.Menu.ADD_EDIT, _createParameterMap(category),
 				Constants.Zicon.PENCIL, Constants.Sclass.BLUE));
 
 		Long status = category.getStatus();
@@ -101,7 +101,7 @@ public class TreeCategoryRender<Component> implements TreeitemRenderer<CategoryT
 		// Thêm action "Quyền" và "Resource" nếu là menu item
 		if (Values.MENU_TYPE_ITEM.equals(category.getType())) {
 			hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.BUTTON_RIGHT),
-					Constants.Tooltip.RIGHT, Events.ON_CLICK, Constants.Page.ManagerMenu.RIGHT,
+					Constants.Tooltip.RIGHT, Events.ON_CLICK, Constants.Page.Menu.RIGHT,
 					_createParameterMap(category), Constants.Zicon.KEY, Constants.Sclass.ORANGE));
 
 //            hlayout.appendChild(ComponentUtil.createButton(null,

@@ -56,7 +56,7 @@ public class RightRender implements RowRenderer<Right> {
 		hlayout.setSpacing("0");
 
 		hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.EDIT), Constants.Tooltip.EDIT,
-				Events.ON_CLICK, Constants.Page.ManagerMenu.EDIT_RIGHT, _createParameterMap(right),
+				Events.ON_CLICK, Constants.Page.Menu.EDIT_RIGHT, _createParameterMap(right),
 				Constants.Zicon.PENCIL, Constants.Sclass.BLUE));
 
 		Long status = right.getStatus();

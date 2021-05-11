@@ -4,7 +4,7 @@
     <window apply="${departmentController}" width="400px" closable="true"
             sizable="true" minwidth="400" minheight="700" style="position: fixed;"
             action="show: slideDown;hide: slideUp" border="none" 
-            position="center, center" title="${c:l('title.department.manager')}">
+            position="center, center" title="${c:l('menu.item.document.management')}">
         <groupbox>
             <div class="btn-group">
                 <button type="button" zclass="btn btn-app btn-info btn-xs" 

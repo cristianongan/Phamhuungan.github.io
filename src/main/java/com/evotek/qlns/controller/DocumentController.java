@@ -47,7 +47,7 @@ import org.zkoss.zul.Window;
 import com.evotek.qlns.extend.Messagebox;
 import com.evotek.qlns.model.Document;
 import com.evotek.qlns.model.DocumentType;
-import com.evotek.qlns.model.list.ManagerDocumentListModel;
+import com.evotek.qlns.model.list.DocumentListModel;
 import com.evotek.qlns.model.render.DocumentRender;
 import com.evotek.qlns.service.DocumentService;
 import com.evotek.qlns.service.DocumentTypeService;
@@ -134,7 +134,7 @@ public class DocumentController extends BasicController<Hlayout> implements Seri
 		this.paramMap.put("fromDate", fromDate);
 		this.paramMap.put("toDate", toDate);
 
-		ListModel model = new ManagerDocumentListModel(this.listboxResult.getPageSize(), documentContent,
+		ListModel model = new DocumentListModel(this.listboxResult.getPageSize(), documentContent,
 				documentNumber, documentType, department, fromDate, toDate, this.isAdvance, null, false,
 				this.documentService);
 
@@ -152,7 +152,7 @@ public class DocumentController extends BasicController<Hlayout> implements Seri
 
 		this.paramMap.put("keyword", keyword);
 
-		ListModel model = new ManagerDocumentListModel(this.listboxResult.getPageSize(), keyword, this.isAdvance, null,
+		ListModel model = new DocumentListModel(this.listboxResult.getPageSize(), keyword, this.isAdvance, null,
 				false, this.documentService);
 
 		this.listboxResult.setModel(model);
@@ -371,7 +371,7 @@ public class DocumentController extends BasicController<Hlayout> implements Seri
 		map.put(Constants.Attr.PARENT_WINDOW, this.winDocument);
 		map.put(Constants.Attr.OBJECT, null);
 
-		Window win = (Window) Executions.createComponents(Constants.Page.ManagerDocument.ADD_EDIT, null, map);
+		Window win = (Window) Executions.createComponents(Constants.Page.DocumentManagement.ADD_EDIT, null, map);
 
 		win.doModal();
 	}
@@ -454,7 +454,7 @@ public class DocumentController extends BasicController<Hlayout> implements Seri
 			List<Document> datas = getListExport();
 
 			if (!datas.isEmpty()) {
-				String title = Labels.getLabel(LanguageKeys.MENU_ITEM_MANAGER_DOCUMENT).toUpperCase();
+				String title = Labels.getLabel(LanguageKeys.MENU_ITEM_DOCUMENT_MANAGEMENT).toUpperCase();
 
 				ExcelUtil excelUtil = new ExcelUtil<Document>();
 
@@ -611,7 +611,7 @@ public class DocumentController extends BasicController<Hlayout> implements Seri
 
 		this.paramMap.put("docTypeIds", docTypeIds);
 
-		ListModel model = new ManagerDocumentListModel(this.listboxResult.getPageSize(), StringPool.BLANK, true,
+		ListModel model = new DocumentListModel(this.listboxResult.getPageSize(), StringPool.BLANK, true,
 				docTypeIds, true, this.documentService);
 
 		this.listboxResult.setModel(model);

@@ -365,7 +365,7 @@ public class AddEditStaffController extends BasicController<Window> implements S
 		map.put(Constants.Attr.PARENT_WINDOW, this.winEditStaff);
 		map.put(Constants.Attr.OBJECT, null);
 
-		Window win = (Window) Executions.createComponents(Constants.Page.ManagerHumanResource.ADD_EDIT_CONTRACT_TYPE,
+		Window win = (Window) Executions.createComponents(Constants.Page.HumanResourceManagement.ADD_EDIT_CONTRACT_TYPE,
 				null, map);
 
 		win.doModal();
@@ -377,7 +377,7 @@ public class AddEditStaffController extends BasicController<Window> implements S
 		map.put(Constants.Attr.PARENT_WINDOW, this.winEditStaff);
 		map.put(Constants.Attr.OBJECT, null);
 
-		Window win = (Window) Executions.createComponents(Constants.Page.ManagerHumanResource.ADD_EDIT_JOB, null, map);
+		Window win = (Window) Executions.createComponents(Constants.Page.HumanResourceManagement.ADD_EDIT_JOB, null, map);
 
 		win.doModal();
 	}

@@ -66,7 +66,7 @@ public class UserRender implements ListitemRenderer<User> {
 		hlayout.setSpacing("0");
 
 		hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.EDIT), Constants.Tooltip.EDIT,
-				Events.ON_CLICK, Constants.Page.ManagerUser.ADD_EDIT, _createParameterMap(user, index), Constants.Zicon.PENCIL,
+				Events.ON_CLICK, Constants.Page.UserManagement.ADD_EDIT, _createParameterMap(user, index), Constants.Zicon.PENCIL,
 				Constants.Sclass.BLUE));
 
 		Long status = user.getStatus();
@@ -88,7 +88,7 @@ public class UserRender implements ListitemRenderer<User> {
 		}
 
 		hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.ASSIGN_ROLE),
-				Constants.Tooltip.ASSIGN_ROLE, Events.ON_CLICK, Constants.Page.ManagerUser.ASSIGNED_ROLE,
+				Constants.Tooltip.ASSIGN_ROLE, Events.ON_CLICK, Constants.Page.UserManagement.ASSIGNED_ROLE,
 				_createParameterMap(user, index), Constants.Zicon.SHARE, Constants.Sclass.PURPLE));
 
 		action.appendChild(hlayout);

@@ -57,7 +57,7 @@ public class NotificationRender implements ListitemRenderer<Notification> {
 
 		if (Values.NOTI_CONTRACT_EXPIRED.equals(type)) {
 			hlayout.appendChild(ComponentUtil.createButton(null, Labels.getLabel(LanguageKeys.EXTEND_CONTRACT),
-					"extendContractTooltip", Events.ON_CLICK, Constants.Page.ManagerHumanResource.ADD_EDIT,
+					"extendContractTooltip", Events.ON_CLICK, Constants.Page.HumanResourceManagement.ADD_EDIT,
 					_createParameterMap(notify, Labels.getLabel(LanguageKeys.TITLE_EDIT_STAFF)),
 					Constants.Zicon.LEVEL_UP, Constants.Sclass.BLUE));
 		} else {

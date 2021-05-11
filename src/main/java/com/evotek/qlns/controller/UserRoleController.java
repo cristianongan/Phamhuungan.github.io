@@ -117,7 +117,7 @@ public class UserRoleController extends BasicController<Window> implements Seria
 		parameters.put(Constants.Attr.OBJECT, this.user);
 		parameters.put(Constants.Attr.SECOND_OBJECT, this._roles);
 
-		Window win = (Window) Executions.createComponents(Constants.Page.ManagerUser.ADD_ROLE, this.winUserRole,
+		Window win = (Window) Executions.createComponents(Constants.Page.UserManagement.ADD_ROLE, this.winUserRole,
 				parameters);
 
 		win.doModal();

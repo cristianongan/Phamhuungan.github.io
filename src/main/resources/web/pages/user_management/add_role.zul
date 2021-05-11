@@ -20,7 +20,7 @@
             
             <div align="center" sclass="z-button-action">
                 <button id="btnAdd" label="${c:l('button.add')}"
-                        if="${sec:isAllGranted('manager_user_btnSaveAssignRole')}"
+                        if="${sec:isAllGranted('user_btnSaveAssignRole')}"
                         iconSclass="z-icon-plus-circle" class="btn-info"/>
                 <button id="btnCancel" label = "${c:l('button.cancel')}"
                         iconSclass="z-icon-times" class="btn-default"/>
