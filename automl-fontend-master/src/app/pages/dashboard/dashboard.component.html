@@ -1,0 +1,85 @@
+<nb-layout>
+  <nb-layout-column>
+    <nb-card class="h-body">
+      <nb-card-header style="text-align: center">Dashboard</nb-card-header>
+      <nb-card-body>
+        <div class="d-flex">
+          <div class="w-35">
+            <nb-card>
+              <highcharts-chart
+                [Highcharts]="Highcharts"
+                [options]="chartOptions"
+                [(update)]="chartUpdate"
+                style="width: 100%; height: 200px; display: block;"
+              ></highcharts-chart>
+            </nb-card>
+          </div>
+          <div class="w-65 ml-5">
+            <span class="font-weight-bold d-block" style="text-align: center;
+    width: calc(100vw - 864px);"> Recent Projects </span>
+            <nb-list class="w-100 ml-5">
+              <nb-list-item *ngFor="let item of project" class="w-100 mt-1">
+                {{ item.projectName }}
+              </nb-list-item>
+            </nb-list>
+          </div>
+        </div>
+        <div class="mb-3">
+          <nb-card>
+            <nb-card-header>Recent Models</nb-card-header>
+            <ngx-datatable
+              #table
+              class="dark"
+              [columnMode]="'flex'"
+              [rows]="recentProject"
+              [columns]="columns"
+              [messages]="{totalMessage:'items'}"
+              [headerHeight]="50"
+              [footerHeight]="50"
+              [loadingIndicator]="true"
+              [limit]="10"
+              rowHeight="auto"
+            >
+              <ng-container *ngFor="let col of columns">
+                <ngx-datatable-column prop="{{col.prop}}" name="{{col.name}}" [sortable]="false"
+                                      [flexGrow]="col.flex">
+                  <ng-template let-column="column" ngx-datatable-header-template>{{col.name}}</ng-template>
+                  <ng-template let-value="value" let-rowIndex="rowIndex" ngx-datatable-cell-template let-row="rows">
+                    <ng-container [ngSwitch]="col.prop">
+                      <ng-container *ngSwitchDefault>
+                          <span class="custom-show-data" [title]="value">
+                            {{value}}
+                          </span>
+                      </ng-container>
+<!--                        <ng-container *ngSwitchCase="'tasks'">-->
+<!--                          <div class="d-flex ml-1">-->
+<!--                            <div *ngIf="value[0] === 1" class="task-green mr-1"></div>-->
+<!--                            <div *ngIf="value[1] === 1" class="task-red mr-1"></div>-->
+<!--                            <div *ngIf="value[2] === 1" class="task-blue"></div>-->
+<!--                          </div>-->
+<!--                        </ng-container>-->
+                      <ng-container *ngSwitchCase="'actions'">
+                        <button status="primary" type="button" nbButton nbTooltip="View model" ghost size="small" (click)="modelDetail(rowIndex)">
+                          <nb-icon icon="more-horizontal-outline"></nb-icon>
+                        </button>
+                      </ng-container>
+                    </ng-container>
+                  </ng-template>
+                </ngx-datatable-column>
+              </ng-container>
+            </ngx-datatable>
+<!--            <div class="d-flex justify-content-end mt-2 mr-5 align-items-center mb-2">-->
+<!--              <span class="font-weight-bold mr-5">Task</span>-->
+<!--              <div class="task-blue"></div>-->
+<!--              <span class="mr-1 mr-3 ml-1">Inference</span>-->
+<!--              <div class="task-green"></div>-->
+<!--              <span class="mr-1 mr-3 ml-1">Train</span>-->
+<!--              <div class="task-red"></div>-->
+<!--              <span class="mr-1 mr-3 ml-1">Test</span>-->
+<!--            </div>-->
+          </nb-card>
+        </div>
+      </nb-card-body>
+    </nb-card>
+  </nb-layout-column>
+</nb-layout>

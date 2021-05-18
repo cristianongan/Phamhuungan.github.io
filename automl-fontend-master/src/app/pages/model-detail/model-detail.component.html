@@ -1,0 +1,455 @@
+<nb-card [nbSpinner]="isLoading" [nbSpinnerMessage]="'Searching...'" nbSpinnerStatus="primary">
+  <nb-card class="w60-h90">
+    <nb-card-header style="text-align: center">
+      <span class="font-weight-bold">Model detail</span>
+    </nb-card-header>
+    <nb-card-body>
+      <nb-card>
+        <div class="mt-3 ml-3 mb-3">
+          <span class="font-weight-bold">Model detail</span>
+          <div class="d-flex mt-1">
+            <div class="w-43">
+              <span class="d-block ml-3 mt-2 font-blue ">Model name</span>
+              <input type="text" nbInput class="ml-3" [value]="modelDetail?.modelName" fullWidth readonly>
+            </div>
+            <div class="w-43 ml-10">
+              <span class="d-block ml-3 mt-2 font-blue">Create time</span>
+              <input type="text" nbInput class="ml-3" fullWidth
+                     [value]="modelDetail?.createTime | date: 'dd/MM/yyyy HH-mm-ss'" readonly>
+            </div>
+          </div>
+          <div class="mt-1 ml-3 w-96">
+            <span class="d-block mt-2 font-blue ">Description</span>
+            <textarea type="text" nbInput rows="3" fullWidth [value]="modelDetail?.description" readonly></textarea>
+          </div>
+          <div class="d-flex mt-1">
+            <div class="w-43">
+              <span class="d-block ml-3 mt-2 font-blue ">Project</span>
+              <input type="text" nbInput class="ml-3" fullWidth [value]="modelDetail?.projectName" readonly>
+            </div>
+            <div class="w-43 ml-10">
+              <span class="d-block ml-3 mt-2 font-blue">User</span>
+              <input type="text" nbInput class="ml-3" fullWidth [value]="modelDetail?.createUser" readonly>
+            </div>
+          </div>
+          <div class="d-flex mt-1">
+            <div class="w-43">
+              <span class="d-block ml-3 mt-2 font-blue ">Type</span>
+              <input type="text" nbInput class="ml-3" fullWidth
+                     [value]="modelDetail?.bestModelType === undefined ? '' : modelDetail?.bestModelType" readonly>
+            </div>
+            <div class="w-43 ml-10">
+              <span class="d-block ml-3 mt-2 font-blue">Mode</span>
+              <input type="text" nbInput class="ml-3"
+                     [value]="modelDetail?.modelMode === 0 ? 'Auto select model' : 'Manual define model'" fullWidth
+                     readonly>
+            </div>
+          </div>
+        </div>
+      </nb-card>
+      <nb-card>
+        <ngx-datatable
+          #table
+          class="dark"
+          [columnMode]="'flex'"
+          [rows]="modelDetail?.historyDTOS"
+          [columns]="columnsDetail"
+          [messages]="{totalMessage:'items'}"
+          [headerHeight]="50"
+          [footerHeight]="50"
+          [loadingIndicator]="true"
+          [limit]="10"
+          rowHeight="auto"
+        >
+          <ng-container *ngFor="let col of columnsDetail">
+            <ngx-datatable-column prop="{{col.prop}}" name="{{col.name}}" [sortable]="false"
+                                  [flexGrow]="col.flex">
+              <ng-template let-column="column" ngx-datatable-header-template>{{col.name}}</ng-template>
+              <ng-template let-value="value" let-rowIndex="rowIndex" ngx-datatable-cell-template let-row="rows">
+                <ng-container [ngSwitch]="col.prop">
+                  <ng-container *ngSwitchDefault>
+                          <span class="custom-show-data" [title]="value">
+                            {{value}}
+                          </span>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'tasks'">
+                    <div class="d-flex ml-1">
+                      <div *ngIf="value[0] === 1" class="task-green ml-1"></div>
+                      <div *ngIf="value[1] === 1" class="task-red ml-1"></div>
+                      <div *ngIf="value[2] === 1" class="task-blue ml-1"></div>
+                    </div>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'currentStatus'">
+                    <div class="d-flex ml-1">
+                      <div *ngIf="value === 0"><span>Ready</span></div>
+                      <div *ngIf="value === 1"><span>Running</span></div>
+                      <div *ngIf="value === 2"><span>Pending</span></div>
+                      <div *ngIf="value === 3"><span>Done</span></div>
+                      <div *ngIf="value === 4"><span>Cancelled</span></div>
+                      <div *ngIf="value === 5"><span>Error</span></div>
+                    </div>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'detail'">
+                    <button style="text-transform: capitalize;" nbButton size="small" status="success"
+                            (click)="getModelHistory(rowIndex, modelHistory);">
+                      Show detail
+                    </button>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'log'">
+                    <button style="text-transform: capitalize;" nbButton size="small" status="primary"
+                            (click)="getLog(rowIndex);dialogService.open(logs,{context: { action: '', historyIndex: rowIndex}, closeOnEsc: true, hasBackdrop: true})">
+                      Show log
+                    </button>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'actions'">
+                    <button type="button" nbButton nbTooltip="View model" status="primary" ghost size="small"
+                            (click)="dialogService.open(modelDetail,{context: { action: ''}, closeOnEsc: true, hasBackdrop: true})">
+                      <nb-icon icon="more-horizontal-outline"></nb-icon>
+                    </button>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'reset'">
+                    <button type="button" nbButton nbTooltip="View model" status="warning" ghost>
+                      <nb-icon icon="refresh-outline"></nb-icon>
+                    </button>
+                  </ng-container>
+                </ng-container>
+              </ng-template>
+            </ngx-datatable-column>
+          </ng-container>
+        </ngx-datatable>
+        <div class="d-flex justify-content-end mt-2 mr-5 align-items-center mb-2">
+          <span class="font-weight-bold mr-5">Task</span>
+          <div class="task-blue"></div>
+          <span class="mr-1 mr-3 ml-1">Inference</span>
+          <div class="task-green"></div>
+          <span class="mr-1 mr-3 ml-1">Train</span>
+          <div class="task-red"></div>
+          <span class="mr-1 mr-3 ml-1">Test</span>
+        </div>
+      </nb-card>
+    </nb-card-body>
+  </nb-card>
+</nb-card>
+<ng-template #modelHistory let-ref="dialogRef">
+  <nb-card style="width: 75vw ; height: 90vh">
+    <nb-card-header style="text-align: center"><span>Model history</span></nb-card-header>
+    <nb-card-body>
+      <nb-card *ngIf="runType !== 1">
+        <div class="mt-3 ml-3 mb-3" *ngIf="modelMode === 0 ">
+          <span class="font-weight-bold">Search space</span>
+          <nb-tabset class="scroll-tabmenu">
+            <nb-tab *ngFor="let item of searchSpaces; index as index"
+                    [active]="index === searchSpaces.length"
+                    [tabTitle]="item[0].modelTypeName" style="height: 250px;  overflow: auto;">
+              <div *ngFor="let value of item; let paraIndex = index" class="mt-3 d-flex">
+                <span class="w-25">{{value.parameterName}}</span>
+                <div class="w-75">
+                  <input fullWidth readonly class="w-100" type="text" nbInput [value]="value.parameterValue" *ngIf="value.dataType === 0">
+                  <div *ngIf="value.dataType !== 0" class="d-flex w-100">
+                    <input readonly class="w-24" type="number" nbInput [value]="value.min">
+                    <input readonly class="ml-4 w-24" type="number" nbInput [value]="value.max">
+                    <input readonly class="ml-4 w-24" type="text" nbInput  [value]="value.uniform === 1 ? 'uniform' : 'normal'">
+                    <input readonly class="ml-4 w-24" type="number" nbInput [value]="value.step">
+                  </div>
+                </div>
+              </div>
+            </nb-tab>
+          </nb-tabset>
+        </div>
+        <div class="mt-3 ml-3 mb-3" *ngIf="modelMode !== 0 ">
+          <span class="font-weight-bold">Parameter</span>
+          <nb-tabset class="scroll-tabmenu">
+            <nb-tab *ngFor="let item of searchSpaces; index as index"
+                    [active]="index === searchSpaces.length"
+                    [tabTitle]="item[0].modelTypeName" style="height: 250px;  overflow: auto;">
+              <div *ngFor="let value of item; let paraIndex = index" class="mt-3 d-flex">
+                <span class="w-25">{{value.parameterName}}</span>
+                <div class="w-75">
+                  <input fullWidth readonly class="w-100" type="text" nbInput [value]="value.parameterValue">
+                </div>
+              </div>
+            </nb-tab>
+          </nb-tabset>
+        </div>
+      </nb-card>
+      <nb-card *ngIf="runType !== 1">
+        <div class="row justify-content-between ml-2 mr-2 mt-2">
+          <div class="col-4">
+            <span>Metrics</span>
+            <input class="mt-1" nbInput fullWidth [value]="metric">
+          </div>
+          <div class="col-4">
+            <span>Auto turning type</span>
+            <input class="mt-1" nbInput fullWidth [value]="modelDTO?.autoTurningType === 1 ? 'hold_out' : modelDTO?.autoTurningType === 2 ? 'random_split': 'cross_validation'">
+          </div>
+          <div class="col-4">
+            <span>Max trial times</span>
+            <input class="mt-1" nbInput fullWidth [value]="modelDTO?.maxTrialTime">
+          </div>
+        </div>
+        <div class="row justify-content-between m-2">
+          <div class="col-4">
+            <span>Data subsampling ratio</span>
+            <input class="mt-1" nbInput fullWidth [value]="modelDTO?.dataSubsamplingRatio">
+          </div>
+          <div class="col-4">
+            <span>Checkpoint step</span>
+            <input class="mt-1" nbInput fullWidth [value]="modelDTO?.checkpointStep">
+          </div>
+          <div class="col-4">
+            <span>Optimization algorithm</span>
+            <input class="mt-1" nbInput fullWidth [value]="modelDTO?.optimizationAlgorithm">
+          </div>
+        </div>
+      </nb-card>
+      <nb-card>
+        <div class="mt-3 ml-3 mb-3">
+          <span class="font-weight-bold">Data Source</span>
+          <div class="d-flex" style="align-items: center">
+            <span class="mt-1 ml-3" style="width: 15%">Connection</span>
+            <input readonly style="width: 59%" nbInput fullWidth [value]="connectionName">
+          </div>
+          <div class="d-flex mt-2" style="align-items: center">
+            <span class="mt-1 ml-3" style="width: 15%">Training table</span>
+            <input readonly style="width: 59%" nbInput fullWidth [value]="configFlow.trainingTable">
+            <button nbButton size="medium" class="ml-5 custom-button"
+                    (click)="getDataSQL(configFlow.trainingTable);dialogService.open(sampleData,{context: { action: 'validateTable'}, closeOnEsc: true, hasBackdrop: true});dataSql= null; keyDataSql = null;sqlError= ''">
+              Show sample
+            </button>
+          </div>
+          <div class="d-flex mt-2" style="align-items: center">
+            <span class="mt-1 ml-3" style="width: 15%">Validation table</span>
+            <input readonly style="width: 59%" nbInput fullWidth [value]="configFlow.validationTable">
+            <button nbButton size="medium" class="ml-5 custom-button"
+                    (click)="getDataSQL(configFlow.validationTable);dialogService.open(sampleData,{context: { action: 'validateTable'}, closeOnEsc: true, hasBackdrop: true});dataSql= null; keyDataSql = null;sqlError= ''">
+              Show sample
+            </button>
+          </div>
+          <div class="d-flex mt-2" style="align-items: center">
+            <span class="mt-1 ml-3" style="width: 15%">Testing table</span>
+            <input readonly style="width: 59%" nbInput fullWidth [value]="configFlow.testingTable">
+            <button nbButton size="medium" class="ml-5 custom-button"
+                    (click)="getDataSQL(configFlow.testingTable);dialogService.open(sampleData,{context: { action: 'validateTable'}, closeOnEsc: true, hasBackdrop: true});dataSql= null; keyDataSql = null;sqlError= ''">
+              Show sample
+            </button>
+          </div>
+          <div class="d-flex mt-2" style="align-items: center">
+            <span class="mt-1 ml-3" style="width: 15%">Inference table</span>
+            <input readonly style="width: 59%" nbInput fullWidth [value]="configFlow.inferenceTable">
+            <button nbButton size="medium" class="ml-5 custom-button"
+                    (click)="getDataSQL(configFlow.inferenceTable);dialogService.open(sampleData,{context: { action: 'validateTable'}, closeOnEsc: true, hasBackdrop: true});dataSql= null; keyDataSql = null;sqlError= ''">
+              Show sample
+            </button>
+          </div>
+        </div>
+      </nb-card>
+      <nb-card>
+        <div class="mt-3 ml-3 mb-3">
+          <span class="font-weight-bold">Output Table</span>
+          <div class="d-flex mt-1">
+            <div class="w-43">
+              <span class="d-block ml-3 mt-2 font-blue ">Name of output table (inference)</span>
+              <input type="text" nbInput class="ml-3" fullWidth readonly [value]="configFlow.outputTableName">
+            </div>
+            <div class="w-43 ml-10">
+              <span class="d-block ml-3 mt-2 font-blue">Table location</span>
+              <input type="text" nbInput class="ml-3" fullWidth readonly [value]="configFlow.location">
+            </div>
+          </div>
+        </div>
+      </nb-card>
+      <nb-card *ngIf="runType !== 1">
+        <div class="mt-3 ml-3 mb-3 d-flex">
+          <nb-card class="w-50 h-75">
+                  <span style="font-weight: bold" class="mt-2 ml-2">
+                    Select feature columns
+                  </span>
+            <nb-card class="ml-2 mr-2 mt-2 custom">
+              <p-pickList class="mb-2 mt-2" [source]="tableColumnFea"
+                          [target]="targetColumnFea"
+                          [responsive]="true" [sourceStyle]="{'height':'300px'}"
+                          [targetStyle]="{'height':'300px'}"
+                          filterBy="name"
+                          sourceFilterPlaceholder="Search by name" targetFilterPlaceholder="Search by name"
+                          (onMoveAllToSource)="false">
+                <ng-template let-product pTemplate="item">
+                  <div class="product-item">
+                    <div class="product-list-detail">
+                      <span>{{product.name}}</span>
+                    </div>
+                  </div>
+                </ng-template>
+              </p-pickList>
+            </nb-card>
+          </nb-card>
+          <nb-card class="w-50 ml-2">
+                  <span style="font-weight: bold" class="mt-2 ml-2">
+                    Select output columns
+                  </span>
+            <nb-card class="ml-2 mr-2 mt-2 custom">
+              <p-pickList [source]="tableColumnOut" [target]="targetColumnOut"
+                          class=" mb-2 mt-2"
+                          [responsive]="true" [sourceStyle]="{'height':'300px'}"
+                          [targetStyle]="{'height':'300px'}"
+                          filterBy="name"
+                          sourceFilterPlaceholder="Search by name" targetFilterPlaceholder="Search by name">
+                <ng-template let-product pTemplate="item">
+                  <div class="product-item">
+                    <div class="product-list-detail">
+                      <span class="p-mb-2">{{product.name}}</span>
+                    </div>
+                  </div>
+                </ng-template>
+              </p-pickList>
+            </nb-card>
+            <span style="font-weight: bold" class="mt-2 ml-2">
+                    Select label columns
+                  </span>
+            <nb-card class="ml-2 mr-2 mt-2">
+              <div class=" mt-2 ml-2 mb-2">
+                <input nbInput type="text" [value]="configFlow.labelColumn" trim="blur" readonly>
+                <div class="d-block">
+                  <nb-checkbox disabled class="d-block" [(ngModel)]="raw_prediction"
+                               *ngIf="configFlow.labelColumn">{{configFlow.labelColumn + '_raw_prediction'}}
+                  </nb-checkbox>
+                  <nb-checkbox disabled class="d-block" [(ngModel)]="prediction"
+                               *ngIf="configFlow.labelColumn">{{configFlow.labelColumn + '_prediction'}}
+                  </nb-checkbox>
+                  <nb-checkbox disabled class="d-block" [(ngModel)]="probability"
+                               *ngIf="configFlow.labelColumn">{{configFlow.labelColumn + '_probability'}}
+                  </nb-checkbox>
+                </div>
+              </div>
+            </nb-card>
+          </nb-card>
+        </div>
+      </nb-card>
+    </nb-card-body>
+  </nb-card>
+</ng-template>
+<ng-template #logs let-ref="dialogRef" let-data>
+  <nb-card class="w-h-log"  [nbSpinner]="isLoading" [nbSpinnerMessage]="'Searching...'" nbSpinnerStatus="primary">
+    <nb-card-header style="text-align: center">
+      <span>Show logs</span>
+    </nb-card-header>
+    <nb-card-body>
+      <div class="d-flex mt-1 mb-3">
+        <div class="w-44">
+          <span class="d-block ml-3 mt-2 font-blue ">History ID</span>
+          <input type="text" nbInput class="ml-3" fullWidth [value]="logData[0]?.historyId" readonly>
+        </div>
+        <div class="w-44 ml-10">
+          <span class="d-block ml-3 mt-2 font-blue">Project Name</span>
+          <input type="text" nbInput class="ml-3" fullWidth [value]="logData[0]?.projectName" readonly>
+        </div>
+      </div>
+      <div class="d-flex mt-1">
+        <div class="w-44">
+          <span class="d-block ml-3 mt-2 font-blue ">Model Name</span>
+          <input type="text" nbInput class="ml-3" fullWidth [value]="logData[0]?.modelName" readonly>
+        </div>
+        <div class="w-44 ml-10">
+          <span class="d-block ml-3 mt-2 font-blue">UserName</span>
+          <input type="text" nbInput class="ml-3" fullWidth [value]="logData[0]?.username" readonly>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-lg-center">
+        <button nbButton class="mt-2 mb-2" status="info" size="small"
+                (click)="dialogService.open(logDetail,{context: { historyIndex: data.historyIndex}, closeOnEsc: true, hasBackdrop: true})"
+        >Show logs</button>
+      </div>
+      <ngx-datatable
+        #table
+        class="dark"
+        [columnMode]="'flex'"
+        [rows]="logData"
+        [columns]="logColumn"
+        [messages]="{totalMessage:'items'}"
+        [headerHeight]="50"
+        [footerHeight]="50"
+        [loadingIndicator]="true"
+        [limit]="10"
+        rowHeight="auto"
+      >
+        <ng-container *ngFor="let col of logColumn">
+          <ngx-datatable-column prop="{{col.prop}}" name="{{col.name}}" [sortable]="false"
+                                [flexGrow]="col.flex">
+            <ng-template let-column="column" ngx-datatable-header-template>{{col.name}}</ng-template>
+            <ng-template let-value="value" let-rowIndex="rowIndex" ngx-datatable-cell-template let-row="rows">
+              <ng-container [ngSwitch]="col.prop">
+                <ng-container *ngSwitchDefault>
+                          <span class="custom-show-data" [title]="value">
+                            {{value}}
+                          </span>
+                </ng-container>
+                <ng-container *ngSwitchCase="'logOutput'">
+                  <button nbButton size="small" status="info"
+                          (click)="dialogService.open(logDetail,{context: { dataLogs: value}, closeOnEsc: true, hasBackdrop: true})">
+                    <span>Log Detail</span>
+                  </button>
+                </ng-container>
+                <ng-container *ngSwitchCase="'startTime'">
+                          <span class="custom-show-data" [title]="value | date: 'dd/MM/yyyy HH-mm-ss' ">
+                              {{value | date: 'dd/MM/yyyy HH-mm-ss' }}
+                          </span>
+                </ng-container>
+                <ng-container *ngSwitchCase="'endTime'">
+                          <span class="custom-show-data" [title]="value | date: 'dd/MM/yyyy HH-mm-ss' ">
+                              {{value | date: 'dd/MM/yyyy HH-mm-ss'}}
+                          </span>
+                </ng-container>
+                <ng-container *ngSwitchCase="'executeTime'">
+                          <span class="custom-show-data" [title]="value">
+                              {{value}}(m)
+                          </span>
+                </ng-container>
+              </ng-container>
+            </ng-template>
+          </ngx-datatable-column>
+        </ng-container>
+      </ngx-datatable>
+    </nb-card-body>
+  </nb-card>
+</ng-template>
+<ng-template #sampleData let-ref="dialogRef" let-data>
+  <nb-card class="custom-table" [nbSpinner]="isLoading" [nbSpinnerMessage]="'Processing...'" nbSpinnerStatus="primary">
+    <nb-card-header class="background-header">
+      <span>Sample data</span>
+    </nb-card-header>
+    <nb-card-body>
+      <span *ngIf="sqlError" class="text-danger">
+        {{sqlError}}
+      </span>
+      <table class="mt-2 mb-2 ml-2 mr-2 align-items-center">
+        <tr>
+          <th *ngFor="let key of keyDataSql | keyvalue">
+            <span>{{key.key}}</span>
+          </th>
+        </tr>
+        <tr *ngFor="let itemArr of dataSql">
+          <td *ngFor="let item of itemArr | keyvalue">
+            <span> {{item.value}}</span>
+          </td>
+        </tr>
+      </table>
+    </nb-card-body>
+  </nb-card>
+</ng-template>
+<ng-template #logDetail let-ref="dialogRef" let-data>
+  <nb-card class="w-h-logs" [nbSpinner]="isLoading" [nbSpinnerMessage]="'Searching...'" nbSpinnerStatus="primary">
+    <nb-card-header style="text-align: center"><span>Log Detail</span></nb-card-header>
+    <nb-card-body>
+      <div *ngFor="let item of log">
+        <pre class="mt-3 ml-3 mr-3 mb-3" [innerHTML]="item" style="color: #e2e2e2"></pre>
+      </div>
+    </nb-card-body>
+    <nb-card-footer>
+      <div class="d-flex justify-content-lg-end">
+        <button nbButton status="info" size="small"
+                (click)="refreshLog(data.historyIndex)"
+        >Refresh</button>
+      </div>
+    </nb-card-footer>
+  </nb-card>
+</ng-template>

@@ -1,0 +1,64 @@
+{
+  "validation": {
+
+    "required": "{{field}} is required.",
+    "maxLength": "Max length of {{field}} is {{value}}",
+    "minLength": "Min length of {{field}} is {{value}}",
+    "pattern": "{{field}} not contains characters of  %",
+    "pattern%": "{{field}} not contains characters of  %",
+    "unique" : "{{field}} is existing in system",
+    "onlyNaturalNumber": "{{field}} must be natural number",
+    "onlyNumber": "{{field}} must be number",
+    "onlyDoubleNumber": "{{field}} must be number",
+    "onlyCharacter": "{{field}} only input alphabet, number and character _",
+    "mustMatch": "{{field}} not match",
+    "existCheck": "{{field}} is exist",
+    "email": "Invalid email format",
+    "mustSameUnit": "{{field}} must same unit",
+    "invalidColor": "Color is invalid"
+  },
+  "login": {
+    "in": "Login",
+    "out": "Logout",
+    "account": "Account",
+    "password": "Password",
+    "failIn": "Login Fail",
+    "forgotPassword": "Forgot Password"
+  },
+  "user": {
+    "column": {
+      "index": "No.",
+      "account": "Account",
+      "email": "Email",
+      "status": "Status",
+      "phoneNumber": "Phone number",
+      "createDate": "Create date",
+      "active": "Active",
+      "password": "Password",
+      "confirmPassword": "Confirm password",
+      "fullname": "Full name",
+      "getAlerted": "Get alerted to the head",
+      "language": "Language",
+      "role": "Role",
+      "domain": "Domain"
+    },
+    "label": {
+      "record": "record",
+      "title": "User management",
+      "add": "Add",
+      "edit": "Edit user",
+      "new": "Add user",
+      "search": "Search",
+      "active": "Active",
+      "inactive": "Inactive",
+      "cancel": "Cancel",
+      "save": "Save"
+    }
+  },
+  "error": {
+    "http": {
+      "401": "Login error"
+    }
+  }
+}
+

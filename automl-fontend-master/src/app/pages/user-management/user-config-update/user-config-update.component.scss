@@ -1,0 +1,14 @@
+@import '../../../@theme/styles/themes';
+
+@include nb-install-component() {
+  nb-card {
+    min-width: 800px;
+    //min-height: 550px;
+    max-height: 600px;
+  }
+}
+
+.user-update-dialog {
+  max-width: 90vw;
+  max-height: 90vh;
+}

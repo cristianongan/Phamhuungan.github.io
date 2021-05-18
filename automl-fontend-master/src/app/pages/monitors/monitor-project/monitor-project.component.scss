@@ -1,0 +1,87 @@
+.task-blue {
+  width: 15px;
+  height: 31px;
+  background: #007bff;
+}
+
+.task-red {
+  width: 15px;
+  height: 31px;
+  background: #ff5500;
+}
+
+.task-green {
+  width: 15px;
+  height: 31px;
+  background: #229922;
+}
+
+.h-body {
+  height: calc(100vh - 142px);
+}
+
+.font-center {
+  text-align: center;
+  font-weight: bold;
+}
+
+.w35-h38 {
+  width: 35vw;
+  height: 38vh;
+}
+
+.font-blue {
+  color: #0076cb;
+  font-weight: bold;
+}
+
+.w-43 {
+  width: 43%;
+}
+
+.w-96 {
+  width: 96%;
+}
+
+.ml-10 {
+  margin-left: 10%;
+}
+
+.w30 {
+  width: 30vw;
+}
+
+.w60-h90 {
+  width: 60vw;
+  height: 90vh;
+}
+
+.item-right {
+  position: absolute;
+  left: 57.5%;
+}
+
+.screen {
+  height: calc(100vh - 242px);
+}
+
+@media only screen and (max-width: 1680px) {
+  .item-right {
+    position: absolute;
+    left: 56.5%;
+  }
+}
+
+@media only screen and (max-width: 1550px) {
+  .item-right {
+    position: absolute;
+    left: 56%;
+  }
+}
+
+@media only screen and (max-width: 1400px) {
+  .item-right {
+    position: absolute;
+    left: 54.5%;
+  }
+}
