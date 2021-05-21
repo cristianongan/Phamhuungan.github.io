@@ -24,7 +24,6 @@ public abstract class AbstractDAO<T extends Serializable> implements Operations<
 	@Override
 	public void delete(final T entity) {
 		Preconditions.checkNotNull(entity);
-
 		getCurrentSession().delete(entity);
 	}
 
@@ -69,7 +68,6 @@ public abstract class AbstractDAO<T extends Serializable> implements Operations<
 
 	public void rollback() {
 		Session session = getCurrentSession();
-
 		Transaction tx = session.getTransaction();
 
 		try {

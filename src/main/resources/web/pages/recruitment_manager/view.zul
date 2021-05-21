@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+<window id="c" border="normal" apply="${recruitmentManagerController}" height="100%">
+
+
+<hlayout height="100%">
+		<div id="navbar" sclass="sidebar"  height="100%" vflex="1">
+        	<div>
+					<button id="removeBtn" label="Xóa" iconSclass="z-icon-trash-o" sclass="blue" style="border:0;padding:0;margin:5px;" />
+					<button id="addBtn" label="Thêm mới" iconSclass="z-icon-plus" sclass="blue" style="border:0;padding:0;margin:5px;" />
+			</div>
+			<textbox placeholder="search here" id="inputKey" width="95%" style="margin:5px"></textbox>
+			<image src="~./images/icons/filter-svgrepo-com-blue.svg" width="25px" style="display:block"></image>
+			<label >Vị trí tuyển dụng</label><button id="addPositionBtn" label="" iconSclass="z-icon-search-plus" sclass="blue" style="border:0;padding:0;margin:0;" height="25px" width="25px"/>
+			<combobox id="applyPositionCombobox" readonly="true" width="95%" style="margin:5px">
+			</combobox>
+			<label>Kinh nghiệm</label>
+			<combobox id="expList" readonly="true" width="95%" style="margin:5px">
+			</combobox>
+			<datebox id="startDate" style="margin:5px"></datebox>
+			<datebox id="endDate" style="margin:5px"></datebox>
+			<button id="searchBtn" iconSclass="z-icon-search" sclass="btn btn-primary" style="padding:0;margin:5px;">Search</button>
+        </div>
+<!-- 		<div style="border-right:1px solid gray;margin-right:2px;padding:1px" height="100%" sclass="nav-list"> -->
+<!-- 		<gr	oupbox> -->
+<!-- 			<vlayout> -->
+				
+				
+<!-- 			</vlayout> -->
+<!-- 		</groupbox> -->
+<!-- 	</div> -->
+	<vlayout hflex="1">
+			<div sclass="page-header">
+                    <a label="${c:l('list.applicant')}" 
+                       iconSclass="z-icon-list" sclass="lighter z-label"/>
+                </div>
+		<listbox id="applicantListbox" hflex="1"  span="true" multiple="true" checkmark="true"
+		  vflex="true" sclass="table table-striped table-bordered table-hover" 
+                    height="600px"  nonselectableTags="*" >
+			<listhead sizable="true">
+				<listheader width="50px"></listheader>
+				<listheader >Họ và tên</listheader>
+				<listheader>Vị trí ứng tuyển</listheader>
+				<listheader>Ngày ứng tuyển</listheader>
+				<listheader>Trạng thái</listheader>
+				<listheader>Kinh nghiệm</listheader>
+				<listheader>Kết quả  phỏng vấn</listheader>
+				<listheader></listheader>
+			</listhead>
+			
+		</listbox>
+		<paging id="pagi" mold="default" hflex="1" ></paging>
+	</vlayout>
+</hlayout>
+</window>
+<!-- <window mode="popup" position="parent" id='addApplicantPop' visible="false"> -->
+<!-- 	<include src="~./pages/recruitment_manager/add_applicant.zul" ></include> -->
+<!-- </window> -->
+<popup id="success" >Thêm thành công</popup>
+</zk>

@@ -1,0 +1,8 @@
+@charset "UTF-8";
+.container_grid{
+	display: grid;
+	grid-column-gap: 5px;
+	grid-row-gap:0px;
+	grid-template-columns:200px 300px;
+	grid-template-rows:100px;
+}

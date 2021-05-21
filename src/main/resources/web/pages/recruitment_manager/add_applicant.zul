@@ -1,0 +1,95 @@
+<zk>
+<window width="400px" closable="true"
+            sizable="true" minwidth="400" minheight="700" style="position: fixed;"
+            action="show: slideDown;hide: slideUp" border="none" 
+            position="center, center" title="Thêm mới ứng viên tại đây" onCancel="self.detach();">
+<grid id="uploadCVForm" apply="${applicantController}">
+		<columns >
+			<column>Fields</column>
+			<column>Contents</column>
+		</columns>
+		<rows>
+			<row>
+				<label value="Họ và tên" width="150px" />
+                <hlayout >
+                	<textbox id="name" value="" width="150px" tabindex="1" onChange="validateName()"/>
+                </hlayout>
+			</row>
+			<row>
+				<label value="Số điện thoại" width="150px" />
+                <hlayout>
+                	<textbox id="mobiblePhone" value="" width="150px" tabindex="1" />
+                </hlayout>
+			</row>
+			<row>
+				<label value="Email" width="150px" />
+                <hlayout>
+                	<textbox id="email" value="" width="150px" tabindex="1" constraint="/.+@.+\.[a-z]+/: Please enter an e-mail address"/>
+                </hlayout>
+			</row>
+			<row>
+				<label value="Trạng thái" width="150px" />
+                <hlayout>
+                	<textbox id="status" value="" width="150px" tabindex="1" />
+                </hlayout>
+			</row>
+			<row>
+				<label value="Kinh nghiệm" width="150px" />
+                <hlayout>
+                	<combobox id="exp" value="" width="150px" tabindex="1" readonly="true"/>
+                </hlayout>
+			</row>
+			<row>
+				<label value="Nguồn thông tin" width="150px" />
+                <hlayout>
+                	<textbox id="jobInfomationSource" value="" width="150px" tabindex="1" />
+                </hlayout>
+			</row>
+			<row>
+				<label value="Vị trí ứng tuyển" width="150px" />
+                <hlayout>
+                	<combobox id="applyPosition" value="" width="150px" tabindex="1" readonly="true"/>
+                </hlayout>
+			</row>
+			<row>
+				<label value="Ghi chú" width="150px" />
+                <hlayout>
+                	<textbox id="note" value="" width="150px" tabindex="1"/>
+                </hlayout>
+			</row>
+			<row>
+				<label value="Ngày apply" width="150px" />
+                <hlayout>
+                	<datebox id="applyDateC"  width="150px" tabindex="1"/>
+                </hlayout>
+			</row>
+			<row style="border-top:1px solid grey">
+<!-- 				<pdfviewer id="cvpdf"></pdfviewer> -->
+                <label id="cvpdf" value="CV(Nhập ít nhất 1)" width="150px" />
+                <vlayout>
+                	<textbox id="linkMedia" placeholder="Link "></textbox>
+                	<label>OR</label>
+                	<button label="Upload" upload="true" sclass="blue" id="btnUpload">
+                		<attribute name="onUpload">
+                			<![CDATA[
+                 				org.zkoss.util.media.Media media = event.getMedia(); 
+                 				cvpdf.setValue(media.getName()); 
+                			]]> 
+                		</attribute>
+                	</button>
+                </vlayout>
+			</row>
+			<row>
+				<button id="btnSubmit" sclass="blue" label="Hoàn tất"></button>
+			</row>
+		</rows>
+	</grid>
+	</window>
+	<zscript>
+		<![CDATA[
+			public void validateName(){
+				
+			}
+		]]>
+	</zscript>
+</zk>

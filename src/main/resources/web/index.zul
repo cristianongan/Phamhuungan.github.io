@@ -7,7 +7,7 @@
 <?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
 
 <?link rel="shortcut icon" type="image/x-icon" href="~./images/favicon/favicon.ico"?>
-
+<?link rel="stylesheet" type="text/css"	href="~./css/recruitment.css" ?>
 <!--<?link rel="stylesheet" type="text/css"	href="~./static/css/themes/bootstrap-${param.theme}.min.css" if="${not empty param.theme}"?>-->
 <?link rel="stylesheet" type="text/css"	href="~./static/css/themes/bootstrap-cerulean.min.css"?>
 <?link rel="stylesheet" type="text/css"	href="~./static/css/ace/ace.min.css" ?>
@@ -30,7 +30,7 @@
             <div class="container" style="float:left">
                 <a label=" Smart Office " sclass="navbar-brand" 
                    iconSclass="z-icon-leaf" onClick='Executions.sendRedirect("/index")'/>
-                <navbar mold="bs-pills" sclass="navbar-nav" id="mainMenu">
+                <navbar mold="bs-pills" sclass=" navbar-nav" id="mainMenu">
 
                 </navbar>
             </div>

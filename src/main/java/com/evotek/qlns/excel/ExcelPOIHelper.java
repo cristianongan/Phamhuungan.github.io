@@ -166,7 +166,7 @@ public class ExcelPOIHelper {
 				
 				if (row != null) {
 					for (int j = 0; j < row.getLastCellNum(); j++) {
-						XSSFCell cell = row.getCell(j);
+						XSSFCell cell = row.getCell(j);	
 						
 						if (cell != null) {
 							XSSFCellStyle cellStyle = cell.getCellStyle();

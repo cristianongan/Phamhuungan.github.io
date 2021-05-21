@@ -69,6 +69,7 @@ public class CategoryServiceImpl implements CategoryService {
 			_log.error(ex.getMessage(), ex);
 		}
 	}
+	
 
 	@Override
 	public void deleteGroup(Group group) throws Exception {

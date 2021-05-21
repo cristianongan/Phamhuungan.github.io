@@ -161,7 +161,6 @@
                 </div>
             </vlayout>
         </vlayout>
-        
         <!--pop up tooltip-->
         <popup id="advSearchTooltip" zclass="tooltip" sclass="bottom tooltip-info">
             <span zclass="tooltip-arrow"/>

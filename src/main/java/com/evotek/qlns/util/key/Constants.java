@@ -252,6 +252,9 @@ public class Constants {
 		}
 
 		public static final String ROOT_FOLDER = "~./pages/";
+		public static interface Recruitment{
+			public static final String ADD_APPLICANT ="~./pages/recruitment_manager/add_applicant.zul";
+		}
 	}
 
 	public static interface Sclass {
@@ -353,5 +356,6 @@ public class Constants {
 
 		public static final String UNLOCK = "z-icon-unlock";
 	}
+	
 
 }
