@@ -1,0 +1,86 @@
+div{
+    display: block;
+    width: 100%;
+    background-color: white;
+}
+.container_table{
+    border-collapse: collapse ;
+    width: 100%;
+    margin: 15px auto;
+}
+.container_table td{
+    border: rgba(0, 0, 0, 0.164) 1px solid;
+    
+}
+
+.thstt{
+    width: 35px;
+    /* background-color: rgba(0, 255, 255, 0.192); */
+    padding: 7px 5px;
+    
+}
+.container_table th{
+
+    /* background-color: rgba(0, 255, 255, 0.192); */
+    padding: 7px 5px;
+    
+}
+.container_table td{
+    text-align: center;
+}
+
+/*
+for paging
+*/
+
+.paging{
+
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 30px;
+}
+.paging ul{
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+.paging li{
+    padding: 7px 9px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.paging li:hover{
+    background-color:  rgba(0, 255, 255, 0.123);
+}
+
+
+/* nav search */
+
+.navSearch{
+    display:flex;
+    flex-direction: row-reverse;
+    margin:10px 0px;    
+}
+
+.navSearch input{
+    margin: 5px;
+}
+/* advance*/
+
+.advancePop{
+    width:500px;
+    height:auto;
+    padding: 20px;
+
+    border:solid 1px black;
+    border-radius: 15px;
+
+    overflow: visible;
+
+}
+/* .modal{
+    position: relative;
+} */
+

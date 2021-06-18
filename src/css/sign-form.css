@@ -1,0 +1,142 @@
+.login-box{
+    width: 30%;
+    height: auto;
+    min-width: 30%;
+    /* float: right; */
+    margin: auto 60%;
+    /* vertical-align: middle; */
+    
+    padding: 0 4%;
+    box-shadow: 0px 4px 12px #00000029;
+    opacity: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #FFFFFF;
+    background-repeat: no-repeat;
+    text-align: center;
+  }
+  .form-header-custom{
+    font: Roboto bold ;
+    font-size: 30px;
+    color: #00833E;
+    margin:3%;
+
+  }
+  .form-input{
+    height: 13%;
+    width: auto;
+    margin:1% 0;
+    padding-top: 2%;
+    padding-left: 2%;
+    background-color: rgba(112, 112, 112, 0.1);
+    /* opacity: 0.1; */
+    border-radius: 5px;
+    text-align: left;
+   
+  }
+  .form-input label{
+      color:black;
+      opacity: 1;
+      font-size: 13px;
+      font-weight: normal;
+      pointer-events: none;
+      left: 0px;
+      top: 0px;
+       
+
+  }
+  .form-input input{
+    text-align: left;
+    font: 14px ;
+    height: 50%;
+    width: 100%;
+    letter-spacing: 0px;
+    color:rgba(112, 112, 112, 1);
+    background-color:rgba(112, 112, 112, 0) ;
+    border: none;
+    
+  }
+  .form-input input:focus{
+    outline: none;
+    border:none;
+    box-shadow: none;
+  }
+   .form-input input:focus{
+    outline: none;
+    border:none;
+  }
+  .tool-form{
+    display: flex;
+    justify-content: space-between;
+    margin:4% 0;
+    vertical-align: middle;
+    text-align: left;
+  }
+  /* .div-form-re{
+    display: inline;
+    padding: 0 10px;
+    width: auto;
+    font-size: 12px;
+     line-height: au;  
+   */
+
+  .tool-re{
+    display: flex;
+    margin:4% 0;
+    vertical-align: middle;
+    text-align: left;
+    
+  }
+  .tool-re span{
+      margin-left: 5%;
+      line-height: 1;
+      font-size: 12px;
+      line-height: auto;
+      vertical-align: middle;
+  }
+
+  .login-box button{
+    width: 70%;
+    height: 40px;
+    margin:2% auto;
+    box-shadow: 0px 0px 4px #00000029;
+    background-color: #00833E;
+    border-radius: 10px;
+    opacity: 0.8;
+    /* padding:7px; */
+    line-height: 40px;
+    color: white;
+    
+  }
+  .tool-form div{
+    vertical-align: center;
+  }
+ input[type=checkbox]{
+  transform: scale(1.5);
+    vertical-align: center;
+    text-align: center;
+  }
+  .tool-form span{
+    padding: 0 10px;
+    vertical-align: center;
+    font-size: 12px;
+    line-height: auto;
+  }
+   a{
+    font-family:sans-serif,Roboto;
+    font: bold;
+    text-decoration: none;
+    letter-spacing: 0px;
+    color: #00833E;
+    opacity: 0.8;
+  }
+
+  .container-form{
+    position:fixed;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    /* flex-direction: column; */
+    /* justify-content: space-around; */
+  }
